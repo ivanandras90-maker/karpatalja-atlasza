@@ -6,6 +6,8 @@
 
 <title>Kárpátalja Földrajzi és Történeti Atlasza</title>
 
+<meta name="description" content="Kárpátalja földrajzi és történeti atlasza, interaktív térképekkel, történelmi vármegyékkel, településekkel és forrásokkal.">
+
 <style>
 
 * {
@@ -30,7 +32,7 @@ body {
 header {
     background: #102a43;
     color: white;
-    padding: 25px 30px;
+    padding: 24px 30px 20px;
 }
 
 .header-inner {
@@ -49,8 +51,29 @@ header {
     font-size: 14px;
 }
 
+.language-switch {
+    margin-top: 12px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+.language-switch a {
+    color: white;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.language-switch a:hover {
+    color: #d8b86a;
+}
+
+.language-current {
+    color: #d8b86a;
+    font-weight: bold;
+}
+
 /* =========================
-   FŐMENÜ
+   NAVIGÁCIÓ
 ========================= */
 
 nav {
@@ -95,7 +118,7 @@ nav a:hover,
     position: absolute;
     left: 0;
     top: 100%;
-    min-width: 270px;
+    min-width: 285px;
     background: white;
     box-shadow: 0 8px 20px rgba(0,0,0,.22);
     z-index: 9999;
@@ -125,8 +148,8 @@ nav a:hover,
 .hero {
     background:
         linear-gradient(
-            rgba(16,42,67,.93),
-            rgba(16,42,67,.93)
+            rgba(16,42,67,.94),
+            rgba(16,42,67,.94)
         );
 
     color: white;
@@ -156,7 +179,7 @@ nav a:hover,
 }
 
 .hero p {
-    max-width: 760px;
+    max-width: 780px;
     margin: auto;
     font-size: 19px;
     line-height: 1.8;
@@ -232,7 +255,7 @@ h2 {
 }
 
 /* =========================
-   KÉT FŐ TERÜLET
+   KÉT ATLASZ
 ========================= */
 
 .atlas-grid {
@@ -260,10 +283,6 @@ h2 {
     line-height: 1.7;
     color: #5f676b;
 }
-
-/* =========================
-   TÉRKÉP GOMBOK
-========================= */
 
 .map-button {
     display: inline-block;
@@ -297,7 +316,7 @@ h2 {
 }
 
 /* =========================
-   KATEGÓRIAKÁRTYÁK
+   KÁRTYÁK
 ========================= */
 
 .cards {
@@ -322,6 +341,17 @@ h2 {
 .card p {
     color: #626a6e;
     line-height: 1.7;
+}
+
+.card a {
+    color: #075985;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+}
+
+.card a:hover {
+    text-decoration: underline;
 }
 
 /* =========================
@@ -413,7 +443,6 @@ footer {
 
 <body>
 
-
 <!-- =========================
      FEJLÉC
 ========================= -->
@@ -430,13 +459,27 @@ footer {
             Földrajz • Történelem • Egykori vármegyék
         </div>
 
+        <div class="language-switch">
+
+            <span class="language-current">
+                🇭🇺 MAGYAR
+            </span>
+
+            <span>|</span>
+
+            <a href="index-ua.html">
+                🇺🇦 УКРАЇНСЬКА
+            </a>
+
+        </div>
+
     </div>
 
 </header>
 
 
 <!-- =========================
-     NAVIGÁCIÓ
+     FŐMENÜ
 ========================= -->
 
 <nav>
@@ -581,7 +624,7 @@ footer {
 
 
 <!-- =========================
-     FŐ ATLASZ
+     KÉT FŐ ATLASZ
 ========================= -->
 
 <section>
@@ -827,7 +870,7 @@ footer {
             </h3>
 
             <p>
-                A térség történetéhez kapcsolódó
+                A Kárpátalja történetéhez kapcsolódó
                 jelentős személyek.
             </p>
 
@@ -889,42 +932,66 @@ footer {
     </h2>
 
     <p class="description">
-        A történelmi Kárpátalja területéhez kapcsolódó
-        egykori vármegyék bemutatása.
+        A történelmi Kárpátalja területéhez
+        kapcsolódó egykori vármegyék.
     </p>
 
 
     <div class="cards">
 
         <div class="card county">
-            <h3>Ung vármegye</h3>
+
+            <h3>
+                Ung vármegye
+            </h3>
+
             <p>
-                Története, területe és települései.
+                Története, területe,
+                közigazgatása és települései.
             </p>
+
         </div>
 
 
         <div class="card county">
-            <h3>Bereg vármegye</h3>
+
+            <h3>
+                Bereg vármegye
+            </h3>
+
             <p>
-                Története, területe és települései.
+                Története, területe,
+                közigazgatása és települései.
             </p>
+
         </div>
 
 
         <div class="card county">
-            <h3>Ugocsa vármegye</h3>
+
+            <h3>
+                Ugocsa vármegye
+            </h3>
+
             <p>
-                Története, területe és települései.
+                Története, területe,
+                közigazgatása és települései.
             </p>
+
         </div>
 
 
         <div class="card county">
-            <h3>Máramaros vármegye</h3>
+
+            <h3>
+                Máramaros vármegye
+            </h3>
+
             <p>
-                Története, területe és települései.
+                Története, területe,
+                közigazgatása és települései.
             </p>
+
         </div>
 
     </div>
@@ -1007,9 +1074,7 @@ footer {
 
 <footer>
 
-    <strong>
-        Kárpátalja Földrajzi és Történeti Atlasza
-    </strong>
+    Kárpátalja Földrajzi és Történeti Atlasza
 
     <br><br>
 
