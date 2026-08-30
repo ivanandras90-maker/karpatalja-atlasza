@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="hu">
 
 <head>
 
@@ -8,7 +8,7 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>Географічна інтерактивна карта – Закарпаття</title>
+<title>Interaktív földrajzi térkép – Kárpátalja</title>
 
 <link
     rel="stylesheet"
@@ -35,7 +35,7 @@ body {
 
 
 /* =========================================
-   HEADER
+   FEJLÉC
 ========================================= */
 
 header {
@@ -59,7 +59,7 @@ header p {
 
 
 /* =========================================
-   LANGUAGE SWITCH
+   NYELVVÁLTÓ
 ========================================= */
 
 .language-switch {
@@ -85,7 +85,7 @@ header p {
 
 
 /* =========================================
-   NAVIGATION
+   NAVIGÁCIÓ
 ========================================= */
 
 nav {
@@ -110,7 +110,7 @@ nav a:hover {
 
 
 /* =========================================
-   MAP HEADER
+   TÉRKÉP FEJLÉC
 ========================================= */
 
 .map-header {
@@ -132,7 +132,7 @@ nav a:hover {
 
 
 /* =========================================
-   MAP
+   TÉRKÉP
 ========================================= */
 
 #map {
@@ -143,7 +143,7 @@ nav a:hover {
 
 
 /* =========================================
-   MOBILE
+   MOBIL
 ========================================= */
 
 @media (max-width: 700px) {
@@ -189,29 +189,29 @@ nav a:hover {
 
 
 <!-- =========================================
-     HEADER
+     FEJLÉC
 ========================================= -->
 
 <header>
 
     <h1>
-        Географічний та історичний атлас Закарпаття
+        Kárpátalja Földrajzi és Történeti Atlasza
     </h1>
 
     <p>
-        Географія • Історія • Колишні комітати
+        Földrajz • Történelem • Egykori vármegyék
     </p>
 
 
     <div class="language-switch">
 
-        <a href="foldrajzi-terkep.html">
-            🇭🇺 MAGYAR
-        </a>
-
         <span class="current-language">
-            🇺🇦 УКРАЇНСЬКА
+            🇭🇺 MAGYAR
         </span>
+
+        <a href="foldrajzi-terkep-uk.html">
+            🇺🇦 УКРАЇНСЬКА
+        </a>
 
     </div>
 
@@ -219,46 +219,46 @@ nav a:hover {
 
 
 <!-- =========================================
-     NAVIGATION
+     NAVIGÁCIÓ
 ========================================= -->
 
 <nav>
 
-    <a href="index-ua.html">
-        ГОЛОВНА
+    <a href="index.html">
+        FŐOLDAL
     </a>
 
-    <a href="foldrajzi-terkep-uk.html">
-        🌍 ГЕОГРАФІЧНА КАРТА
+    <a href="foldrajzi-terkep.html">
+        🌍 FÖLDRAJZI TÉRKÉP
     </a>
 
-    <a href="tortenelmi-terkep-uk.html">
-        📜 ІСТОРИЧНА КАРТА
+    <a href="tortenelmi-terkep.html">
+        📜 TÖRTÉNELMI TÉRKÉP
     </a>
 
 </nav>
 
 
 <!-- =========================================
-     MAP HEADER
+     TÉRKÉP FEJLÉC
 ========================================= -->
 
 <section class="map-header">
 
     <h2>
-        🌍 Інтерактивна географічна карта
+        🌍 Interaktív földrajzi térkép
     </h2>
 
     <p>
-        Географічна карта Закарпаття
-        з природними та географічними об'єктами.
+        Kárpátalja földrajzi térképe
+        természetföldrajzi és földrajzi objektumokkal.
     </p>
 
 </section>
 
 
 <!-- =========================================
-     MAP
+     TÉRKÉP
 ========================================= -->
 
 <div id="map"></div>
@@ -276,7 +276,7 @@ nav a:hover {
 <script>
 
 /* =========================================
-   ОСНОВНА КАРТА
+   ALAP TÉRKÉP
 ========================================= */
 
 const map = L.map('map').setView(
@@ -286,7 +286,7 @@ const map = L.map('map').setView(
 
 
 /* =========================================
-   БАЗОВА КАРТА
+   ALAPTÉRKÉP
 ========================================= */
 
 const osm = L.tileLayer(
@@ -303,84 +303,84 @@ osm.addTo(map);
 
 
 /* =========================================
-   ГЕОГРАФІЧНІ ШАРИ
+   FÖLDRAJZI RÉTEGEK
 ========================================= */
 
 
-/* Рельєф */
+/* Domborzat */
 
 const relief =
     L.layerGroup();
 
 
-/* Гори */
+/* Hegységek */
 
 const mountains =
     L.layerGroup();
 
 
-/* Річки */
+/* Folyók */
 
 const rivers =
     L.layerGroup();
 
 
-/* Озера */
+/* Tavak */
 
 const lakes =
     L.layerGroup();
 
 
-/* Населені пункти */
+/* Települések */
 
 const settlements =
     L.layerGroup();
 
 
-/* Дороги */
+/* Utak */
 
 const roads =
     L.layerGroup();
 
 
-/* Адміністративні межі */
+/* Közigazgatási határok */
 
 const administrativeBoundaries =
     L.layerGroup();
 
 
 /* =========================================
-   НАЗВИ ШАРІВ
+   RÉTEGEK NEVEI
 ========================================= */
 
 const overlays = {
 
-    "🏔️ Рельєф":
+    "🏔️ Domborzat":
         relief,
 
-    "⛰️ Гори":
+    "⛰️ Hegységek":
         mountains,
 
-    "🌊 Річки":
+    "🌊 Folyók":
         rivers,
 
-    "💧 Озера":
+    "💧 Tavak":
         lakes,
 
-    "🏘️ Населені пункти":
+    "🏘️ Települések":
         settlements,
 
-    "🛣️ Дороги":
+    "🛣️ Utak":
         roads,
 
-    "🏛️ Адміністративні межі":
+    "🏛️ Közigazgatási határok":
         administrativeBoundaries
 
 };
 
 
 /* =========================================
-   КОНТРОЛЬ ШАРІВ
+   RÉTEGKEZELŐ
 ========================================= */
 
 L.control.layers(
