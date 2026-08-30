@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Географічний та історичний атлас Закарпаття</title>
+
+<meta name="description"
+      content="Географічний та історичний атлас Закарпаття – інтерактивні географічні та історичні карти, колишні комітати, населені пункти та історичні джерела.">
 
 <style>
 
@@ -23,12 +30,16 @@ body {
     color: #263238;
 }
 
-/* ===== HEADER ===== */
+
+/* =========================================
+   HEADER
+========================================= */
 
 header {
     background: #102a43;
     color: white;
-    padding: 25px 30px;
+    padding: 24px 30px 20px;
+    border-bottom: 1px solid #c09d57;
 }
 
 .header-inner {
@@ -39,18 +50,49 @@ header {
 .logo {
     font-size: 30px;
     font-weight: bold;
+    line-height: 1.25;
 }
 
 .subtitle {
     color: #d8b86a;
-    margin-top: 6px;
+    margin-top: 7px;
     font-size: 14px;
 }
 
-/* ===== NAVIGATION ===== */
+
+/* =========================================
+   LANGUAGE SWITCH
+========================================= */
+
+.language-switch {
+    margin-top: 13px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+.language-switch a {
+    color: white;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.language-switch a:hover {
+    color: #d8b86a;
+}
+
+.language-current {
+    color: #d8b86a;
+    font-weight: bold;
+}
+
+
+/* =========================================
+   NAVIGATION
+========================================= */
 
 nav {
     background: #173f5f;
+    border-bottom: 1px solid rgba(255,255,255,.15);
 }
 
 .nav-inner {
@@ -58,6 +100,7 @@ nav {
     margin: auto;
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 nav a,
@@ -78,7 +121,10 @@ nav a:hover,
     background: #0d3049;
 }
 
-/* ===== DROPDOWN ===== */
+
+/* =========================================
+   DROPDOWN
+========================================= */
 
 .dropdown {
     position: relative;
@@ -87,11 +133,11 @@ nav a:hover,
 .dropdown-content {
     display: none;
     position: absolute;
-    left: 0;
     top: 100%;
-    min-width: 285px;
+    left: 0;
+    min-width: 310px;
     background: white;
-    box-shadow: 0 8px 20px rgba(0,0,0,.22);
+    box-shadow: 0 8px 25px rgba(0,0,0,.25);
     z-index: 9999;
 }
 
@@ -100,7 +146,7 @@ nav a:hover,
     color: #263238;
     padding: 14px 18px;
     font-weight: normal;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #eeeeee;
 }
 
 .dropdown-content a:hover {
@@ -112,13 +158,17 @@ nav a:hover,
     display: block;
 }
 
-/* ===== HERO ===== */
+
+/* =========================================
+   HERO
+========================================= */
 
 .hero {
-    background: linear-gradient(
-        rgba(16,42,67,.93),
-        rgba(16,42,67,.93)
-    );
+    background:
+        linear-gradient(
+            rgba(16,42,67,.94),
+            rgba(16,42,67,.94)
+        );
 
     color: white;
     text-align: center;
@@ -129,6 +179,7 @@ nav a:hover,
     color: #d8b86a;
     font-family: Arial, sans-serif;
     font-size: 13px;
+    font-weight: bold;
     letter-spacing: 3px;
     text-transform: uppercase;
 }
@@ -147,12 +198,17 @@ nav a:hover,
 }
 
 .hero p {
-    max-width: 760px;
+    max-width: 800px;
     margin: auto;
     font-size: 19px;
     line-height: 1.8;
     color: #e5e5e5;
 }
+
+
+/* =========================================
+   BUTTONS
+========================================= */
 
 .buttons {
     margin-top: 35px;
@@ -182,7 +238,10 @@ nav a:hover,
     opacity: .85;
 }
 
-/* ===== SECTIONS ===== */
+
+/* =========================================
+   SECTIONS
+========================================= */
 
 section {
     padding: 80px 25px;
@@ -210,13 +269,16 @@ h2 {
 }
 
 .description {
-    max-width: 800px;
+    max-width: 820px;
     line-height: 1.8;
     font-size: 17px;
     color: #5d6569;
 }
 
-/* ===== TWO ATLAS AREAS ===== */
+
+/* =========================================
+   ATLAS
+========================================= */
 
 .atlas-grid {
     display: grid;
@@ -253,21 +315,35 @@ h2 {
     text-decoration: none;
     font-family: Arial, sans-serif;
     font-weight: bold;
+    border-radius: 3px;
 }
 
-/* ===== GEOGRAPHY ===== */
+.map-button:hover {
+    background: #0d3049;
+}
+
+
+/* =========================================
+   GEOGRAPHY
+========================================= */
 
 .geography {
     background: #eee9dc;
 }
 
-/* ===== HISTORY ===== */
+
+/* =========================================
+   HISTORY
+========================================= */
 
 .history {
     background: #f8f6f0;
 }
 
-/* ===== CARDS ===== */
+
+/* =========================================
+   CARDS
+========================================= */
 
 .cards {
     display: grid;
@@ -293,7 +369,21 @@ h2 {
     line-height: 1.7;
 }
 
-/* ===== COUNTIES ===== */
+.card a {
+    color: #075985;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+}
+
+.card a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================
+   COUNTIES
+========================================= */
 
 .counties {
     background: #e5dfd0;
@@ -303,7 +393,10 @@ h2 {
     border-left: 5px solid #b08a35;
 }
 
-/* ===== SOURCES ===== */
+
+/* =========================================
+   SOURCES
+========================================= */
 
 .sources {
     background: #102a43;
@@ -327,7 +420,10 @@ h2 {
     color: #e1e6e9;
 }
 
-/* ===== FOOTER ===== */
+
+/* =========================================
+   FOOTER
+========================================= */
 
 footer {
     background: #091d2d;
@@ -338,7 +434,10 @@ footer {
     font-size: 13px;
 }
 
-/* ===== MOBILE ===== */
+
+/* =========================================
+   MOBILE
+========================================= */
 
 @media (max-width: 800px) {
 
@@ -370,41 +469,65 @@ footer {
 }
 
 </style>
+
 </head>
+
 
 <body>
 
-<!-- ===== HEADER ===== -->
+
+<!-- =========================================
+     HEADER
+========================================= -->
 
 <header>
 
-    <div class="header-inner">
+<div class="header-inner">
 
-        <div class="logo">
-            Географічний та історичний атлас Закарпаття
-        </div>
+    <div class="logo">
+        Географічний та історичний атлас Закарпаття
+    </div>
 
-        <div class="subtitle">
-            Географія • Історія • Колишні комітати
-        </div>
+    <div class="subtitle">
+        Географія • Історія • Колишні комітати
+    </div>
+
+    <div class="language-switch">
+
+        <a href="index.html">
+            🇭🇺 MAGYAR
+        </a>
+
+        <span>|</span>
+
+        <span class="language-current">
+            🇺🇦 УКРАЇНСЬКА
+        </span>
 
     </div>
+
+</div>
 
 </header>
 
 
-<!-- ===== NAVIGATION ===== -->
+<!-- =========================================
+     NAVIGATION
+========================================= -->
 
 <nav>
 
 <div class="nav-inner">
+
 
     <a href="index-ua.html">
         ГОЛОВНА
     </a>
 
 
-    <!-- GEOGRAPHY -->
+    <!-- =====================================
+         GEOGRAPHY
+    ====================================== -->
 
     <div class="dropdown">
 
@@ -418,7 +541,7 @@ footer {
                 Географічний огляд
             </a>
 
-            <a href="foldrajzi-terkep.html">
+            <a href="foldrajzi-terkep-ua.html">
                 🗺️ Інтерактивна географічна карта
             </a>
 
@@ -443,7 +566,9 @@ footer {
     </div>
 
 
-    <!-- HISTORY -->
+    <!-- =====================================
+         HISTORY
+    ====================================== -->
 
     <div class="dropdown">
 
@@ -457,7 +582,7 @@ footer {
                 Історичний огляд
             </a>
 
-            <a href="tortenelmi-terkep.html">
+            <a href="tortenelmi-terkep-ua.html">
                 🗺️ Інтерактивна історична карта
             </a>
 
@@ -495,7 +620,9 @@ footer {
 </nav>
 
 
-<!-- ===== HERO ===== -->
+<!-- =========================================
+     HERO
+========================================= -->
 
 <div class="hero">
 
@@ -510,23 +637,32 @@ footer {
     <div class="hero-line"></div>
 
     <p>
-        Відкрийте для себе географію та історію Закарпаття
-        за допомогою інтерактивних карт, історичних джерел,
-        населених пунктів та колишніх комітатів.
+
+        Відкрийте для себе географію та історію
+        Закарпаття за допомогою інтерактивних карт,
+        історичних джерел, населених пунктів
+        та колишніх комітатів.
+
     </p>
+
 
     <div class="buttons">
 
         <a
-            href="foldrajzi-terkep.html"
+            href="foldrajzi-terkep-ua.html"
             class="button button-gold">
+
             🌍 ГЕОГРАФІЧНА КАРТА
+
         </a>
 
+
         <a
-            href="tortenelmi-terkep.html"
+            href="tortenelmi-terkep-ua.html"
             class="button button-outline">
+
             📜 ІСТОРИЧНА КАРТА
+
         </a>
 
     </div>
@@ -534,7 +670,9 @@ footer {
 </div>
 
 
-<!-- ===== TWO ATLAS AREAS ===== -->
+<!-- =========================================
+     TWO ATLAS
+========================================= -->
 
 <section>
 
@@ -549,16 +687,19 @@ footer {
     </h2>
 
     <p class="description">
+
         Атлас складається з двох незалежних,
-        але взаємопов'язаних систем, які представляють
-        географічну та історичну спадщину Закарпаття.
+        але взаємопов'язаних систем, які
+        представляють географічну та історичну
+        спадщину Закарпаття.
+
     </p>
 
 
     <div class="atlas-grid">
 
 
-        <!-- GEOGRAPHICAL ATLAS -->
+        <!-- GEOGRAPHY -->
 
         <div class="atlas-card">
 
@@ -567,21 +708,27 @@ footer {
             </h3>
 
             <p>
+
                 Природна географія Закарпаття,
-                рельєф, річки, озера, населені пункти
-                та сучасний адміністративний устрій.
+                рельєф, річки, озера, населені
+                пункти та сучасний адміністративний
+                устрій.
+
             </p>
 
+
             <a
-                href="foldrajzi-terkep.html"
+                href="foldrajzi-terkep-ua.html"
                 class="map-button">
-                🗺️ Географічна інтерактивна карта →
+
+                🗺️ Інтерактивна географічна карта →
+
             </a>
 
         </div>
 
 
-        <!-- HISTORICAL ATLAS -->
+        <!-- HISTORY -->
 
         <div class="atlas-card">
 
@@ -590,15 +737,20 @@ footer {
             </h3>
 
             <p>
+
                 Історія Закарпаття, колишні комітати,
                 історичні населені пункти, події,
                 постаті та історичні карти.
+
             </p>
 
+
             <a
-                href="tortenelmi-terkep.html"
+                href="tortenelmi-terkep-ua.html"
                 class="map-button">
-                🗺️ Історична інтерактивна карта →
+
+                🗺️ Інтерактивна історична карта →
+
             </a>
 
         </div>
@@ -610,9 +762,13 @@ footer {
 </section>
 
 
-<!-- ===== GEOGRAPHY ===== -->
+<!-- =========================================
+     GEOGRAPHY
+========================================= -->
 
-<section class="geography" id="geography">
+<section
+    class="geography"
+    id="geography">
 
 <div class="section-inner">
 
@@ -625,42 +781,51 @@ footer {
     </h2>
 
     <p class="description">
+
         Природні особливості та географічна
         структура регіону.
+
     </p>
 
 
     <div class="cards">
 
-        <div class="card" id="landscape">
+
+        <div
+            class="card"
+            id="landscape">
 
             <h3>
                 🏔️ Ландшафти та рельєф
             </h3>
 
             <p>
-                Гірські масиви, долини, улоговини
-                та природні ландшафти.
+                Гірські масиви, долини,
+                улоговини та природні ландшафти.
             </p>
 
         </div>
 
 
-        <div class="card" id="rivers">
+        <div
+            class="card"
+            id="rivers">
 
             <h3>
                 🌊 Річки та озера
             </h3>
 
             <p>
-                Тиса та її притоки, озера
-                і водна система регіону.
+                Тиса та її притоки,
+                озера і водна система регіону.
             </p>
 
         </div>
 
 
-        <div class="card" id="settlements">
+        <div
+            class="card"
+            id="settlements">
 
             <h3>
                 🏘️ Населені пункти
@@ -674,7 +839,9 @@ footer {
         </div>
 
 
-        <div class="card" id="administration">
+        <div
+            class="card"
+            id="administration">
 
             <h3>
                 🏛️ Адміністративний устрій
@@ -699,7 +866,7 @@ footer {
                 з окремими інформаційними шарами.
             </p>
 
-            <a href="foldrajzi-terkep.html">
+            <a href="foldrajzi-terkep-ua.html">
                 Відкрити карту →
             </a>
 
@@ -712,9 +879,13 @@ footer {
 </section>
 
 
-<!-- ===== HISTORY ===== -->
+<!-- =========================================
+     HISTORY
+========================================= -->
 
-<section class="history" id="history">
+<section
+    class="history"
+    id="history">
 
 <div class="section-inner">
 
@@ -727,16 +898,20 @@ footer {
     </h2>
 
     <p class="description">
+
         Історія регіону представлена через
         історичні періоди, події, постаті,
         населені пункти та адміністративні зміни.
+
     </p>
 
 
     <div class="cards">
 
 
-        <div class="card" id="periods">
+        <div
+            class="card"
+            id="periods">
 
             <h3>
                 ⏳ Історичні періоди
@@ -750,7 +925,9 @@ footer {
         </div>
 
 
-        <div class="card" id="events">
+        <div
+            class="card"
+            id="events">
 
             <h3>
                 ⚔️ Історичні події
@@ -764,7 +941,9 @@ footer {
         </div>
 
 
-        <div class="card" id="people">
+        <div
+            class="card"
+            id="people">
 
             <h3>
                 👑 Історичні постаті
@@ -778,15 +957,17 @@ footer {
         </div>
 
 
-        <div class="card" id="oldmaps">
+        <div
+            class="card"
+            id="oldmaps">
 
             <h3>
                 🗺️ Історичні карти
             </h3>
 
             <p>
-                Старі карти та зміни територіального
-                устрою в різні історичні періоди.
+                Старі карти та зміни
+                територіального устрою.
             </p>
 
         </div>
@@ -799,11 +980,11 @@ footer {
             </h3>
 
             <p>
-                Колишні комітати та історичні
-                інформаційні шари.
+                Колишні комітати, історичні
+                населені пункти, замки та події.
             </p>
 
-            <a href="tortenelmi-terkep.html">
+            <a href="tortenelmi-terkep-ua.html">
                 Відкрити карту →
             </a>
 
@@ -816,9 +997,13 @@ footer {
 </section>
 
 
-<!-- ===== COUNTIES ===== -->
+<!-- =========================================
+     COUNTIES
+========================================= -->
 
-<section class="counties" id="counties">
+<section
+    class="counties"
+    id="counties">
 
 <div class="section-inner">
 
@@ -831,12 +1016,15 @@ footer {
     </h2>
 
     <p class="description">
-        Історичні комітати, пов'язані з територією
-        сучасного Закарпаття.
+
+        Історичні комітати, пов'язані
+        з територією сучасного Закарпаття.
+
     </p>
 
 
     <div class="cards">
+
 
         <div class="card county">
 
@@ -845,7 +1033,8 @@ footer {
             </h3>
 
             <p>
-                Історія, територія та населені пункти.
+                Історія, територія
+                та населені пункти.
             </p>
 
         </div>
@@ -858,7 +1047,8 @@ footer {
             </h3>
 
             <p>
-                Історія, територія та населені пункти.
+                Історія, територія
+                та населені пункти.
             </p>
 
         </div>
@@ -871,7 +1061,8 @@ footer {
             </h3>
 
             <p>
-                Історія, територія та населені пункти.
+                Історія, територія
+                та населені пункти.
             </p>
 
         </div>
@@ -884,7 +1075,8 @@ footer {
             </h3>
 
             <p>
-                Історія, територія та населені пункти.
+                Історія, територія
+                та населені пункти.
             </p>
 
         </div>
@@ -896,9 +1088,13 @@ footer {
 </section>
 
 
-<!-- ===== SOURCES ===== -->
+<!-- =========================================
+     SOURCES
+========================================= -->
 
-<section class="sources" id="sources">
+<section
+    class="sources"
+    id="sources">
 
 <div class="section-inner">
 
@@ -912,6 +1108,7 @@ footer {
 
 
     <div class="cards">
+
 
         <div class="card">
 
@@ -961,7 +1158,9 @@ footer {
 </section>
 
 
-<!-- ===== FOOTER ===== -->
+<!-- =========================================
+     FOOTER
+========================================= -->
 
 <footer>
 
@@ -971,7 +1170,13 @@ footer {
 
     Цифровий географічний та історичний атлас
 
+    <br><br>
+
+    🇭🇺 Magyar | 🇺🇦 Українська
+
 </footer>
 
+
 </body>
+
 </html>
