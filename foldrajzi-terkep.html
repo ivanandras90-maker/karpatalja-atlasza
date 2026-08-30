@@ -1,45 +1,27 @@
 <!DOCTYPE html>
 <html lang="hu">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Földrajzi interaktív térkép – Kárpátalja</title>
 
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css">
+<link rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css">
 
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css">
 
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css">
-
+<link rel="stylesheet"
+      href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css">
 
 <style>
 
-* {
-    box-sizing: border-box;
-}
-
-html,
-body {
+html, body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
-}
-
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f3f0e7;
 }
 
 #map {
@@ -47,413 +29,230 @@ body {
     height: 100vh;
 }
 
-
-/* ==========================================
-   FELSŐ CÍM
-========================================== */
-
 .map-title {
-
     position: absolute;
-
     top: 15px;
     left: 60px;
-
     z-index: 1000;
 
-    background: rgba(16,38,56,.94);
-
+    background: rgba(16,38,56,.95);
     color: white;
 
     padding: 12px 20px;
 
     border-left: 3px solid #c09d57;
+    border-radius: 4px;
 
-    box-shadow:
-        0 3px 12px rgba(0,0,0,.25);
-
-    border-radius: 3px;
-
+    box-shadow: 0 3px 12px rgba(0,0,0,.25);
 }
 
 .map-title strong {
-
     display: block;
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
+    font-family: Georgia, serif;
     font-size: 19px;
-
 }
 
 .map-title span {
-
     display: block;
-
     margin-top: 3px;
-
     color: #d2b56c;
-
     font-size: 12px;
-
 }
-
-
-/* ==========================================
-   KOORDINÁTÁK
-========================================== */
 
 .coordinates-info {
-
     padding: 7px 10px;
+    font: 13px/18px Arial, sans-serif;
 
-    font:
-        13px/18px
-        Arial,
-        Helvetica,
-        sans-serif;
+    background: rgba(255,255,255,.92);
 
-    background: white;
-
-    background:
-        rgba(255,255,255,.92);
-
-    box-shadow:
-        0 0 10px
-        rgba(0,0,0,.2);
-
+    box-shadow: 0 0 10px rgba(0,0,0,.2);
     border-radius: 4px;
-
 }
 
-
-/* ==========================================
-   RÉTEGKEZELŐ
-========================================== */
-
-.leaflet-control-layers {
-
-    font-size: 13px;
-
-}
-
-
-/* ==========================================
-   GEOJSON EXPORT
-========================================== */
-
-.export-control {
-
+.geojson-import-control {
     background: white;
-
-    padding: 8px 11px;
-
+    padding: 8px 10px;
     border-radius: 4px;
 
-    box-shadow:
-        0 0 8px
-        rgba(0,0,0,.25);
+    box-shadow: 0 0 8px rgba(0,0,0,.25);
 
     cursor: pointer;
 
-    font-size: 13px;
-
+    font: 13px Arial, sans-serif;
 }
 
-.export-control:hover {
-
+.geojson-import-control:hover {
     background: #eeeeee;
-
 }
 
+.geojson-import-control input {
+    display: none;
+}
 
-/* ==========================================
-   MOBIL
-========================================== */
-
-@media (max-width: 700px) {
+@media(max-width:700px) {
 
     .map-title {
-
         left: 55px;
-
         top: 10px;
-
         padding: 9px 12px;
-
     }
 
     .map-title strong {
-
         font-size: 15px;
-
     }
 
     .map-title span {
-
         font-size: 10px;
-
     }
 
 }
 
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- ==========================================
-     TÉRKÉP CÍME
-========================================== -->
-
 <div class="map-title">
-
-    <strong>
-        Kárpátalja
-    </strong>
-
-    <span>
-        🌍 Interaktív földrajzi térkép
-    </span>
-
+    <strong>Kárpátalja</strong>
+    <span>🌍 Interaktív földrajzi térkép</span>
 </div>
-
-
-<!-- ==========================================
-     TÉRKÉP
-========================================== -->
 
 <div id="map"></div>
 
 
-<!-- ==========================================
-     KÖNYVTÁRAK
-========================================== -->
+<!-- LEAFLET -->
 
-<script
-    src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js">
-</script>
+<script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"></script>
 
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js">
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js"></script>
 
-<script
-    src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js">
-</script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
 
-<!-- ==========================================
-     ZIP ADATOK
-========================================== -->
+<!-- A ZIP-BEN LÉVŐ ADATOK -->
 
 <script src="./data/line.js"></script>
-
 <script src="./data/point.js"></script>
-
 <script src="./data/polygon.js"></script>
-
 <script src="./data/nepaldata.js"></script>
 
 
 <script>
 
-
-/* ==================================================
+/* =========================================================
    TÉRKÉP
-================================================== */
+========================================================= */
 
-var map =
-    L.map('map').setView(
-        [48.20579018144784,
-         22.644663061560948],
-        8
-    );
+var map = L.map('map').setView(
+    [48.20579018144784, 22.644663061560948],
+    8
+);
 
 
-/* ==================================================
+/* =========================================================
    ALAPTÉRKÉPEK
-================================================== */
+========================================================= */
 
+var osm = L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        maxZoom: 19,
+        attribution:
+            '&copy; OpenStreetMap contributors'
+    }
+);
 
-/* OpenStreetMap */
+var googleStreets = L.tileLayer(
+    'https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+    {
+        maxZoom: 20,
+        subdomains:
+            ['mt0','mt1','mt2','mt3']
+    }
+);
 
-var osm =
-    L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        {
+var googleSat = L.tileLayer(
+    'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+    {
+        maxZoom: 20,
+        subdomains:
+            ['mt0','mt1','mt2','mt3']
+    }
+);
 
-            maxZoom: 19,
+var googleTerrain = L.tileLayer(
+    'https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
+    {
+        maxZoom: 20,
+        subdomains:
+            ['mt0','mt1','mt2','mt3']
+    }
+);
 
-            attribution:
-                '&copy; OpenStreetMap contributors'
+var googleHybrid = L.tileLayer(
+    'https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',
+    {
+        maxZoom: 20,
+        subdomains:
+            ['mt0','mt1','mt2','mt3']
+    }
+);
 
-        }
-    );
+var CyclOSM = L.tileLayer(
+    'https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=ba624ccccf5448f4946ad3de45173189',
+    {
+        maxZoom: 20,
+        attribution:
+            'CyclOSM | OpenStreetMap contributors'
+    }
+);
 
+var OpenTopoMap = L.tileLayer(
+    'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+    {
+        maxZoom: 17,
+        attribution:
+            'OpenTopoMap | OpenStreetMap contributors'
+    }
+);
 
-/* Google Térkép */
+var CartoDB_DarkMatter = L.tileLayer(
+    'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    {
+        maxZoom: 19,
+        subdomains:
+            ['a','b','c','d'],
+        attribution:
+            'OpenStreetMap contributors & CARTO'
+    }
+);
 
-var googleStreets =
-    L.tileLayer(
-        'https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-        {
-
-            maxZoom: 20,
-
-            subdomains:
-                ['mt0','mt1','mt2','mt3']
-
-        }
-    );
-
-
-/* Műhold */
-
-var googleSat =
-    L.tileLayer(
-        'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
-        {
-
-            maxZoom: 20,
-
-            subdomains:
-                ['mt0','mt1','mt2','mt3']
-
-        }
-    );
-
-
-/* Google Terrain */
-
-var googleTerrain =
-    L.tileLayer(
-        'https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
-        {
-
-            maxZoom: 20,
-
-            subdomains:
-                ['mt0','mt1','mt2','mt3']
-
-        }
-    );
-
-
-/* Google Hybrid */
-
-var googleHybrid =
-    L.tileLayer(
-        'https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',
-        {
-
-            maxZoom: 20,
-
-            subdomains:
-                ['mt0','mt1','mt2','mt3']
-
-        }
-    );
-
-
-/* CyclOSM */
-
-var CyclOSM =
-    L.tileLayer(
-        'https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=ba624ccccf5448f4946ad3de45173189',
-        {
-
-            maxZoom: 20,
-
-            attribution:
-                'CyclOSM | OpenStreetMap contributors'
-
-        }
-    );
-
-
-/* OpenTopoMap */
-
-var OpenTopoMap =
-    L.tileLayer(
-        'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-        {
-
-            maxZoom: 17,
-
-            attribution:
-                'OpenTopoMap | OpenStreetMap contributors'
-
-        }
-    );
-
-
-/* Dark Matter */
-
-var CartoDB_DarkMatter =
-    L.tileLayer(
-        'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-        {
-
-            maxZoom: 19,
-
-            subdomains:
-                ['a','b','c','d'],
-
-            attribution:
-                'OpenStreetMap contributors & CARTO'
-
-        }
-    );
-
-
-/* Water Color */
-
-var Stamen_Watercolor =
-    L.tileLayer(
-        'https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}',
-        {
-
-            subdomains:
-                'abcd',
-
-            minZoom: 1,
-
-            maxZoom: 16,
-
-            ext: 'jpg',
-
-            attribution:
-                'Stamen Design | OpenStreetMap'
-
-        }
-    );
-
-
-/* Alapértelmezett */
+var Stamen_Watercolor = L.tileLayer(
+    'https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}',
+    {
+        subdomains: 'abcd',
+        minZoom: 1,
+        maxZoom: 16,
+        ext: 'jpg',
+        attribution:
+            'Stamen Design | OpenStreetMap'
+    }
+);
 
 osm.addTo(map);
 
 
-/* ==================================================
+/* =========================================================
    KOORDINÁTÁK
-================================================== */
+========================================================= */
 
 var coordinatesControl =
     L.control({
-        position:
-            'bottomright'
+        position: 'bottomright'
     });
 
-
 coordinatesControl.onAdd =
-function(map) {
+function() {
 
     this._div =
         L.DomUtil.create(
@@ -464,28 +263,21 @@ function(map) {
     this.update();
 
     return this._div;
-
 };
-
 
 coordinatesControl.update =
 function(latlng) {
 
-    if (latlng) {
+    if(latlng) {
 
         this._div.innerHTML =
-
             '<strong>Szélesség:</strong> ' +
             latlng.lat.toFixed(6) +
-
             ' &nbsp; ' +
-
             '<strong>Hosszúság:</strong> ' +
             latlng.lng.toFixed(6);
 
-    }
-
-    else {
+    } else {
 
         this._div.innerHTML =
             'Mutasson a térképre!';
@@ -494,9 +286,7 @@ function(latlng) {
 
 };
 
-
 coordinatesControl.addTo(map);
-
 
 map.on(
     'mousemove',
@@ -510,150 +300,73 @@ map.on(
 );
 
 
-/* ==================================================
+/* =========================================================
    MÉRÉSI SKÁLA
-================================================== */
+========================================================= */
 
 L.control.scale({
-
-    position:
-        'bottomleft',
-
-    metric:
-        true,
-
-    imperial:
-        false,
-
-    maxWidth:
-        200
-
+    position: 'bottomleft',
+    metric: true,
+    imperial: false,
+    maxWidth: 200
 }).addTo(map);
 
 
-/* ==================================================
-   FÖLDRAJZI RÉTEGEK
-================================================== */
+/* =========================================================
+   A ZIP MEGLÉVŐ ADATAI
+========================================================= */
 
-
-/* Domborzat */
-
-var domborzat =
-    L.layerGroup();
-
-
-/* Földtan */
-
-var foldtan =
-    L.layerGroup();
-
-
-/* Vízrajz */
-
-var vizrajz =
-    L.layerGroup();
-
-
-/* Éghajlat */
-
-var eghajlat =
-    L.layerGroup();
-
-
-/* Talaj */
-
-var talaj =
-    L.layerGroup();
-
-
-/* Növényzet */
-
-var novenyzet =
-    L.layerGroup();
-
-
-/* Állatvilág */
-
-var allatvilag =
-    L.layerGroup();
-
-
-/* Tájak */
-
-var tajak =
-    L.layerGroup();
-
-
-/* Természetvédelem */
-
-var termeszetvedelem =
-    L.layerGroup();
-
-
-/* Természeti erőforrások */
-
-var termeszetiEroforrasok =
-    L.layerGroup();
-
-
-/* Természeti veszélyek */
-
-var termeszetiVeszelyek =
-    L.layerGroup();
-
-
-/* ==================================================
-   ZIP GEOJSON ADATOK
-================================================== */
-
-var linedata =
+var zipPontok =
     L.geoJSON(
-        lineJSON
-    );
-
-
-var pointdata =
-    L.geoJSON(
-        pointJSON
-    );
-
-
-var polygondata =
-    L.geoJSON(
-        polygonJSON,
+        pointJSON,
         {
-
             onEachFeature:
-            function(
-                feature,
-                layer
-            ) {
+            function(feature, layer) {
 
-                if (
+                if(
                     feature.properties &&
                     feature.properties.name
                 ) {
 
                     layer.bindPopup(
-                        '<b>' +
+                        '<strong>' +
                         feature.properties.name +
-                        '</b>'
+                        '</strong>'
                     );
 
                 }
 
-            },
+            }
+        }
+    );
 
-            style: {
 
-                fillColor:
-                    'red',
+var zipVonalak =
+    L.geoJSON(
+        lineJSON
+    );
 
-                fillOpacity:
-                    1,
 
-                color:
-                    'green'
+var zipPoligonok =
+    L.geoJSON(
+        polygonJSON,
+        {
+
+            onEachFeature:
+            function(feature, layer) {
+
+                if(
+                    feature.properties &&
+                    feature.properties.name
+                ) {
+
+                    layer.bindPopup(
+                        '<strong>' +
+                        feature.properties.name +
+                        '</strong>'
+                    );
+
+                }
 
             }
 
@@ -661,53 +374,84 @@ var polygondata =
     );
 
 
-var nepalData =
+var zipTerkepek =
     L.geoJSON(
         nepaldataa
     );
 
 
-/* ==================================================
-   ZIP RÉTEGEKET A FÖLDRAJZI RENDSZERHEZ
-================================================== */
+/* =========================================================
+   FÖLDRAJZI RÉTEGEK
+========================================================= */
 
-linedata.addTo(
-    domborzat
-);
+var domborzat =
+    L.layerGroup();
 
-polygondata.addTo(
-    tajak
-);
+var foldtan =
+    L.layerGroup();
 
-pointdata.addTo(
-    telepulesek = L.layerGroup()
-);
+var vizrajz =
+    L.layerGroup();
 
+var eghajlat =
+    L.layerGroup();
 
-/* ==================================================
-   TELEPÜLÉSEK
-================================================== */
+var talaj =
+    L.layerGroup();
+
+var novenyzet =
+    L.layerGroup();
+
+var allatvilag =
+    L.layerGroup();
+
+var tajak =
+    L.layerGroup();
+
+var termeszetvedelem =
+    L.layerGroup();
+
+var termeszetiEroforrasok =
+    L.layerGroup();
+
+var termeszetiVeszelyek =
+    L.layerGroup();
 
 var telepulesek =
     L.layerGroup();
-
-
-pointdata.addTo(
-    telepulesek
-);
-
-
-/* ==================================================
-   KÖZIGAZGATÁS
-================================================== */
 
 var kozigazgatas =
     L.layerGroup();
 
 
-/* ==================================================
-   RÉTEGKEZELŐ
-================================================== */
+/* =========================================================
+   A ZIP ADATAI MEGMARADNAK
+========================================================= */
+
+zipPontok.addTo(
+    telepulesek
+);
+
+zipVonalak.addTo(
+    domborzat
+);
+
+zipPoligonok.addTo(
+    tajak
+);
+
+
+/* =========================================================
+   SAJÁT / IMPORTÁLT GEOJSON RÉTEGEK
+========================================================= */
+
+var importedGeoJSON =
+    L.layerGroup();
+
+
+/* =========================================================
+   RÉTEGEK
+========================================================= */
 
 var baseLayers = {
 
@@ -726,14 +470,14 @@ var baseLayers = {
     "🛰️ Google Hybrid":
         googleHybrid,
 
-    "🎨 Water Color":
-        Stamen_Watercolor,
-
     "🚲 CyclOSM":
         CyclOSM,
 
     "🏔️ OpenTopoMap":
         OpenTopoMap,
+
+    "🎨 Water Color":
+        Stamen_Watercolor,
 
     "🌑 Dark Matter":
         CartoDB_DarkMatter
@@ -782,44 +526,235 @@ var overlays = {
     "🏛️ Közigazgatás":
         kozigazgatas,
 
-    "〰️ Vonaladatok":
-        linedata,
+    "🗺️ ZIP térképi adatok":
+        zipTerkepek,
 
-    "📍 Pontadatok":
-        pointdata,
-
-    "⬟ Poligonadatok":
-        polygondata,
-
-    "🗺️ Térképi adatok":
-        nepalData
+    "📥 Importált GeoJSON":
+        importedGeoJSON
 
 };
 
 
 L.control.layers(
-
     baseLayers,
-
     overlays,
-
     {
-
-        collapsed:
-            false
-
+        collapsed: false
     }
-
 ).addTo(map);
 
 
-/* ==================================================
-   LEAFLET DRAW
-================================================== */
+/* =========================================================
+   GEOJSON IMPORT KONTROLL
+========================================================= */
+
+var GeoJSONImportControl =
+    L.Control.extend({
+
+        options: {
+            position:
+                'topright'
+        },
+
+        onAdd:
+        function(map) {
+
+            var container =
+                L.DomUtil.create(
+                    'div',
+                    'geojson-import-control'
+                );
+
+            container.innerHTML =
+                '📥 Import GeoJSON';
+
+            var input =
+                L.DomUtil.create(
+                    'input'
+                );
+
+            input.type =
+                'file';
+
+            input.accept =
+                '.geojson,.json,application/geo+json,application/json';
+
+            container.appendChild(
+                input
+            );
+
+
+            L.DomEvent.disableClickPropagation(
+                container
+            );
+
+
+            L.DomEvent.on(
+                container,
+                'click',
+                function() {
+
+                    input.click();
+
+                }
+            );
+
+
+            L.DomEvent.on(
+                input,
+                'change',
+                function(e) {
+
+                    importGeoJSON(
+                        e.target.files[0]
+                    );
+
+                }
+            );
+
+
+            return container;
+
+        }
+
+    });
+
+
+map.addControl(
+    new GeoJSONImportControl()
+);
+
+
+/* =========================================================
+   GEOJSON IMPORT FUNKCIÓ
+========================================================= */
+
+function importGeoJSON(file) {
+
+    if(!file) {
+        return;
+    }
+
+
+    var reader =
+        new FileReader();
+
+
+    reader.onload =
+    function(event) {
+
+        try {
+
+            var geojson =
+                JSON.parse(
+                    event.target.result
+                );
+
+
+            var layer =
+                L.geoJSON(
+                    geojson,
+                    {
+
+                        onEachFeature:
+                        function(
+                            feature,
+                            layer
+                        ) {
+
+                            var properties =
+                                feature.properties;
+
+
+                            if(
+                                properties
+                            ) {
+
+                                var html =
+                                    '<strong>GeoJSON adat</strong><br>';
+
+                                for(
+                                    var key in properties
+                                ) {
+
+                                    html +=
+                                        '<b>' +
+                                        key +
+                                        ':</b> ' +
+                                        properties[key] +
+                                        '<br>';
+
+                                }
+
+                                layer.bindPopup(
+                                    html
+                                );
+
+                            }
+
+                        }
+
+                    }
+                );
+
+
+            importedGeoJSON.clearLayers();
+
+            importedGeoJSON.addLayer(
+                layer
+            );
+
+
+            if(
+                layer.getBounds &&
+                layer.getBounds().isValid()
+            ) {
+
+                map.fitBounds(
+                    layer.getBounds(),
+                    {
+                        padding:
+                            [30,30]
+                    }
+                );
+
+            }
+
+
+            alert(
+                'A GeoJSON sikeresen betöltve.'
+            );
+
+        }
+
+        catch(error) {
+
+            alert(
+                'Hiba: a GeoJSON fájl nem olvasható.'
+            );
+
+            console.error(
+                error
+            );
+
+        }
+
+    };
+
+
+    reader.readAsText(
+        file
+    );
+
+}
+
+
+/* =========================================================
+   RAJZOLÁS
+========================================================= */
 
 var drawnItems =
     new L.FeatureGroup();
-
 
 map.addLayer(
     drawnItems
@@ -830,10 +765,8 @@ var drawControl =
     new L.Control.Draw({
 
         edit: {
-
             featureGroup:
                 drawnItems
-
         },
 
         draw: {
@@ -845,13 +778,10 @@ var drawControl =
                 false,
 
             polygon: {
-
                 allowIntersection:
                     false,
-
                 showArea:
                     true
-
             }
 
         }
@@ -864,166 +794,9 @@ map.addControl(
 );
 
 
-/* ==================================================
-   MÉRÉS
-================================================== */
-
-var _round =
-function(num, len) {
-
-    return Math.round(
-        num *
-        Math.pow(
-            10,
-            len
-        )
-    )
-    /
-    Math.pow(
-        10,
-        len
-    );
-
-};
-
-
-var strLatLng =
-function(latlng) {
-
-    return '(' +
-        _round(
-            latlng.lat,
-            6
-        ) +
-        ', ' +
-        _round(
-            latlng.lng,
-            6
-        ) +
-        ')';
-
-};
-
-
-var getPopupContent =
-function(layer) {
-
-    if (
-        layer instanceof L.Marker ||
-        layer instanceof L.CircleMarker
-    ) {
-
-        return strLatLng(
-            layer.getLatLng()
-        );
-
-    }
-
-
-    else if (
-        layer instanceof L.Circle
-    ) {
-
-        var center =
-            layer.getLatLng();
-
-        var radius =
-            layer.getRadius();
-
-        return
-            'Középpont: ' +
-            strLatLng(center) +
-            '<br>' +
-
-            'Sugár: ' +
-            _round(
-                radius,
-                2
-            ) +
-            ' m';
-
-    }
-
-
-    else if (
-        layer instanceof L.Polygon
-    ) {
-
-        return 'Terület: poligon';
-
-    }
-
-
-    else if (
-        layer instanceof L.Polyline
-    ) {
-
-        var latlngs =
-            layer.getLatLngs();
-
-        var distance =
-            0;
-
-
-        if (
-            latlngs.length < 2
-        ) {
-
-            return
-                'Távolság: N/A';
-
-        }
-
-
-        for (
-            var i = 0;
-            i < latlngs.length - 1;
-            i++
-        ) {
-
-            distance +=
-                latlngs[i]
-                .distanceTo(
-                    latlngs[i + 1]
-                );
-
-        }
-
-
-        if (
-            distance > 1000
-        ) {
-
-            return
-                'Távolság: ' +
-                _round(
-                    distance / 1000,
-                    2
-                ) +
-                ' km';
-
-        }
-
-
-        return
-            'Távolság: ' +
-            _round(
-                distance,
-                2
-            ) +
-            ' m';
-
-    }
-
-
-    return null;
-
-};
-
-
-/* ==================================================
-   RAJZOLÁS
-================================================== */
+/* =========================================================
+   RAJZOLÁS ESEMÉNY
+========================================================= */
 
 map.on(
     L.Draw.Event.CREATED,
@@ -1031,36 +804,6 @@ map.on(
 
         var layer =
             event.layer;
-
-        var content =
-            getPopupContent(
-                layer
-            );
-
-
-        if (
-            content !== null
-        ) {
-
-            layer.bindPopup(
-                content
-            );
-
-        }
-
-
-        layer.feature =
-            layer.feature || {};
-
-        layer.feature.type =
-            'Feature';
-
-        layer.feature.properties =
-            layer.feature.properties || {};
-
-        layer.feature.properties.info =
-            content;
-
 
         drawnItems.addLayer(
             layer
@@ -1070,65 +813,28 @@ map.on(
 );
 
 
-/* ==================================================
-   SZERKESZTÉS
-================================================== */
-
-map.on(
-    L.Draw.Event.EDITED,
-    function(event) {
-
-        event.layers.eachLayer(
-            function(layer) {
-
-                var content =
-                    getPopupContent(
-                        layer
-                    );
-
-
-                if (
-                    content !== null
-                ) {
-
-                    layer.setPopupContent(
-                        content
-                    );
-
-                }
-
-            }
-        );
-
-    }
-);
-
-
-/* ==================================================
+/* =========================================================
    GEOJSON EXPORT
-================================================== */
+========================================================= */
 
 var exportControl =
     L.control({
-
         position:
             'bottomright'
-
     });
 
 
 exportControl.onAdd =
-function(map) {
+function() {
 
     var div =
         L.DomUtil.create(
             'div',
-            'export-control'
+            'geojson-import-control'
         );
 
-
     div.innerHTML =
-        '⬇️ GeoJSON export';
+        '📤 GeoJSON export';
 
 
     L.DomEvent.on(
@@ -1136,7 +842,62 @@ function(map) {
         'click',
         function() {
 
-            geojsonExport();
+            var data =
+                drawnItems.toGeoJSON();
+
+
+            if(
+                data.features.length === 0
+            ) {
+
+                alert(
+                    'Nincs exportálható saját rajz.'
+                );
+
+                return;
+
+            }
+
+
+            var blob =
+                new Blob(
+                    [
+                        JSON.stringify(
+                            data,
+                            null,
+                            2
+                        )
+                    ],
+                    {
+                        type:
+                            'application/json'
+                    }
+                );
+
+
+            var url =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            var a =
+                document.createElement(
+                    'a'
+                );
+
+            a.href =
+                url;
+
+            a.download =
+                'karpatalja-foldrajzi.geojson';
+
+            a.click();
+
+
+            URL.revokeObjectURL(
+                url
+            );
 
         }
     );
@@ -1147,78 +908,24 @@ function(map) {
 };
 
 
-exportControl.addTo(
-    map
+map.addControl(
+    exportControl
 );
 
 
-function geojsonExport() {
-
-    var jsonData =
-        JSON.stringify(
-            drawnItems.toGeoJSON()
-        );
-
-
-    if (
-        drawnItems.getLayers()
-        .length === 0
-    ) {
-
-        alert(
-            'Nincs exportálható rajz a térképen.'
-        );
-
-        return;
-
-    }
-
-
-    var dataUri =
-        'data:application/json;charset=utf-8,' +
-        encodeURIComponent(
-            jsonData
-        );
-
-
-    var link =
-        document.createElement(
-            'a'
-        );
-
-
-    link.setAttribute(
-        'href',
-        dataUri
-    );
-
-
-    link.setAttribute(
-        'download',
-        'karpatalja-foldrajzi-adatok.geojson'
-    );
-
-
-    link.click();
-
-}
-
-
-/* ==================================================
-   KERESÉS
-================================================== */
+/* =========================================================
+   KERESŐ
+========================================================= */
 
 L.Control.geocoder({
-
     defaultMarkGeocode:
         true
-
 }).addTo(map);
 
 
-/* ==================================================
-   TÉRKÉP FRISSÍTÉSE
-================================================== */
+/* =========================================================
+   TÉRKÉP FRISSÍTÉS
+========================================================= */
 
 setTimeout(
     function() {
@@ -1232,5 +939,4 @@ setTimeout(
 </script>
 
 </body>
-
 </html>
