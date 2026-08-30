@@ -21,15 +21,22 @@
     box-sizing: border-box;
 }
 
+html,
 body {
     margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
     font-family: Georgia, "Times New Roman", serif;
     background: #f3f0e7;
 }
 
-/* =========================
+
+/* =========================================
    HEADER
-========================= */
+========================================= */
 
 header {
     background: #102638;
@@ -41,37 +48,45 @@ header {
 header h1 {
     margin: 0;
     font-size: 27px;
+    line-height: 1.3;
 }
 
 header p {
-    margin: 5px 0 0;
+    margin: 6px 0 0;
     color: #c9ad6c;
     font-size: 14px;
 }
 
-/* =========================
-   LANGUAGE
-========================= */
 
-.language {
+/* =========================================
+   LANGUAGE SWITCH
+========================================= */
+
+.language-switch {
     margin-top: 12px;
     font-family: Arial, sans-serif;
     font-size: 13px;
 }
 
-.language a {
+.language-switch a {
     color: white;
     text-decoration: none;
     margin-right: 12px;
 }
 
-.language a:hover {
+.language-switch a:hover {
     color: #d8b86a;
 }
 
-/* =========================
+.current-language {
+    color: #d8b86a;
+    font-weight: bold;
+}
+
+
+/* =========================================
    NAVIGATION
-========================= */
+========================================= */
 
 nav {
     background: #17374d;
@@ -85,6 +100,7 @@ nav a {
     text-decoration: none;
     font-family: Arial, sans-serif;
     font-size: 14px;
+    font-weight: bold;
 }
 
 nav a:hover {
@@ -92,9 +108,10 @@ nav a:hover {
     color: #102638;
 }
 
-/* =========================
+
+/* =========================================
    MAP HEADER
-========================= */
+========================================= */
 
 .map-header {
     background: #f3f0e7;
@@ -110,73 +127,55 @@ nav a:hover {
 .map-header p {
     margin: 0;
     color: #5d666c;
+    font-size: 15px;
 }
 
-/* =========================
+
+/* =========================================
    MAP
-========================= */
+========================================= */
 
 #map {
     width: 100%;
-    height: calc(100vh - 245px);
+    height: calc(100vh - 215px);
     min-height: 550px;
 }
 
-/* =========================
-   INFO PANEL
-========================= */
 
-.map-info {
-    position: absolute;
-    z-index: 1000;
-    top: 260px;
-    right: 20px;
-
-    background: white;
-
-    padding: 18px;
-
-    width: 300px;
-
-    box-shadow:
-        0 4px 18px rgba(0,0,0,.2);
-
-    border-radius: 4px;
-}
-
-.map-info h3 {
-    margin-top: 0;
-    color: #17374d;
-}
-
-.map-info p {
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-    line-height: 1.5;
-    color: #555;
-}
-
-/* =========================
+/* =========================================
    MOBILE
-========================= */
+========================================= */
 
 @media (max-width: 700px) {
 
-    .map-info {
-        display: none;
+    header {
+        padding: 18px 15px;
     }
 
-    #map {
-        height: calc(100vh - 230px);
+    header h1 {
+        font-size: 21px;
     }
 
     nav {
-        padding: 0 10px;
+        padding: 0 8px;
     }
 
     nav a {
         padding: 12px 8px;
-        font-size: 12px;
+        font-size: 11px;
+    }
+
+    .map-header {
+        padding: 20px 15px;
+    }
+
+    .map-header h2 {
+        font-size: 24px;
+    }
+
+    #map {
+        height: calc(100vh - 200px);
+        min-height: 450px;
     }
 
 }
@@ -189,9 +188,9 @@ nav a:hover {
 <body>
 
 
-<!-- =========================
+<!-- =========================================
      HEADER
-========================= -->
+========================================= -->
 
 <header>
 
@@ -200,27 +199,27 @@ nav a:hover {
     </h1>
 
     <p>
-        📜 Історичний атлас
+        Географія • Історія • Колишні комітати
     </p>
 
-    <div class="language">
+    <div class="language-switch">
 
         <a href="tortenelmi-terkep.html">
             🇭🇺 MAGYAR
         </a>
 
-        <a href="tortenelmi-terkep-ua.html">
+        <span class="current-language">
             🇺🇦 УКРАЇНСЬКА
-        </a>
+        </span>
 
     </div>
 
 </header>
 
 
-<!-- =========================
+<!-- =========================================
      NAVIGATION
-========================= -->
+========================================= -->
 
 <nav>
 
@@ -239,9 +238,9 @@ nav a:hover {
 </nav>
 
 
-<!-- =========================
-     MAP TITLE
-========================= -->
+<!-- =========================================
+     MAP HEADER
+========================================= -->
 
 <section class="map-header">
 
@@ -250,38 +249,18 @@ nav a:hover {
     </h2>
 
     <p>
-        Історична територія Закарпаття,
-        колишні комітати та історичні місця.
+        Історична карта Закарпаття,
+        колишніх комітатів та історичних місць.
     </p>
 
 </section>
 
 
-<!-- =========================
+<!-- =========================================
      MAP
-========================= -->
+========================================= -->
 
 <div id="map"></div>
-
-
-<!-- =========================
-     INFORMATION
-========================= -->
-
-<div class="map-info">
-
-    <h3>
-        Історичний атлас
-    </h3>
-
-    <p>
-        На цій карті будуть представлені
-        колишні комітати, історичні населені
-        пункти, замки, укріплення, історичні
-        дороги та важливі події.
-    </p>
-
-</div>
 
 
 <script
@@ -291,39 +270,36 @@ nav a:hover {
 
 <script>
 
-/* =========================
-   MAP
-========================= */
+/* =========================================
+   ОСНОВНА КАРТА
+========================================= */
 
-const map =
-    L.map('map').setView(
-        [48.45, 22.75],
-        8
-    );
+const map = L.map('map').setView(
+    [48.45, 22.75],
+    8
+);
 
 
-/* =========================
-   BASE MAP
-========================= */
+/* =========================================
+   БАЗОВА КАРТА
+========================================= */
 
-const osm =
-    L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        {
-            maxZoom: 19,
+const osm = L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        maxZoom: 19,
 
-            attribution:
-                '&copy; OpenStreetMap contributors'
-        }
-    );
-
+        attribution:
+            '&copy; OpenStreetMap contributors'
+    }
+);
 
 osm.addTo(map);
 
 
-/* =========================
-   HISTORICAL LAYERS
-========================= */
+/* =========================================
+   ІСТОРИЧНІ ШАРИ
+========================================= */
 
 
 /* Ужанський комітат */
@@ -364,13 +340,13 @@ const castles =
 
 /* Історичні події */
 
-const events =
+const historicalEvents =
     L.layerGroup();
 
 
 /* Історичні дороги */
 
-const roads =
+const historicalRoads =
     L.layerGroup();
 
 
@@ -380,9 +356,9 @@ const oldMaps =
     L.layerGroup();
 
 
-/* =========================
-   LAYER CONTROL
-========================= */
+/* =========================================
+   ШАРИ НА КАРТІ
+========================================= */
 
 const overlays = {
 
@@ -405,10 +381,10 @@ const overlays = {
         castles,
 
     "⚔️ Історичні події":
-        events,
+        historicalEvents,
 
     "🛤️ Історичні дороги":
-        roads,
+        historicalRoads,
 
     "🗺️ Старі карти":
         oldMaps
@@ -416,9 +392,9 @@ const overlays = {
 };
 
 
-/* =========================
-   LAYER CONTROL
-========================= */
+/* =========================================
+   КОНТРОЛЬ ШАРІВ
+========================================= */
 
 L.control.layers(
 
