@@ -1,664 +1,822 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Kárpátalja Földrajzi és Történeti Atlasza</title>
-
-    <meta name="description"
-          content="Kárpátalja földrajzi és történeti atlasza – történelmi vármegyék, települések, térképek és események.">
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            margin: 0;
-            font-family: Georgia, "Times New Roman", serif;
-            background: #f3f0e7;
-            color: #1d2b35;
-        }
-
-        /* ===== FEJLÉC ===== */
-
-        header {
-            background: #102638;
-            color: white;
-            padding: 25px 6%;
-            border-bottom: 1px solid #9d8350;
-        }
-
-        .header-inner {
-            max-width: 1250px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .brand {
-            text-decoration: none;
-            color: white;
-        }
-
-        .brand-title {
-            font-size: 28px;
-            font-weight: bold;
-            letter-spacing: .5px;
-        }
-
-        .brand-subtitle {
-            color: #c9ad6c;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        /* ===== NAVIGÁCIÓ ===== */
-
-        nav {
-            background: #17374d;
-            border-bottom: 1px solid rgba(201,173,108,.35);
-        }
-
-        .nav-inner {
-            max-width: 1250px;
-            margin: auto;
-            display: flex;
-            flex-wrap: wrap;
-            padding: 0 6%;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            padding: 17px 16px;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            transition: .2s;
-        }
-
-        nav a:hover {
-            background: #c09d57;
-            color: #102638;
-        }
-
-        /* ===== HERO ===== */
-
-        .hero {
-            min-height: 600px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-
-            background:
-                linear-gradient(
-                    rgba(10,31,45,.84),
-                    rgba(10,31,45,.88)
-                ),
-                radial-gradient(
-                    circle at center,
-                    #41657a,
-                    #102638 75%
-                );
-
-            color: white;
-            padding: 70px 25px;
-        }
-
-        .hero-content {
-            max-width: 900px;
-        }
-
-        .hero-kicker {
-            color: #d0b36f;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 25px;
-        }
-
-        .hero h1 {
-            font-size: clamp(42px, 6vw, 76px);
-            line-height: 1.08;
-            margin: 0;
-            font-weight: normal;
-        }
-
-        .hero-line {
-            width: 90px;
-            height: 2px;
-            background: #c09d57;
-            margin: 28px auto;
-        }
-
-        .hero p {
-            font-size: 20px;
-            line-height: 1.7;
-            color: #e4e1d7;
-            max-width: 720px;
-            margin: auto;
-        }
-
-        .hero-buttons {
-            margin-top: 35px;
-        }
-
-        .button {
-            display: inline-block;
-            padding: 15px 30px;
-            margin: 6px;
-            border-radius: 3px;
-            text-decoration: none;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-            font-weight: bold;
-            transition: .2s;
-        }
-
-        .button-primary {
-            background: #c09d57;
-            color: #102638;
-        }
-
-        .button-primary:hover {
-            background: #d7bd82;
-        }
-
-        .button-secondary {
-            border: 1px solid #c09d57;
-            color: white;
-        }
-
-        .button-secondary:hover {
-            background: rgba(192,157,87,.15);
-        }
-
-        /* ===== BEVEZETŐ ===== */
-
-        .intro {
-            max-width: 1100px;
-            margin: auto;
-            padding: 80px 25px 50px;
-            text-align: center;
-        }
-
-        .section-label {
-            color: #9a7b3e;
-            font-family: Arial, sans-serif;
-            font-size: 13px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .intro h2 {
-            font-size: 38px;
-            font-weight: normal;
-            margin: 15px 0 20px;
-        }
-
-        .intro p {
-            max-width: 780px;
-            margin: auto;
-            font-size: 18px;
-            line-height: 1.8;
-            color: #53606a;
-        }
-
-        /* ===== KÁRTYÁK ===== */
-
-        .cards-section {
-            max-width: 1200px;
-            margin: auto;
-            padding: 30px 25px 90px;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 22px;
-        }
-
-        .card {
-            background: white;
-            border: 1px solid #ddd6c5;
-            padding: 35px 28px;
-            min-height: 220px;
-            box-shadow: 0 6px 22px rgba(0,0,0,.06);
-            transition: .2s;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 28px rgba(0,0,0,.10);
-        }
-
-        .card-icon {
-            font-size: 32px;
-            margin-bottom: 15px;
-        }
-
-        .card h3 {
-            margin: 0 0 12px;
-            font-size: 23px;
-            font-weight: normal;
-            color: #17374d;
-        }
-
-        .card p {
-            color: #626b70;
-            line-height: 1.7;
-            margin: 0;
-        }
-
-        /* ===== VÁRMEGYÉK ===== */
-
-        .counties {
-            background: #102638;
-            color: white;
-            padding: 80px 25px;
-            text-align: center;
-        }
-
-        .counties h2 {
-            font-size: 38px;
-            font-weight: normal;
-            margin: 15px 0 45px;
-        }
-
-        .county-grid {
-            max-width: 1100px;
-            margin: auto;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
-
-        .county {
-            border: 1px solid rgba(201,173,108,.5);
-            padding: 30px 15px;
-            color: white;
-            text-decoration: none;
-            transition: .2s;
-        }
-
-        .county:hover {
-            background: #c09d57;
-            color: #102638;
-        }
-
-        .county strong {
-            display: block;
-            font-size: 21px;
-            font-weight: normal;
-        }
-
-        .county span {
-            display: block;
-            margin-top: 8px;
-            color: #cdbb91;
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-        }
-
-        .county:hover span {
-            color: #102638;
-        }
-
-        /* ===== IDŐVONAL ===== */
-
-        .timeline {
-            max-width: 1100px;
-            margin: auto;
-            padding: 85px 25px;
-            text-align: center;
-        }
-
-        .timeline h2 {
-            font-size: 38px;
-            font-weight: normal;
-            margin: 15px 0 45px;
-        }
-
-        .timeline-line {
-            height: 2px;
-            background: #c09d57;
-            margin: 50px 0 20px;
-        }
-
-        .timeline-items {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-        }
-
-        .year {
-            color: #17374d;
-        }
-
-        .year strong {
-            display: block;
-            font-size: 20px;
-        }
-
-        .year span {
-            display: block;
-            margin-top: 7px;
-            font-size: 13px;
-            color: #69747a;
-        }
-
-        /* ===== FOOTER ===== */
-
-        footer {
-            background: #0b1b28;
-            color: #c9c5ba;
-            padding: 40px 25px;
-            text-align: center;
-        }
-
-        footer strong {
-            color: white;
-            font-size: 18px;
-        }
-
-        footer p {
-            margin: 10px 0 0;
-            font-family: Arial, sans-serif;
-            font-size: 13px;
-        }
-
-        /* ===== MOBIL ===== */
-
-        @media (max-width: 850px) {
-
-            .header-inner {
-                display: block;
-            }
-
-            .cards {
-                grid-template-columns: 1fr;
-            }
-
-            .county-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .timeline-items {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .timeline-line {
-                display: none;
-            }
-
-            nav a {
-                padding: 12px 9px;
-                font-size: 12px;
-            }
-        }
-
-        @media (max-width: 550px) {
-
-            .brand-title {
-                font-size: 21px;
-            }
-
-            .hero {
-                min-height: 520px;
-            }
-
-            .hero p {
-                font-size: 17px;
-            }
-
-            .county-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kárpátalja Földrajzi és Történeti Atlasza</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    background: #f4f1e8;
+    color: #263238;
+}
+
+/* ===== FEJLÉC ===== */
+
+header {
+    background: #102a43;
+    color: white;
+    padding: 24px 40px 18px;
+}
+
+.header-inner {
+    max-width: 1200px;
+    margin: auto;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 30px;
+    letter-spacing: 0.3px;
+}
+
+.subtitle {
+    margin-top: 5px;
+    color: #e2b84b;
+    font-size: 14px;
+}
+
+/* ===== NAVIGÁCIÓ ===== */
+
+nav {
+    background: #075985;
+    border-top: 1px solid rgba(255,255,255,0.2);
+}
+
+.nav-inner {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+}
+
+nav a,
+.dropbtn {
+    color: white;
+    text-decoration: none;
+    padding: 17px 20px;
+    display: block;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+nav a:hover,
+.dropbtn:hover {
+    background: #0c4a6e;
+}
+
+/* ===== LENYÍLÓ MENÜ ===== */
+
+.dropdown {
+    position: relative;
+}
+
+.dropbtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 250px;
+    background: white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+.dropdown-content a {
+    color: #263238;
+    padding: 13px 18px;
+    font-weight: normal;
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-content a:hover {
+    background: #f0ead8;
+    color: #102a43;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* ===== HERO ===== */
+
+.hero {
+    background:
+        linear-gradient(rgba(16,42,67,0.94), rgba(16,42,67,0.94));
+    color: white;
+    text-align: center;
+    padding: 95px 20px 105px;
+}
+
+.hero-label {
+    color: #e2b84b;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.hero h2 {
+    font-size: 58px;
+    margin: 18px 0 12px;
+}
+
+.hero-line {
+    width: 70px;
+    height: 2px;
+    background: #e2b84b;
+    margin: 0 auto 25px;
+}
+
+.hero p {
+    max-width: 720px;
+    margin: auto;
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.hero-buttons {
+    margin-top: 32px;
+}
+
+.button {
+    display: inline-block;
+    padding: 14px 25px;
+    margin: 5px;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.button-primary {
+    background: #e2b84b;
+    color: #102a43;
+}
+
+.button-secondary {
+    border: 1px solid white;
+    color: white;
+}
+
+.button:hover {
+    opacity: 0.85;
+}
+
+/* ===== SZEKCIÓ ===== */
+
+section {
+    padding: 75px 25px;
+}
+
+.section-inner {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.section-label {
+    color: #b08a2e;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+section h2 {
+    font-size: 36px;
+    margin-top: 0;
+    color: #102a43;
+}
+
+.intro {
+    max-width: 750px;
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+/* ===== KATEGÓRIA KÁRTYÁK ===== */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin-top: 35px;
+}
+
+.card {
+    background: white;
+    padding: 28px;
+    border: 1px solid #ddd6c5;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.card h3 {
+    margin-top: 0;
+    color: #102a43;
+    font-size: 21px;
+}
+
+.card p {
+    line-height: 1.6;
+    color: #555;
+}
+
+.card a {
+    color: #075985;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* ===== FÖLDRAJZ ===== */
+
+.geography {
+    background: #eee9dc;
+}
+
+/* ===== TÖRTÉNELEM ===== */
+
+.history {
+    background: #f8f6f0;
+}
+
+/* ===== VÁRMEGYÉK ===== */
+
+.counties {
+    background: #e5e0d2;
+}
+
+.county-card {
+    border-left: 5px solid #b08a2e;
+}
+
+/* ===== FORRÁSOK ===== */
+
+.sources {
+    background: #102a43;
+    color: white;
+}
+
+.sources h2 {
+    color: white;
+}
+
+.sources .card {
+    background: #173b5c;
+    border-color: #315773;
+    color: white;
+}
+
+.sources .card h3 {
+    color: #e2b84b;
+}
+
+.sources .card p {
+    color: #e4e8eb;
+}
+
+/* ===== FOOTER ===== */
+
+footer {
+    background: #091d2d;
+    color: #cfd8dc;
+    text-align: center;
+    padding: 30px 20px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+/* ===== MOBIL ===== */
+
+@media (max-width: 800px) {
+
+    header {
+        padding: 20px;
+    }
+
+    header h1 {
+        font-size: 23px;
+    }
+
+    .nav-inner {
+        flex-wrap: wrap;
+    }
+
+    nav a,
+    .dropbtn {
+        padding: 13px 12px;
+        font-size: 12px;
+    }
+
+    .hero h2 {
+        font-size: 42px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
 
+<!-- ===== FEJLÉC ===== -->
+
 <header>
     <div class="header-inner">
 
-        <a class="brand" href="index.html">
-            <div class="brand-title">
-                Kárpátalja Földrajzi és Történeti Atlasza
-            </div>
+        <h1>Kárpátalja Földrajzi és Történeti Atlasza</h1>
 
-            <div class="brand-subtitle">
-                Földrajz • Történelem • Egykori vármegyék
-            </div>
-        </a>
+        <div class="subtitle">
+            Földrajz • Történelem • Egykori vármegyék
+        </div>
 
     </div>
 </header>
 
+
+<!-- ===== FŐMENÜ ===== -->
+
 <nav>
+
     <div class="nav-inner">
+
         <a href="index.html">FŐOLDAL</a>
-        <a href="#terkep">TÉRKÉP</a>
-        <a href="#varmegyek">VÁRMEGYÉK</a>
-        <a href="#telepulesek">TELEPÜLÉSEK</a>
-        <a href="#tortenelem">TÖRTÉNELEM</a>
-        <a href="#forrasok">FORRÁSOK</a>
+
+
+        <!-- FÖLDRAJZ -->
+
+        <div class="dropdown">
+
+            <button class="dropbtn">
+                🌍 FÖLDRAJZ ▾
+            </button>
+
+            <div class="dropdown-content">
+
+                <a href="#foldrajz">Földrajzi áttekintés</a>
+
+                <a href="terkep.html">
+                    🗺️ Interaktív térkép
+                </a>
+
+                <a href="#tajak">
+                    🏔️ Tájak és domborzat
+                </a>
+
+                <a href="#vizek">
+                    🌊 Folyók és tavak
+                </a>
+
+                <a href="#telepulesek">
+                    🏘️ Települések
+                </a>
+
+                <a href="#kozigazgatas">
+                    🏛️ Közigazgatás
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- TÖRTÉNELEM -->
+
+        <div class="dropdown">
+
+            <button class="dropbtn">
+                📜 TÖRTÉNELEM ▾
+            </button>
+
+            <div class="dropdown-content">
+
+                <a href="#tortenelem">
+                    Történelmi áttekintés
+                </a>
+
+                <a href="#korszakok">
+                    ⏳ Történelmi korszakok
+                </a>
+
+                <a href="#varmegyek">
+                    🏛️ Egykori vármegyék
+                </a>
+
+                <a href="#esemenyek">
+                    ⚔️ Fontos események
+                </a>
+
+                <a href="#szemelyek">
+                    👑 Történelmi személyek
+                </a>
+
+                <a href="#terkepek">
+                    🗺️ Történelmi térképek
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- TÉRKÉPEK -->
+
+        <div class="dropdown">
+
+            <button class="dropbtn">
+                🗺️ TÉRKÉPEK ▾
+            </button>
+
+            <div class="dropdown-content">
+
+                <a href="terkep.html">
+                    Interaktív térkép
+                </a>
+
+                <a href="#terkepek">
+                    Történelmi térképek
+                </a>
+
+                <a href="#regiterkepek">
+                    Régi térképek
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <a href="#forrasok">📚 FORRÁSOK</a>
+
     </div>
+
 </nav>
 
-<main>
 
-    <!-- HERO -->
+<!-- ===== HERO ===== -->
 
-    <section class="hero">
+<div class="hero">
 
-        <div class="hero-content">
+    <div class="hero-label">
+        Digitális történelmi és földrajzi atlasz
+    </div>
 
-            <div class="hero-kicker">
-                Digitális történelmi és földrajzi atlasz
-            </div>
+    <h2>Kárpátalja</h2>
 
-            <h1>
-                Kárpátalja
-            </h1>
+    <div class="hero-line"></div>
 
-            <div class="hero-line"></div>
+    <p>
+        Fedezd fel Kárpátalja földrajzát, történelmét,
+        egykori vármegyéit, településeit és történelmi
+        örökségét egyetlen interaktív atlaszban.
+    </p>
 
-            <p>
-                Fedezd fel Kárpátalja földrajzát, történelmét,
-                egykori vármegyéit, településeit és történelmi
-                örökségét egyetlen interaktív atlaszban.
-            </p>
+    <div class="hero-buttons">
 
-            <div class="hero-buttons">
+        <a href="terkep.html" class="button button-primary">
+            🗺️ INTERAKTÍV TÉRKÉP
+        </a>
 
-                <a class="button button-primary" href="terkep.html">
-                    🗺️ INTERAKTÍV TÉRKÉP
-                </a>
+        <a href="#varmegyek" class="button button-secondary">
+            🏛️ VÁRMEGYÉK
+        </a>
 
-                <a class="button button-secondary" href="#varmegyek">
-                    🏰 VÁRMEGYÉK
-                </a>
+    </div>
 
-            </div>
+</div>
 
-        </div>
 
-    </section>
+<!-- ===== FÖLDRAJZ ===== -->
 
-    <!-- BEVEZETŐ -->
+<section class="geography" id="foldrajz">
 
-    <section class="intro">
+    <div class="section-inner">
 
         <div class="section-label">
-            Kárpátalja öröksége
+            🌍 Földrajz
         </div>
 
-        <h2>
-            Egy táj története térképeken keresztül
-        </h2>
+        <h2>Kárpátalja földrajza</h2>
 
-        <p>
-            Az atlasz célja Kárpátalja földrajzi és történeti
-            örökségének bemutatása. A térképek, települések,
-            vármegyék, történelmi események és források
-            összekapcsolásával egy folyamatosan bővíthető
-            digitális tudástár jön létre.
+        <p class="intro">
+            Kárpátalja földrajzi arculatának bemutatása
+            térképeken, tájakon, vízrajzon, településeken
+            és közigazgatási egységeken keresztül.
         </p>
 
-    </section>
-
-    <!-- FŐ RÉSZEK -->
-
-    <section class="cards-section">
 
         <div class="cards">
 
-            <div class="card" id="terkep">
-                <div class="card-icon">🗺️</div>
+            <div class="card" id="tajak">
 
-                <h3>Interaktív térkép</h3>
+                <h3>🏔️ Tájak és domborzat</h3>
 
                 <p>
-                    Történelmi és földrajzi térképek,
-                    határok, települések, utak, folyók,
-                    várak és fontos helyszínek.
+                    A Kárpátok hegyvidékei, völgyei,
+                    medencéi és természetföldrajzi tájai.
                 </p>
+
             </div>
+
+
+            <div class="card" id="vizek">
+
+                <h3>🌊 Folyók és tavak</h3>
+
+                <p>
+                    A Tisza és mellékfolyói, valamint
+                    Kárpátalja vízrajzi rendszere.
+                </p>
+
+            </div>
+
 
             <div class="card" id="telepulesek">
-                <div class="card-icon">🏘️</div>
 
-                <h3>Települések</h3>
-
-                <p>
-                    Kárpátalja történelmi településeinek
-                    adatlapjai, régi nevei, története,
-                    képei és térképi helye.
-                </p>
-            </div>
-
-            <div class="card" id="tortenelem">
-                <div class="card-icon">📜</div>
-
-                <h3>Történelem</h3>
+                <h3>🏘️ Települések</h3>
 
                 <p>
-                    Korszakok, történelmi események,
-                    személyek és a térség változásai
-                    évszázadokon keresztül.
+                    Városok, falvak és történelmi
+                    települések adatbázisa.
                 </p>
+
+            </div>
+
+
+            <div class="card" id="kozigazgatas">
+
+                <h3>🏛️ Közigazgatás</h3>
+
+                <p>
+                    A térség jelenlegi és történelmi
+                    közigazgatási rendszere.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>🗺️ Interaktív atlasz</h3>
+
+                <p>
+                    Fedezd fel Kárpátalja térképét
+                    különböző térképi rétegekkel.
+                </p>
+
+                <a href="terkep.html">
+                    Térkép megnyitása →
+                </a>
+
             </div>
 
         </div>
 
-    </section>
+    </div>
 
-    <!-- VÁRMEGYÉK -->
+</section>
 
-    <section class="counties" id="varmegyek">
+
+<!-- ===== TÖRTÉNELEM ===== -->
+
+<section class="history" id="tortenelem">
+
+    <div class="section-inner">
 
         <div class="section-label">
-            Történelmi közigazgatás
+            📜 Történelem
         </div>
 
-        <h2>
-            Az egykori vármegyék
-        </h2>
+        <h2>Kárpátalja története</h2>
 
-        <div class="county-grid">
+        <p class="intro">
+            A térség történetének bemutatása kronológiai,
+            földrajzi és közigazgatási szempontból.
+        </p>
 
-            <a class="county" href="#">
-                <strong>UNG</strong>
-                <span>UNG VÁRMEGYE</span>
-            </a>
 
-            <a class="county" href="#">
-                <strong>BEREG</strong>
-                <span>BEREG VÁRMEGYE</span>
-            </a>
+        <div class="cards">
 
-            <a class="county" href="#">
-                <strong>UGOCSA</strong>
-                <span>UGOCSA VÁRMEGYE</span>
-            </a>
+            <div class="card" id="korszakok">
 
-            <a class="county" href="#">
-                <strong>MÁRAMAROS</strong>
-                <span>MÁRAMAROS VÁRMEGYE</span>
-            </a>
+                <h3>⏳ Történelmi korszakok</h3>
+
+                <p>
+                    Kárpátalja története az ókortól
+                    napjainkig, időrendben.
+                </p>
+
+            </div>
+
+
+            <div class="card" id="esemenyek">
+
+                <h3>⚔️ Fontos események</h3>
+
+                <p>
+                    A térség történetének meghatározó
+                    eseményei és fordulópontjai.
+                </p>
+
+            </div>
+
+
+            <div class="card" id="szemelyek">
+
+                <h3>👑 Történelmi személyek</h3>
+
+                <p>
+                    A Kárpátalja történetéhez kapcsolódó
+                    fontos történelmi személyek.
+                </p>
+
+            </div>
+
+
+            <div class="card" id="terkepek">
+
+                <h3>🗺️ Történelmi térképek</h3>
+
+                <p>
+                    Különböző korszakok történelmi
+                    térképei és közigazgatási változásai.
+                </p>
+
+            </div>
 
         </div>
 
-    </section>
+    </div>
 
-    <!-- IDŐVONAL -->
+</section>
 
-    <section class="timeline">
+
+<!-- ===== VÁRMEGYÉK ===== -->
+
+<section class="counties" id="varmegyek">
+
+    <div class="section-inner">
 
         <div class="section-label">
-            Történelmi idővonal
+            🏛️ Történelmi közigazgatás
         </div>
 
-        <h2>
-            Kárpátalja évszázadai
-        </h2>
+        <h2>Egykori vármegyék</h2>
 
-        <div class="timeline-line"></div>
+        <p class="intro">
+            Kárpátalja történelmi területének egyik
+            legfontosabb rendszerezési szempontja
+            az egykori vármegyék bemutatása.
+        </p>
 
-        <div class="timeline-items">
 
-            <div class="year">
-                <strong>Honfoglalás</strong>
-                <span>9–10. század</span>
+        <div class="cards">
+
+            <div class="card county-card">
+
+                <h3>Ung vármegye</h3>
+
+                <p>
+                    Története, területe, települései,
+                    közigazgatása és történelmi térképei.
+                </p>
+
             </div>
 
-            <div class="year">
-                <strong>Árpád-kor</strong>
-                <span>Középkor</span>
+
+            <div class="card county-card">
+
+                <h3>Bereg vármegye</h3>
+
+                <p>
+                    A történelmi Bereg vármegye
+                    földrajza és története.
+                </p>
+
             </div>
 
-            <div class="year">
-                <strong>1526</strong>
-                <span>A mohácsi korszak</span>
+
+            <div class="card county-card">
+
+                <h3>Ugocsa vármegye</h3>
+
+                <p>
+                    Ugocsa története, települései
+                    és közigazgatási változásai.
+                </p>
+
             </div>
 
-            <div class="year">
-                <strong>1867</strong>
-                <span>Dualizmus</span>
-            </div>
 
-            <div class="year">
-                <strong>1920</strong>
-                <span>Új korszak</span>
+            <div class="card county-card">
+
+                <h3>Máramaros vármegye</h3>
+
+                <p>
+                    Máramaros történelmi területe,
+                    települései és térképei.
+                </p>
+
             </div>
 
         </div>
 
-    </section>
+    </div>
 
-</main>
+</section>
 
-<footer id="forrasok">
 
-    <strong>
-        Kárpátalja Földrajzi és Történeti Atlasza
-    </strong>
+<!-- ===== FORRÁSOK ===== -->
 
-    <p>
-        Digitális történelmi és földrajzi tudástár
-    </p>
+<section class="sources" id="forrasok">
+
+    <div class="section-inner">
+
+        <div class="section-label">
+            📚 Dokumentáció
+        </div>
+
+        <h2>Források</h2>
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>📖 Történeti források</h3>
+
+                <p>
+                    Könyvek, tanulmányok, levéltári
+                    és történeti források.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>🗺️ Térképészeti források</h3>
+
+                <p>
+                    Régi és modern térképek,
+                    atlaszok és térképészeti adatok.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>📑 Irodalom</h3>
+
+                <p>
+                    A kutatáshoz felhasznált szakirodalom
+                    és további ajánlott művek.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ===== FOOTER ===== -->
+
+<footer>
+
+    Kárpátalja Földrajzi és Történeti Atlasza
+
+    <br><br>
+
+    Digitális történelmi és földrajzi atlasz
 
 </footer>
 
