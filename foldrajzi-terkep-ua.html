@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Географічна інтерактивна карта – Закарпаття</title>
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    background: #f3f0e7;
+}
+
+header {
+    background: #102638;
+    color: white;
+    padding: 20px 35px;
+    border-bottom: 1px solid #c09d57;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 27px;
+}
+
+header p {
+    margin: 5px 0 0;
+    color: #c9ad6c;
+    font-size: 14px;
+}
+
+.language {
+    margin-top: 12px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+.language a {
+    color: white;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.language a:hover {
+    color: #d8b86a;
+}
+
+nav {
+    background: #17374d;
+    padding: 0 35px;
+}
+
+nav a {
+    display: inline-block;
+    padding: 15px;
+    color: white;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+nav a:hover {
+    background: #c09d57;
+    color: #102638;
+}
+
+.map-header {
+    background: #f3f0e7;
+    padding: 25px 35px;
+}
+
+.map-header h2 {
+    margin: 0 0 8px;
+    font-size: 30px;
+    color: #17374d;
+}
+
+.map-header p {
+    margin: 0;
+    color: #5d666c;
+}
+
+#map {
+    width: 100%;
+    height: calc(100vh - 245px);
+    min-height: 550px;
+}
+
+.map-info {
+    position: absolute;
+    z-index: 1000;
+    top: 260px;
+    right: 20px;
+    background: white;
+    padding: 18px;
+    width: 285px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.2);
+    border-radius: 4px;
+}
+
+.map-info h3 {
+    margin-top: 0;
+    color: #17374d;
+}
+
+.map-info p {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #555;
+}
+
+@media (max-width: 700px) {
+
+    .map-info {
+        display: none;
+    }
+
+    #map {
+        height: calc(100vh - 230px);
+    }
+
+    nav {
+        padding: 0 10px;
+    }
+
+    nav a {
+        padding: 12px 8px;
+        font-size: 12px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>
+        Географічний та історичний атлас Закарпаття
+    </h1>
+
+    <p>
+        🌍 Географічний атлас
+    </p>
+
+    <div class="language">
+
+        <a href="foldrajzi-terkep.html">
+            🇭🇺 MAGYAR
+        </a>
+
+        <a href="foldrajzi-terkep-ua.html">
+            🇺🇦 УКРАЇНСЬКА
+        </a>
+
+    </div>
+
+</header>
+
+
+<nav>
+
+    <a href="index-ua.html">
+        ГОЛОВНА
+    </a>
+
+    <a href="foldrajzi-terkep-ua.html">
+        🌍 ГЕОГРАФІЧНА КАРТА
+    </a>
+
+    <a href="tortenelmi-terkep-ua.html">
+        📜 ІСТОРИЧНА КАРТА
+    </a>
+
+</nav>
+
+
+<section class="map-header">
+
+    <h2>
+        🌍 Інтерактивна географічна карта
+    </h2>
+
+    <p>
+        Географічна карта Закарпаття
+        з окремими інформаційними шарами.
+    </p>
+
+</section>
+
+
+<div id="map"></div>
+
+
+<div class="map-info">
+
+    <h3>
+        Географічний атлас
+    </h3>
+
+    <p>
+        На цій карті будуть представлені
+        рельєф, гори, річки, озера,
+        населені пункти, дороги та
+        адміністративні межі.
+    </p>
+
+</div>
+
+
+<script
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+<script>
+
+const map =
+    L.map('map').setView(
+        [48.45, 22.75],
+        8
+    );
+
+
+const osm =
+    L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+            maxZoom: 19,
+
+            attribution:
+                '&copy; OpenStreetMap contributors'
+        }
+    );
+
+
+osm.addTo(map);
+
+
+/* =========================
+   ГЕОГРАФІЧНІ ШАРИ
+========================= */
+
+const relief =
+    L.layerGroup();
+
+const rivers =
+    L.layerGroup();
+
+const lakes =
+    L.layerGroup();
+
+const settlements =
+    L.layerGroup();
+
+const administration =
+    L.layerGroup();
+
+
+/* =========================
+   КОНТРОЛЬ ШАРІВ
+========================= */
+
+const overlays = {
+
+    "🏔️ Рельєф":
+        relief,
+
+    "🌊 Річки":
+        rivers,
+
+    "💧 Озера":
+        lakes,
+
+    "🏘️ Населені пункти":
+        settlements,
+
+    "🏛️ Адміністративні межі":
+        administration
+
+};
+
+
+L.control.layers(
+
+    {
+        "OpenStreetMap": osm
+    },
+
+    overlays,
+
+    {
+        collapsed: false
+    }
+
+).addTo(map);
+
+</script>
+
+</body>
+</html>
