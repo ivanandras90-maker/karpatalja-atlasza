@@ -11,9 +11,14 @@
 <title>Kárpátalja Földrajzi és Történeti Atlasza</title>
 
 <meta name="description"
-      content="Kárpátalja Földrajzi és Történeti Atlasza – interaktív földrajzi és történelmi térképek, egykori vármegyék, települések és történelmi források.">
+      content="Kárpátalja Földrajzi és Történeti Atlasza – földrajzi és történelmi térképek, egykori vármegyék, települések és történelmi források.">
+
 
 <style>
+
+/* =====================================================
+   ALAP
+===================================================== */
 
 * {
     box-sizing: border-box;
@@ -31,9 +36,9 @@ body {
 }
 
 
-/* =========================================
-   HEADER
-========================================= */
+/* =====================================================
+   FEJLÉC
+===================================================== */
 
 header {
     background: #102a43;
@@ -60,9 +65,9 @@ header {
 }
 
 
-/* =========================================
-   LANGUAGE
-========================================= */
+/* =====================================================
+   NYELVVÁLTÓ
+===================================================== */
 
 .language-switch {
     margin-top: 13px;
@@ -86,12 +91,13 @@ header {
 }
 
 
-/* =========================================
-   NAVIGATION
-========================================= */
+/* =====================================================
+   FŐMENÜ
+===================================================== */
 
 nav {
     background: #173f5f;
+    border-bottom: 1px solid rgba(255,255,255,.15);
 }
 
 .nav-inner {
@@ -121,9 +127,9 @@ nav a:hover,
 }
 
 
-/* =========================================
-   DROPDOWN
-========================================= */
+/* =====================================================
+   LENYÍLÓ MENÜ
+===================================================== */
 
 .dropdown {
     position: relative;
@@ -131,20 +137,31 @@ nav a:hover,
 
 .dropdown-content {
     display: none;
+
     position: absolute;
+
     top: 100%;
     left: 0;
-    min-width: 300px;
+
+    min-width: 285px;
+
     background: white;
-    box-shadow: 0 8px 25px rgba(0,0,0,.25);
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.25);
+
     z-index: 9999;
 }
 
 .dropdown-content a {
     display: block;
+
     color: #263238;
+
     padding: 14px 18px;
+
     font-weight: normal;
+
     border-bottom: 1px solid #eeeeee;
 }
 
@@ -158,9 +175,9 @@ nav a:hover,
 }
 
 
-/* =========================================
+/* =====================================================
    HERO
-========================================= */
+===================================================== */
 
 .hero {
     background:
@@ -170,44 +187,60 @@ nav a:hover,
         );
 
     color: white;
+
     text-align: center;
+
     padding: 110px 25px;
 }
 
 .hero-label {
     color: #d8b86a;
+
     font-family: Arial, sans-serif;
+
     font-size: 13px;
+
     font-weight: bold;
+
     letter-spacing: 3px;
+
     text-transform: uppercase;
 }
 
 .hero h1 {
     font-size: clamp(44px, 7vw, 76px);
+
     font-weight: normal;
+
     margin: 20px 0;
 }
 
 .hero-line {
     width: 80px;
+
     height: 2px;
+
     background: #d8b86a;
+
     margin: 0 auto 28px;
 }
 
 .hero p {
     max-width: 780px;
+
     margin: auto;
+
     font-size: 19px;
+
     line-height: 1.8;
+
     color: #e5e5e5;
 }
 
 
-/* =========================================
-   BUTTONS
-========================================= */
+/* =====================================================
+   HERO GOMBOK
+===================================================== */
 
 .buttons {
     margin-top: 35px;
@@ -215,21 +248,29 @@ nav a:hover,
 
 .button {
     display: inline-block;
+
     padding: 15px 28px;
+
     margin: 6px;
+
     text-decoration: none;
+
     font-family: Arial, sans-serif;
+
     font-weight: bold;
+
     border-radius: 3px;
 }
 
 .button-gold {
     background: #d8b86a;
+
     color: #102a43;
 }
 
 .button-outline {
     border: 1px solid #d8b86a;
+
     color: white;
 }
 
@@ -238,9 +279,9 @@ nav a:hover,
 }
 
 
-/* =========================================
-   SECTIONS
-========================================= */
+/* =====================================================
+   ÁLTALÁNOS SZEKCIÓ
+===================================================== */
 
 section {
     padding: 80px 25px;
@@ -253,67 +294,102 @@ section {
 
 .section-label {
     color: #a47c29;
+
     font-family: Arial, sans-serif;
+
     font-size: 12px;
+
     font-weight: bold;
+
     letter-spacing: 2px;
+
     text-transform: uppercase;
 }
 
 h2 {
     color: #102a43;
+
     font-size: 38px;
+
     font-weight: normal;
+
     margin-top: 12px;
 }
 
 .description {
     max-width: 800px;
+
     line-height: 1.8;
+
     font-size: 17px;
+
     color: #5d6569;
 }
 
 
-/* =========================================
-   ATLAS CARDS
-========================================= */
+/* =====================================================
+   KÉT ATLASZ
+===================================================== */
 
 .atlas-grid {
     display: grid;
+
     grid-template-columns: 1fr 1fr;
+
     gap: 25px;
+
     margin-top: 40px;
 }
 
 .atlas-card {
     background: white;
+
     padding: 42px 35px;
+
     border: 1px solid #ddd5c3;
-    box-shadow: 0 7px 22px rgba(0,0,0,.08);
+
+    box-shadow:
+        0 7px 22px rgba(0,0,0,.08);
 }
 
 .atlas-card h3 {
     font-size: 28px;
+
     font-weight: normal;
+
     color: #102a43;
+
     margin-top: 0;
 }
 
 .atlas-card p {
     line-height: 1.7;
+
     color: #5f676b;
 }
 
+
+/* =====================================================
+   TÉRKÉP GOMB
+===================================================== */
+
 .map-button {
     display: inline-block;
+
     margin-top: 20px;
+
     padding: 14px 22px;
+
     background: #173f5f;
+
     color: white;
+
     text-decoration: none;
+
     font-family: Arial, sans-serif;
+
     font-weight: bold;
+
     border-radius: 3px;
 }
 
@@ -322,56 +398,70 @@ h2 {
 }
 
 
-/* =========================================
-   GEOGRAPHY
-========================================= */
+/* =====================================================
+   FÖLDRAJZ
+===================================================== */
 
 .geography {
     background: #eee9dc;
 }
 
 
-/* =========================================
-   HISTORY
-========================================= */
+/* =====================================================
+   TÖRTÉNELEM
+===================================================== */
 
 .history {
     background: #f8f6f0;
 }
 
 
-/* =========================================
-   CARDS
-========================================= */
+/* =====================================================
+   KÁRTYÁK
+===================================================== */
 
 .cards {
     display: grid;
+
     grid-template-columns: repeat(3, 1fr);
+
     gap: 20px;
+
     margin-top: 35px;
 }
 
 .card {
     background: white;
+
     border: 1px solid #ddd5c3;
+
     padding: 28px;
+
+    box-shadow:
+        0 3px 10px rgba(0,0,0,.04);
 }
 
 .card h3 {
     color: #102a43;
+
     font-size: 21px;
+
     font-weight: normal;
 }
 
 .card p {
     color: #626a6e;
+
     line-height: 1.7;
 }
 
 .card a {
     color: #075985;
+
     text-decoration: none;
+
     font-family: Arial, sans-serif;
+
     font-weight: bold;
 }
 
@@ -380,9 +470,9 @@ h2 {
 }
 
 
-/* =========================================
-   COUNTIES
-========================================= */
+/* =====================================================
+   VÁRMEGYÉK
+===================================================== */
 
 .counties {
     background: #e5dfd0;
@@ -393,12 +483,13 @@ h2 {
 }
 
 
-/* =========================================
-   SOURCES
-========================================= */
+/* =====================================================
+   FORRÁSOK
+===================================================== */
 
 .sources {
     background: #102a43;
+
     color: white;
 }
 
@@ -408,6 +499,7 @@ h2 {
 
 .sources .card {
     background: #173f5f;
+
     border-color: #315872;
 }
 
@@ -420,23 +512,28 @@ h2 {
 }
 
 
-/* =========================================
+/* =====================================================
    FOOTER
-========================================= */
+===================================================== */
 
 footer {
     background: #091d2d;
+
     color: #cbd3d8;
+
     text-align: center;
+
     padding: 35px 20px;
+
     font-family: Arial, sans-serif;
+
     font-size: 13px;
 }
 
 
-/* =========================================
-   MOBILE
-========================================= */
+/* =====================================================
+   MOBIL
+===================================================== */
 
 @media (max-width: 800px) {
 
@@ -475,55 +572,63 @@ footer {
 <body>
 
 
-<!-- =========================================
-     HEADER
-========================================= -->
+<!-- =====================================================
+     FEJLÉC
+===================================================== -->
 
 <header>
 
-<div class="header-inner">
+    <div class="header-inner">
 
-    <div class="logo">
-        Kárpátalja Földrajzi és Történeti Atlasza
+        <div class="logo">
+            Kárpátalja Földrajzi és Történeti Atlasza
+        </div>
+
+        <div class="subtitle">
+            Földrajz • Történelem • Egykori vármegyék
+        </div>
+
+
+        <!-- NYELVVÁLTÓ -->
+
+        <div class="language-switch">
+
+            <span class="language-current">
+                🇭🇺 MAGYAR
+            </span>
+
+            <span>|</span>
+
+            <a href="index-ua.html">
+                🇺🇦 УКРАЇНСЬКА
+            </a>
+
+        </div>
+
     </div>
-
-    <div class="subtitle">
-        Földrajz • Történelem • Egykori vármegyék
-    </div>
-
-    <div class="language-switch">
-
-        <span class="language-current">
-            🇭🇺 MAGYAR
-        </span>
-
-        <span>|</span>
-
-        <a href="index-ua.html">
-            🇺🇦 УКРАЇНСЬКА
-        </a>
-
-    </div>
-
-</div>
 
 </header>
 
 
-<!-- =========================================
-     NAVIGATION
-========================================= -->
+<!-- =====================================================
+     FŐMENÜ
+===================================================== -->
 
 <nav>
 
 <div class="nav-inner">
+
+
+    <!-- FŐOLDAL -->
 
     <a href="index.html">
         FŐOLDAL
     </a>
 
 
-    <!-- FÖLDRAJZ -->
+    <!-- =================================================
+         FÖLDRAJZ
+    ================================================== -->
 
     <div class="dropdown">
 
@@ -562,7 +667,9 @@ footer {
     </div>
 
 
-    <!-- TÖRTÉNELEM -->
+    <!-- =================================================
+         TÖRTÉNELEM
+    ================================================== -->
 
     <div class="dropdown">
 
@@ -605,18 +712,21 @@ footer {
     </div>
 
 
+    <!-- FORRÁSOK -->
+
     <a href="#forrasok">
         📚 FORRÁSOK
     </a>
+
 
 </div>
 
 </nav>
 
 
-<!-- =========================================
+<!-- =====================================================
      HERO
-========================================= -->
+===================================================== -->
 
 <div class="hero">
 
@@ -631,12 +741,9 @@ footer {
     <div class="hero-line"></div>
 
     <p>
-
-        Fedezd fel Kárpátalja földrajzát és
-        történelmét interaktív térképeken,
-        történelmi forrásokon, településeken
-        és egykori vármegyéken keresztül.
-
+        Fedezd fel Kárpátalja földrajzát és történelmét
+        interaktív térképeken, történelmi forrásokon,
+        településeken és egykori vármegyéken keresztül.
     </p>
 
 
@@ -649,6 +756,7 @@ footer {
             🌍 FÖLDRAJZI TÉRKÉP
 
         </a>
+
 
         <a
             href="tortenelmi-terkep.html"
@@ -663,9 +771,9 @@ footer {
 </div>
 
 
-<!-- =========================================
-     TWO ATLAS
-========================================= -->
+<!-- =====================================================
+     KÉT FŐ ATLASZ
+===================================================== -->
 
 <section>
 
@@ -692,6 +800,8 @@ footer {
     <div class="atlas-grid">
 
 
+        <!-- FÖLDRAJZI ATLASZ -->
+
         <div class="atlas-card">
 
             <h3>
@@ -707,6 +817,7 @@ footer {
 
             </p>
 
+
             <a
                 href="foldrajzi-terkep.html"
                 class="map-button">
@@ -717,6 +828,8 @@ footer {
 
         </div>
 
+
+        <!-- TÖRTÉNETI ATLASZ -->
 
         <div class="atlas-card">
 
@@ -732,6 +845,7 @@ footer {
                 eseményei és történelmi térképei.
 
             </p>
+
 
             <a
                 href="tortenelmi-terkep.html"
@@ -750,9 +864,9 @@ footer {
 </section>
 
 
-<!-- =========================================
-     GEOGRAPHY
-========================================= -->
+<!-- =====================================================
+     FÖLDRAJZ
+===================================================== -->
 
 <section
     class="geography"
@@ -760,13 +874,16 @@ footer {
 
 <div class="section-inner">
 
+
     <div class="section-label">
         🌍 Földrajz
     </div>
 
+
     <h2>
         Kárpátalja földrajza
     </h2>
+
 
     <p class="description">
 
@@ -850,7 +967,8 @@ footer {
             </h3>
 
             <p>
-                Domborzat, folyók, tavak,
+                Földrajzi rétegek:
+                domborzat, folyók, tavak,
                 települések és közigazgatás.
             </p>
 
@@ -867,9 +985,9 @@ footer {
 </section>
 
 
-<!-- =========================================
-     HISTORY
-========================================= -->
+<!-- =====================================================
+     TÖRTÉNELEM
+===================================================== -->
 
 <section
     class="history"
@@ -877,13 +995,16 @@ footer {
 
 <div class="section-inner">
 
+
     <div class="section-label">
         📜 Történelem
     </div>
 
+
     <h2>
         Kárpátalja története
     </h2>
+
 
     <p class="description">
 
@@ -987,9 +1108,9 @@ footer {
 </section>
 
 
-<!-- =========================================
-     COUNTIES
-========================================= -->
+<!-- =====================================================
+     VÁRMEGYÉK
+===================================================== -->
 
 <section
     class="counties"
@@ -997,13 +1118,16 @@ footer {
 
 <div class="section-inner">
 
+
     <div class="section-label">
         🏛️ Történelmi közigazgatás
     </div>
 
+
     <h2>
         Egykori vármegyék
     </h2>
+
 
     <p class="description">
 
@@ -1078,9 +1202,9 @@ footer {
 </section>
 
 
-<!-- =========================================
-     SOURCES
-========================================= -->
+<!-- =====================================================
+     FORRÁSOK
+===================================================== -->
 
 <section
     class="sources"
@@ -1088,9 +1212,11 @@ footer {
 
 <div class="section-inner">
 
+
     <div class="section-label">
         📚 Dokumentáció
     </div>
+
 
     <h2>
         Források
@@ -1148,9 +1274,9 @@ footer {
 </section>
 
 
-<!-- =========================================
+<!-- =====================================================
      FOOTER
-========================================= -->
+===================================================== -->
 
 <footer>
 
