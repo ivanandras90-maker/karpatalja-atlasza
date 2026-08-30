@@ -8,11 +8,11 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>Történelmi interaktív térkép – Kárpátalja</title>
+<title>Interaktív földrajzi térkép – Kárpátalja</title>
 
 <link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
 
 <style>
@@ -21,15 +21,22 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     box-sizing: border-box;
 }
 
+html,
 body {
     margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
     font-family: Georgia, "Times New Roman", serif;
     background: #f3f0e7;
 }
 
-/* =========================
+
+/* =========================================
    FEJLÉC
-========================= */
+========================================= */
 
 header {
     background: #102638;
@@ -41,17 +48,45 @@ header {
 header h1 {
     margin: 0;
     font-size: 27px;
+    line-height: 1.3;
 }
 
 header p {
-    margin: 5px 0 0;
+    margin: 6px 0 0;
     color: #c9ad6c;
     font-size: 14px;
 }
 
-/* =========================
+
+/* =========================================
+   NYELVVÁLTÓ
+========================================= */
+
+.language-switch {
+    margin-top: 12px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+.language-switch a {
+    color: white;
+    text-decoration: none;
+    margin-right: 12px;
+}
+
+.language-switch a:hover {
+    color: #d8b86a;
+}
+
+.current-language {
+    color: #d8b86a;
+    font-weight: bold;
+}
+
+
+/* =========================================
    NAVIGÁCIÓ
-========================= */
+========================================= */
 
 nav {
     background: #17374d;
@@ -65,6 +100,7 @@ nav a {
     text-decoration: none;
     font-family: Arial, sans-serif;
     font-size: 14px;
+    font-weight: bold;
 }
 
 nav a:hover {
@@ -72,9 +108,10 @@ nav a:hover {
     color: #102638;
 }
 
-/* =========================
+
+/* =========================================
    TÉRKÉP FEJLÉC
-========================= */
+========================================= */
 
 .map-header {
     background: #f3f0e7;
@@ -90,74 +127,55 @@ nav a:hover {
 .map-header p {
     margin: 0;
     color: #5d666c;
+    font-size: 15px;
 }
 
-/* =========================
+
+/* =========================================
    TÉRKÉP
-========================= */
+========================================= */
 
 #map {
     width: 100%;
-    height: calc(100vh - 205px);
+    height: calc(100vh - 215px);
     min-height: 550px;
 }
 
-/* =========================
-   INFORMÁCIÓS PANEL
-========================= */
 
-.map-info {
-    position: absolute;
-    z-index: 1000;
-
-    top: 220px;
-    right: 20px;
-
-    background: white;
-
-    padding: 18px;
-
-    width: 285px;
-
-    box-shadow:
-        0 4px 18px rgba(0,0,0,.2);
-
-    border-radius: 4px;
-}
-
-.map-info h3 {
-    margin-top: 0;
-    color: #17374d;
-}
-
-.map-info p {
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-    line-height: 1.5;
-    color: #555;
-}
-
-/* =========================
+/* =========================================
    MOBIL
-========================= */
+========================================= */
 
 @media (max-width: 700px) {
 
-    .map-info {
-        display: none;
+    header {
+        padding: 18px 15px;
     }
 
-    #map {
-        height: calc(100vh - 190px);
+    header h1 {
+        font-size: 21px;
     }
 
     nav {
-        padding: 0 10px;
+        padding: 0 8px;
     }
 
     nav a {
         padding: 12px 8px;
-        font-size: 12px;
+        font-size: 11px;
+    }
+
+    .map-header {
+        padding: 20px 15px;
+    }
+
+    .map-header h2 {
+        font-size: 24px;
+    }
+
+    #map {
+        height: calc(100vh - 200px);
+        min-height: 450px;
     }
 
 }
@@ -170,9 +188,9 @@ nav a:hover {
 <body>
 
 
-<!-- =========================
+<!-- =========================================
      FEJLÉC
-========================= -->
+========================================= -->
 
 <header>
 
@@ -181,15 +199,28 @@ nav a:hover {
     </h1>
 
     <p>
-        📜 Történelmi atlasz
+        Földrajz • Történelem • Egykori vármegyék
     </p>
+
+
+    <div class="language-switch">
+
+        <span class="current-language">
+            🇭🇺 MAGYAR
+        </span>
+
+        <a href="foldrajzi-terkep-uk.html">
+            🇺🇦 УКРАЇНСЬКА
+        </a>
+
+    </div>
 
 </header>
 
 
-<!-- =========================
+<!-- =========================================
      NAVIGÁCIÓ
-========================= -->
+========================================= -->
 
 <nav>
 
@@ -208,194 +239,162 @@ nav a:hover {
 </nav>
 
 
-<!-- =========================
-     TÉRKÉP CÍM
-========================= -->
+<!-- =========================================
+     TÉRKÉP FEJLÉC
+========================================= -->
 
 <section class="map-header">
 
     <h2>
-        📜 Interaktív történelmi térkép
+        🌍 Interaktív földrajzi térkép
     </h2>
 
     <p>
-        Kárpátalja történelmi területe,
-        egykori vármegyéi és történelmi helyszínei.
+        Kárpátalja földrajzi térképe
+        természetföldrajzi és földrajzi objektumokkal.
     </p>
 
 </section>
 
 
-<!-- =========================
-     MAP
-========================= -->
+<!-- =========================================
+     TÉRKÉP
+========================================= -->
 
 <div id="map"></div>
 
 
-<!-- =========================
-     INFORMÁCIÓ
-========================= -->
-
-<div class="map-info">
-
-    <h3>
-        Történelmi atlasz
-    </h3>
-
-    <p>
-        Ezen a térképen külön rétegként
-        jelennek majd meg az egykori vármegyék,
-        történelmi települések, várak,
-        történelmi utak és események.
-    </p>
-
-</div>
-
+<!-- =========================================
+     LEAFLET
+========================================= -->
 
 <script
-src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 </script>
 
 
 <script>
 
-/* =========================
-   TÉRKÉP
-========================= */
+/* =========================================
+   ALAP TÉRKÉP
+========================================= */
 
-const map =
-    L.map('map').setView(
-        [48.45, 22.75],
-        8
-    );
+const map = L.map('map').setView(
+    [48.45, 22.75],
+    8
+);
 
 
-/* =========================
+/* =========================================
    ALAPTÉRKÉP
-========================= */
+========================================= */
 
-const osm =
-    L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        {
-            maxZoom: 19,
+const osm = L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        maxZoom: 19,
 
-            attribution:
-                '&copy; OpenStreetMap contributors'
-        }
-    );
+        attribution:
+            '&copy; OpenStreetMap contributors'
+    }
+);
 
 osm.addTo(map);
 
 
-/* =========================
-   TÖRTÉNELMI RÉTEGEK
-========================= */
+/* =========================================
+   FÖLDRAJZI RÉTEGEK
+========================================= */
 
 
-/* Ung vármegye */
+/* Domborzat */
 
-const ung =
+const relief =
     L.layerGroup();
 
 
-/* Bereg vármegye */
+/* Hegységek */
 
-const bereg =
+const mountains =
     L.layerGroup();
 
 
-/* Ugocsa vármegye */
+/* Folyók */
 
-const ugocsa =
+const rivers =
     L.layerGroup();
 
 
-/* Máramaros vármegye */
+/* Tavak */
 
-const maramaros =
+const lakes =
     L.layerGroup();
 
 
-/* Történelmi települések */
+/* Települések */
 
-const tortenelmiTelepulesek =
+const settlements =
     L.layerGroup();
 
 
-/* Várak és erődítmények */
+/* Utak */
 
-const varak =
+const roads =
     L.layerGroup();
 
 
-/* Történelmi események */
+/* Közigazgatási határok */
 
-const esemenyek =
+const administrativeBoundaries =
     L.layerGroup();
 
 
-/* Történelmi utak */
-
-const utak =
-    L.layerGroup();
-
-
-/* Régi térképek */
-
-const regiTerkepek =
-    L.layerGroup();
-
-
-/* =========================
-   RÉTEGVÁLASZTÓ
-========================= */
+/* =========================================
+   RÉTEGEK NEVEI
+========================================= */
 
 const overlays = {
 
-    "🏛️ Ung vármegye":
-        ung,
+    "🏔️ Domborzat":
+        relief,
 
-    "🏛️ Bereg vármegye":
-        bereg,
+    "⛰️ Hegységek":
+        mountains,
 
-    "🏛️ Ugocsa vármegye":
-        ugocsa,
+    "🌊 Folyók":
+        rivers,
 
-    "🏛️ Máramaros vármegye":
-        maramaros,
+    "💧 Tavak":
+        lakes,
 
-    "🏘️ Történelmi települések":
-        tortenelmiTelepulesek,
+    "🏘️ Települések":
+        settlements,
 
-    "🏰 Várak és erődítmények":
-        varak,
+    "🛣️ Utak":
+        roads,
 
-    "⚔️ Történelmi események":
-        esemenyek,
-
-    "🛤️ Történelmi utak":
-        utak,
-
-    "🗺️ Régi térképek":
-        regiTerkepek
+    "🏛️ Közigazgatási határok":
+        administrativeBoundaries
 
 };
 
 
-/* =========================
-   LAYER CONTROL
-========================= */
+/* =========================================
+   RÉTEGKEZELŐ
+========================================= */
 
 L.control.layers(
+
     {
         "OpenStreetMap": osm
     },
+
     overlays,
+
     {
         collapsed: false
     }
+
 ).addTo(map);
 
 </script>
