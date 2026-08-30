@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="uk">
 
 <head>
 
@@ -8,17 +8,12 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>Kárpátalja Földrajzi és Történeti Atlasza</title>
+<title>Географічний та історичний атлас Закарпаття</title>
 
 <meta name="description"
-      content="Kárpátalja Földrajzi és Történeti Atlasza – földrajzi és történelmi térképek, egykori vármegyék, települések és történelmi források.">
-
+      content="Географічний та історичний атлас Закарпаття – інтерактивні географічні та історичні карти, колишні комітати, населені пункти та історичні джерела.">
 
 <style>
-
-/* =====================================================
-   ALAP
-===================================================== */
 
 * {
     box-sizing: border-box;
@@ -35,10 +30,9 @@ body {
     color: #263238;
 }
 
-
-/* =====================================================
-   FEJLÉC
-===================================================== */
+/* =========================
+   HEADER
+========================= */
 
 header {
     background: #102a43;
@@ -65,9 +59,9 @@ header {
 }
 
 
-/* =====================================================
-   NYELVVÁLTÓ
-===================================================== */
+/* =========================
+   LANGUAGE SWITCH
+========================= */
 
 .language-switch {
     margin-top: 13px;
@@ -91,9 +85,9 @@ header {
 }
 
 
-/* =====================================================
-   FŐMENÜ
-===================================================== */
+/* =========================
+   NAVIGATION
+========================= */
 
 nav {
     background: #173f5f;
@@ -127,9 +121,9 @@ nav a:hover,
 }
 
 
-/* =====================================================
-   LENYÍLÓ MENÜ
-===================================================== */
+/* =========================
+   DROPDOWN
+========================= */
 
 .dropdown {
     position: relative;
@@ -137,31 +131,20 @@ nav a:hover,
 
 .dropdown-content {
     display: none;
-
     position: absolute;
-
     top: 100%;
     left: 0;
-
-    min-width: 285px;
-
+    min-width: 300px;
     background: white;
-
-    box-shadow:
-        0 8px 25px rgba(0,0,0,.25);
-
+    box-shadow: 0 8px 25px rgba(0,0,0,.25);
     z-index: 9999;
 }
 
 .dropdown-content a {
     display: block;
-
     color: #263238;
-
     padding: 14px 18px;
-
     font-weight: normal;
-
     border-bottom: 1px solid #eeeeee;
 }
 
@@ -175,9 +158,9 @@ nav a:hover,
 }
 
 
-/* =====================================================
+/* =========================
    HERO
-===================================================== */
+========================= */
 
 .hero {
     background:
@@ -187,60 +170,44 @@ nav a:hover,
         );
 
     color: white;
-
     text-align: center;
-
     padding: 110px 25px;
 }
 
 .hero-label {
     color: #d8b86a;
-
     font-family: Arial, sans-serif;
-
     font-size: 13px;
-
     font-weight: bold;
-
     letter-spacing: 3px;
-
     text-transform: uppercase;
 }
 
 .hero h1 {
     font-size: clamp(44px, 7vw, 76px);
-
     font-weight: normal;
-
     margin: 20px 0;
 }
 
 .hero-line {
     width: 80px;
-
     height: 2px;
-
     background: #d8b86a;
-
     margin: 0 auto 28px;
 }
 
 .hero p {
     max-width: 780px;
-
     margin: auto;
-
     font-size: 19px;
-
     line-height: 1.8;
-
     color: #e5e5e5;
 }
 
 
-/* =====================================================
-   HERO GOMBOK
-===================================================== */
+/* =========================
+   BUTTONS
+========================= */
 
 .buttons {
     margin-top: 35px;
@@ -248,29 +215,21 @@ nav a:hover,
 
 .button {
     display: inline-block;
-
     padding: 15px 28px;
-
     margin: 6px;
-
     text-decoration: none;
-
     font-family: Arial, sans-serif;
-
     font-weight: bold;
-
     border-radius: 3px;
 }
 
 .button-gold {
     background: #d8b86a;
-
     color: #102a43;
 }
 
 .button-outline {
     border: 1px solid #d8b86a;
-
     color: white;
 }
 
@@ -279,9 +238,9 @@ nav a:hover,
 }
 
 
-/* =====================================================
-   ÁLTALÁNOS SZEKCIÓ
-===================================================== */
+/* =========================
+   SECTIONS
+========================= */
 
 section {
     padding: 80px 25px;
@@ -294,102 +253,67 @@ section {
 
 .section-label {
     color: #a47c29;
-
     font-family: Arial, sans-serif;
-
     font-size: 12px;
-
     font-weight: bold;
-
     letter-spacing: 2px;
-
     text-transform: uppercase;
 }
 
 h2 {
     color: #102a43;
-
     font-size: 38px;
-
     font-weight: normal;
-
     margin-top: 12px;
 }
 
 .description {
     max-width: 800px;
-
     line-height: 1.8;
-
     font-size: 17px;
-
     color: #5d6569;
 }
 
 
-/* =====================================================
-   KÉT ATLASZ
-===================================================== */
+/* =========================
+   TWO ATLAS
+========================= */
 
 .atlas-grid {
     display: grid;
-
     grid-template-columns: 1fr 1fr;
-
     gap: 25px;
-
     margin-top: 40px;
 }
 
 .atlas-card {
     background: white;
-
     padding: 42px 35px;
-
     border: 1px solid #ddd5c3;
-
-    box-shadow:
-        0 7px 22px rgba(0,0,0,.08);
+    box-shadow: 0 7px 22px rgba(0,0,0,.08);
 }
 
 .atlas-card h3 {
     font-size: 28px;
-
     font-weight: normal;
-
     color: #102a43;
-
     margin-top: 0;
 }
 
 .atlas-card p {
     line-height: 1.7;
-
     color: #5f676b;
 }
 
-
-/* =====================================================
-   TÉRKÉP GOMB
-===================================================== */
-
 .map-button {
     display: inline-block;
-
     margin-top: 20px;
-
     padding: 14px 22px;
-
     background: #173f5f;
-
     color: white;
-
     text-decoration: none;
-
     font-family: Arial, sans-serif;
-
     font-weight: bold;
-
     border-radius: 3px;
 }
 
@@ -398,70 +322,57 @@ h2 {
 }
 
 
-/* =====================================================
-   FÖLDRAJZ
-===================================================== */
+/* =========================
+   GEOGRAPHY
+========================= */
 
 .geography {
     background: #eee9dc;
 }
 
 
-/* =====================================================
-   TÖRTÉNELEM
-===================================================== */
+/* =========================
+   HISTORY
+========================= */
 
 .history {
     background: #f8f6f0;
 }
 
 
-/* =====================================================
-   KÁRTYÁK
-===================================================== */
+/* =========================
+   CARDS
+========================= */
 
 .cards {
     display: grid;
-
     grid-template-columns: repeat(3, 1fr);
-
     gap: 20px;
-
     margin-top: 35px;
 }
 
 .card {
     background: white;
-
     border: 1px solid #ddd5c3;
-
     padding: 28px;
-
-    box-shadow:
-        0 3px 10px rgba(0,0,0,.04);
+    box-shadow: 0 3px 10px rgba(0,0,0,.04);
 }
 
 .card h3 {
     color: #102a43;
-
     font-size: 21px;
-
     font-weight: normal;
 }
 
 .card p {
     color: #626a6e;
-
     line-height: 1.7;
 }
 
 .card a {
     color: #075985;
-
     text-decoration: none;
-
     font-family: Arial, sans-serif;
-
     font-weight: bold;
 }
 
@@ -470,9 +381,9 @@ h2 {
 }
 
 
-/* =====================================================
-   VÁRMEGYÉK
-===================================================== */
+/* =========================
+   COUNTIES
+========================= */
 
 .counties {
     background: #e5dfd0;
@@ -483,13 +394,12 @@ h2 {
 }
 
 
-/* =====================================================
-   FORRÁSOK
-===================================================== */
+/* =========================
+   SOURCES
+========================= */
 
 .sources {
     background: #102a43;
-
     color: white;
 }
 
@@ -499,7 +409,6 @@ h2 {
 
 .sources .card {
     background: #173f5f;
-
     border-color: #315872;
 }
 
@@ -512,28 +421,23 @@ h2 {
 }
 
 
-/* =====================================================
+/* =========================
    FOOTER
-===================================================== */
+========================= */
 
 footer {
     background: #091d2d;
-
     color: #cbd3d8;
-
     text-align: center;
-
     padding: 35px 20px;
-
     font-family: Arial, sans-serif;
-
     font-size: 13px;
 }
 
 
-/* =====================================================
-   MOBIL
-===================================================== */
+/* =========================
+   MOBILE
+========================= */
 
 @media (max-width: 800px) {
 
@@ -572,94 +476,90 @@ footer {
 <body>
 
 
-<!-- =====================================================
-     FEJLÉC
-===================================================== -->
+<!-- =========================
+     HEADER
+========================= -->
 
 <header>
 
-    <div class="header-inner">
+<div class="header-inner">
 
-        <div class="logo">
-            Kárpátalja Földrajzi és Történeti Atlasza
-        </div>
+    <div class="logo">
+        Географічний та історичний атлас Закарпаття
+    </div>
 
-        <div class="subtitle">
-            Földrajz • Történelem • Egykori vármegyék
-        </div>
+    <div class="subtitle">
+        Географія • Історія • Колишні комітати
+    </div>
 
 
-        <!-- NYELVVÁLTÓ -->
+    <div class="language-switch">
 
-        <div class="language-switch">
+        <a href="index.html">
+            🇭🇺 MAGYAR
+        </a>
 
-            <span class="language-current">
-                🇭🇺 MAGYAR
-            </span>
+        <span>|</span>
 
-            <span>|</span>
-
-            <a href="index-ua.html">
-                🇺🇦 УКРАЇНСЬКА
-            </a>
-
-        </div>
+        <span class="language-current">
+            🇺🇦 УКРАЇНСЬКА
+        </span>
 
     </div>
+
+</div>
 
 </header>
 
 
-<!-- =====================================================
-     FŐMENÜ
-===================================================== -->
+<!-- =========================
+     NAVIGATION
+========================= -->
 
 <nav>
 
 <div class="nav-inner">
 
 
-    <!-- FŐOLDAL -->
-
-    <a href="index.html">
-        FŐOLDAL
+    <a href="index-ua.html">
+        ГОЛОВНА
     </a>
 
 
-    <!-- =================================================
-         FÖLDRAJZ
-    ================================================== -->
+    <!-- =====================
+         GEOGRAPHY
+    ====================== -->
 
     <div class="dropdown">
 
         <button class="dropbtn">
-            🌍 FÖLDRAJZ ▾
+            🌍 ГЕОГРАФІЯ ▾
         </button>
 
         <div class="dropdown-content">
 
-            <a href="#foldrajz">
-                Földrajzi áttekintés
+            <a href="#geography">
+                Географічний огляд
             </a>
 
-            <a href="foldrajzi-terkep.html">
-                🗺️ Földrajzi interaktív térkép
+            <a href="foldrajzi-terkep-ua.html">
+                🗺️ Інтерактивна географічна карта
             </a>
 
-            <a href="#tajak">
-                🏔️ Tájak és domborzat
+            <a href="#landscape">
+                🏔️ Ландшафти та рельєф
             </a>
 
-            <a href="#vizek">
-                🌊 Folyók és tavak
+            <a href="#rivers">
+                🌊 Річки та озера
             </a>
 
-            <a href="#telepulesek">
-                🏘️ Települések
+            <a href="#settlements">
+                🏘️ Населені пункти
             </a>
 
-            <a href="#kozigazgatas">
-                🏛️ Közigazgatás
+            <a href="#administration">
+                🏛️ Адміністративний устрій
             </a>
 
         </div>
@@ -667,44 +567,44 @@ footer {
     </div>
 
 
-    <!-- =================================================
-         TÖRTÉNELEM
-    ================================================== -->
+    <!-- =====================
+         HISTORY
+    ====================== -->
 
     <div class="dropdown">
 
         <button class="dropbtn">
-            📜 TÖRTÉNELEM ▾
+            📜 ІСТОРІЯ ▾
         </button>
 
         <div class="dropdown-content">
 
-            <a href="#tortenelem">
-                Történelmi áttekintés
+            <a href="#history">
+                Історичний огляд
             </a>
 
-            <a href="tortenelmi-terkep.html">
-                🗺️ Történelmi interaktív térkép
+            <a href="tortenelmi-terkep-ua.html">
+                🗺️ Інтерактивна історична карта
             </a>
 
-            <a href="#varmegyek">
-                🏛️ Egykori vármegyék
+            <a href="#counties">
+                🏛️ Колишні комітати
             </a>
 
-            <a href="#korszakok">
-                ⏳ Történelmi korszakok
+            <a href="#periods">
+                ⏳ Історичні періоди
             </a>
 
-            <a href="#esemenyek">
-                ⚔️ Történelmi események
+            <a href="#events">
+                ⚔️ Історичні події
             </a>
 
-            <a href="#szemelyek">
-                👑 Történelmi személyek
+            <a href="#people">
+                👑 Історичні постаті
             </a>
 
-            <a href="#terkepek">
-                🗺️ Régi történelmi térképek
+            <a href="#oldmaps">
+                🗺️ Старі історичні карти
             </a>
 
         </div>
@@ -712,57 +612,57 @@ footer {
     </div>
 
 
-    <!-- FORRÁSOK -->
-
-    <a href="#forrasok">
-        📚 FORRÁSOK
+    <a href="#sources">
+        📚 ДЖЕРЕЛА
     </a>
-
 
 </div>
 
 </nav>
 
 
-<!-- =====================================================
+<!-- =========================
      HERO
-===================================================== -->
+========================= -->
 
 <div class="hero">
 
     <div class="hero-label">
-        Digitális földrajzi és történeti atlasz
+        Цифровий географічний та історичний атлас
     </div>
 
     <h1>
-        Kárpátalja
+        Закарпаття
     </h1>
 
     <div class="hero-line"></div>
 
     <p>
-        Fedezd fel Kárpátalja földrajzát és történelmét
-        interaktív térképeken, történelmi forrásokon,
-        településeken és egykori vármegyéken keresztül.
+
+        Відкрийте для себе географію та історію
+        Закарпаття за допомогою інтерактивних карт,
+        історичних джерел, населених пунктів
+        та колишніх комітатів.
+
     </p>
 
 
     <div class="buttons">
 
         <a
-            href="foldrajzi-terkep.html"
+            href="foldrajzi-terkep-ua.html"
             class="button button-gold">
 
-            🌍 FÖLDRAJZI TÉRKÉP
+            🌍 ГЕОГРАФІЧНА КАРТА
 
         </a>
 
 
         <a
-            href="tortenelmi-terkep.html"
+            href="tortenelmi-terkep-ua.html"
             class="button button-outline">
 
-            📜 TÖRTÉNELMI TÉRKÉP
+            📜 ІСТОРИЧНА КАРТА
 
         </a>
 
@@ -771,28 +671,28 @@ footer {
 </div>
 
 
-<!-- =====================================================
-     KÉT FŐ ATLASZ
-===================================================== -->
+<!-- =========================
+     TWO ATLAS
+========================= -->
 
 <section>
 
 <div class="section-inner">
 
     <div class="section-label">
-        Az atlasz két fő területe
+        Два основні розділи атласу
     </div>
 
     <h2>
-        Földrajz és történelem
+        Географія та історія
     </h2>
 
     <p class="description">
 
-        Az atlasz két egymástól független,
-        de egymással összekapcsolható rendszerben
-        mutatja be Kárpátalja földrajzi és történeti
-        örökségét.
+        Атлас складається з двох незалежних,
+        але взаємопов'язаних систем, які
+        представляють географічну та історичну
+        спадщину Закарпаття.
 
     </p>
 
@@ -800,58 +700,57 @@ footer {
     <div class="atlas-grid">
 
 
-        <!-- FÖLDRAJZI ATLASZ -->
+        <!-- GEOGRAPHY -->
 
         <div class="atlas-card">
 
             <h3>
-                🌍 Földrajzi atlasz
+                🌍 Географічний атлас
             </h3>
 
             <p>
 
-                Kárpátalja természetföldrajza,
-                domborzata, folyói, tavai,
-                települései és jelenlegi
-                közigazgatása.
+                Природна географія Закарпаття,
+                рельєф, річки, озера, населені
+                пункти та сучасний адміністративний
+                устрій.
 
             </p>
 
 
             <a
-                href="foldrajzi-terkep.html"
+                href="foldrajzi-terkep-ua.html"
                 class="map-button">
 
-                🗺️ Földrajzi interaktív térkép →
+                🗺️ Інтерактивна географічна карта →
 
             </a>
 
         </div>
 
 
-        <!-- TÖRTÉNETI ATLASZ -->
+        <!-- HISTORY -->
 
         <div class="atlas-card">
 
             <h3>
-                📜 Történeti atlasz
+                📜 Історичний атлас
             </h3>
 
             <p>
 
-                Kárpátalja történelme,
-                egykori vármegyéi,
-                történelmi települései,
-                eseményei és történelmi térképei.
+                Історія Закарпаття, колишні комітати,
+                історичні населені пункти, події,
+                постаті та історичні карти.
 
             </p>
 
 
             <a
-                href="tortenelmi-terkep.html"
+                href="tortenelmi-terkep-ua.html"
                 class="map-button">
 
-                🗺️ Történelmi interaktív térkép →
+                🗺️ Інтерактивна історична карта →
 
             </a>
 
@@ -864,31 +763,28 @@ footer {
 </section>
 
 
-<!-- =====================================================
-     FÖLDRAJZ
-===================================================== -->
+<!-- =========================
+     GEOGRAPHY
+========================= -->
 
 <section
     class="geography"
-    id="foldrajz">
+    id="geography">
 
 <div class="section-inner">
 
-
     <div class="section-label">
-        🌍 Földrajz
+        🌍 Географія
     </div>
 
-
     <h2>
-        Kárpátalja földrajza
+        Географія Закарпаття
     </h2>
-
 
     <p class="description">
 
-        A térség természetföldrajzi és
-        településföldrajzi bemutatása.
+        Природні особливості та географічна
+        структура регіону.
 
     </p>
 
@@ -898,15 +794,15 @@ footer {
 
         <div
             class="card"
-            id="tajak">
+            id="landscape">
 
             <h3>
-                🏔️ Tájak és domborzat
+                🏔️ Ландшафти та рельєф
             </h3>
 
             <p>
-                Hegységek, völgyek, medencék
-                és természetföldrajzi tájak.
+                Гірські масиви, долини,
+                улоговини та природні ландшафти.
             </p>
 
         </div>
@@ -914,15 +810,15 @@ footer {
 
         <div
             class="card"
-            id="vizek">
+            id="rivers">
 
             <h3>
-                🌊 Folyók és tavak
+                🌊 Річки та озера
             </h3>
 
             <p>
-                A Tisza és mellékfolyói,
-                valamint a térség vízrajza.
+                Тиса та її притоки, озера
+                і водна система регіону.
             </p>
 
         </div>
@@ -930,15 +826,15 @@ footer {
 
         <div
             class="card"
-            id="telepulesek">
+            id="settlements">
 
             <h3>
-                🏘️ Települések
+                🏘️ Населені пункти
             </h3>
 
             <p>
-                Városok és falvak földrajzi
-                és településtörténeti adatai.
+                Міста, села та географічні
+                характеристики населених пунктів.
             </p>
 
         </div>
@@ -946,15 +842,15 @@ footer {
 
         <div
             class="card"
-            id="kozigazgatas">
+            id="administration">
 
             <h3>
-                🏛️ Közigazgatás
+                🏛️ Адміністративний устрій
             </h3>
 
             <p>
-                A jelenlegi közigazgatási
-                rendszer és területi egységek.
+                Сучасний адміністративний поділ
+                та територіальні одиниці.
             </p>
 
         </div>
@@ -963,17 +859,16 @@ footer {
         <div class="card">
 
             <h3>
-                🗺️ Földrajzi interaktív térkép
+                🗺️ Географічна карта
             </h3>
 
             <p>
-                Földrajzi rétegek:
-                domborzat, folyók, tavak,
-                települések és közigazgatás.
+                Інтерактивна географічна карта
+                з окремими інформаційними шарами.
             </p>
 
-            <a href="foldrajzi-terkep.html">
-                Térkép megnyitása →
+            <a href="foldrajzi-terkep-ua.html">
+                Відкрити карту →
             </a>
 
         </div>
@@ -985,33 +880,29 @@ footer {
 </section>
 
 
-<!-- =====================================================
-     TÖRTÉNELEM
-===================================================== -->
+<!-- =========================
+     HISTORY
+========================= -->
 
 <section
     class="history"
-    id="tortenelem">
+    id="history">
 
 <div class="section-inner">
 
-
     <div class="section-label">
-        📜 Történelem
+        📜 Історія
     </div>
 
-
     <h2>
-        Kárpátalja története
+        Історія Закарпаття
     </h2>
-
 
     <p class="description">
 
-        A térség történetének bemutatása
-        korszakok, események, személyek,
-        települések és közigazgatási változások
-        alapján.
+        Історія регіону представлена через
+        історичні періоди, події, постаті,
+        населені пункти та адміністративні зміни.
 
     </p>
 
@@ -1021,15 +912,15 @@ footer {
 
         <div
             class="card"
-            id="korszakok">
+            id="periods">
 
             <h3>
-                ⏳ Történelmi korszakok
+                ⏳ Історичні періоди
             </h3>
 
             <p>
-                A térség története az ókortól
-                napjainkig.
+                Історія краю від давнини
+                до сучасності.
             </p>
 
         </div>
@@ -1037,15 +928,15 @@ footer {
 
         <div
             class="card"
-            id="esemenyek">
+            id="events">
 
             <h3>
-                ⚔️ Történelmi események
+                ⚔️ Історичні події
             </h3>
 
             <p>
-                Fontos események és történelmi
-                fordulópontok.
+                Важливі події та історичні
+                переломні моменти.
             </p>
 
         </div>
@@ -1053,15 +944,15 @@ footer {
 
         <div
             class="card"
-            id="szemelyek">
+            id="people">
 
             <h3>
-                👑 Történelmi személyek
+                👑 Історичні постаті
             </h3>
 
             <p>
-                A Kárpátalja történetéhez kapcsolódó
-                jelentős személyek.
+                Видатні постаті, пов'язані
+                з історією Закарпаття.
             </p>
 
         </div>
@@ -1069,15 +960,15 @@ footer {
 
         <div
             class="card"
-            id="terkepek">
+            id="oldmaps">
 
             <h3>
-                🗺️ Történelmi térképek
+                🗺️ Історичні карти
             </h3>
 
             <p>
-                Régi térképek és a történelmi
-                területi változások.
+                Старі карти та зміни
+                територіального устрою.
             </p>
 
         </div>
@@ -1086,17 +977,16 @@ footer {
         <div class="card">
 
             <h3>
-                🗺️ Történelmi interaktív térkép
+                🗺️ Історична карта
             </h3>
 
             <p>
-                Egykori vármegyék, történelmi
-                települések, várak, események,
-                utak és régi térképek.
+                Колишні комітати та історичні
+                інформаційні шари.
             </p>
 
-            <a href="tortenelmi-terkep.html">
-                Térkép megnyitása →
+            <a href="tortenelmi-terkep-ua.html">
+                Відкрити карту →
             </a>
 
         </div>
@@ -1108,31 +998,28 @@ footer {
 </section>
 
 
-<!-- =====================================================
-     VÁRMEGYÉK
-===================================================== -->
+<!-- =========================
+     COUNTIES
+========================= -->
 
 <section
     class="counties"
-    id="varmegyek">
+    id="counties">
 
 <div class="section-inner">
 
-
     <div class="section-label">
-        🏛️ Történelmi közigazgatás
+        🏛️ Історичний адміністративний устрій
     </div>
 
-
     <h2>
-        Egykori vármegyék
+        Колишні комітати
     </h2>
-
 
     <p class="description">
 
-        A történelmi Kárpátalja területéhez
-        kapcsolódó egykori vármegyék.
+        Історичні комітати, пов'язані
+        з територією сучасного Закарпаття.
 
     </p>
 
@@ -1143,12 +1030,12 @@ footer {
         <div class="card county">
 
             <h3>
-                Ung vármegye
+                Ужанський комітат
             </h3>
 
             <p>
-                Története, területe,
-                közigazgatása és települései.
+                Історія, територія
+                та населені пункти.
             </p>
 
         </div>
@@ -1157,12 +1044,12 @@ footer {
         <div class="card county">
 
             <h3>
-                Bereg vármegye
+                Березький комітат
             </h3>
 
             <p>
-                Története, területe,
-                közigazgatása és települései.
+                Історія, територія
+                та населені пункти.
             </p>
 
         </div>
@@ -1171,12 +1058,12 @@ footer {
         <div class="card county">
 
             <h3>
-                Ugocsa vármegye
+                Угочанський комітат
             </h3>
 
             <p>
-                Története, területe,
-                közigazgatása és települései.
+                Історія, територія
+                та населені пункти.
             </p>
 
         </div>
@@ -1185,12 +1072,12 @@ footer {
         <div class="card county">
 
             <h3>
-                Máramaros vármegye
+                Марамороський комітат
             </h3>
 
             <p>
-                Története, területe,
-                közigazgatása és települései.
+                Історія, територія
+                та населені пункти.
             </p>
 
         </div>
@@ -1202,24 +1089,22 @@ footer {
 </section>
 
 
-<!-- =====================================================
-     FORRÁSOK
-===================================================== -->
+<!-- =========================
+     SOURCES
+========================= -->
 
 <section
     class="sources"
-    id="forrasok">
+    id="sources">
 
 <div class="section-inner">
 
-
     <div class="section-label">
-        📚 Dokumentáció
+        📚 Документація
     </div>
 
-
     <h2>
-        Források
+        Джерела
     </h2>
 
 
@@ -1229,12 +1114,12 @@ footer {
         <div class="card">
 
             <h3>
-                📖 Történeti források
+                📖 Історичні джерела
             </h3>
 
             <p>
-                Könyvek, tanulmányok,
-                levéltári és történeti források.
+                Книги, дослідження, архівні
+                та історичні джерела.
             </p>
 
         </div>
@@ -1243,12 +1128,12 @@ footer {
         <div class="card">
 
             <h3>
-                🗺️ Térképészeti források
+                🗺️ Картографічні джерела
             </h3>
 
             <p>
-                Régi és modern térképek,
-                atlaszok és térképészeti adatok.
+                Старі та сучасні карти,
+                атласи та картографічні дані.
             </p>
 
         </div>
@@ -1257,12 +1142,12 @@ footer {
         <div class="card">
 
             <h3>
-                📑 Szakirodalom
+                📑 Наукова література
             </h3>
 
             <p>
-                A kutatáshoz felhasznált
-                szakirodalom és további művek.
+                Використана література
+                та рекомендовані праці.
             </p>
 
         </div>
@@ -1274,17 +1159,17 @@ footer {
 </section>
 
 
-<!-- =====================================================
+<!-- =========================
      FOOTER
-===================================================== -->
+========================= -->
 
 <footer>
 
-    Kárpátalja Földrajzi és Történeti Atlasza
+    Географічний та історичний атлас Закарпаття
 
     <br><br>
 
-    Digitális földrajzi és történeti atlasz
+    Цифровий географічний та історичний атлас
 
     <br><br>
 
