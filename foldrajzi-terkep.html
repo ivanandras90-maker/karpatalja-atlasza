@@ -8,559 +8,121 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>Kárpátalja Földrajzi és Történeti Atlasza</title>
+<title>Kárpátalja – Interaktív földrajzi térkép</title>
 
-<meta name="description"
-      content="Kárpátalja Földrajzi és Történeti Atlasza – földrajzi és történelmi térképek, egykori vármegyék, települések és történelmi források.">
+<!-- Leaflet -->
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
+/>
+
+<!-- Leaflet Draw -->
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css"
+/>
+
+<!-- Geocoder -->
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"
+/>
+
+<!-- Bootstrap -->
+<link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+/>
+
+<!-- Font Awesome -->
+<link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+/>
 
 
 <style>
 
-/* =====================================================
-   ALAP
-===================================================== */
-
-* {
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
+html,
 body {
+
     margin: 0;
-    font-family: Georgia, "Times New Roman", serif;
-    background: #f4f1e8;
-    color: #263238;
+    padding: 0;
+
+    width: 100%;
+    height: 100%;
+
+}
+
+#map {
+
+    width: 100%;
+    height: 100vh;
+
 }
 
 
-/* =====================================================
-   FEJLÉC
-===================================================== */
+/* Koordináta kijelzés */
 
-header {
-    background: #102a43;
-    color: white;
-    padding: 24px 30px 20px;
-    border-bottom: 1px solid #c09d57;
-}
+.coordinates-info {
 
-.header-inner {
-    max-width: 1250px;
-    margin: auto;
-}
+    padding: 6px 10px;
 
-.logo {
-    font-size: 30px;
-    font-weight: bold;
-    line-height: 1.25;
-}
-
-.subtitle {
-    color: #d8b86a;
-    margin-top: 7px;
-    font-size: 14px;
-}
-
-
-/* =====================================================
-   NYELVVÁLTÓ
-===================================================== */
-
-.language-switch {
-    margin-top: 13px;
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-}
-
-.language-switch a {
-    color: white;
-    text-decoration: none;
-    margin: 0 5px;
-}
-
-.language-switch a:hover {
-    color: #d8b86a;
-}
-
-.language-current {
-    color: #d8b86a;
-    font-weight: bold;
-}
-
-
-/* =====================================================
-   FŐMENÜ
-===================================================== */
-
-nav {
-    background: #173f5f;
-    border-bottom: 1px solid rgba(255,255,255,.15);
-}
-
-.nav-inner {
-    max-width: 1250px;
-    margin: auto;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-nav a,
-.dropbtn {
-    color: white;
-    text-decoration: none;
-    padding: 17px 20px;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-}
-
-nav a:hover,
-.dropbtn:hover {
-    background: #0d3049;
-}
-
-
-/* =====================================================
-   LENYÍLÓ MENÜ
-===================================================== */
-
-.dropdown {
-    position: relative;
-}
-
-.dropdown-content {
-    display: none;
-
-    position: absolute;
-
-    top: 100%;
-    left: 0;
-
-    min-width: 285px;
+    font:
+        13px/18px
+        Arial,
+        Helvetica,
+        sans-serif;
 
     background: white;
 
-    box-shadow:
-        0 8px 25px rgba(0,0,0,.25);
-
-    z-index: 9999;
-}
-
-.dropdown-content a {
-    display: block;
-
-    color: #263238;
-
-    padding: 14px 18px;
-
-    font-weight: normal;
-
-    border-bottom: 1px solid #eeeeee;
-}
-
-.dropdown-content a:hover {
-    background: #eee8d8;
-    color: #102a43;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-
-/* =====================================================
-   HERO
-===================================================== */
-
-.hero {
     background:
-        linear-gradient(
-            rgba(16,42,67,.94),
-            rgba(16,42,67,.94)
-        );
+        rgba(255,255,255,0.9);
 
-    color: white;
+    box-shadow:
+        0 0 10px
+        rgba(0,0,0,0.2);
 
-    text-align: center;
+    border-radius: 4px;
 
-    padding: 110px 25px;
 }
 
-.hero-label {
-    color: #d8b86a;
 
-    font-family: Arial, sans-serif;
+/* Rétegkezelő */
+
+.leaflet-control-layers {
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
     font-size: 13px;
 
-    font-weight: bold;
-
-    letter-spacing: 3px;
-
-    text-transform: uppercase;
-}
-
-.hero h1 {
-    font-size: clamp(44px, 7vw, 76px);
-
-    font-weight: normal;
-
-    margin: 20px 0;
-}
-
-.hero-line {
-    width: 80px;
-
-    height: 2px;
-
-    background: #d8b86a;
-
-    margin: 0 auto 28px;
-}
-
-.hero p {
-    max-width: 780px;
-
-    margin: auto;
-
-    font-size: 19px;
-
-    line-height: 1.8;
-
-    color: #e5e5e5;
 }
 
 
-/* =====================================================
-   HERO GOMBOK
-===================================================== */
+/* Export gomb */
 
-.buttons {
-    margin-top: 35px;
-}
+.export-control {
 
-.button {
-    display: inline-block;
-
-    padding: 15px 28px;
-
-    margin: 6px;
-
-    text-decoration: none;
-
-    font-family: Arial, sans-serif;
-
-    font-weight: bold;
-
-    border-radius: 3px;
-}
-
-.button-gold {
-    background: #d8b86a;
-
-    color: #102a43;
-}
-
-.button-outline {
-    border: 1px solid #d8b86a;
-
-    color: white;
-}
-
-.button:hover {
-    opacity: .85;
-}
-
-
-/* =====================================================
-   ÁLTALÁNOS SZEKCIÓ
-===================================================== */
-
-section {
-    padding: 80px 25px;
-}
-
-.section-inner {
-    max-width: 1200px;
-    margin: auto;
-}
-
-.section-label {
-    color: #a47c29;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 12px;
-
-    font-weight: bold;
-
-    letter-spacing: 2px;
-
-    text-transform: uppercase;
-}
-
-h2 {
-    color: #102a43;
-
-    font-size: 38px;
-
-    font-weight: normal;
-
-    margin-top: 12px;
-}
-
-.description {
-    max-width: 800px;
-
-    line-height: 1.8;
-
-    font-size: 17px;
-
-    color: #5d6569;
-}
-
-
-/* =====================================================
-   KÉT ATLASZ
-===================================================== */
-
-.atlas-grid {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 25px;
-
-    margin-top: 40px;
-}
-
-.atlas-card {
     background: white;
 
-    padding: 42px 35px;
+    padding: 7px 10px;
 
-    border: 1px solid #ddd5c3;
-
-    box-shadow:
-        0 7px 22px rgba(0,0,0,.08);
-}
-
-.atlas-card h3 {
-    font-size: 28px;
-
-    font-weight: normal;
-
-    color: #102a43;
-
-    margin-top: 0;
-}
-
-.atlas-card p {
-    line-height: 1.7;
-
-    color: #5f676b;
-}
-
-
-/* =====================================================
-   TÉRKÉP GOMB
-===================================================== */
-
-.map-button {
-    display: inline-block;
-
-    margin-top: 20px;
-
-    padding: 14px 22px;
-
-    background: #173f5f;
-
-    color: white;
-
-    text-decoration: none;
-
-    font-family: Arial, sans-serif;
-
-    font-weight: bold;
-
-    border-radius: 3px;
-}
-
-.map-button:hover {
-    background: #0d3049;
-}
-
-
-/* =====================================================
-   FÖLDRAJZ
-===================================================== */
-
-.geography {
-    background: #eee9dc;
-}
-
-
-/* =====================================================
-   TÖRTÉNELEM
-===================================================== */
-
-.history {
-    background: #f8f6f0;
-}
-
-
-/* =====================================================
-   KÁRTYÁK
-===================================================== */
-
-.cards {
-    display: grid;
-
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 20px;
-
-    margin-top: 35px;
-}
-
-.card {
-    background: white;
-
-    border: 1px solid #ddd5c3;
-
-    padding: 28px;
+    border-radius: 4px;
 
     box-shadow:
-        0 3px 10px rgba(0,0,0,.04);
+        0 0 8px
+        rgba(0,0,0,.25);
+
+    cursor: pointer;
+
 }
 
-.card h3 {
-    color: #102a43;
+.export-control:hover {
 
-    font-size: 21px;
-
-    font-weight: normal;
-}
-
-.card p {
-    color: #626a6e;
-
-    line-height: 1.7;
-}
-
-.card a {
-    color: #075985;
-
-    text-decoration: none;
-
-    font-family: Arial, sans-serif;
-
-    font-weight: bold;
-}
-
-.card a:hover {
-    text-decoration: underline;
-}
-
-
-/* =====================================================
-   VÁRMEGYÉK
-===================================================== */
-
-.counties {
-    background: #e5dfd0;
-}
-
-.county {
-    border-left: 5px solid #b08a35;
-}
-
-
-/* =====================================================
-   FORRÁSOK
-===================================================== */
-
-.sources {
-    background: #102a43;
-
-    color: white;
-}
-
-.sources h2 {
-    color: white;
-}
-
-.sources .card {
-    background: #173f5f;
-
-    border-color: #315872;
-}
-
-.sources .card h3 {
-    color: #d8b86a;
-}
-
-.sources .card p {
-    color: #e1e6e9;
-}
-
-
-/* =====================================================
-   FOOTER
-===================================================== */
-
-footer {
-    background: #091d2d;
-
-    color: #cbd3d8;
-
-    text-align: center;
-
-    padding: 35px 20px;
-
-    font-family: Arial, sans-serif;
-
-    font-size: 13px;
-}
-
-
-/* =====================================================
-   MOBIL
-===================================================== */
-
-@media (max-width: 800px) {
-
-    .logo {
-        font-size: 22px;
-    }
-
-    nav a,
-    .dropbtn {
-        padding: 13px 10px;
-        font-size: 12px;
-    }
-
-    .atlas-grid,
-    .cards {
-        grid-template-columns: 1fr;
-    }
-
-    .dropdown-content {
-        position: static;
-        width: 100%;
-        box-shadow: none;
-    }
-
-    .hero {
-        padding: 80px 20px;
-    }
+    background: #eeeeee;
 
 }
 
@@ -572,726 +134,939 @@ footer {
 <body>
 
 
-<!-- =====================================================
-     FEJLÉC
-===================================================== -->
+<div id="map"></div>
 
-<header>
 
-    <div class="header-inner">
+<!-- ==========================================
+     JAVASCRIPT KÖNYVTÁRAK
+========================================== -->
 
-        <div class="logo">
-            Kárpátalja Földrajzi és Történeti Atlasza
-        </div>
+<script
+src="https://code.jquery.com/jquery-3.3.1.min.js">
+</script>
 
-        <div class="subtitle">
-            Földrajz • Történelem • Egykori vármegyék
-        </div>
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js">
+</script>
 
+<script
+src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+</script>
 
-        <!-- NYELVVÁLTÓ -->
+<script
+src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js">
+</script>
 
-        <div class="language-switch">
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js">
+</script>
 
-            <span class="language-current">
-                🇭🇺 MAGYAR
-            </span>
+<script
+src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js">
+</script>
 
-            <span>|</span>
 
-            <a href="index-ua.html">
-                🇺🇦 УКРАЇНСЬКА
-            </a>
+<!-- ==========================================
+     ZIP ADATFÁJLOK
+========================================== -->
 
-        </div>
+<script src="./data/line.js"></script>
 
-    </div>
+<script src="./data/point.js"></script>
 
-</header>
+<script src="./data/polygon.js"></script>
 
+<script src="./data/nepaldata.js"></script>
 
-<!-- =====================================================
-     FŐMENÜ
-===================================================== -->
 
-<nav>
+<script>
 
-<div class="nav-inner">
+/* =================================================
+   TÉRKÉP
+================================================= */
 
+var map =
+    L.map('map').setView(
+        [48.20579018144784,
+         22.644663061560948],
+        8
+    );
 
-    <!-- FŐOLDAL -->
 
-    <a href="index.html">
-        FŐOLDAL
-    </a>
+/* =================================================
+   OPENSTREETMAP
+================================================= */
 
+var osm =
+    L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
 
-    <!-- =================================================
-         FÖLDRAJZ
-    ================================================== -->
+            maxZoom: 19,
 
-    <div class="dropdown">
+            attribution:
+                '&copy; OpenStreetMap contributors'
 
-        <button class="dropbtn">
-            🌍 FÖLDRAJZ ▾
-        </button>
+        }
+    );
 
-        <div class="dropdown-content">
 
-            <a href="#foldrajz">
-                Földrajzi áttekintés
-            </a>
+osm.addTo(map);
 
-            <a href="foldrajzi-terkep.html">
-                🗺️ Földrajzi interaktív térkép
-            </a>
 
-            <a href="#tajak">
-                🏔️ Tájak és domborzat
-            </a>
+/* =================================================
+   KOORDINÁTÁK
+================================================= */
 
-            <a href="#vizek">
-                🌊 Folyók és tavak
-            </a>
+var coordinatesControl =
+    L.control({
+        position: 'bottomright'
+    });
 
-            <a href="#telepulesek">
-                🏘️ Települések
-            </a>
 
-            <a href="#kozigazgatas">
-                🏛️ Közigazgatás
-            </a>
+coordinatesControl.onAdd =
+function(map) {
 
-        </div>
+    this._div =
+        L.DomUtil.create(
+            'div',
+            'coordinates-info'
+        );
 
-    </div>
+    this.update();
 
+    return this._div;
 
-    <!-- =================================================
-         TÖRTÉNELEM
-    ================================================== -->
+};
 
-    <div class="dropdown">
 
-        <button class="dropbtn">
-            📜 TÖRTÉNELEM ▾
-        </button>
+coordinatesControl.update =
+function(latlng) {
 
-        <div class="dropdown-content">
+    if (latlng) {
 
-            <a href="#tortenelem">
-                Történelmi áttekintés
-            </a>
+        this._div.innerHTML =
 
-            <a href="tortenelmi-terkep.html">
-                🗺️ Történelmi interaktív térkép
-            </a>
+            '<strong>Szélesség:</strong> ' +
+            latlng.lat.toFixed(6) +
 
-            <a href="#varmegyek">
-                🏛️ Egykori vármegyék
-            </a>
+            ' &nbsp; ' +
 
-            <a href="#korszakok">
-                ⏳ Történelmi korszakok
-            </a>
+            '<strong>Hosszúság:</strong> ' +
+            latlng.lng.toFixed(6);
 
-            <a href="#esemenyek">
-                ⚔️ Történelmi események
-            </a>
+    }
 
-            <a href="#szemelyek">
-                👑 Történelmi személyek
-            </a>
+    else {
 
-            <a href="#terkepek">
-                🗺️ Régi történelmi térképek
-            </a>
+        this._div.innerHTML =
+            'Mutasson a térképre!';
 
-        </div>
+    }
 
-    </div>
+};
 
 
-    <!-- FORRÁSOK -->
+coordinatesControl.addTo(map);
 
-    <a href="#forrasok">
-        📚 FORRÁSOK
-    </a>
 
+map.on(
+    'mousemove',
+    function(e) {
 
-</div>
+        coordinatesControl.update(
+            e.latlng
+        );
 
-</nav>
+    }
+);
 
 
-<!-- =====================================================
-     HERO
-===================================================== -->
+/* =================================================
+   MÉRÉSI SKÁLA
+================================================= */
 
-<div class="hero">
+L.control.scale({
 
-    <div class="hero-label">
-        Digitális földrajzi és történeti atlasz
-    </div>
+    position: 'bottomleft',
 
-    <h1>
-        Kárpátalja
-    </h1>
+    metric: true,
 
-    <div class="hero-line"></div>
+    imperial: false,
 
-    <p>
-        Fedezd fel Kárpátalja földrajzát és történelmét
-        interaktív térképeken, történelmi forrásokon,
-        településeken és egykori vármegyéken keresztül.
-    </p>
+    maxWidth: 200
 
+}).addTo(map);
 
-    <div class="buttons">
 
-        <a
-            href="foldrajzi-terkep.html"
-            class="button button-gold">
+/* =================================================
+   CYCLOSM
+================================================= */
 
-            🌍 FÖLDRAJZI TÉRKÉP
+var CyclOSM =
+    L.tileLayer(
+        'https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=ba624ccccf5448f4946ad3de45173189',
+        {
 
-        </a>
+            maxZoom: 20,
 
+            attribution:
+                'CyclOSM | OpenStreetMap contributors'
 
-        <a
-            href="tortenelmi-terkep.html"
-            class="button button-outline">
+        }
+    );
 
-            📜 TÖRTÉNELMI TÉRKÉP
 
-        </a>
+/* =================================================
+   OPENTOPOMAP
+================================================= */
 
-    </div>
+var OpenTopoMap =
+    L.tileLayer(
+        'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+        {
 
-</div>
+            maxZoom: 17,
 
+            attribution:
+                'OpenTopoMap | OpenStreetMap contributors'
 
-<!-- =====================================================
-     KÉT FŐ ATLASZ
-===================================================== -->
+        }
+    );
 
-<section>
 
-<div class="section-inner">
+/* =================================================
+   CARTODB DARK
+================================================= */
 
-    <div class="section-label">
-        Az atlasz két fő területe
-    </div>
+var CartoDB_DarkMatter =
+    L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+        {
 
-    <h2>
-        Földrajz és történelem
-    </h2>
+            maxZoom: 19,
 
-    <p class="description">
+            subdomains:
+                'abcd',
 
-        Az atlasz két egymástól független,
-        de egymással összekapcsolható rendszerben
-        mutatja be Kárpátalja földrajzi és történeti
-        örökségét.
+            attribution:
+                'OpenStreetMap contributors & CARTO'
 
-    </p>
+        }
+    );
 
 
-    <div class="atlas-grid">
+/* =================================================
+   GOOGLE MAP
+================================================= */
 
+var googleStreets =
+    L.tileLayer(
+        'https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+        {
 
-        <!-- FÖLDRAJZI ATLASZ -->
+            maxZoom: 20,
 
-        <div class="atlas-card">
+            subdomains:
+                ['mt0','mt1','mt2','mt3']
 
-            <h3>
-                🌍 Földrajzi atlasz
-            </h3>
+        }
+    );
 
-            <p>
 
-                Kárpátalja természetföldrajza,
-                domborzata, folyói, tavai,
-                települései és jelenlegi
-                közigazgatása.
+/* =================================================
+   GOOGLE SATELLITE
+================================================= */
 
-            </p>
+var googleSat =
+    L.tileLayer(
+        'https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+        {
 
+            maxZoom: 20,
 
-            <a
-                href="foldrajzi-terkep.html"
-                class="map-button">
+            subdomains:
+                ['mt0','mt1','mt2','mt3']
 
-                🗺️ Földrajzi interaktív térkép →
+        }
+    );
 
-            </a>
 
-        </div>
+/* =================================================
+   WATER COLOR
+================================================= */
 
+var Stamen_Watercolor =
+    L.tileLayer(
+        'https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}',
+        {
 
-        <!-- TÖRTÉNETI ATLASZ -->
+            subdomains:
+                'abcd',
 
-        <div class="atlas-card">
+            minZoom: 1,
 
-            <h3>
-                📜 Történeti atlasz
-            </h3>
+            maxZoom: 16,
 
-            <p>
+            ext: 'jpg',
 
-                Kárpátalja történelme,
-                egykori vármegyéi,
-                történelmi települései,
-                eseményei és történelmi térképei.
+            attribution:
+                'Stamen Design | OpenStreetMap'
 
-            </p>
+        }
+    );
 
 
-            <a
-                href="tortenelmi-terkep.html"
-                class="map-button">
+/* =================================================
+   GOOGLE TERRAIN
+================================================= */
 
-                🗺️ Történelmi interaktív térkép →
+var googleTerrain =
+    L.tileLayer(
+        'https://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',
+        {
 
-            </a>
+            maxZoom: 20,
 
-        </div>
+            subdomains:
+                ['mt0','mt1','mt2','mt3']
 
-    </div>
+        }
+    );
 
-</div>
 
-</section>
+/* =================================================
+   GOOGLE HYBRID
+================================================= */
 
+var googleHybrid =
+    L.tileLayer(
+        'https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',
+        {
 
-<!-- =====================================================
-     FÖLDRAJZ
-===================================================== -->
+            maxZoom: 20,
 
-<section
-    class="geography"
-    id="foldrajz">
+            subdomains:
+                ['mt0','mt1','mt2','mt3']
 
-<div class="section-inner">
+        }
+    );
 
 
-    <div class="section-label">
-        🌍 Földrajz
-    </div>
+/* =================================================
+   MARKER
+================================================= */
 
+var singleMarker =
+    L.marker(
+        [48.20579018144784,
+         22.644663061560948]
+    );
 
-    <h2>
-        Kárpátalja földrajza
-    </h2>
 
+singleMarker.bindPopup(
+    'Kárpátalja'
+);
 
-    <p class="description">
 
-        A térség természetföldrajzi és
-        településföldrajzi bemutatása.
+/* =================================================
+   LEAFLET DRAW
+================================================= */
 
-    </p>
+var drawnItems =
+    new L.FeatureGroup();
 
 
-    <div class="cards">
+map.addLayer(
+    drawnItems
+);
 
 
-        <div
-            class="card"
-            id="tajak">
+var drawControl =
+    new L.Control.Draw({
 
-            <h3>
-                🏔️ Tájak és domborzat
-            </h3>
+        edit: {
 
-            <p>
-                Hegységek, völgyek, medencék
-                és természetföldrajzi tájak.
-            </p>
+            featureGroup:
+                drawnItems,
 
-        </div>
+            poly: {
 
+                allowIntersection:
+                    false
 
-        <div
-            class="card"
-            id="vizek">
+            }
 
-            <h3>
-                🌊 Folyók és tavak
-            </h3>
+        },
 
-            <p>
-                A Tisza és mellékfolyói,
-                valamint a térség vízrajza.
-            </p>
+        draw: {
 
-        </div>
+            circle: false,
 
+            circlemarker: false,
 
-        <div
-            class="card"
-            id="telepulesek">
+            polygon: {
 
-            <h3>
-                🏘️ Települések
-            </h3>
+                allowIntersection:
+                    false,
 
-            <p>
-                Városok és falvak földrajzi
-                és településtörténeti adatai.
-            </p>
+                showArea:
+                    true
 
-        </div>
+            }
 
+        }
 
-        <div
-            class="card"
-            id="kozigazgatas">
+    });
 
-            <h3>
-                🏛️ Közigazgatás
-            </h3>
 
-            <p>
-                A jelenlegi közigazgatási
-                rendszer és területi egységek.
-            </p>
+map.addControl(
+    drawControl
+);
 
-        </div>
 
+/* =================================================
+   SEGÉDFÜGGVÉNYEK
+================================================= */
 
-        <div class="card">
+var _round =
+function(num, len) {
 
-            <h3>
-                🗺️ Földrajzi interaktív térkép
-            </h3>
+    return Math.round(
+        num *
+        Math.pow(10, len)
+    )
+    /
+    Math.pow(10, len);
 
-            <p>
-                Földrajzi rétegek:
-                domborzat, folyók, tavak,
-                települések és közigazgatás.
-            </p>
+};
 
-            <a href="foldrajzi-terkep.html">
-                Térkép megnyitása →
-            </a>
 
-        </div>
+var strLatLng =
+function(latlng) {
 
-    </div>
+    return '(' +
+        _round(latlng.lat, 6) +
+        ', ' +
+        _round(latlng.lng, 6) +
+        ')';
 
-</div>
+};
 
-</section>
 
+/* =================================================
+   RAJZOLT OBJEKTUM POPUP
+================================================= */
 
-<!-- =====================================================
-     TÖRTÉNELEM
-===================================================== -->
+var getPopupContent =
+function(layer) {
 
-<section
-    class="history"
-    id="tortenelem">
 
-<div class="section-inner">
+    /* MARKER */
 
+    if (
+        layer instanceof L.Marker ||
+        layer instanceof L.CircleMarker
+    ) {
 
-    <div class="section-label">
-        📜 Történelem
-    </div>
+        return strLatLng(
+            layer.getLatLng()
+        );
 
+    }
 
-    <h2>
-        Kárpátalja története
-    </h2>
 
+    /* KÖR */
 
-    <p class="description">
+    else if (
+        layer instanceof L.Circle
+    ) {
 
-        A térség történetének bemutatása
-        korszakok, események, személyek,
-        települések és közigazgatási változások
-        alapján.
+        var center =
+            layer.getLatLng();
 
-    </p>
+        var radius =
+            layer.getRadius();
 
+        return
+            'Középpont: ' +
+            strLatLng(center) +
+            '<br>' +
 
-    <div class="cards">
+            'Sugár: ' +
+            _round(radius, 2) +
+            ' m';
 
+    }
 
-        <div
-            class="card"
-            id="korszakok">
 
-            <h3>
-                ⏳ Történelmi korszakok
-            </h3>
+    /* POLIGON */
 
-            <p>
-                A térség története az ókortól
-                napjainkig.
-            </p>
+    else if (
+        layer instanceof L.Polygon
+    ) {
 
-        </div>
+        return 'Terület: poligon';
 
+    }
 
-        <div
-            class="card"
-            id="esemenyek">
 
-            <h3>
-                ⚔️ Történelmi események
-            </h3>
+    /* VONAL */
 
-            <p>
-                Fontos események és történelmi
-                fordulópontok.
-            </p>
+    else if (
+        layer instanceof L.Polyline
+    ) {
 
-        </div>
+        var latlngs =
+            layer.getLatLngs();
 
+        if (
+            latlngs.length < 2
+        ) {
 
-        <div
-            class="card"
-            id="szemelyek">
+            return 'Távolság: N/A';
 
-            <h3>
-                👑 Történelmi személyek
-            </h3>
+        }
 
-            <p>
-                A Kárpátalja történetéhez kapcsolódó
-                jelentős személyek.
-            </p>
+        var distance = 0;
 
-        </div>
+        for (
+            var i = 0;
+            i < latlngs.length - 1;
+            i++
+        ) {
 
+            distance +=
+                latlngs[i]
+                .distanceTo(
+                    latlngs[i + 1]
+                );
 
-        <div
-            class="card"
-            id="terkepek">
+        }
 
-            <h3>
-                🗺️ Történelmi térképek
-            </h3>
 
-            <p>
-                Régi térképek és a történelmi
-                területi változások.
-            </p>
+        if (
+            distance > 1000
+        ) {
 
-        </div>
+            return
+                'Távolság: ' +
+                _round(
+                    distance / 1000,
+                    2
+                ) +
+                ' km';
 
+        }
 
-        <div class="card">
+        else {
 
-            <h3>
-                🗺️ Történelmi interaktív térkép
-            </h3>
+            return
+                'Távolság: ' +
+                _round(
+                    distance,
+                    2
+                ) +
+                ' m';
 
-            <p>
-                Egykori vármegyék, történelmi
-                települések, várak, események,
-                utak és régi térképek.
-            </p>
+        }
 
-            <a href="tortenelmi-terkep.html">
-                Térkép megnyitása →
-            </a>
+    }
 
-        </div>
 
-    </div>
+    return null;
 
-</div>
+};
 
-</section>
 
+/* =================================================
+   LÉTREHOZÁS
+================================================= */
 
-<!-- =====================================================
-     VÁRMEGYÉK
-===================================================== -->
+map.on(
+    L.Draw.Event.CREATED,
+    function(event) {
 
-<section
-    class="counties"
-    id="varmegyek">
+        var layer =
+            event.layer;
 
-<div class="section-inner">
+        var content =
+            getPopupContent(
+                layer
+            );
 
 
-    <div class="section-label">
-        🏛️ Történelmi közigazgatás
-    </div>
+        if (content !== null) {
 
+            layer.bindPopup(
+                content
+            );
 
-    <h2>
-        Egykori vármegyék
-    </h2>
+        }
 
 
-    <p class="description">
+        layer.feature =
+            layer.feature || {};
 
-        A történelmi Kárpátalja területéhez
-        kapcsolódó egykori vármegyék.
+        layer.feature.type =
+            'Feature';
 
-    </p>
+        layer.feature.properties =
+            layer.feature.properties || {};
 
+        layer.feature.properties.info =
+            content;
 
-    <div class="cards">
 
+        drawnItems.addLayer(
+            layer
+        );
 
-        <div class="card county">
+    }
+);
 
-            <h3>
-                Ung vármegye
-            </h3>
 
-            <p>
-                Története, területe,
-                közigazgatása és települései.
-            </p>
+/* =================================================
+   SZERKESZTÉS
+================================================= */
 
-        </div>
+map.on(
+    L.Draw.Event.EDITED,
+    function(event) {
 
+        event.layers.eachLayer(
+            function(layer) {
 
-        <div class="card county">
+                var content =
+                    getPopupContent(
+                        layer
+                    );
 
-            <h3>
-                Bereg vármegye
-            </h3>
 
-            <p>
-                Története, területe,
-                közigazgatása és települései.
-            </p>
+                if (
+                    content !== null
+                ) {
 
-        </div>
+                    layer.setPopupContent(
+                        content
+                    );
 
+                }
 
-        <div class="card county">
 
-            <h3>
-                Ugocsa vármegye
-            </h3>
+                layer.feature =
+                    layer.feature || {};
 
-            <p>
-                Története, területe,
-                közigazgatása és települései.
-            </p>
+                layer.feature.properties =
+                    layer.feature.properties || {};
 
-        </div>
+                layer.feature.properties.info =
+                    content;
 
+            }
+        );
 
-        <div class="card county">
+    }
+);
 
-            <h3>
-                Máramaros vármegye
-            </h3>
 
-            <p>
-                Története, területe,
-                közigazgatása és települései.
-            </p>
+/* =================================================
+   ZIP GEOJSON ADATOK
+================================================= */
 
-        </div>
 
-    </div>
+/* VONALAK */
 
-</div>
+var linedata =
+    L.geoJSON(
+        lineJSON
+    );
 
-</section>
 
+/* PONTOK */
 
-<!-- =====================================================
-     FORRÁSOK
-===================================================== -->
+var pointdata =
+    L.geoJSON(
+        pointJSON
+    );
 
-<section
-    class="sources"
-    id="forrasok">
 
-<div class="section-inner">
+/* NEPALDATA */
 
+var nepalData =
+    L.geoJSON(
+        nepaldataa
+    );
 
-    <div class="section-label">
-        📚 Dokumentáció
-    </div>
 
+/* POLIGONOK */
 
-    <h2>
-        Források
-    </h2>
+var polygondata =
+    L.geoJSON(
+        polygonJSON,
+        {
 
+            onEachFeature:
+            function(
+                feature,
+                layer
+            ) {
 
-    <div class="cards">
+                if (
+                    feature.properties &&
+                    feature.properties.name
+                ) {
 
+                    layer.bindPopup(
+                        '<b>' +
+                        feature.properties.name +
+                        '</b>'
+                    );
 
-        <div class="card">
+                }
 
-            <h3>
-                📖 Történeti források
-            </h3>
+            },
 
-            <p>
-                Könyvek, tanulmányok,
-                levéltári és történeti források.
-            </p>
+            style: {
 
-        </div>
+                fillColor:
+                    'red',
 
+                fillOpacity:
+                    1,
 
-        <div class="card">
+                color:
+                    'green'
 
-            <h3>
-                🗺️ Térképészeti források
-            </h3>
+            }
 
-            <p>
-                Régi és modern térképek,
-                atlaszok és térképészeti adatok.
-            </p>
+        }
+    );
 
-        </div>
 
+/* =================================================
+   ALAPTÉRKÉPEK
+================================================= */
 
-        <div class="card">
+var baseLayers = {
 
-            <h3>
-                📑 Szakirodalom
-            </h3>
+    "🗺️ OpenStreetMap":
+        osm,
 
-            <p>
-                A kutatáshoz felhasznált
-                szakirodalom és további művek.
-            </p>
+    "🗺️ Google Térkép":
+        googleStreets,
 
-        </div>
+    "🛰️ Műhold":
+        googleSat,
 
-    </div>
+    "⛰️ Google Terep":
+        googleTerrain,
 
-</div>
+    "🛰️ Google Hybrid":
+        googleHybrid,
 
-</section>
+    "🎨 Water Color":
+        Stamen_Watercolor,
 
+    "🚲 CyclOSM":
+        CyclOSM,
 
-<!-- =====================================================
-     FOOTER
-===================================================== -->
+    "🏔️ OpenTopoMap":
+        OpenTopoMap,
 
-<footer>
+    "🌑 Dark Matter":
+        CartoDB_DarkMatter
 
-    Kárpátalja Földrajzi és Történeti Atlasza
+};
 
-    <br><br>
 
-    Digitális földrajzi és történeti atlasz
+/* =================================================
+   ADAT RÉTEGEK
+================================================= */
 
-    <br><br>
+var overlays = {
 
-    🇭🇺 Magyar | 🇺🇦 Українська
+    "📍 Marker":
+        singleMarker,
 
-</footer>
+    "📍 Pontadatok":
+        pointdata,
 
+    "〰️ Vonaladatok":
+        linedata,
+
+    "⬟ Poligonadatok":
+        polygondata,
+
+    "🗺️ Térképi adatok":
+        nepalData,
+
+    "✏️ Saját rajzok":
+        drawnItems
+
+};
+
+
+/* =================================================
+   RÉTEGKEZELŐ
+================================================= */
+
+L.control.layers(
+
+    baseLayers,
+
+    overlays,
+
+    {
+
+        collapsed:
+            false
+
+    }
+
+).addTo(map);
+
+
+/* =================================================
+   GEOJSON EXPORT
+================================================= */
+
+var exportControl =
+    L.control({
+
+        position:
+            'bottomright'
+
+    });
+
+
+exportControl.onAdd =
+function(map) {
+
+    var div =
+        L.DomUtil.create(
+            'div',
+            'export-control'
+        );
+
+
+    div.innerHTML =
+        '<i class="fa fa-file-code-o"></i> ' +
+        'GeoJSON export';
+
+
+    L.DomEvent.on(
+        div,
+        'click',
+        function() {
+
+            geojsonExport();
+
+        }
+    );
+
+
+    return div;
+
+};
+
+
+exportControl.addTo(
+    map
+);
+
+
+function geojsonExport() {
+
+    var jsonData =
+        JSON.stringify(
+            drawnItems.toGeoJSON()
+        );
+
+
+    var dataUri =
+        'data:application/json;charset=utf-8,' +
+        encodeURIComponent(
+            jsonData
+        );
+
+
+    var date =
+        new Date()
+        .toLocaleDateString(
+            'hu-HU'
+        );
+
+
+    var fileName =
+        'karpatalja-foldrajz-' +
+        date +
+        '.geojson';
+
+
+    var link =
+        document.createElement(
+            'a'
+        );
+
+
+    link.setAttribute(
+        'href',
+        dataUri
+    );
+
+
+    link.setAttribute(
+        'download',
+        fileName
+    );
+
+
+    if (
+        drawnItems.getLayers()
+            .length === 0
+    ) {
+
+        alert(
+            'Nincs exportálható rajz a térképen.'
+        );
+
+        return;
+
+    }
+
+
+    link.click();
+
+}
+
+
+/* =================================================
+   KERESŐ
+================================================= */
+
+L.Control.geocoder({
+
+    defaultMarkGeocode:
+        true
+
+}).addTo(map);
+
+
+/* =================================================
+   TÉRKÉP MÉRET FRISSÍTÉSE
+================================================= */
+
+setTimeout(
+    function() {
+
+        map.invalidateSize();
+
+    },
+    500
+);
+
+</script>
 
 </body>
 
