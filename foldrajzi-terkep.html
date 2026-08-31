@@ -8,19 +8,25 @@
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
-<title>Interaktív földrajzi térkép – Kárpátalja</title>
+<title>Kárpátalja Földrajzi és Történeti Atlasza</title>
 
+<!-- LEAFLET -->
 <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
 
+<!-- LEAFLET DRAW -->
 <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"
 />
 
 <style>
+
+/* =====================================================
+   ALAP
+===================================================== */
 
 * {
     box-sizing: border-box;
@@ -30,6 +36,7 @@ html,
 body {
     margin: 0;
     padding: 0;
+    width: 100%;
     height: 100%;
 }
 
@@ -39,48 +46,47 @@ body {
 }
 
 
-/* =========================================
+/* =====================================================
    FEJLÉC
-========================================= */
+===================================================== */
 
 header {
     background: #102638;
     color: white;
-    padding: 12px 35px;
+    padding: 20px 35px;
     border-bottom: 1px solid #c09d57;
 }
 
 header h1 {
     margin: 0;
     font-size: 27px;
-    line-height: 1.3;
 }
 
 header p {
-    margin: 5px 0 0;
+    margin: 6px 0 0;
     color: #c9ad6c;
     font-size: 14px;
 }
 
 
-/* =========================================
-   NYELVVÁLTÓ
-========================================= */
+/* =====================================================
+   NYELV
+===================================================== */
 
 .language-switch {
-    margin-top: 10px;
+    margin-top: 12px;
     font-family: Arial, sans-serif;
     font-size: 13px;
+}
+
+.language-switch span,
+.language-switch a {
+    margin-right: 12px;
 }
 
 .language-switch a {
     color: white;
     text-decoration: none;
-    margin-right: 12px;
-}
-
-.language-switch a:hover {
-    color: #d8b86a;
 }
 
 .current-language {
@@ -89,23 +95,22 @@ header p {
 }
 
 
-/* =========================================
-   NAVIGÁCIÓ
-========================================= */
+/* =====================================================
+   NAV
+===================================================== */
 
 nav {
     background: #17374d;
     padding: 0 35px;
-    height: 34px;
 }
 
 nav a {
     display: inline-block;
-    padding: 9px 15px;
+    padding: 15px;
     color: white;
     text-decoration: none;
     font-family: Arial, sans-serif;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
 }
 
@@ -115,19 +120,19 @@ nav a:hover {
 }
 
 
-/* =========================================
+/* =====================================================
    TÉRKÉP FEJLÉC
-========================================= */
+===================================================== */
 
 .map-header {
     background: #f3f0e7;
-    padding: 18px 25px;
+    padding: 20px 35px;
 }
 
 .map-header h2 {
-    margin: 0 0 5px;
-    font-size: 28px;
+    margin: 0 0 8px;
     color: #17374d;
+    font-size: 28px;
 }
 
 .map-header p {
@@ -137,367 +142,428 @@ nav a:hover {
 }
 
 
-/* =========================================
+/* =====================================================
    TÉRKÉP
-========================================= */
+===================================================== */
 
 #map {
     width: 100%;
-    height: calc(100vh - 176px);
+    height: calc(100vh - 205px);
     min-height: 550px;
 }
 
 
-/* =========================================
-   GEOJSON IMPORT / EXPORT
-========================================= */
+/* =====================================================
+   KOORDINÁTA
+===================================================== */
+
+.coordinate-display {
+    background: rgba(16,38,56,.95);
+    color: white;
+    padding: 7px 10px;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   GEOJSON VEZÉRLŐ
+===================================================== */
 
 .geojson-control {
     background: white;
+    padding: 5px;
     border-radius: 4px;
     box-shadow: 0 1px 5px rgba(0,0,0,.35);
-    overflow: hidden;
+    margin-bottom: 5px;
 }
 
 .geojson-control button {
     display: block;
-    width: 150px;
-    padding: 8px 10px;
-    border: none;
-    border-bottom: 1px solid #ddd;
+    width: 165px;
+    border: 0;
     background: white;
     color: #17374d;
+    padding: 8px 10px;
     text-align: left;
     cursor: pointer;
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    font-weight: bold;
+    font: bold 11px Arial,sans-serif;
+    border-bottom: 1px solid #eee;
 }
 
 .geojson-control button:last-child {
-    border-bottom: none;
+    border-bottom: 0;
 }
 
 .geojson-control button:hover {
     background: #f0eadb;
 }
 
-.geojson-control .import-button {
-    color: #17374d;
-}
 
-.geojson-control .export-button {
-    color: #8b2020;
-}
+/* =====================================================
+   PREZI GOMB
+===================================================== */
 
-
-/* =========================================
-   KOORDINÁTÁK
-========================================= */
-
-.coordinates-info {
-    background: rgba(255,255,255,.95);
-    padding: 7px 14px;
-    border-radius: 4px;
-    box-shadow: 0 1px 5px rgba(0,0,0,.3);
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    color: #17374d;
-    white-space: nowrap;
+.prezi-button {
+    background: #c09d57 !important;
+    color: #102638 !important;
+    font-weight: bold !important;
 }
 
 
-/* =========================================
-   INPUT
-========================================= */
+/* =====================================================
+   PREZI SZERKESZTŐ
+===================================================== */
 
-#geojsonFileInput {
+#preziEditor {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
     display: none;
+    background: #e9e5da;
 }
 
-
-/* =========================================
-   RÉTEGEK
-========================================= */
-
-.leaflet-control-layers {
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-}
-
-.leaflet-control-layers-expanded {
-    padding: 8px 10px;
-    background: rgba(255,255,255,.97);
-}
-
-
-/* =========================================
-   DRAW
-========================================= */
-
-.leaflet-draw-toolbar a {
-    background-color: white;
-}
-
-
-/* =========================================
-   CHATGPT PANEL
-========================================= */
-
-.chatgpt-control {
-    background: rgba(255,255,255,.98);
-    width: 330px;
-    padding: 10px;
-    border-radius: 4px;
-    box-shadow: 0 1px 6px rgba(0,0,0,.4);
-    font-family: Arial, sans-serif;
-}
-
-.chatgpt-title {
-    color: #17374d;
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 6px;
-}
-
-.chatgpt-description {
-    color: #666;
-    font-size: 11px;
-    line-height: 1.4;
-    margin-bottom: 7px;
-}
-
-.chatgpt-textarea {
-    width: 100%;
-    height: 145px;
-    resize: vertical;
-    padding: 8px;
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    background: #fafafa;
-    font-family: Consolas, "Courier New", monospace;
-    font-size: 11px;
-    color: #222;
-}
-
-.chatgpt-textarea:focus {
-    outline: none;
-    border-color: #17374d;
-}
-
-.chatgpt-buttons {
+#preziEditor.active {
     display: flex;
-    gap: 6px;
-    margin-top: 7px;
 }
 
-.chatgpt-button {
-    border: none;
+
+/* BAL OLDALI ESZKÖZTÁR */
+
+.prezi-toolbar {
+    width: 190px;
+    background: #102638;
+    color: white;
+    padding: 15px;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.prezi-brand {
+    padding-bottom: 15px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #526573;
+}
+
+.prezi-brand-title {
+    color: #d8b86a;
+    font: bold 19px Georgia,serif;
+}
+
+.prezi-brand-subtitle {
+    color: #cbd4d9;
+    font: 9px Arial,sans-serif;
+    letter-spacing: 1px;
+    margin-top: 3px;
+}
+
+.prezi-toolbar button {
+    width: 100%;
+    padding: 9px 8px;
+    margin-bottom: 6px;
+    border: 0;
     border-radius: 4px;
-    padding: 7px 9px;
-    cursor: pointer;
-    font-family: Arial, sans-serif;
-    font-size: 11px;
-    font-weight: bold;
-}
-
-.chatgpt-load {
     background: #17374d;
     color: white;
+    cursor: pointer;
+    text-align: left;
+    font: bold 11px Arial,sans-serif;
 }
 
-.chatgpt-load:hover {
-    background: #24546e;
+.prezi-toolbar button:hover {
+    background: #28566d;
 }
 
-.chatgpt-clear {
-    background: #ddd;
-    color: #333;
-}
-
-.chatgpt-clear:hover {
-    background: #ccc;
-}
-
-.chatgpt-status {
-    margin-top: 7px;
-    font-size: 11px;
-    line-height: 1.4;
-    color: #555;
+.prezi-toolbar .gold {
+    background: #c09d57;
+    color: #102638;
 }
 
 
-/* =========================================
-   GEOJSON.IO-SZERŰ SZERKESZTŐ
-========================================= */
+/* PREZI MUNKATERÜLET */
 
-.geo-editor-control {
-    width: 350px;
-    max-width: calc(100vw - 30px);
-    background: rgba(255,255,255,.98);
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.35);
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-}
-
-.geo-editor-header {
-    background: #17374d;
-    color: #fff;
-    padding: 9px 11px;
-    font-size: 13px;
-    font-weight: bold;
-}
-
-.geo-editor-body {
-    padding: 9px;
-}
-
-.geo-editor-row {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 7px;
-}
-
-.geo-editor-row label {
-    width: 75px;
-    padding-top: 6px;
-    font-size: 11px;
-    font-weight: bold;
-}
-
-.geo-editor-row input,
-.geo-editor-row textarea,
-.geo-editor-code {
+.prezi-workspace {
+    position: relative;
     flex: 1;
     min-width: 0;
-    border: 1px solid #aaa;
-    border-radius: 3px;
-    padding: 6px;
-    font-size: 11px;
 }
 
-.geo-editor-row textarea {
+#preziMap {
+    position: absolute;
+    inset: 0;
+}
+
+
+/* JOBB OLDALI DIÁK */
+
+.prezi-frames {
+    width: 230px;
+    background: #f7f5ef;
+    border-left: 1px solid #c8c2b5;
+    padding: 12px;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.prezi-frames-title {
+    color: #17374d;
+    font: bold 11px Arial,sans-serif;
+    letter-spacing: 1px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.prezi-frame {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 11px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.prezi-frame:hover {
+    border-color: #c09d57;
+}
+
+.prezi-frame.active {
+    border-color: #c09d57;
+    box-shadow: 0 0 0 2px rgba(192,157,87,.25);
+}
+
+.prezi-frame-number {
+    color: #c09d57;
+    font: bold 10px Arial,sans-serif;
+}
+
+.prezi-frame-title {
+    color: #17374d;
+    font: bold 12px Arial,sans-serif;
+    margin-top: 4px;
+}
+
+.prezi-frame-text {
+    color: #777;
+    font: 10px Arial,sans-serif;
+    line-height: 1.4;
+    margin-top: 5px;
+}
+
+
+/* =====================================================
+   PREZI SZÖVEGOBJEKTUMOK
+===================================================== */
+
+.prezi-object {
+    position: absolute;
+    z-index: 2000;
+    cursor: move;
+    user-select: none;
+    transform-origin: center center;
+}
+
+.prezi-text-object {
+    padding: 8px 12px;
+    background: rgba(255,255,255,.9);
+    border-radius: 5px;
+    color: #17374d;
+    box-shadow: 0 2px 10px rgba(0,0,0,.18);
+    white-space: pre-wrap;
+}
+
+.prezi-object.selected {
+    outline: 2px solid #c09d57;
+    outline-offset: 4px;
+}
+
+
+/* =====================================================
+   PREZI FRAME SZERKESZTŐ
+===================================================== */
+
+.prezi-frame-editor {
+    position: absolute;
+    top: 60px;
+    right: 15px;
+    width: 285px;
+    background: rgba(255,255,255,.98);
+    border: 1px solid #c09d57;
+    border-radius: 6px;
+    padding: 12px;
+    z-index: 4000;
+    box-shadow: 0 5px 20px rgba(0,0,0,.3);
+}
+
+.prezi-frame-editor h3 {
+    margin: 0 0 10px;
+    color: #17374d;
+    font-size: 14px;
+}
+
+.prezi-frame-editor label,
+.prezi-text-editor label {
+    display: block;
+    margin: 8px 0 4px;
+    color: #526573;
+    font: bold 10px Arial,sans-serif;
+}
+
+.prezi-frame-editor input,
+.prezi-frame-editor textarea,
+.prezi-text-editor input,
+.prezi-text-editor textarea,
+.prezi-text-editor select {
+    width: 100%;
+    padding: 7px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    font: 11px Arial,sans-serif;
+}
+
+.prezi-frame-editor textarea {
     min-height: 70px;
     resize: vertical;
 }
 
-.geo-editor-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 7px;
+
+/* =====================================================
+   SZÖVEG SZERKESZTŐ
+===================================================== */
+
+.prezi-text-editor {
+    position: absolute;
+    bottom: 20px;
+    right: 15px;
+    width: 285px;
+    background: rgba(255,255,255,.98);
+    border: 1px solid #c09d57;
+    border-radius: 6px;
+    padding: 12px;
+    z-index: 4500;
+    box-shadow: 0 5px 20px rgba(0,0,0,.3);
+    display: none;
 }
 
-.geo-editor-button {
+.prezi-text-editor.active {
+    display: block;
+}
+
+.prezi-text-editor h3 {
+    margin: 0 0 10px;
+    color: #17374d;
+    font-size: 14px;
+}
+
+.prezi-text-editor textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+
+/* =====================================================
+   PREZENTÁCIÓ
+===================================================== */
+
+#presentationOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 9000;
+    display: none;
+    pointer-events: none;
+}
+
+#presentationOverlay.active {
+    display: block;
+}
+
+.presentation-caption {
+    position: absolute;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    width: min(780px,calc(100% - 50px));
+    padding: 18px 22px;
+    background: rgba(16,38,56,.95);
+    color: white;
+    border: 1px solid #c09d57;
+    border-radius: 8px;
+    text-align: center;
+    pointer-events: auto;
+    box-shadow: 0 8px 30px rgba(0,0,0,.4);
+}
+
+.presentation-counter {
+    color: #d8b86a;
+    font: bold 10px Arial,sans-serif;
+}
+
+.presentation-caption h1 {
+    margin: 5px 0;
+    font: 29px Georgia,serif;
+}
+
+.presentation-caption p {
+    margin: 0;
+    color: #e2e6e8;
+    font: 13px Arial,sans-serif;
+    line-height: 1.5;
+}
+
+.presentation-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.presentation-buttons button {
     border: 0;
-    border-radius: 3px;
-    padding: 7px 9px;
+    border-radius: 4px;
+    padding: 8px 14px;
     cursor: pointer;
-    font-size: 11px;
     font-weight: bold;
 }
 
-.geo-editor-primary {
-    background: #17374d;
-    color: white;
-}
 
-.geo-editor-success {
-    background: #176b3a;
-    color: white;
-}
-
-.geo-editor-danger {
-    background: #8b2020;
-    color: white;
-}
-
-.geo-editor-secondary {
-    background: #ddd;
-    color: #333;
-}
-
-.geo-editor-code {
-    display: block;
-    width: 100%;
-    height: 180px;
-    resize: vertical;
-    font-family: Consolas, "Courier New", monospace;
-}
-
-.geo-editor-status {
-    margin-top: 7px;
-    padding: 6px;
-    background: #f5f5f5;
-    border-radius: 3px;
-    font-size: 10px;
-    color: #555;
-}
-
-@media (max-width: 700px) {
-
-    .geo-editor-control {
-        width: 290px;
-    }
-
-}
-
-
-/* =========================================
+/* =====================================================
    MOBIL
-========================================= */
+===================================================== */
 
-@media (max-width: 700px) {
+@media(max-width:800px) {
 
     header {
-        padding: 12px 15px;
+        padding: 15px;
     }
 
     header h1 {
-        font-size: 20px;
+        font-size: 21px;
     }
 
     nav {
         padding: 0 8px;
-        overflow-x: auto;
-        white-space: nowrap;
     }
 
     nav a {
-        padding: 9px 7px;
-        font-size: 10px;
+        padding: 12px 8px;
+        font-size: 11px;
     }
 
     .map-header {
         padding: 15px;
     }
 
-    .map-header h2 {
-        font-size: 22px;
-    }
-
     #map {
-        height: calc(100vh - 170px);
-        min-height: 450px;
+        height: calc(100vh - 185px);
     }
 
-    .geojson-control button {
-        width: 135px;
-        font-size: 11px;
+    .prezi-toolbar {
+        width: 145px;
     }
 
-    .coordinates-info {
-        font-size: 10px;
-        padding: 6px 8px;
-    }
-
-    .chatgpt-control {
-        width: 285px;
-    }
-
-    .chatgpt-textarea {
-        height: 120px;
+    .prezi-frames {
+        width: 175px;
     }
 
 }
@@ -509,6 +575,10 @@ nav a:hover {
 
 <body>
 
+
+<!-- =====================================================
+     FEJLÉC
+===================================================== -->
 
 <header>
 
@@ -526,7 +596,7 @@ nav a:hover {
             🇭🇺 MAGYAR
         </span>
 
-        <a href="foldrajzi-terkep-uk.html">
+        <a href="#">
             🇺🇦 УКРАЇНСЬКА
         </a>
 
@@ -535,22 +605,30 @@ nav a:hover {
 </header>
 
 
+<!-- =====================================================
+     NAV
+===================================================== -->
+
 <nav>
 
-    <a href="index.html">
+    <a href="#">
         FŐOLDAL
     </a>
 
-    <a href="foldrajzi-terkep.html">
+    <a href="#">
         🌍 FÖLDRAJZI TÉRKÉP
     </a>
 
-    <a href="tortenelmi-terkep.html">
+    <a href="#">
         📜 TÖRTÉNELMI TÉRKÉP
     </a>
 
 </nav>
 
+
+<!-- =====================================================
+     TÉRKÉP FEJLÉC
+===================================================== -->
 
 <section class="map-header">
 
@@ -560,21 +638,22 @@ nav a:hover {
 
     <p>
         Kárpátalja földrajzi térképe
-        természetföldrajzi és földrajzi objektumokkal.
+        természetföldrajzi és történelmi objektumokkal.
     </p>
 
 </section>
 
 
+<!-- =====================================================
+     TÉRKÉP
+===================================================== -->
+
 <div id="map"></div>
 
 
-<input
-    type="file"
-    id="geojsonFileInput"
-    accept=".geojson,.json,application/geo+json,application/json"
-/>
-
+<!-- =====================================================
+     LEAFLET
+===================================================== -->
 
 <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
@@ -587,82 +666,38 @@ nav a:hover {
 
 <script>
 
-/* =========================================
-   ALAPTÉRKÉP
-========================================= */
+/* =====================================================
+   ALAP TÉRKÉP
+===================================================== */
 
 const map =
-    L.map('map').setView(
-        [48.45, 22.75],
-        8
-    );
+    L.map("map")
+     .setView(
+         [48.45,22.75],
+         8
+     );
 
 
-/* =========================================
-   ALAPTÉRKÉPEK
-========================================= */
+/* =====================================================
+   OSM
+===================================================== */
 
 const osm =
     L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         {
-            maxZoom: 19,
+            maxZoom:19,
             attribution:
-                '&copy; OpenStreetMap contributors'
+                "&copy; OpenStreetMap contributors"
         }
     );
-
-
-const satellite =
-    L.tileLayer(
-        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-        {
-            maxZoom: 19,
-            attribution:
-                'Tiles &copy; Esri'
-        }
-    );
-
-
-const terrain =
-    L.tileLayer(
-        'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-        {
-            maxZoom: 17,
-            attribution:
-                'Map data &copy; OpenStreetMap contributors, SRTM | Map style &copy; OpenTopoMap'
-        }
-    );
-
-
-const darkMap =
-    L.tileLayer(
-        'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-        {
-            maxZoom: 19,
-            attribution:
-                '&copy; OpenStreetMap contributors &copy; CARTO'
-        }
-    );
-
-
-const lightMap =
-    L.tileLayer(
-        'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
-        {
-            maxZoom: 19,
-            attribution:
-                '&copy; OpenStreetMap contributors &copy; CARTO'
-        }
-    );
-
 
 osm.addTo(map);
 
 
-/* =========================================
+/* =====================================================
    FÖLDRAJZI RÉTEGEK
-========================================= */
+===================================================== */
 
 const relief =
     L.layerGroup();
@@ -710,32 +745,9 @@ const naturalHazards =
     L.layerGroup();
 
 
-/* =========================================
-   GEOJSON RÉTEGEK
-========================================= */
-
-const importedGeoJSON =
-    L.layerGroup();
-
-const chatGPTGeoJSONLayer =
-    L.layerGroup();
-
-
-/* =========================================
-   SAJÁT RAJZOK
-========================================= */
-
-const drawnItems =
-    new L.FeatureGroup();
-
-map.addLayer(
-    drawnItems
-);
-
-
-/* =========================================
+/* =====================================================
    RÉTEGEK
-========================================= */
+===================================================== */
 
 const overlays = {
 
@@ -763,7 +775,7 @@ const overlays = {
     "🪨 Földtan":
         geological,
 
-    "🌡️ Éghajlat":
+    "🌦️ Éghajlat":
         climate,
 
     "🌱 Talaj":
@@ -775,1592 +787,84 @@ const overlays = {
     "🗺️ Tájak":
         landscapes,
 
-    "🌿 Természetvédelem":
+    "🌳 Természetvédelem":
         natureProtection,
 
     "⛏️ Természeti erőforrások":
         naturalResources,
 
     "⚠️ Természeti veszélyek":
-        naturalHazards,
-
-    "📍 Importált GeoJSON":
-        importedGeoJSON,
-
-    "🤖 ChatGPT GeoJSON":
-        chatGPTGeoJSONLayer,
-
-    "✏️ Saját rajzok":
-        drawnItems
+        naturalHazards
 
 };
 
 
-/* =========================================
-   ALAPTÉRKÉPEK
-========================================= */
+/* =====================================================
+   RÉTEGKEZELŐ
+===================================================== */
 
-const baseLayers = {
-
-    "OpenStreetMap":
-        osm,
-
-    "🛰️ Műhold":
-        satellite,
-
-    "⛰️ Topográfiai":
-        terrain,
-
-    "🌑 Sötét térkép":
-        darkMap,
-
-    "☀️ Világos térkép":
-        lightMap
-
-};
-
-
-/* =========================================
-   RÉTEGVÁLASZTÓ
-========================================= */
-
-const layerControl =
-    L.control.layers(
-
-        baseLayers,
-
-        overlays,
-
-        {
-            collapsed: false,
-            position: 'topright'
-        }
-
-    ).addTo(map);
-
-
-/* =========================================
-   KOORDINÁTÁK
-========================================= */
-
-const coordinatesControl =
-    L.control({
-        position:
-            'bottomleft'
-    });
-
-
-coordinatesControl.onAdd =
-function() {
-
-    this._div =
-        L.DomUtil.create(
-            'div',
-            'coordinates-info'
-        );
-
-    this.update();
-
-    return this._div;
-};
-
-
-coordinatesControl.update =
-function(latlng) {
-
-    if (latlng) {
-
-        this._div.innerHTML =
-
-            '<strong>Szélesség:</strong> ' +
-
-            latlng.lat.toFixed(6) +
-
-            ' &nbsp;&nbsp; ' +
-
-            '<strong>Hosszúság:</strong> ' +
-
-            latlng.lng.toFixed(6);
-
+L.control.layers(
+    {
+        "OpenStreetMap":
+            osm
+    },
+    overlays,
+    {
+        collapsed:false
     }
-
-    else {
-
-        this._div.innerHTML =
-            'Mozgassa az egeret a térképen';
-
-    }
-
-};
+).addTo(map);
 
 
-coordinatesControl.addTo(map);
-
-
-map.on(
-    'mousemove',
-    function(e) {
-
-        coordinatesControl.update(
-            e.latlng
-        );
-
-    }
-);
-
-
-/* =========================================
-   SKÁLA
-========================================= */
-
-L.control.scale({
-
-    position:
-        'bottomleft',
-
-    metric:
-        true,
-
-    imperial:
-        false,
-
-    maxWidth:
-        200
-
-}).addTo(map);
-
-
-/* =========================================
+/* =====================================================
    DRAW
-========================================= */
+===================================================== */
+
+const drawnItems =
+    new L.FeatureGroup();
+
+map.addLayer(
+    drawnItems
+);
 
 const drawControl =
     new L.Control.Draw({
 
         position:
-            'topleft',
+            "topleft",
 
         edit: {
-
             featureGroup:
-                drawnItems,
-
-            poly: {
-
-                allowIntersection:
-                    false
-
-            }
-
+                drawnItems
         },
 
         draw: {
 
-            polygon: {
+            polygon:true,
 
-                allowIntersection:
-                    false,
+            polyline:true,
 
-                showArea:
-                    true,
+            rectangle:true,
 
-                shapeOptions: {
+            circle:true,
 
-                    color:
-                        '#b22222',
+            marker:true,
 
-                    weight:
-                        3,
-
-                    fillOpacity:
-                        0.25
-
-                }
-
-            },
-
-            polyline: {
-
-                shapeOptions: {
-
-                    color:
-                        '#17374d',
-
-                    weight:
-                        4
-
-                }
-
-            },
-
-            rectangle: {
-
-                shapeOptions: {
-
-                    color:
-                        '#8b6914',
-
-                    weight:
-                        3,
-
-                    fillOpacity:
-                        0.2
-
-                }
-
-            },
-
-            marker:
-                true,
-
-            circle:
-                false,
-
-            circlemarker:
-                false
+            circlemarker:true
 
         }
 
     });
-
 
 map.addControl(
     drawControl
 );
 
 
-/* =========================================
-   DRAW POPUP
-========================================= */
-
-function roundNumber(
-    num,
-    decimals
-) {
-
-    return Math.round(
-
-        num *
-        Math.pow(
-            10,
-            decimals
-        )
-
-    )
-    /
-    Math.pow(
-        10,
-        decimals
-    );
-
-}
-
-
-function getPopupContent(
-    layer
-) {
-
-    if (
-        layer instanceof L.Marker ||
-        layer instanceof L.CircleMarker
-    ) {
-
-        return (
-
-            '<strong>Koordináták</strong><br>' +
-
-            'Szélesség: ' +
-
-            roundNumber(
-                layer.getLatLng().lat,
-                6
-            ) +
-
-            '<br>' +
-
-            'Hosszúság: ' +
-
-            roundNumber(
-                layer.getLatLng().lng,
-                6
-            )
-
-        );
-
-    }
-
-
-    if (
-        layer instanceof L.Polygon
-    ) {
-
-        return 'Poligon<br>Geometria létrehozva.';
-
-    }
-
-
-    if (
-        layer instanceof L.Polyline
-    ) {
-
-        const latlngs =
-            layer.getLatLngs();
-
-        let distance =
-            0;
-
-
-        if (
-            latlngs.length > 1
-        ) {
-
-            for (
-                let i = 0;
-                i < latlngs.length - 1;
-                i++
-            ) {
-
-                distance +=
-                    latlngs[i].distanceTo(
-                        latlngs[i + 1]
-                    );
-
-            }
-
-        }
-
-
-        if (
-            distance > 1000
-        ) {
-
-            return (
-                'Vonal<br>' +
-                'Hosszúság: ' +
-                roundNumber(
-                    distance / 1000,
-                    2
-                ) +
-                ' km'
-            );
-
-        }
-
-
-        return (
-            'Vonal<br>' +
-            'Hosszúság: ' +
-            roundNumber(
-                distance,
-                2
-            ) +
-            ' m'
-        );
-
-    }
-
-
-    return null;
-
-}
-
-
-/* =========================================
-   DRAW LÉTREHOZÁS
-========================================= */
-
 map.on(
     L.Draw.Event.CREATED,
-    function(event) {
-
-        const layer =
-            event.layer;
-
-
-        const content =
-            getPopupContent(
-                layer
-            );
-
-
-        if (
-            content !== null
-        ) {
-
-            layer.bindPopup(
-                content
-            );
-
-        }
-
-
-        layer.feature =
-            layer.feature ||
-            {
-                type:
-                    'Feature',
-
-                properties:
-                    {}
-            };
-
-
-        layer.feature.properties =
-            layer.feature.properties ||
-            {};
-
-
-        layer.feature.properties.info =
-            content;
-
+    function(event){
 
         drawnItems.addLayer(
-            layer
-        );
-
-    }
-);
-
-
-/* =========================================
-   DRAW SZERKESZTÉS
-========================================= */
-
-map.on(
-    L.Draw.Event.EDITED,
-    function(event) {
-
-        event.layers.eachLayer(
-            function(layer) {
-
-                const content =
-                    getPopupContent(
-                        layer
-                    );
-
-
-                if (
-                    content !== null
-                ) {
-
-                    layer.setPopupContent(
-                        content
-                    );
-
-                }
-
-            }
-        );
-
-    }
-);
-
-
-/* =========================================
-   GEOJSON LÉTREHOZÁSA
-========================================= */
-
-function createGeoJSONLayer(
-    data
-) {
-
-    return L.geoJSON(
-        data,
-        {
-
-            style:
-            function() {
-
-                return {
-
-                    color:
-                        '#8b2020',
-
-                    weight:
-                        3,
-
-                    fillColor:
-                        '#c09d57',
-
-                    fillOpacity:
-                        0.30
-
-                };
-
-            },
-
-
-            pointToLayer:
-            function(
-                feature,
-                latlng
-            ) {
-
-                return L.circleMarker(
-                    latlng,
-                    {
-
-                        radius:
-                            7,
-
-                        color:
-                            '#8b2020',
-
-                        weight:
-                            2,
-
-                        fillColor:
-                            '#c09d57',
-
-                        fillOpacity:
-                            0.85
-
-                    }
-                );
-
-            },
-
-
-            onEachFeature:
-            function(
-                feature,
-                layer
-            ) {
-
-                if (
-                    feature.properties
-                ) {
-
-                    let html =
-                        '<strong>GeoJSON objektum</strong>';
-
-
-                    Object.keys(
-                        feature.properties
-                    ).forEach(
-                        function(key) {
-
-                            html +=
-                                '<br><strong>' +
-                                key +
-                                ':</strong> ' +
-                                feature.properties[key];
-
-                        }
-                    );
-
-
-                    layer.bindPopup(
-                        html
-                    );
-
-                }
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================
-   GEOJSON IMPORT
-========================================= */
-
-const fileInput =
-    document.getElementById(
-        'geojsonFileInput'
-    );
-
-
-function importGeoJSON() {
-
-    fileInput.value = '';
-
-    fileInput.click();
-
-}
-
-
-fileInput.addEventListener(
-    'change',
-    function(event) {
-
-        const file =
-            event.target.files[0];
-
-
-        if (!file) {
-
-            return;
-
-        }
-
-
-        const reader =
-            new FileReader();
-
-
-        reader.onload =
-        function(e) {
-
-            try {
-
-                const data =
-                    JSON.parse(
-                        e.target.result
-                    );
-
-
-                importedGeoJSON.clearLayers();
-
-
-                const layer =
-                    createGeoJSONLayer(
-                        data
-                    );
-
-
-                importedGeoJSON.addLayer(
-                    layer
-                );
-
-
-                map.addLayer(
-                    importedGeoJSON
-                );
-
-
-                const bounds =
-                    layer.getBounds();
-
-
-                if (
-                    bounds.isValid()
-                ) {
-
-                    map.fitBounds(
-                        bounds,
-                        {
-                            padding:
-                                [30,30]
-                        }
-                    );
-
-                }
-
-
-                alert(
-                    'A GeoJSON fájl sikeresen betöltve.'
-                );
-
-            }
-
-            catch(error) {
-
-                console.error(
-                    error
-                );
-
-
-                alert(
-                    'Hiba a GeoJSON fájl beolvasásakor.'
-                );
-
-            }
-
-        };
-
-
-        reader.readAsText(
-            file
-        );
-
-    }
-);
-
-
-/* =========================================
-   CHATGPT GEOJSON
-========================================= */
-
-let chatGPTLayerNumber =
-    0;
-
-
-function cleanChatGPTGeoJSON(
-    text
-) {
-
-    let cleaned =
-        text.trim();
-
-
-    if (
-        cleaned.startsWith('```')
-    ) {
-
-        cleaned =
-            cleaned.replace(
-                /^```(?:json|geojson)?\s*/i,
-                ''
-            );
-
-
-        cleaned =
-            cleaned.replace(
-                /\s*```$/,
-                ''
-            );
-
-    }
-
-
-    return cleaned.trim();
-
-}
-
-
-function loadChatGPTGeoJSON() {
-
-    const textarea =
-        document.getElementById(
-            'chatGPTGeoJSON'
-        );
-
-
-    const status =
-        document.getElementById(
-            'chatGPTStatus'
-        );
-
-
-    const text =
-        cleanChatGPTGeoJSON(
-            textarea.value
-        );
-
-
-    if (!text) {
-
-        status.innerHTML =
-            '⚠️ Nincs beillesztett GeoJSON.';
-
-        status.style.color =
-            '#a33';
-
-        return;
-
-    }
-
-
-    let data;
-
-
-    try {
-
-        data =
-            JSON.parse(
-                text
-            );
-
-    }
-
-    catch(error) {
-
-        status.innerHTML =
-            '❌ Hibás JSON / GeoJSON formátum.';
-
-        status.style.color =
-            '#a33';
-
-        return;
-
-    }
-
-
-    chatGPTGeoJSONLayer.clearLayers();
-
-
-    const layer =
-        createGeoJSONLayer(
-            data
-        );
-
-
-    chatGPTGeoJSONLayer.addLayer(
-        layer
-    );
-
-
-    map.addLayer(
-        chatGPTGeoJSONLayer
-    );
-
-
-    chatGPTLayerNumber++;
-
-
-    layerControl.addOverlay(
-        chatGPTGeoJSONLayer,
-        '🤖 ChatGPT GeoJSON ' +
-        chatGPTLayerNumber
-    );
-
-
-    try {
-
-        const bounds =
-            layer.getBounds();
-
-
-        if (
-            bounds.isValid()
-        ) {
-
-            map.fitBounds(
-                bounds,
-                {
-                    padding:
-                        [40,40]
-                }
-            );
-
-        }
-
-    }
-
-    catch(error) {
-
-        console.log(
-            error
-        );
-
-    }
-
-
-    status.innerHTML =
-        '✅ GeoJSON sikeresen betöltve a térképre.';
-
-    status.style.color =
-        '#176b3a';
-
-}
-
-
-/* =========================================
-   CHATGPT PANEL
-========================================= */
-
-const chatGPTControl =
-    L.control({
-
-        position:
-            'topleft'
-
-    });
-
-
-chatGPTControl.onAdd =
-function() {
-
-    const container =
-        L.DomUtil.create(
-            'div',
-            'chatgpt-control'
-        );
-
-
-    container.innerHTML = `
-
-        <div class="chatgpt-title">
-            🤖 ChatGPT → Térkép
-        </div>
-
-        <div class="chatgpt-description">
-
-            Másold ide a ChatGPT által készített
-            GeoJSON-kódot.
-
-        </div>
-
-        <textarea
-            id="chatGPTGeoJSON"
-            class="chatgpt-textarea"
-            placeholder="Ide illeszd a GeoJSON kódot..."></textarea>
-
-        <div class="chatgpt-buttons">
-
-            <button
-                type="button"
-                id="chatGPTLoadButton"
-                class="chatgpt-button chatgpt-load">
-
-                ▶ Betöltés
-
-            </button>
-
-            <button
-                type="button"
-                id="chatGPTClearButton"
-                class="chatgpt-button chatgpt-clear">
-
-                🗑 Törlés
-
-            </button>
-
-        </div>
-
-        <div
-            id="chatGPTStatus"
-            class="chatgpt-status">
-
-            Várja a GeoJSON-kódot.
-
-        </div>
-
-    `;
-
-
-    L.DomEvent.disableClickPropagation(
-        container
-    );
-
-
-    L.DomEvent.disableScrollPropagation(
-        container
-    );
-
-
-    return container;
-
-};
-
-
-chatGPTControl.addTo(
-    map
-);
-
-
-document.addEventListener(
-    'click',
-    function(event) {
-
-        if (
-            event.target &&
-            event.target.id ===
-            'chatGPTLoadButton'
-        ) {
-
-            loadChatGPTGeoJSON();
-
-        }
-
-
-        if (
-            event.target &&
-            event.target.id ===
-            'chatGPTClearButton'
-        ) {
-
-            document.getElementById(
-                'chatGPTGeoJSON'
-            ).value = '';
-
-
-            document.getElementById(
-                'chatGPTStatus'
-            ).innerHTML =
-                'Várja a GeoJSON-kódot.';
-
-        }
-
-    }
-);
-
-
-/* =========================================
-   GEOJSON.IO-SZERŰ SZERKESZTŐ
-========================================= */
-
-let editorSelectedLayer =
-    null;
-
-
-function editorAttachLayer(
-    layer
-) {
-
-    layer.on(
-        'click',
-        function(e) {
-
-            L.DomEvent.stopPropagation(
-                e
-            );
-
-
-            editorSelectedLayer =
-                layer;
-
-
-            const properties =
-                (
-                    layer.feature &&
-                    layer.feature.properties
-                )
-                ?
-                layer.feature.properties
-                :
-                {};
-
-
-            document.getElementById(
-                'editorName'
-            ).value =
-                properties.name || '';
-
-
-            document.getElementById(
-                'editorDescription'
-            ).value =
-                properties.description || '';
-
-
-            document.getElementById(
-                'editorStatus'
-            ).textContent =
-                '✏️ Kijelölve: ' +
-                (
-                    properties.name ||
-                    'névtelen objektum'
-                );
-
-        }
-    );
-
-}
-
-
-/* =========================================
-   TULAJDONSÁGOK MENTÉSE
-========================================= */
-
-function editorSave() {
-
-    if (
-        !editorSelectedLayer
-    ) {
-
-        alert(
-            'Először kattints egy rajzolt objektumra.'
-        );
-
-        return;
-
-    }
-
-
-    editorSelectedLayer.feature =
-        editorSelectedLayer.feature ||
-        {
-            type:
-                'Feature',
-
-            properties:
-                {}
-        };
-
-
-    editorSelectedLayer.feature.properties =
-        editorSelectedLayer.feature.properties ||
-        {};
-
-
-    const name =
-        document.getElementById(
-            'editorName'
-        ).value.trim();
-
-
-    const description =
-        document.getElementById(
-            'editorDescription'
-        ).value.trim();
-
-
-    editorSelectedLayer
-        .feature
-        .properties
-        .name =
-            name;
-
-
-    editorSelectedLayer
-        .feature
-        .properties
-        .description =
-            description;
-
-
-    if (
-        name
-    ) {
-
-        editorSelectedLayer.bindTooltip(
-            name,
-            {
-                direction:
-                    'top'
-            }
-        );
-
-    }
-
-
-    document.getElementById(
-        'editorStatus'
-    ).textContent =
-        '✅ Tulajdonságok mentve.';
-
-}
-
-
-/* =========================================
-   OBJEKTUM TÖRLÉSE
-========================================= */
-
-function editorDelete() {
-
-    if (
-        !editorSelectedLayer
-    ) {
-
-        alert(
-            'Először válassz ki egy objektumot.'
-        );
-
-        return;
-
-    }
-
-
-    drawnItems.removeLayer(
-        editorSelectedLayer
-    );
-
-
-    editorSelectedLayer =
-        null;
-
-
-    document.getElementById(
-        'editorName'
-    ).value =
-        '';
-
-
-    document.getElementById(
-        'editorDescription'
-    ).value =
-        '';
-
-
-    document.getElementById(
-        'editorStatus'
-    ).textContent =
-        '🗑️ Objektum törölve.';
-
-
-    editorRefresh();
-
-}
-
-
-/* =========================================
-   GEOJSON FRISSÍTÉSE
-========================================= */
-
-function editorRefresh() {
-
-    const code =
-        document.getElementById(
-            'editorGeoJSON'
-        );
-
-
-    if (
-        code
-    ) {
-
-        code.value =
-            JSON.stringify(
-                drawnItems.toGeoJSON(),
-                null,
-                2
-            );
-
-    }
-
-}
-
-
-/* =========================================
-   GEOJSON ALKALMAZÁSA
-========================================= */
-
-function editorApply() {
-
-    const code =
-        document.getElementById(
-            'editorGeoJSON'
-        );
-
-
-    const status =
-        document.getElementById(
-            'editorStatus'
-        );
-
-
-    let data;
-
-
-    try {
-
-        data =
-            JSON.parse(
-                code.value
-            );
-
-    }
-
-    catch(error) {
-
-        status.textContent =
-            '❌ Hibás GeoJSON.';
-
-        return;
-
-    }
-
-
-    drawnItems.clearLayers();
-
-
-    const layer =
-        L.geoJSON(
-            data
-        );
-
-
-    layer.eachLayer(
-        function(child) {
-
-            drawnItems.addLayer(
-                child
-            );
-
-
-            editorAttachLayer(
-                child
-            );
-
-        }
-    );
-
-
-    if (
-        layer.getLayers().length
-    ) {
-
-        const bounds =
-            layer.getBounds();
-
-
-        if (
-            bounds.isValid()
-        ) {
-
-            map.fitBounds(
-                bounds,
-                {
-                    padding:
-                        [30,30]
-                }
-            );
-
-        }
-
-    }
-
-
-    status.textContent =
-        '✅ GeoJSON alkalmazva.';
-
-}
-
-
-/* =========================================
-   SZERKESZTŐ PANEL
-========================================= */
-
-const geoEditorControl =
-    L.control({
-
-        position:
-            'topleft'
-
-    });
-
-
-geoEditorControl.onAdd =
-function() {
-
-    const container =
-        L.DomUtil.create(
-            'div',
-            'geo-editor-control'
-        );
-
-
-    container.innerHTML = `
-
-        <div class="geo-editor-header">
-
-            🗺️ GeoJSON szerkesztő
-
-        </div>
-
-
-        <div class="geo-editor-body">
-
-
-            <div class="geo-editor-row">
-
-                <label>
-                    Név
-                </label>
-
-                <input
-                    id="editorName"
-                    type="text"
-                    placeholder="Objektum neve">
-
-            </div>
-
-
-            <div class="geo-editor-row">
-
-                <label>
-                    Leírás
-                </label>
-
-                <textarea
-                    id="editorDescription"
-                    placeholder="Objektum leírása"></textarea>
-
-            </div>
-
-
-            <div class="geo-editor-actions">
-
-
-                <button
-                    id="editorSave"
-                    type="button"
-                    class="geo-editor-button geo-editor-primary">
-
-                    💾 Mentés
-
-                </button>
-
-
-                <button
-                    id="editorDelete"
-                    type="button"
-                    class="geo-editor-button geo-editor-danger">
-
-                    🗑 Törlés
-
-                </button>
-
-
-                <button
-                    id="editorRefresh"
-                    type="button"
-                    class="geo-editor-button geo-editor-secondary">
-
-                    🔄 Frissítés
-
-                </button>
-
-
-            </div>
-
-
-            <div
-                id="editorStatus"
-                class="geo-editor-status">
-
-                Kattints egy rajzolt objektumra.
-
-            </div>
-
-
-        </div>
-
-
-        <div class="geo-editor-body">
-
-
-            <strong
-                style="font-size:11px">
-
-                GeoJSON közvetlen szerkesztése
-
-            </strong>
-
-
-            <textarea
-                id="editorGeoJSON"
-                class="geo-editor-code"
-                placeholder="GeoJSON..."></textarea>
-
-
-            <div class="geo-editor-actions">
-
-
-                <button
-                    id="editorApply"
-                    type="button"
-                    class="geo-editor-button geo-editor-success">
-
-                    ▶ Alkalmazás
-
-                </button>
-
-
-                <button
-                    id="editorCopy"
-                    type="button"
-                    class="geo-editor-button geo-editor-secondary">
-
-                    📋 Másolás
-
-                </button>
-
-
-            </div>
-
-
-        </div>
-
-    `;
-
-
-    L.DomEvent.disableClickPropagation(
-        container
-    );
-
-
-    L.DomEvent.disableScrollPropagation(
-        container
-    );
-
-
-    return container;
-
-};
-
-
-geoEditorControl.addTo(
-    map
-);
-
-
-/* =========================================
-   SZERKESZTŐ GOMBOK
-========================================= */
-
-document.addEventListener(
-    'click',
-    function(event) {
-
-        if (
-            event.target.id ===
-            'editorSave'
-        ) {
-
-            editorSave();
-
-        }
-
-
-        if (
-            event.target.id ===
-            'editorDelete'
-        ) {
-
-            editorDelete();
-
-        }
-
-
-        if (
-            event.target.id ===
-            'editorRefresh'
-        ) {
-
-            editorRefresh();
-
-        }
-
-
-        if (
-            event.target.id ===
-            'editorApply'
-        ) {
-
-            editorApply();
-
-        }
-
-
-        if (
-            event.target.id ===
-            'editorCopy'
-        ) {
-
-            const code =
-                document.getElementById(
-                    'editorGeoJSON'
-                );
-
-
-            code.select();
-
-
-            navigator.clipboard.writeText(
-                code.value
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================================
-   DRAW OBJEKTUMOK ÖSSZEKÖTÉSE
-========================================= */
-
-map.on(
-    L.Draw.Event.CREATED,
-    function(event) {
-
-        editorAttachLayer(
             event.layer
         );
 
@@ -2368,98 +872,1142 @@ map.on(
 );
 
 
-drawnItems.eachLayer(
-    function(layer) {
+/* =====================================================
+   KOORDINÁTA
+===================================================== */
 
-        editorAttachLayer(
-            layer
+const coordinateControl =
+    L.control({
+        position:
+            "bottomleft"
+    });
+
+
+coordinateControl.onAdd =
+function(){
+
+    const div =
+        L.DomUtil.create(
+            "div",
+            "coordinate-display"
         );
+
+    div.innerHTML =
+        "Lat: -- | Lng: --";
+
+    return div;
+
+};
+
+
+coordinateControl.addTo(
+    map
+);
+
+
+map.on(
+    "mousemove",
+    function(event){
+
+        document.querySelector(
+            ".coordinate-display"
+        ).innerHTML =
+            "Lat: " +
+            event.latlng.lat.toFixed(6) +
+            " | Lng: " +
+            event.latlng.lng.toFixed(6);
 
     }
 );
 
 
-/* =========================================
-   EXPORT
-========================================= */
+/* =====================================================
+   GEOJSON IMPORT
+===================================================== */
 
-function geojsonExport() {
-
-    const drawn =
-        drawnItems.toGeoJSON();
-
-
-    const imported =
-        importedGeoJSON.toGeoJSON();
+const geoJSONImport =
+    L.control({
+        position:
+            "topleft"
+    });
 
 
-    const chatGPT =
-        chatGPTGeoJSONLayer.toGeoJSON();
+geoJSONImport.onAdd =
+function(){
 
+    const container =
+        L.DomUtil.create(
+            "div",
+            "geojson-control"
+        );
 
-    const features = [];
+    const button =
+        L.DomUtil.create(
+            "button",
+            "",
+            container
+        );
 
+    button.innerHTML =
+        "📥 Import GeoJSON";
 
-    if (
-        drawn &&
-        drawn.features
-    ) {
+    button.onclick =
+    function(){
 
-        drawn.features.forEach(
-            function(feature) {
+        const input =
+            document.createElement(
+                "input"
+            );
 
-                features.push(
-                    feature
-                );
+        input.type =
+            "file";
 
+        input.accept =
+            ".geojson,.json";
+
+        input.onchange =
+        function(event){
+
+            const file =
+                event.target.files[0];
+
+            if(!file){
+                return;
             }
+
+            const reader =
+                new FileReader();
+
+            reader.onload =
+            function(){
+
+                try{
+
+                    const data =
+                        JSON.parse(
+                            reader.result
+                        );
+
+                    const layer =
+                        L.geoJSON(
+                            data,
+                            {
+                                onEachFeature:
+                                function(
+                                    feature,
+                                    layer
+                                ){
+
+                                    if(
+                                        feature.properties
+                                    ){
+
+                                        layer.bindPopup(
+                                            Object.entries(
+                                                feature.properties
+                                            )
+                                            .map(
+                                                pair =>
+                                                    "<b>" +
+                                                    pair[0] +
+                                                    "</b>: " +
+                                                    pair[1]
+                                            )
+                                            .join(
+                                                "<br>"
+                                            )
+                                        );
+
+                                    }
+
+                                }
+                            }
+                        );
+
+                    drawnItems.addLayer(
+                        layer
+                    );
+
+                    map.fitBounds(
+                        layer.getBounds()
+                    );
+
+                }
+                catch(error){
+
+                    alert(
+                        "Hibás GeoJSON fájl."
+                    );
+
+                }
+
+            };
+
+            reader.readAsText(
+                file
+            );
+
+        };
+
+        input.click();
+
+    };
+
+    L.DomEvent.disableClickPropagation(
+        container
+    );
+
+    return container;
+
+};
+
+
+geoJSONImport.addTo(
+    map
+);
+
+
+/* =====================================================
+   GEOJSON EXPORT
+===================================================== */
+
+const geoJSONExport =
+    L.control({
+        position:
+            "topleft"
+    });
+
+
+geoJSONExport.onAdd =
+function(){
+
+    const container =
+        L.DomUtil.create(
+            "div",
+            "geojson-control"
+        );
+
+    const button =
+        L.DomUtil.create(
+            "button",
+            "",
+            container
+        );
+
+    button.innerHTML =
+        "📤 Export GeoJSON";
+
+    button.onclick =
+    function(){
+
+        const data =
+            drawnItems.toGeoJSON();
+
+        const blob =
+            new Blob(
+                [
+                    JSON.stringify(
+                        data,
+                        null,
+                        2
+                    )
+                ],
+                {
+                    type:
+                        "application/geo+json"
+                }
+            );
+
+        const url =
+            URL.createObjectURL(
+                blob
+            );
+
+        const a =
+            document.createElement(
+                "a"
+            );
+
+        a.href =
+            url;
+
+        a.download =
+            "karpatalja.geojson";
+
+        a.click();
+
+        URL.revokeObjectURL(
+            url
+        );
+
+    };
+
+    L.DomEvent.disableClickPropagation(
+        container
+    );
+
+    return container;
+
+};
+
+
+geoJSONExport.addTo(
+    map
+);
+
+
+/* =====================================================
+   PREZI SZERKESZTŐ
+===================================================== */
+
+const preziEditor =
+    document.createElement(
+        "div"
+    );
+
+preziEditor.id =
+    "preziEditor";
+
+preziEditor.innerHTML = `
+
+    <aside class="prezi-toolbar">
+
+        <div class="prezi-brand">
+
+            <div class="prezi-brand-title">
+                KÁRPÁTALJA
+            </div>
+
+            <div class="prezi-brand-subtitle">
+                INTERAKTÍV ATLASZ
+            </div>
+
+        </div>
+
+
+        <button
+            id="preziNewFrame">
+            ＋ Új nézet
+        </button>
+
+
+        <button
+            id="preziSaveFrame">
+            💾 Nézet mentése
+        </button>
+
+
+        <button
+            id="preziDeleteFrame">
+            🗑 Nézet törlése
+        </button>
+
+
+        <button
+            id="preziAddText">
+            T Szöveg
+        </button>
+
+
+        <button
+            id="preziAddTitle">
+            H Cím
+        </button>
+
+
+        <button
+            id="preziStart"
+            class="gold">
+            ▶ PREZI MÓD
+        </button>
+
+
+        <button
+            id="preziExport">
+            📤 Prezi export
+        </button>
+
+
+        <button
+            id="preziImport">
+            📥 Prezi import
+        </button>
+
+
+        <input
+            id="preziFile"
+            type="file"
+            accept=".json"
+            hidden>
+
+    </aside>
+
+
+    <main class="prezi-workspace">
+
+        <div id="preziMap"></div>
+
+
+        <div class="prezi-frame-editor">
+
+            <h3>
+                🗺️ Nézet szerkesztése
+            </h3>
+
+
+            <label>
+                Cím
+            </label>
+
+            <input
+                id="preziFrameTitle">
+
+
+            <label>
+                Szöveg
+            </label>
+
+            <textarea
+                id="preziFrameText">
+            </textarea>
+
+
+            <label>
+                Zoom
+            </label>
+
+            <input
+                id="preziZoom"
+                type="range"
+                min="1"
+                max="19"
+                step=".1">
+
+            <button
+                id="preziPosition"
+                style="
+                    margin-top:8px;
+                    width:100%;
+                    padding:8px;
+                    border:0;
+                    background:#17374d;
+                    color:white;
+                    border-radius:4px;
+                    cursor:pointer;
+                ">
+                📍 Aktuális pozíció mentése
+            </button>
+
+        </div>
+
+
+        <div
+            id="preziTextEditor"
+            class="prezi-text-editor">
+
+            <h3>
+                ✏️ Szövegszerkesztő
+            </h3>
+
+
+            <label>
+                Szöveg
+            </label>
+
+            <textarea
+                id="preziObjectText">
+            </textarea>
+
+
+            <label>
+                Betűméret
+            </label>
+
+            <input
+                id="preziObjectSize"
+                type="range"
+                min="12"
+                max="90"
+                value="30">
+
+
+            <label>
+                Igazítás
+            </label>
+
+            <select
+                id="preziObjectAlign">
+
+                <option value="left">
+                    Balra
+                </option>
+
+                <option value="center">
+                    Középre
+                </option>
+
+                <option value="right">
+                    Jobbra
+                </option>
+
+            </select>
+
+
+            <button
+                id="preziApplyText"
+                style="
+                    margin-top:8px;
+                    padding:8px 12px;
+                    border:0;
+                    background:#17374d;
+                    color:white;
+                    border-radius:4px;
+                    cursor:pointer;
+                ">
+                💾 Alkalmaz
+            </button>
+
+
+            <button
+                id="preziDeleteText"
+                style="
+                    margin-top:8px;
+                    padding:8px 12px;
+                    border:0;
+                    background:#8b2020;
+                    color:white;
+                    border-radius:4px;
+                    cursor:pointer;
+                ">
+                🗑 Törlés
+            </button>
+
+        </div>
+
+
+        <div
+            id="presentationOverlay">
+
+            <div class="presentation-caption">
+
+                <div
+                    id="presentationCounter"
+                    class="presentation-counter">
+                </div>
+
+
+                <h1
+                    id="presentationTitle">
+                </h1>
+
+
+                <p
+                    id="presentationText">
+                </p>
+
+
+                <div class="presentation-buttons">
+
+                    <button
+                        id="presentationPrev">
+                        ◀
+                    </button>
+
+                    <button
+                        id="presentationExit">
+                        ✕ Kilépés
+                    </button>
+
+                    <button
+                        id="presentationNext">
+                        ▶
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <aside class="prezi-frames">
+
+        <div class="prezi-frames-title">
+            PREZENTÁCIÓ
+        </div>
+
+        <div
+            id="preziFrameList">
+        </div>
+
+    </aside>
+
+`;
+
+
+document.body.appendChild(
+    preziEditor
+);
+
+
+/* =====================================================
+   PREZI ADATOK
+===================================================== */
+
+let preziFrames = [
+
+    {
+        title:
+            "Kárpátalja földrajza",
+
+        text:
+            "Az interaktív földrajzi atlasz áttekintése.",
+
+        lat:
+            48.45,
+
+        lng:
+            22.75,
+
+        zoom:
+            8,
+
+        objects:
+            []
+    }
+
+];
+
+
+let preziIndex =
+    0;
+
+let selectedPreziObject =
+    null;
+
+let presentationRunning =
+    false;
+
+
+/* =====================================================
+   PREZI ADATOK BETÖLTÉSE
+===================================================== */
+
+try {
+
+    const saved =
+        localStorage.getItem(
+            "karpatalja-prezi"
+        );
+
+    if(saved){
+
+        const parsed =
+            JSON.parse(
+                saved
+            );
+
+        if(
+            Array.isArray(parsed) &&
+            parsed.length
+        ){
+
+            preziFrames =
+                parsed;
+
+        }
+
+    }
+
+}
+catch(error){
+
+    console.warn(
+        "Prezi adatok nem tölthetők be."
+    );
+
+}
+
+
+/* =====================================================
+   MENTÉS
+===================================================== */
+
+function savePrezi(){
+
+    localStorage.setItem(
+        "karpatalja-prezi",
+        JSON.stringify(
+            preziFrames
+        )
+    );
+
+}
+
+
+/* =====================================================
+   PREZI MEGNYITÁSA
+===================================================== */
+
+document.getElementById(
+    "preziButton"
+);
+
+
+/*
+   Jobb alsó sarokban lévő vezérlő
+*/
+
+const preziLauncher =
+    L.control({
+        position:
+            "bottomright"
+    });
+
+
+preziLauncher.onAdd =
+function(){
+
+    const container =
+        L.DomUtil.create(
+            "div",
+            "geojson-control"
+        );
+
+
+    const button =
+        L.DomUtil.create(
+            "button",
+            "",
+            container
+        );
+
+
+    button.className =
+        "prezi-button";
+
+
+    button.innerHTML =
+        "🎬 PREZI MÓD";
+
+
+    button.onclick =
+    function(){
+
+        openPreziEditor();
+
+    };
+
+
+    L.DomEvent.disableClickPropagation(
+        container
+    );
+
+
+    return container;
+
+};
+
+
+preziLauncher.addTo(
+    map
+);
+
+
+/* =====================================================
+   PREZI SZERKESZTŐ MEGNYITÁSA
+===================================================== */
+
+function openPreziEditor(){
+
+    preziEditor.classList.add(
+        "active"
+    );
+
+    initPreziMap();
+
+    loadPreziFrame();
+
+    renderPreziFrames();
+
+}
+
+
+/* =====================================================
+   PREZI TÉRKÉP
+===================================================== */
+
+let preziMap =
+    null;
+
+
+function initPreziMap(){
+
+    if(preziMap){
+        return;
+    }
+
+
+    preziMap =
+        L.map(
+            "preziMap"
+        )
+        .setView(
+            [
+                preziFrames[
+                    preziIndex
+                ].lat,
+
+                preziFrames[
+                    preziIndex
+                ].lng
+            ],
+
+            preziFrames[
+                preziIndex
+            ].zoom
+        );
+
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom:
+                19,
+
+            attribution:
+                "&copy; OpenStreetMap contributors"
+        }
+    )
+    .addTo(
+        preziMap
+    );
+
+}
+
+
+/* =====================================================
+   FRAME BETÖLTÉSE
+===================================================== */
+
+function loadPreziFrame(){
+
+    const frame =
+        preziFrames[
+            preziIndex
+        ];
+
+
+    document.getElementById(
+        "preziFrameTitle"
+    ).value =
+        frame.title;
+
+
+    document.getElementById(
+        "preziFrameText"
+    ).value =
+        frame.text;
+
+
+    document.getElementById(
+        "preziZoom"
+    ).value =
+        frame.zoom;
+
+
+    if(preziMap){
+
+        preziMap.setView(
+            [
+                frame.lat,
+                frame.lng
+            ],
+
+            frame.zoom
         );
 
     }
 
+}
 
-    if (
-        imported &&
-        imported.features
-    ) {
 
-        imported.features.forEach(
-            function(feature) {
+/* =====================================================
+   FRAME LISTA
+===================================================== */
 
-                features.push(
-                    feature
-                );
+function renderPreziFrames(){
 
-            }
+    const list =
+        document.getElementById(
+            "preziFrameList"
         );
 
-    }
+
+    list.innerHTML =
+        "";
 
 
-    if (
-        chatGPT &&
-        chatGPT.features
-    ) {
+    preziFrames.forEach(
+        function(
+            frame,
+            index
+        ){
 
-        chatGPT.features.forEach(
-            function(feature) {
-
-                features.push(
-                    feature
+            const item =
+                document.createElement(
+                    "div"
                 );
 
-            }
+
+            item.className =
+                "prezi-frame" +
+                (
+                    index === preziIndex
+                        ? " active"
+                        : ""
+                );
+
+
+            item.innerHTML = `
+
+                <div class="prezi-frame-number">
+                    NÉZET ${index + 1}
+                </div>
+
+                <div class="prezi-frame-title">
+                    ${escapeHTML(frame.title)}
+                </div>
+
+                <div class="prezi-frame-text">
+                    ${escapeHTML(frame.text)}
+                </div>
+
+            `;
+
+
+            item.onclick =
+            function(){
+
+                preziIndex =
+                    index;
+
+                loadPreziFrame();
+
+                renderPreziFrames();
+
+                renderPreziObjects();
+
+            };
+
+
+            list.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ÚJ FRAME
+===================================================== */
+
+document.getElementById(
+    "preziNewFrame"
+).onclick =
+function(){
+
+    const center =
+        preziMap
+            ? preziMap.getCenter()
+            : map.getCenter();
+
+
+    const zoom =
+        preziMap
+            ? preziMap.getZoom()
+            : map.getZoom();
+
+
+    preziFrames.push({
+
+        title:
+            "Új nézet",
+
+        text:
+            "Ide írható a nézet szövege.",
+
+        lat:
+            center.lat,
+
+        lng:
+            center.lng,
+
+        zoom:
+            zoom,
+
+        objects:
+            []
+
+    });
+
+
+    preziIndex =
+        preziFrames.length - 1;
+
+
+    savePrezi();
+
+    loadPreziFrame();
+
+    renderPreziFrames();
+
+};
+
+
+/* =====================================================
+   FRAME MENTÉSE
+===================================================== */
+
+function saveCurrentPreziFrame(){
+
+    const frame =
+        preziFrames[
+            preziIndex
+        ];
+
+
+    frame.title =
+        document.getElementById(
+            "preziFrameTitle"
+        ).value;
+
+
+    frame.text =
+        document.getElementById(
+            "preziFrameText"
+        ).value;
+
+
+    frame.zoom =
+        Number(
+            document.getElementById(
+                "preziZoom"
+            ).value
         );
 
-    }
+
+    savePrezi();
+
+    renderPreziFrames();
+
+}
 
 
-    if (
-        features.length === 0
-    ) {
+/* =====================================================
+   MENTÉS GOMB
+===================================================== */
+
+document.getElementById(
+    "preziSaveFrame"
+).onclick =
+function(){
+
+    saveCurrentPreziFrame();
+
+};
+
+
+/* =====================================================
+   POZÍCIÓ MENTÉSE
+===================================================== */
+
+document.getElementById(
+    "preziPosition"
+).onclick =
+function(){
+
+    const frame =
+        preziFrames[
+            preziIndex
+        ];
+
+
+    const center =
+        preziMap.getCenter();
+
+
+    frame.lat =
+        center.lat;
+
+
+    frame.lng =
+        center.lng;
+
+
+    frame.zoom =
+        preziMap.getZoom();
+
+
+    document.getElementById(
+        "preziZoom"
+    ).value =
+        frame.zoom;
+
+
+    savePrezi();
+
+};
+
+
+/* =====================================================
+   ZOOM
+===================================================== */
+
+document.getElementById(
+    "preziZoom"
+).oninput =
+function(){
+
+    const zoom =
+        Number(
+            this.value
+        );
+
+
+    preziFrames[
+        preziIndex
+    ].zoom =
+        zoom;
+
+
+    preziMap.setZoom(
+        zoom
+    );
+
+};
+
+
+/* =====================================================
+   FRAME TÖRLÉSE
+===================================================== */
+
+document.getElementById(
+    "preziDeleteFrame"
+).onclick =
+function(){
+
+    if(
+        preziFrames.length <= 1
+    ){
 
         alert(
-            'Nincs exportálható objektum.'
+            "Legalább egy nézet szükséges."
         );
 
         return;
@@ -2467,31 +2015,794 @@ function geojsonExport() {
     }
 
 
-    const finalGeoJSON = {
+    preziFrames.splice(
+        preziIndex,
+        1
+    );
 
-        type:
-            'FeatureCollection',
 
-        features:
-            features
+    preziIndex =
+        Math.max(
+            0,
+            preziIndex - 1
+        );
+
+
+    savePrezi();
+
+    loadPreziFrame();
+
+    renderPreziFrames();
+
+};
+
+
+/* =====================================================
+   SZÖVEG
+===================================================== */
+
+document.getElementById(
+    "preziAddText"
+).onclick =
+function(){
+
+    addPreziText(
+        false
+    );
+
+};
+
+
+document.getElementById(
+    "preziAddTitle"
+).onclick =
+function(){
+
+    addPreziText(
+        true
+    );
+
+};
+
+
+function addPreziText(
+    title
+){
+
+    const frame =
+        preziFrames[
+            preziIndex
+        ];
+
+
+    if(!frame.objects){
+        frame.objects = [];
+    }
+
+
+    const object = {
+
+        id:
+            Date.now(),
+
+        text:
+            title
+                ? "Kárpátalja története"
+                : "Ide írd a szöveget.",
+
+        size:
+            title
+                ? 50
+                : 30,
+
+        align:
+            "center",
+
+        x:
+            50,
+
+        y:
+            50,
+
+        scale:
+            1,
+
+        rotation:
+            0
 
     };
 
 
-    const json =
-        JSON.stringify(
-            finalGeoJSON,
-            null,
-            2
+    frame.objects.push(
+        object
+    );
+
+
+    selectedPreziObject =
+        object;
+
+
+    savePrezi();
+
+    renderPreziObjects();
+
+    openTextEditor(
+        object
+    );
+
+}
+
+
+/* =====================================================
+   OBJEKTUMOK
+===================================================== */
+
+function renderPreziObjects(){
+
+    if(!preziMap){
+        return;
+    }
+
+
+    let layer =
+        document.getElementById(
+            "preziObjects"
         );
 
 
+    if(!layer){
+
+        layer =
+            document.createElement(
+                "div"
+            );
+
+        layer.id =
+            "preziObjects";
+
+
+        layer.style.cssText = `
+            position:absolute;
+            inset:0;
+            z-index:2000;
+            pointer-events:none;
+        `;
+
+
+        document
+            .getElementById(
+                "preziMap"
+            )
+            .parentElement
+            .appendChild(
+                layer
+            );
+
+    }
+
+
+    layer.innerHTML =
+        "";
+
+
+    const frame =
+        preziFrames[
+            preziIndex
+        ];
+
+
+    if(!frame.objects){
+        return;
+    }
+
+
+    frame.objects.forEach(
+        function(object){
+
+            const el =
+                document.createElement(
+                    "div"
+                );
+
+
+            el.className =
+                "prezi-object prezi-text-object";
+
+
+            if(
+                selectedPreziObject &&
+                selectedPreziObject.id === object.id
+            ){
+
+                el.classList.add(
+                    "selected"
+                );
+
+            }
+
+
+            el.textContent =
+                object.text;
+
+
+            el.style.left =
+                object.x + "%";
+
+
+            el.style.top =
+                object.y + "%";
+
+
+            el.style.fontSize =
+                object.size + "px";
+
+
+            el.style.textAlign =
+                object.align;
+
+
+            el.style.transform =
+                `
+                translate(-50%,-50%)
+                scale(${object.scale})
+                rotate(${object.rotation}deg)
+                `;
+
+
+            el.style.pointerEvents =
+                "auto";
+
+
+            el.onclick =
+            function(event){
+
+                event.stopPropagation();
+
+                selectedPreziObject =
+                    object;
+
+                openTextEditor(
+                    object
+                );
+
+                renderPreziObjects();
+
+            };
+
+
+            makePreziDraggable(
+                el,
+                object
+            );
+
+
+            layer.appendChild(
+                el
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   MOZGATHATÓ SZÖVEG
+===================================================== */
+
+function makePreziDraggable(
+    element,
+    object
+){
+
+    let dragging =
+        false;
+
+
+    let startX =
+        0;
+
+    let startY =
+        0;
+
+
+    let originalX =
+        0;
+
+    let originalY =
+        0;
+
+
+    element.addEventListener(
+        "pointerdown",
+        function(event){
+
+            dragging =
+                true;
+
+
+            element.setPointerCapture(
+                event.pointerId
+            );
+
+
+            startX =
+                event.clientX;
+
+
+            startY =
+                event.clientY;
+
+
+            originalX =
+                object.x;
+
+
+            originalY =
+                object.y;
+
+
+            selectedPreziObject =
+                object;
+
+        }
+    );
+
+
+    element.addEventListener(
+        "pointermove",
+        function(event){
+
+            if(!dragging){
+                return;
+            }
+
+
+            const rect =
+                document
+                    .getElementById(
+                        "preziMap"
+                    )
+                    .getBoundingClientRect();
+
+
+            const dx =
+                (
+                    event.clientX -
+                    startX
+                )
+                /
+                rect.width
+                *
+                100;
+
+
+            const dy =
+                (
+                    event.clientY -
+                    startY
+                )
+                /
+                rect.height
+                *
+                100;
+
+
+            object.x =
+                originalX + dx;
+
+
+            object.y =
+                originalY + dy;
+
+
+            element.style.left =
+                object.x + "%";
+
+
+            element.style.top =
+                object.y + "%";
+
+        }
+    );
+
+
+    element.addEventListener(
+        "pointerup",
+        function(){
+
+            dragging =
+                false;
+
+            savePrezi();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   SZÖVEGSZERKESZTŐ
+===================================================== */
+
+function openTextEditor(
+    object
+){
+
+    const editor =
+        document.getElementById(
+            "preziTextEditor"
+        );
+
+
+    editor.classList.add(
+        "active"
+    );
+
+
+    document.getElementById(
+        "preziObjectText"
+    ).value =
+        object.text;
+
+
+    document.getElementById(
+        "preziObjectSize"
+    ).value =
+        object.size;
+
+
+    document.getElementById(
+        "preziObjectAlign"
+    ).value =
+        object.align;
+
+}
+
+
+/* =====================================================
+   SZÖVEG ALKALMAZÁSA
+===================================================== */
+
+document.getElementById(
+    "preziApplyText"
+).onclick =
+function(){
+
+    if(
+        !selectedPreziObject
+    ){
+        return;
+    }
+
+
+    selectedPreziObject.text =
+        document.getElementById(
+            "preziObjectText"
+        ).value;
+
+
+    selectedPreziObject.size =
+        Number(
+            document.getElementById(
+                "preziObjectSize"
+            ).value
+        );
+
+
+    selectedPreziObject.align =
+        document.getElementById(
+            "preziObjectAlign"
+        ).value;
+
+
+    savePrezi();
+
+    renderPreziObjects();
+
+};
+
+
+/* =====================================================
+   SZÖVEG TÖRLÉSE
+===================================================== */
+
+document.getElementById(
+    "preziDeleteText"
+).onclick =
+function(){
+
+    if(
+        !selectedPreziObject
+    ){
+        return;
+    }
+
+
+    const frame =
+        preziFrames[
+            preziIndex
+        ];
+
+
+    frame.objects =
+        frame.objects.filter(
+            function(object){
+
+                return (
+                    object.id !==
+                    selectedPreziObject.id
+                );
+
+            }
+        );
+
+
+    selectedPreziObject =
+        null;
+
+
+    document
+        .getElementById(
+            "preziTextEditor"
+        )
+        .classList.remove(
+            "active"
+        );
+
+
+    savePrezi();
+
+    renderPreziObjects();
+
+};
+
+
+/* =====================================================
+   PREZI INDÍTÁSA
+===================================================== */
+
+document.getElementById(
+    "preziStart"
+).onclick =
+function(){
+
+    presentationRunning =
+        true;
+
+
+    document
+        .getElementById(
+            "presentationOverlay"
+        )
+        .classList.add(
+            "active"
+        );
+
+
+    playPreziFrame();
+
+};
+
+
+/* =====================================================
+   PREZENTÁCIÓ
+===================================================== */
+
+function playPreziFrame(){
+
+    const frame =
+        preziFrames[
+            preziIndex
+        ];
+
+
+    document.getElementById(
+        "presentationCounter"
+    ).textContent =
+        "KÁRPÁTALJA ATLASZ • " +
+        (preziIndex + 1) +
+        " / " +
+        preziFrames.length;
+
+
+    document.getElementById(
+        "presentationTitle"
+    ).textContent =
+        frame.title;
+
+
+    document.getElementById(
+        "presentationText"
+    ).textContent =
+        frame.text;
+
+
+    preziMap.flyTo(
+        [
+            frame.lat,
+            frame.lng
+        ],
+        frame.zoom,
+        {
+            animate:
+                true,
+
+            duration:
+                2.2,
+
+            easeLinearity:
+                .2
+        }
+    );
+
+
+    renderPreziObjects();
+
+}
+
+
+/* =====================================================
+   KÖVETKEZŐ
+===================================================== */
+
+document.getElementById(
+    "presentationNext"
+).onclick =
+function(){
+
+    if(
+        preziIndex <
+        preziFrames.length - 1
+    ){
+
+        preziIndex++;
+
+        playPreziFrame();
+
+        loadPreziFrame();
+
+        renderPreziFrames();
+
+    }
+
+};
+
+
+/* =====================================================
+   ELŐZŐ
+===================================================== */
+
+document.getElementById(
+    "presentationPrev"
+).onclick =
+function(){
+
+    if(
+        preziIndex > 0
+    ){
+
+        preziIndex--;
+
+        playPreziFrame();
+
+        loadPreziFrame();
+
+        renderPreziFrames();
+
+    }
+
+};
+
+
+/* =====================================================
+   KILÉPÉS
+===================================================== */
+
+document.getElementById(
+    "presentationExit"
+).onclick =
+function(){
+
+    presentationRunning =
+        false;
+
+
+    document
+        .getElementById(
+            "presentationOverlay"
+        )
+        .classList.remove(
+            "active"
+        );
+
+};
+
+
+/* =====================================================
+   BILLENTYŰ
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            !presentationRunning
+        ){
+
+            return;
+
+        }
+
+
+        if(
+            event.key ===
+            "ArrowRight"
+        ){
+
+            document
+                .getElementById(
+                    "presentationNext"
+                )
+                .click();
+
+        }
+
+
+        if(
+            event.key ===
+            "ArrowLeft"
+        ){
+
+            document
+                .getElementById(
+                    "presentationPrev"
+                )
+                .click();
+
+        }
+
+
+        if(
+            event.key ===
+            "Escape"
+        ){
+
+            document
+                .getElementById(
+                    "presentationExit"
+                )
+                .click();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   EXPORT PREZI
+===================================================== */
+
+document.getElementById(
+    "preziExport"
+).onclick =
+function(){
+
     const blob =
         new Blob(
-            [json],
+            [
+                JSON.stringify(
+                    preziFrames,
+                    null,
+                    2
+                )
+            ],
             {
                 type:
-                    'application/geo+json'
+                    "application/json"
             }
         );
 
@@ -2502,109 +2813,162 @@ function geojsonExport() {
         );
 
 
-    const link =
+    const a =
         document.createElement(
-            'a'
+            "a"
         );
 
 
-    link.href =
+    a.href =
         url;
 
 
-    link.download =
-        'karpatalja-atlasz.geojson';
+    a.download =
+        "karpatalja-prezi.json";
 
 
-    document.body.appendChild(
-        link
-    );
-
-
-    link.click();
-
-
-    document.body.removeChild(
-        link
-    );
+    a.click();
 
 
     URL.revokeObjectURL(
         url
     );
 
-}
+};
 
 
-/* =========================================
-   IMPORT / EXPORT VEZÉRLŐ
-========================================= */
+/* =====================================================
+   IMPORT PREZI
+===================================================== */
 
-const geojsonControl =
+document.getElementById(
+    "preziImport"
+).onclick =
+function(){
+
+    document.getElementById(
+        "preziFile"
+    ).click();
+
+};
+
+
+document.getElementById(
+    "preziFile"
+).onchange =
+function(event){
+
+    const file =
+        event.target.files[0];
+
+
+    if(!file){
+        return;
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+    function(){
+
+        try{
+
+            const data =
+                JSON.parse(
+                    reader.result
+                );
+
+
+            if(
+                !Array.isArray(data) ||
+                !data.length
+            ){
+
+                throw new Error();
+
+            }
+
+
+            preziFrames =
+                data;
+
+
+            preziIndex =
+                0;
+
+
+            savePrezi();
+
+            loadPreziFrame();
+
+            renderPreziFrames();
+
+            renderPreziObjects();
+
+
+        }
+        catch(error){
+
+            alert(
+                "Hibás Prezi JSON fájl."
+            );
+
+        }
+
+    };
+
+
+    reader.readAsText(
+        file
+    );
+
+};
+
+
+/* =====================================================
+   TÉRKÉP VISSZA
+===================================================== */
+
+const backControl =
     L.control({
-
         position:
-            'topleft'
-
+            "bottomright"
     });
 
 
-geojsonControl.onAdd =
-function() {
+backControl.onAdd =
+function(){
 
     const container =
         L.DomUtil.create(
-            'div',
-            'geojson-control'
+            "div",
+            "geojson-control"
         );
 
 
-    const importButton =
+    const button =
         L.DomUtil.create(
-            'button',
-            'import-button',
+            "button",
+            "",
             container
         );
 
 
-    importButton.innerHTML =
-        '📥 Import GeoJSON';
+    button.innerHTML =
+        "🗺️ Térkép";
 
 
-    importButton.type =
-        'button';
+    button.onclick =
+    function(){
 
-
-    importButton.onclick =
-        function() {
-
-            importGeoJSON();
-
-        };
-
-
-    const exportButton =
-        L.DomUtil.create(
-            'button',
-            'export-button',
-            container
+        preziEditor.classList.remove(
+            "active"
         );
 
-
-    exportButton.innerHTML =
-        '📤 Export GeoJSON';
-
-
-    exportButton.type =
-        'button';
-
-
-    exportButton.onclick =
-        function() {
-
-            geojsonExport();
-
-        };
+    };
 
 
     L.DomEvent.disableClickPropagation(
@@ -2617,23 +2981,55 @@ function() {
 };
 
 
-geojsonControl.addTo(
+backControl.addTo(
     map
 );
 
 
+/* =====================================================
+   HTML BIZTONSÁG
+===================================================== */
+
+function escapeHTML(
+    value
+){
+
+    return String(
+        value || ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   KÉSZ
+===================================================== */
+
 console.log(
-    'Kárpátalja interaktív földrajzi atlasz betöltve.'
+    "Kárpátalja Atlasz – térkép + GeoJSON + Draw + Prezi rendszer betöltve."
 );
 
 </script>
 
-
 </body>
-
-  <link rel="stylesheet" href="prezi.css">
-
-<script src="map.js"></script>
-<script src="prezi.js"></script>
-      
 </html>
