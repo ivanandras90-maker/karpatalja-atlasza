@@ -25,24 +25,23 @@
             "title": "Térképészeti források",
             "description": "Történelmi és modern térképek, atlaszok és térinformatikai adatok."
         }
+    ],
+
+    "gallery": [
+        {
+            "id": "gallery-001",
+            "image": "assets/images/gallery/ungvar-var.jpg",
+            "title": "Ungvár vára",
+            "description": "Ungvár történelmi vára.",
+            "source": "Fortepan",
+            "sourceUrl": "https://fortepan.hu/",
+            "latitude": 48.6208,
+            "longitude": 22.2879,
+            "category": "Történelmi",
+            "period": "20. század",
+            "visible": true,
+            "mapVisible": true,
+            "order": 1
+        }
     ]
-}
-{
-  "gallery": [
-    {
-      "id": "gallery-001",
-      "image": "assets/images/gallery/ungvar-var.jpg",
-      "title": "Ungvár vára",
-      "description": "Ungvár történelmi vára.",
-      "source": "Fortepan",
-      "sourceUrl": "https://fortepan.hu/",
-      "latitude": 48.6208,
-      "longitude": 22.2879,
-      "category": "Történelmi",
-      "period": "20. század",
-      "visible": true,
-      "mapVisible": true,
-      "order": 1
-    }
-  ]
 }
