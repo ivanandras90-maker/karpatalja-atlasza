@@ -343,103 +343,6 @@ h2 {
 
 
 /* ==================================================
-   GALÉRIA
-================================================== */
-
-.gallery-section {
-    background: #f8f6f0;
-}
-
-.gallery-intro {
-    max-width: 760px;
-    margin: 0 auto 40px;
-    text-align: center;
-}
-
-.gallery-intro p {
-    color: #5d666c;
-    line-height: 1.8;
-    font-size: 17px;
-}
-
-.gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-}
-
-.gallery-card {
-    background: white;
-    border: 1px solid #ddd5c3;
-    box-shadow: 0 7px 22px rgba(0,0,0,.08);
-    overflow: hidden;
-    transition: .2s;
-}
-
-.gallery-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 28px rgba(0,0,0,.12);
-}
-
-.gallery-image {
-    width: 100%;
-    height: 240px;
-    object-fit: cover;
-    display: block;
-}
-
-.gallery-content {
-    padding: 22px;
-}
-
-.gallery-content h3 {
-    margin: 0 0 10px;
-    color: #102638;
-    font-size: 22px;
-    font-weight: normal;
-}
-
-.gallery-content p {
-    color: #5d666c;
-    line-height: 1.7;
-    margin: 0 0 15px;
-}
-
-.gallery-source {
-    border-top: 1px solid #e4dfd3;
-    padding-top: 12px;
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-    color: #687278;
-}
-
-.gallery-source a {
-    color: #9b7a32;
-    text-decoration: none;
-}
-
-.gallery-source a:hover {
-    text-decoration: underline;
-}
-
-.gallery-map-button {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 16px;
-    background: #17374d;
-    color: white;
-    text-decoration: none;
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-    border-radius: 3px;
-}
-
-.gallery-map-button:hover {
-    background: #102638;
-}
-
-
-/* ==================================================
    FÖLDRAJZ
 ================================================== */
 
@@ -581,14 +484,6 @@ footer {
 
 @media (max-width: 900px) {
 
-    .gallery-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-}
-
-@media (max-width: 800px) {
-
     header {
         padding: 20px;
     }
@@ -629,18 +524,6 @@ footer {
 
     .admin-link {
         margin-left: 0;
-    }
-
-}
-
-@media (max-width: 600px) {
-
-    .gallery-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .gallery-image {
-        height: 220px;
     }
 
 }
@@ -696,13 +579,16 @@ footer {
 
 <div class="nav-inner">
 
+
     <!-- FŐOLDAL -->
+
     <a href="index.html">
         FŐOLDAL
     </a>
 
 
     <!-- FÖLDRAJZI ATLASZ -->
+
     <div class="dropdown">
 
         <button class="dropbtn">
@@ -737,6 +623,7 @@ footer {
 
 
     <!-- TÖRTÉNETI ATLASZ -->
+
     <div class="dropdown">
 
         <button class="dropbtn">
@@ -778,23 +665,22 @@ footer {
     </div>
 
 
-    <!-- ==================================================
-         GALÉRIA
-         A FORRÁSOK ELŐTT
-    ================================================== -->
+    <!-- GALÉRIA -->
 
-    <a href="#gallery">
+    <a href="gallery.html">
         📷 GALÉRIA
     </a>
 
 
     <!-- FORRÁSOK -->
+
     <a href="#sources">
         📚 FORRÁSOK
     </a>
 
 
     <!-- ADMIN -->
+
     <div class="admin-link">
 
         <a href="admin.html">
@@ -803,9 +689,12 @@ footer {
 
     </div>
 
+
 </div>
 
 </nav>
+
+
 <!-- ==================================================
      HERO
 ================================================== -->
@@ -961,212 +850,6 @@ footer {
 
 
 <!-- ==================================================
-     GALÉRIA
-================================================== -->
-
-<section
-    class="gallery-section"
-    id="gallery">
-
-<div class="section-inner">
-
-    <div class="section-label">
-        📷 KÉPGALÉRIA
-    </div>
-
-    <div class="gallery-intro">
-
-        <h2>
-            Kárpátalja Galéria
-        </h2>
-
-        <p>
-
-            Kárpátalja földrajzi, történeti és kulturális
-            képi dokumentációja. A galéria képei forrással
-            és – ahol rendelkezésre áll – földrajzi
-            koordinátákkal vannak ellátva.
-
-        </p>
-
-    </div>
-
-
-    <div class="gallery-grid">
-
-
-        <!-- ==================================================
-             KÉP 1
-        ================================================== -->
-
-        <div class="gallery-card">
-
-            <img
-                class="gallery-image"
-                src="assets/images/gallery/ungvar-var.jpg"
-                alt="Ungvár vára">
-
-            <div class="gallery-content">
-
-                <h3>
-                    Ungvár vára
-                </h3>
-
-                <p>
-
-                    Ungvár történelmi várának
-                    képi dokumentációja.
-
-                </p>
-
-                <div class="gallery-source">
-
-                    Forrás:
-                    <strong>Fortepan</strong>
-
-                    <br>
-
-                    <a
-                        href="https://fortepan.hu/"
-                        target="_blank"
-                        rel="noopener noreferrer">
-
-                        Forrás megnyitása →
-
-                    </a>
-
-                </div>
-
-                <a
-                    class="gallery-map-button"
-                    href="foldrajzi-terkep.html">
-
-                    📍 Megtekintés a térképen
-
-                </a>
-
-            </div>
-
-        </div>
-
-
-        <!-- ==================================================
-             KÉP 2
-        ================================================== -->
-
-        <div class="gallery-card">
-
-            <img
-                class="gallery-image"
-                src="assets/images/gallery/karpatalja.jpg"
-                alt="Kárpátalja tája">
-
-            <div class="gallery-content">
-
-                <h3>
-                    Kárpátalja tájai
-                </h3>
-
-                <p>
-
-                    Kárpátalja természeti és földrajzi
-                    környezetének bemutatása.
-
-                </p>
-
-                <div class="gallery-source">
-
-                    Forrás:
-                    <strong>Forrás megnevezése</strong>
-
-                    <br>
-
-                    <a
-                        href="#"
-                        target="_blank"
-                        rel="noopener noreferrer">
-
-                        Forrás megnyitása →
-
-                    </a>
-
-                </div>
-
-                <a
-                    class="gallery-map-button"
-                    href="foldrajzi-terkep.html">
-
-                    📍 Megtekintés a térképen
-
-                </a>
-
-            </div>
-
-        </div>
-
-
-        <!-- ==================================================
-             KÉP 3
-        ================================================== -->
-
-        <div class="gallery-card">
-
-            <img
-                class="gallery-image"
-                src="assets/images/gallery/ungvar.jpg"
-                alt="Ungvár">
-
-            <div class="gallery-content">
-
-                <h3>
-                    Ungvár
-                </h3>
-
-                <p>
-
-                    Történeti és földrajzi képi
-                    dokumentáció.
-
-                </p>
-
-                <div class="gallery-source">
-
-                    Forrás:
-                    <strong>Forrás megnevezése</strong>
-
-                    <br>
-
-                    <a
-                        href="#"
-                        target="_blank"
-                        rel="noopener noreferrer">
-
-                        Forrás megnyitása →
-
-                    </a>
-
-                </div>
-
-                <a
-                    class="gallery-map-button"
-                    href="tortenelmi-terkep.html">
-
-                    📍 Megtekintés a térképen
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-</section>
-
-
-<!-- ==================================================
      FÖLDRAJZI ATLASZ
 ================================================== -->
 
@@ -1196,6 +879,8 @@ footer {
     <div class="cards">
 
 
+        <!-- TERMÉSZETFÖLDRAJZ -->
+
         <div
             class="card"
             id="nature">
@@ -1218,6 +903,8 @@ footer {
         </div>
 
 
+        <!-- TELEPÜLÉSEK -->
+
         <div
             class="card"
             id="settlements">
@@ -1237,6 +924,8 @@ footer {
         </div>
 
 
+        <!-- KÖZIGAZGATÁS -->
+
         <div
             class="card"
             id="administration">
@@ -1255,6 +944,8 @@ footer {
 
         </div>
 
+
+        <!-- INTERAKTÍV TÉRKÉP -->
 
         <div class="card">
 
@@ -1277,6 +968,7 @@ footer {
             </a>
 
         </div>
+
 
     </div>
 
@@ -1316,6 +1008,8 @@ footer {
     <div class="cards">
 
 
+        <!-- KORSZAKOK -->
+
         <div
             class="card"
             id="periods">
@@ -1333,6 +1027,8 @@ footer {
 
         </div>
 
+
+        <!-- ESEMÉNYEK -->
 
         <div
             class="card"
@@ -1353,6 +1049,8 @@ footer {
         </div>
 
 
+        <!-- SZEMÉLYISÉGEK -->
+
         <div
             class="card"
             id="people">
@@ -1370,6 +1068,8 @@ footer {
 
         </div>
 
+
+        <!-- TÖRTÉNELMI TÉRKÉPEK -->
 
         <div
             class="card"
@@ -1389,6 +1089,8 @@ footer {
 
         </div>
 
+
+        <!-- INTERAKTÍV TÖRTÉNELMI TÉRKÉP -->
 
         <div class="card">
 
@@ -1412,6 +1114,7 @@ footer {
             </a>
 
         </div>
+
 
     </div>
 
@@ -1450,6 +1153,8 @@ footer {
     <div class="cards">
 
 
+        <!-- UNG -->
+
         <div class="card county">
 
             <h3>
@@ -1466,6 +1171,8 @@ footer {
 
         </div>
 
+
+        <!-- BEREG -->
 
         <div class="card county">
 
@@ -1484,6 +1191,8 @@ footer {
         </div>
 
 
+        <!-- UGOCSA -->
+
         <div class="card county">
 
             <h3>
@@ -1501,6 +1210,8 @@ footer {
         </div>
 
 
+        <!-- MÁRAMAROS -->
+
         <div class="card county">
 
             <h3>
@@ -1516,6 +1227,7 @@ footer {
             </p>
 
         </div>
+
 
     </div>
 
@@ -1546,6 +1258,8 @@ footer {
     <div class="cards">
 
 
+        <!-- TÖRTÉNETI FORRÁSOK -->
+
         <div class="card">
 
             <h3>
@@ -1561,6 +1275,8 @@ footer {
 
         </div>
 
+
+        <!-- TÉRKÉPÉSZETI FORRÁSOK -->
 
         <div class="card">
 
@@ -1578,6 +1294,8 @@ footer {
         </div>
 
 
+        <!-- SZAKIRODALOM -->
+
         <div class="card">
 
             <h3>
@@ -1592,6 +1310,7 @@ footer {
             </p>
 
         </div>
+
 
     </div>
 
