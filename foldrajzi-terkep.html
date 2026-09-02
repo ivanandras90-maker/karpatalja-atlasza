@@ -677,7 +677,7 @@ document.addEventListener("click",function(event){
     box-shadow:0 5px 22px rgba(0,0,0,.32);
     font-family:Arial,sans-serif;
 }
-.geo-research-head-row{display:flex;align-items:center;gap:8px}.geo-research-head-row>div{min-width:0;flex:1}.geo-research-collapse{width:28px;height:28px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#d8b86a;cursor:pointer;font:700 13px Arial,sans-serif}.geo-research-collapse:hover{background:#c09d57;color:#102638}
+.geo-research-head-row{display:flex;align-items:center;gap:8px}.geo-research-head-row>div:first-child{min-width:0;flex:1}.geo-research-head-actions{display:flex;align-items:center;gap:5px;flex:0 0 auto}.geo-research-collapse,.geo-research-close{width:28px;height:28px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#d8b86a;cursor:pointer;font:700 13px Arial,sans-serif}.geo-research-collapse:hover,.geo-research-close:hover{background:#c09d57;color:#102638}.geo-research-close{font-size:18px;line-height:1}
 .geo-research-head{
     padding:13px 14px 10px;
     border-bottom:1px solid rgba(216,184,106,.35);
@@ -1165,7 +1165,7 @@ document.addEventListener("click",function(event){
     box-shadow:0 6px 25px rgba(0,0,0,.38);
     font-family:Arial,sans-serif;
 }
-.draw-research-head-row{display:flex;align-items:center;gap:8px}.draw-research-head-row>div{min-width:0;flex:1}.draw-research-collapse{width:28px;height:28px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#d8b86a;cursor:pointer;font:700 13px Arial,sans-serif}.draw-research-collapse:hover{background:#c09d57;color:#102638}
+.draw-research-head-row{display:flex;align-items:center;gap:8px}.draw-research-head-row>div:first-child{min-width:0;flex:1}.draw-research-head-actions{display:flex;align-items:center;gap:5px;flex:0 0 auto}.draw-research-collapse,.draw-research-close{width:28px;height:28px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#d8b86a;cursor:pointer;font:700 13px Arial,sans-serif}.draw-research-collapse:hover,.draw-research-close:hover{background:#c09d57;color:#102638}.draw-research-close{font-size:18px;line-height:1}
 .draw-research-head{
     position:sticky;
     top:0;
@@ -1892,7 +1892,10 @@ researchControl.onAdd = function(){
                     <div class="geo-research-title">🌍 FÖLDRAJZI KUTATÁSI RÉTEGEK</div>
                     <div class="geo-research-subtitle">Tematikus felosztás a természet-, társadalom- és gazdaságföldrajzi vizsgálatokhoz.</div>
                 </div>
-                <button type="button" class="geo-research-collapse" title="Panel összecsukása">▾</button>
+                <div class="geo-research-head-actions">
+                    <button type="button" class="geo-research-collapse" title="Tartalom összecsukása">▾</button>
+                    <button type="button" class="geo-research-close" title="Bezárás" aria-label="Kutatási rétegek bezárása">×</button>
+                </div>
             </div>
             <input class="geo-research-search" type="search" placeholder="Réteg keresése…" aria-label="Réteg keresése">
         </div>
@@ -1911,6 +1914,10 @@ researchControl.onAdd = function(){
     const search = container.querySelector(".geo-research-search");
     const content = container.querySelector(".geo-research-content");
     const collapseButton = container.querySelector(".geo-research-collapse");
+    const closeButton = container.querySelector(".geo-research-close");
+    closeButton.addEventListener("click",()=>{
+        container.style.display="none";
+    });
     collapseButton.addEventListener("click",()=>{
         const collapsed=content.style.display==="none";
         content.style.display=collapsed?"block":"none";
@@ -3697,9 +3704,11 @@ const drawResearchPanel=L.control({position:"topright"});
 drawResearchPanel.onAdd=function(){
     const div=L.DomUtil.create("div","draw-research-control");
     div.id="drawResearchPanel";
-    div.innerHTML=`<div class="draw-research-head"><div class="draw-research-head-row"><div><div class="draw-research-title">🔬 KUTATÁSI OBJEKTUMOK</div><div class="draw-research-subtitle">Point · Polyline · Polygon · WGS84 koordináták · hossz- és területmérés</div></div><button type="button" class="draw-research-collapse" id="drawResearchCollapse" title="Kutatási objektumok összecsukása">▾</button></div><div class="draw-research-toolbar"><select id="drawLengthUnit"><option value="cm">cm</option><option value="m" selected>m</option><option value="km">km</option><option value="mi">mérföld</option></select><select id="drawAreaUnit"><option value="cm2">cm²</option><option value="m2" selected>m²</option><option value="are">ár</option><option value="ha">hektár</option><option value="km2">km²</option></select><button id="drawAnalysisAll">📊 Elemzés</button><button id="drawExportGeo">GeoJSON</button><button id="drawExportCSV">CSV</button></div></div><div class="draw-research-content"><div id="drawResearchObjectList" class="draw-object-list"></div></div>`;
+    div.innerHTML=`<div class="draw-research-head"><div class="draw-research-head-row"><div><div class="draw-research-title">🔬 KUTATÁSI OBJEKTUMOK</div><div class="draw-research-subtitle">Point · Polyline · Polygon · WGS84 koordináták · hossz- és területmérés</div></div><div class="draw-research-head-actions"><button type="button" class="draw-research-collapse" id="drawResearchCollapse" title="Tartalom összecsukása">▾</button><button type="button" class="draw-research-close" id="drawResearchClose" title="Bezárás" aria-label="Kutatási objektumok bezárása">×</button></div></div><div class="draw-research-toolbar"><select id="drawLengthUnit"><option value="cm">cm</option><option value="m" selected>m</option><option value="km">km</option><option value="mi">mérföld</option></select><select id="drawAreaUnit"><option value="cm2">cm²</option><option value="m2" selected>m²</option><option value="are">ár</option><option value="ha">hektár</option><option value="km2">km²</option></select><button id="drawAnalysisAll">📊 Elemzés</button><button id="drawExportGeo">GeoJSON</button><button id="drawExportCSV">CSV</button></div></div><div class="draw-research-content"><div id="drawResearchObjectList" class="draw-object-list"></div></div>`;
     const collapse=div.querySelector("#drawResearchCollapse");
+    const close=div.querySelector("#drawResearchClose");
     const content=div.querySelector(".draw-research-content");
+    if(close){close.onclick=()=>{div.style.display="none";};}
     if(collapse&&content){collapse.onclick=()=>{const collapsed=content.style.display==="none";content.style.display=collapsed?"block":"none";collapse.textContent=collapsed?"▾":"▸";collapse.title=collapsed?"Kutatási objektumok összecsukása":"Kutatási objektumok megnyitása";};}
     L.DomEvent.disableClickPropagation(div);L.DomEvent.disableScrollPropagation(div);
     return div;
