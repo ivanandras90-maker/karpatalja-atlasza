@@ -1137,8 +1137,13 @@ const map = L.map("map", {
     center: KARPATALJA_CENTER,
     zoom: KARPATALJA_ZOOM,
     minZoom: 7,
-    maxZoom: 18
+    maxZoom: 18,
+    zoomControl: true
 });
+
+// Alapértelmezett megnyitáskor mindig Kárpátalja legyen középen.
+// Ez megakadályozza, hogy a térkép egy korábbi vagy véletlen nézetből induljon.
+map.setView(KARPATALJA_CENTER, KARPATALJA_ZOOM, { animate: false });
 
 
 /* =====================================================
