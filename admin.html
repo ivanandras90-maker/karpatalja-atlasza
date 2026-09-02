@@ -2,4679 +2,3017 @@
 <html lang="hu">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Kárpátalja Földrajzi és Történeti Atlasza – professzionális adminisztrációs felület">
 <title>Admin – Kárpátalja Atlasz</title>
 
 <style>
 :root{
-    --navy:#102638;
-    --navy2:#17374d;
-    --gold:#c09d57;
-    --gold2:#d8b96c;
-    --cream:#f1eee5;
-    --white:#fff;
-    --text:#263238;
-    --muted:#687178;
-    --border:#d5d0c5;
-    --danger:#9b2226;
-    --success:#477a4d;
+--navy:#102638;
+--navy2:#17374d;
+--navy3:#0b1d2b;
+--gold:#c09d57;
+--gold2:#dfc27a;
+--cream:#f3f0e7;
+--white:#fff;
+--text:#263238;
+--muted:#687178;
+--border:#d8d2c5;
+--danger:#a52a2a;
+--success:#477a4d;
+--warning:#9a6a19;
+--shadow:0 10px 30px rgba(16,38,56,.10);
+--shadow2:0 20px 55px rgba(16,38,56,.16);
+--radius:12px;
 }
 
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
 
 body{
-    margin:0;
-    background:var(--cream);
-    color:var(--text);
-    font-family:Arial,sans-serif;
+margin:0;
+background:var(--cream);
+color:var(--text);
+font-family:Arial,Helvetica,sans-serif;
+-webkit-font-smoothing:antialiased
 }
 
-button,
-input,
-textarea,
-select{
-    font:inherit;
-}
+button,input,textarea,select{font:inherit}
+
+button,a{transition:.18s ease}
+
+button{cursor:pointer}
+
+a{text-decoration:none}
 
 #loginScreen{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(rgba(16,38,56,.97),rgba(16,38,56,.99));
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:25px;
+background:
+radial-gradient(circle at 20% 20%,rgba(192,157,87,.12),transparent 35%),
+linear-gradient(135deg,var(--navy3),var(--navy))
 }
 
 .login-box{
-    width:430px;
-    max-width:calc(100% - 30px);
-    background:#fff;
-    padding:42px;
-    border-top:5px solid var(--gold);
-    box-shadow:0 20px 60px rgba(0,0,0,.35);
+width:440px;
+max-width:100%;
+background:#fff;
+padding:42px;
+border-top:5px solid var(--gold);
+box-shadow:var(--shadow2);
+border-radius:0 0 var(--radius) var(--radius)
 }
 
 .login-logo{
-    text-align:center;
-    font-size:42px;
-    margin-bottom:10px;
+font-size:42px;
+text-align:center;
+margin-bottom:8px
 }
 
 .login-box h1{
-    margin:0;
-    text-align:center;
-    color:var(--navy);
-    font-family:Georgia,"Times New Roman",serif;
-    font-weight:normal;
+margin:0;
+text-align:center;
+font:normal 25px Georgia,"Times New Roman",serif;
+color:var(--navy)
 }
 
 .login-box p{
-    text-align:center;
-    color:var(--muted);
-    margin-bottom:30px;
+text-align:center;
+color:var(--muted);
+line-height:1.5;
+margin:10px 0 28px
 }
 
 .login-box label{
-    display:block;
-    margin-bottom:7px;
-    font-size:13px;
-    font-weight:bold;
+display:block;
+font-size:13px;
+font-weight:bold;
+margin:0 0 7px
 }
 
 .login-box input{
-    width:100%;
-    padding:13px;
-    border:1px solid #ccd1d3;
-    margin-bottom:18px;
+width:100%;
+padding:13px 14px;
+border:1px solid var(--border);
+border-radius:8px;
+margin-bottom:17px
+}
+
+.login-box input:focus{
+outline:none;
+border-color:var(--gold);
+box-shadow:0 0 0 3px rgba(192,157,87,.18)
 }
 
 .login-button{
-    width:100%;
-    padding:14px;
-    background:var(--navy2);
-    color:#fff;
-    border:0;
-    cursor:pointer;
-    font-weight:bold;
+width:100%;
+padding:14px;
+border:0;
+border-radius:8px;
+background:var(--navy2);
+color:#fff;
+font-weight:bold
 }
+
+.login-button:hover{background:var(--navy)}
 
 .login-error{
-    display:none;
-    margin-top:15px;
-    padding:12px;
-    background:#f8dddd;
-    color:var(--danger);
-    text-align:center;
+display:none;
+margin-top:15px;
+padding:12px;
+border-radius:8px;
+background:#f9e0e0;
+color:var(--danger);
+font-size:13px;
+line-height:1.4
 }
 
-#adminScreen{
-    display:none;
-    min-height:100vh;
-}
+#adminScreen{display:none;min-height:100vh}
 
 .admin-header{
-    min-height:75px;
-    background:var(--navy);
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:15px 30px;
-    border-bottom:1px solid var(--gold);
-    gap:20px;
+position:sticky;
+top:0;
+z-index:1000;
+min-height:76px;
+background:rgba(16,38,56,.98);
+color:#fff;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:14px 28px;
+gap:20px;
+border-bottom:1px solid var(--gold);
+box-shadow:0 4px 20px rgba(0,0,0,.18)
 }
 
 .admin-title{
-    display:flex;
-    align-items:center;
-    gap:15px;
+display:flex;
+align-items:center;
+gap:13px
 }
 
+.admin-title-icon{font-size:28px}
+
 .admin-title strong{
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:21px;
-    font-weight:normal;
+font:normal 20px Georgia,"Times New Roman",serif
 }
 
 .admin-badge{
-    padding:5px 9px;
-    border:1px solid var(--gold);
-    color:var(--gold2);
-    font-size:11px;
+padding:5px 9px;
+border:1px solid var(--gold);
+color:var(--gold2);
+font-size:10px;
+letter-spacing:1px;
+border-radius:20px
 }
 
 .header-actions{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+justify-content:flex-end
+}
+
+.header-actions button{
+padding:8px 11px;
+border:1px solid rgba(255,255,255,.22);
+background:rgba(255,255,255,.07);
+color:#fff;
+border-radius:7px
+}
+
+.header-actions button:hover{
+background:rgba(255,255,255,.15);
+border-color:var(--gold)
 }
 
 .admin-layout{
-    display:grid;
-    grid-template-columns:245px 1fr;
-    min-height:calc(100vh - 75px);
+display:grid;
+grid-template-columns:255px minmax(0,1fr);
+min-height:calc(100vh - 76px)
 }
 
 .sidebar{
-    background:#fff;
-    border-right:1px solid var(--border);
-    padding:22px 15px;
+position:sticky;
+top:76px;
+height:calc(100vh - 76px);
+overflow-y:auto;
+background:#fff;
+border-right:1px solid var(--border);
+padding:20px 14px
 }
 
 .sidebar-title{
-    color:var(--gold);
-    font-size:11px;
-    font-weight:bold;
-    letter-spacing:2px;
-    padding:0 12px 12px;
+padding:0 12px 11px;
+color:var(--gold);
+font-size:10px;
+font-weight:bold;
+letter-spacing:2px
 }
 
 .sidebar button{
-    display:block;
-    width:100%;
-    border:0;
-    background:transparent;
-    text-align:left;
-    padding:13px 12px;
-    cursor:pointer;
-    color:#34434b;
-    margin-bottom:3px;
+display:flex;
+align-items:center;
+gap:10px;
+width:100%;
+border:0;
+background:transparent;
+color:var(--text);
+text-align:left;
+padding:11px 12px;
+margin:2px 0;
+border-radius:8px
 }
 
-.sidebar button:hover,
+.sidebar button:hover{
+background:#f5f2ea;
+color:var(--navy)
+}
+
 .sidebar button.active{
-    background:#eef0ed;
-    color:var(--navy);
-    border-left:3px solid var(--gold);
+background:var(--navy);
+color:#fff;
+box-shadow:var(--shadow)
+}
+
+.sidebar-divider{
+height:1px;
+background:var(--border);
+margin:15px 10px
 }
 
 .admin-main{
-    padding:30px;
-    max-width:1500px;
-    width:100%;
+padding:30px;
+max-width:1500px;
+width:100%
 }
 
-.page-heading{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:20px;
-    margin-bottom:25px;
+.page-header{
+display:flex;
+align-items:flex-end;
+justify-content:space-between;
+gap:20px;
+margin-bottom:25px
 }
 
-.page-heading h1{
-    margin:0 0 5px;
-    font-family:Georgia,"Times New Roman",serif;
-    font-weight:normal;
-    color:var(--navy);
+.page-header h2{
+margin:0;
+font:normal 29px Georgia,"Times New Roman",serif;
+color:var(--navy)
 }
 
-.page-heading p{
-    margin:0;
-    color:var(--muted);
+.page-header p{
+margin:6px 0 0;
+color:var(--muted);
+line-height:1.5
 }
 
-.btn{
-    border:1px solid var(--navy);
-    padding:10px 15px;
-    cursor:pointer;
-    background:#fff;
-    color:var(--navy);
-    font-weight:bold;
-    text-decoration:none;
-    display:inline-block;
+.section{display:none}
+
+.section.active{display:block}
+
+.dashboard-grid{
+display:grid;
+grid-template-columns:repeat(4,minmax(0,1fr));
+gap:16px;
+margin-bottom:22px
 }
 
-.btn:hover{
-    background:var(--navy);
-    color:#fff;
+.stat{
+background:#fff;
+border:1px solid var(--border);
+border-radius:var(--radius);
+padding:20px;
+box-shadow:var(--shadow)
 }
 
-.btn-gold{
-    background:var(--gold);
-    border-color:var(--gold);
-    color:#fff;
+.stat-label{
+color:var(--muted);
+font-size:12px;
+margin-bottom:9px
 }
 
-.btn-danger{
-    border-color:#b54b4f;
-    color:#9b2226;
-}
-
-.btn-small{
-    padding:7px 10px;
-    font-size:12px;
-}
-
-.status{
-    display:none;
-    padding:12px 15px;
-    margin-bottom:20px;
-    background:#e7f1e7;
-    color:var(--success);
-    border-left:4px solid var(--success);
-}
-
-.status.show{
-    display:block;
+.stat-value{
+font-size:29px;
+font-weight:bold;
+color:var(--navy)
 }
 
 .card{
-    background:#fff;
-    border:1px solid var(--border);
-    margin-bottom:20px;
+background:#fff;
+border:1px solid var(--border);
+border-radius:var(--radius);
+box-shadow:var(--shadow);
+padding:22px;
+margin-bottom:20px
 }
 
-.card-header{
-    background:#f7f5ef;
-    padding:15px 18px;
-    border-bottom:1px solid var(--border);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:15px;
+.card h3{
+margin:0 0 17px;
+font:normal 20px Georgia,"Times New Roman",serif;
+color:var(--navy)
 }
 
-.card-header h2{
-    margin:0;
-    color:var(--navy);
-    font-family:Georgia,"Times New Roman",serif;
-    font-weight:normal;
-    font-size:21px;
+.form-grid{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:16px
 }
 
-.card-body{
-    padding:20px;
+.form-grid.three{
+grid-template-columns:repeat(3,minmax(0,1fr))
 }
 
-.grid{
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:16px;
+.form-grid.four{
+grid-template-columns:repeat(4,minmax(0,1fr))
 }
 
-.field{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-}
+.field{min-width:0}
 
-.field.full{
-    grid-column:1/-1;
-}
+.field.full{grid-column:1/-1}
 
 .field label{
-    font-size:12px;
-    font-weight:bold;
-    color:#4a555b;
+display:block;
+font-size:12px;
+font-weight:bold;
+color:var(--navy);
+margin-bottom:7px
 }
 
 .field input,
 .field textarea,
 .field select{
-    width:100%;
-    border:1px solid #ccd1d3;
-    background:#fff;
-    color:var(--text);
-    padding:10px 12px;
-    outline:none;
+width:100%;
+border:1px solid var(--border);
+background:#fff;
+color:var(--text);
+padding:11px 12px;
+border-radius:8px
 }
 
 .field textarea{
-    min-height:105px;
-    resize:vertical;
+min-height:110px;
+resize:vertical;
+line-height:1.5
 }
 
 .field input:focus,
 .field textarea:focus,
 .field select:focus{
-    border-color:var(--gold);
+outline:none;
+border-color:var(--gold);
+box-shadow:0 0 0 3px rgba(192,157,87,.17)
 }
 
-.check{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding-top:24px;
+.field small{
+display:block;
+margin-top:6px;
+color:var(--muted);
+font-size:11px;
+line-height:1.4
 }
 
-.check input{
-    width:18px;
-    height:18px;
+.field-invalid{
+border-color:var(--danger)!important;
+box-shadow:0 0 0 3px rgba(165,42,42,.12)!important
 }
 
-.image-upload{
-    border:1px dashed var(--gold);
-    padding:15px;
-    background:#faf8f1;
+.validation-message{
+display:none;
+margin-top:5px;
+font-size:11px;
+color:var(--danger);
+line-height:1.4
 }
 
-.image-upload input[type=file]{
-    border:0;
-    padding:5px 0;
-    width:100%;
+.validation-message.show{display:block}
+
+.checkbox-row{
+display:flex;
+align-items:center;
+gap:8px;
+min-height:42px
 }
 
-.upload-note{
-    color:var(--muted);
-    font-size:11px;
-    line-height:1.5;
-    margin-top:6px;
-}
-
-.preview{
-    margin-top:10px;
-    max-width:100%;
-    width:300px;
-    max-height:200px;
-    object-fit:contain;
-    border:1px solid var(--border);
-    background:#071525;
-    display:none;
+.checkbox-row input{
+width:17px;
+height:17px;
+accent-color:var(--gold)
 }
 
 .coordinates{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:16px;
-    padding:15px;
-    border:1px solid var(--border);
-    background:#faf8f1;
+padding:16px;
+background:#faf8f2;
+border:1px solid #e2dccf;
+border-radius:10px
 }
 
 .coordinates-title{
-    grid-column:1/-1;
-    color:var(--navy);
-    font-weight:bold;
-    font-size:13px;
+font-weight:bold;
+color:var(--navy);
+margin-bottom:12px
 }
 
-.actions{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-top:18px;
+.button-row{
+display:flex;
+flex-wrap:wrap;
+gap:9px;
+margin-top:18px
+}
+
+.btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+gap:6px;
+border:1px solid #cfc8ba;
+background:#fff;
+color:var(--navy);
+padding:9px 13px;
+border-radius:8px;
+font-size:13px;
+font-weight:bold
+}
+
+.btn:hover{
+transform:translateY(-1px);
+box-shadow:0 5px 15px rgba(16,38,56,.10)
+}
+
+.btn-primary{
+background:var(--navy);
+border-color:var(--navy);
+color:#fff
+}
+
+.btn-primary:hover{background:var(--navy2)}
+
+.btn-gold{
+background:var(--gold);
+border-color:var(--gold);
+color:#fff
+}
+
+.btn-danger{
+background:#fff;
+border-color:#dfb4b4;
+color:var(--danger)
+}
+
+.btn-danger:hover{background:#fff2f2}
+
+.btn-success{
+background:#eef7ef;
+border-color:#bdd4bf;
+color:var(--success)
+}
+
+.btn-small{
+padding:7px 10px;
+font-size:12px
 }
 
 .list{
-    display:grid;
-    gap:12px;
+display:grid;
+gap:10px
 }
 
 .list-item{
-    border:1px solid var(--border);
-    padding:14px;
-    background:#fff;
-    display:flex;
-    justify-content:space-between;
-    gap:15px;
-    align-items:center;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:15px;
+padding:14px;
+border:1px solid var(--border);
+background:#fff;
+border-radius:10px
+}
+
+.list-info{
+min-width:0;
+display:flex;
+flex-direction:column;
+gap:4px
 }
 
 .list-info strong{
-    display:block;
-    color:var(--navy);
-    margin-bottom:5px;
+color:var(--navy);
+font-size:14px
 }
 
 .list-info span{
-    color:var(--muted);
-    font-size:12px;
-    line-height:1.5;
+color:var(--muted);
+font-size:12px;
+line-height:1.45
 }
 
-.stats{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:12px;
-    margin-bottom:20px;
+.actions{
+display:flex;
+align-items:center;
+gap:7px;
+flex-wrap:wrap;
+justify-content:flex-end
 }
 
-.stat{
-    background:#fff;
-    border:1px solid var(--border);
-    padding:18px;
+.image-upload{
+border:2px dashed #cec5b4;
+background:#fbfaf7;
+border-radius:10px;
+padding:18px;
+text-align:center
 }
 
-.stat strong{
-    display:block;
-    font-size:25px;
-    color:var(--navy);
+.image-upload:hover{
+border-color:var(--gold);
+background:#fffdf8
 }
 
-.stat span{
-    color:var(--muted);
-    font-size:12px;
+.image-upload input[type=file]{
+width:100%;
+padding:10px;
+border:0;
+background:transparent;
+cursor:pointer
 }
 
-.json-box{
-    width:100%;
-    min-height:500px;
-    font-family:Consolas,monospace;
-    font-size:12px;
-    line-height:1.5;
-    padding:15px;
-    border:1px solid var(--border);
+.preview{
+display:none;
+width:100%;
+max-width:700px;
+max-height:390px;
+object-fit:contain;
+margin:15px auto 0;
+padding:8px;
+border:1px solid var(--border);
+border-radius:10px;
+background:#f7f5ef
 }
 
-.hidden{
-    display:none!important;
+.upload-note{
+margin:8px auto 0;
+max-width:650px;
+font-size:11px;
+line-height:1.5;
+color:var(--muted)
 }
 
-.gallery-preview{
-    width:180px;
-    height:110px;
-    object-fit:cover;
-    border:1px solid var(--border);
-    background:#eee;
+.gallery-editor{
+display:grid;
+grid-template-columns:minmax(0,1fr) 340px;
+gap:20px
 }
 
-.gallery-list-item{
-    display:grid;
-    grid-template-columns:180px 1fr auto;
-    gap:18px;
-    align-items:center;
+.json-editor{
+width:100%;
+min-height:600px;
+font-family:Consolas,Monaco,monospace;
+font-size:12px;
+line-height:1.55;
+padding:15px;
+border:1px solid var(--border);
+border-radius:9px;
+background:#0d202e;
+color:#e8e2d5;
+resize:vertical
 }
 
 .small-note{
-    font-size:11px;
-    color:var(--muted);
-    line-height:1.5;
+color:var(--muted);
+font-size:12px;
+line-height:1.5
 }
 
-@media(max-width:900px){
+.empty{
+padding:30px;
+text-align:center;
+color:var(--muted);
+border:1px dashed var(--border);
+border-radius:10px;
+background:#fbfaf7
+}
 
-    .admin-layout{
-        grid-template-columns:1fr;
-    }
+#adminToast{
+position:fixed;
+right:24px;
+bottom:24px;
+z-index:99999;
+min-width:280px;
+max-width:500px;
+padding:14px 16px;
+border-radius:10px;
+background:var(--navy);
+color:#fff;
+box-shadow:0 15px 45px rgba(0,0,0,.25);
+border-left:4px solid var(--gold);
+opacity:0;
+transform:translateY(15px);
+pointer-events:none;
+transition:.2s ease;
+font-size:13px;
+line-height:1.5
+}
 
-    .sidebar{
-        border-right:0;
-        border-bottom:1px solid var(--border);
-    }
+#adminToast.show{
+opacity:1;
+transform:translateY(0)
+}
 
-    .grid,
-    .stats{
-        grid-template-columns:1fr;
-    }
+#adminToast.success{border-left-color:#72a676}
+#adminToast.error{border-left-color:#df7474}
+#adminToast.info{border-left-color:var(--gold)}
 
-    .coordinates{
-        grid-template-columns:1fr;
-    }
+.hidden{display:none!important}
 
-    .gallery-list-item{
-        grid-template-columns:1fr;
-    }
+@media(max-width:1100px){
+.dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.form-grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gallery-editor{grid-template-columns:1fr}
+}
 
-    .admin-header{
-        flex-direction:column;
-        align-items:flex-start;
-    }
+@media(max-width:850px){
+.admin-header{
+position:static;
+padding:15px
+}
+.admin-layout{grid-template-columns:1fr}
+.sidebar{
+position:static;
+height:auto;
+border-right:0;
+border-bottom:1px solid var(--border);
+display:flex;
+overflow-x:auto;
+padding:10px
+}
+.sidebar-title,.sidebar-divider{display:none}
+.sidebar button{
+min-width:max-content;
+white-space:nowrap
+}
+.admin-main{padding:18px}
+.form-grid,.form-grid.three,.form-grid.four{grid-template-columns:1fr}
+.page-header{align-items:flex-start;flex-direction:column}
+}
+
+@media(max-width:600px){
+.dashboard-grid{grid-template-columns:1fr}
+.login-box{padding:30px 22px}
+.admin-title strong{font-size:16px}
+.admin-badge{display:none}
+.header-actions{width:100%;justify-content:flex-start}
+.list-item{align-items:flex-start;flex-direction:column}
+.actions{justify-content:flex-start}
+#adminToast{left:15px;right:15px;bottom:15px;min-width:0}
 }
 </style>
 </head>
 
 <body>
 
-<div id="loginScreen">
+<div id="adminToast" role="status" aria-live="polite"></div>
 
-    <form class="login-box" id="loginForm">
+<section id="loginScreen">
+<div class="login-box">
+<div class="login-logo">🗺️</div>
+<h1>Kárpátalja Atlasz</h1>
+<p>Professzionális adminisztrációs felület</p>
 
-        <div class="login-logo">🗺️</div>
+<label for="adminPassword">Adminisztrátori jelszó</label>
+<input id="adminPassword" type="password" autocomplete="current-password" placeholder="Jelszó">
 
-        <h1>Kárpátalja Atlasz</h1>
+<button class="login-button" onclick="login()">BELÉPÉS</button>
 
-        <p>Adminisztrációs felület</p>
-
-        <label for="password">Jelszó</label>
-
-        <input
-            id="password"
-            type="password"
-            autocomplete="current-password"
-            required
-        >
-
-        <button
-            class="login-button"
-            type="submit"
-        >
-            BELÉPÉS
-        </button>
-
-        <div
-            id="loginError"
-            class="login-error"
-        >
-            Hibás jelszó.
-        </div>
-
-    </form>
-
+<div id="loginError" class="login-error">
+Hibás jelszó.
 </div>
+</div>
+</section>
 
-
-<div id="adminScreen">
+<section id="adminScreen">
 
 <header class="admin-header">
+<div class="admin-title">
+<div class="admin-title-icon">🏛️</div>
+<div>
+<strong>Kárpátalja Földrajzi és Történeti Atlasza</strong>
+<div style="font-size:11px;color:#bfcbd2;margin-top:3px">Adminisztrációs rendszer</div>
+</div>
+<span class="admin-badge">ADMIN</span>
+</div>
 
-    <div class="admin-title">
-
-        <strong>
-            Kárpátalja Földrajzi és Történeti Atlasza
-        </strong>
-
-        <span class="admin-badge">
-            ADMIN
-        </span>
-
-    </div>
-
-    <div class="header-actions">
-
-        <button
-            class="btn btn-small"
-            onclick="saveToLocalStorage()"
-        >
-            💾 Mentés
-        </button>
-
-        <button
-            class="btn btn-small btn-gold"
-            onclick="downloadJSON()"
-        >
-            ⬇ JSON letöltése
-        </button>
-
-        <button
-            class="btn btn-small"
-            onclick="logout()"
-        >
-            Kilépés
-        </button>
-
-    </div>
-
+<div class="header-actions">
+<button onclick="saveToLocalStorage()">💾 Mentés</button>
+<button onclick="downloadJSON()">⬇️ JSON</button>
+<button onclick="createBackup()">🛡️ Biztonsági mentés</button>
+<button onclick="logout()">Kilépés</button>
+</div>
 </header>
-
 
 <div class="admin-layout">
 
 <aside class="sidebar">
 
-    <div class="sidebar-title">
-        TARTALOMKEZELÉS
-    </div>
+<div class="sidebar-title">ADATKEZELÉS</div>
 
-    <button
-        class="active"
-        onclick="showSection('dashboard',this)"
-    >
-        📊 Áttekintés
-    </button>
+<button class="active" onclick="showSection('dashboard',this)">📊 Áttekintés</button>
+<button onclick="showSection('periods',this)">⏳ Korszakok</button>
+<button onclick="showSection('places',this)">📍 Helyszínek</button>
+<button onclick="showSection('events',this)">⚔️ Események</button>
+<button onclick="showSection('people',this)">👑 Személyiségek</button>
+<button onclick="showSection('counties',this)">🏛️ Vármegyék</button>
+<button onclick="showSection('maps',this)">🗺️ Történelmi térképek</button>
+<button onclick="showSection('gallery',this)">📷 Galéria</button>
+<button onclick="showSection('sources',this)">📚 Források</button>
 
-    <button
-        onclick="showSection('periods',this)"
-    >
-        ⏳ Korszakok
-    </button>
+<div class="sidebar-divider"></div>
 
-    <button
-        onclick="showSection('places',this)"
-    >
-        📍 Történelmi helyszínek
-    </button>
+<div class="sidebar-title">RENDSZER</div>
 
-    <button
-        onclick="showSection('events',this)"
-    >
-        ⚔️ Történelmi események
-    </button>
-
-    <button
-        onclick="showSection('people',this)"
-    >
-        👤 Személyiségek
-    </button>
-
-    <button
-        onclick="showSection('counties',this)"
-    >
-        🏛️ Vármegyék
-    </button>
-
-    <button
-        onclick="showSection('maps',this)"
-    >
-        🗺️ Történelmi térképek
-    </button>
-
-    <button
-        onclick="showSection('gallery',this)"
-    >
-        📷 Galéria
-    </button>
-
-    <button
-        onclick="showSection('sources',this)"
-    >
-        📚 Források
-    </button>
-
-    <button
-        onclick="showSection('json',this)"
-    >
-        {} JSON
-    </button>
+<button onclick="showSection('json',this)">💻 JSON szerkesztő</button>
 
 </aside>
 
-
 <main class="admin-main">
 
-<div class="page-heading">
+<!-- DASHBOARD -->
 
-    <div>
+<section id="section-dashboard" class="section active">
 
-        <h1 id="pageTitle">
-            Áttekintés
-        </h1>
+<div class="page-header">
+<div>
+<h2>Atlasz áttekintése</h2>
+<p>Az atlasz teljes tartalmának központi kezelőfelülete.</p>
+</div>
+</div>
 
-        <p id="pageDescription">
-            A Kárpátalja Atlasz tartalmainak kezelése.
-        </p>
+<div class="dashboard-grid">
 
-    </div>
+<div class="stat">
+<div class="stat-label">Történelmi korszakok</div>
+<div class="stat-value" id="statPeriods">0</div>
+</div>
+
+<div class="stat">
+<div class="stat-label">Történelmi helyszínek</div>
+<div class="stat-value" id="statPlaces">0</div>
+</div>
+
+<div class="stat">
+<div class="stat-label">Történelmi események</div>
+<div class="stat-value" id="statEvents">0</div>
+</div>
+
+<div class="stat">
+<div class="stat-label">Galériaelemek</div>
+<div class="stat-value" id="statGallery">0</div>
+</div>
 
 </div>
 
+<div class="card">
+<h3>Rendszerállapot</h3>
 
-<div
-    id="status"
-    class="status"
-></div>
+<div class="form-grid three">
 
+<div>
+<strong>Adatforrás</strong>
+<div class="small-note">atlasz.json</div>
+</div>
 
-<section id="section-dashboard">
+<div>
+<strong>Tárolás</strong>
+<div class="small-note">Böngésző + JSON export</div>
+</div>
 
-    <div class="stats">
+<div>
+<strong>Adatmodell</strong>
+<div class="small-note">Központi, egységes struktúra</div>
+</div>
 
-        <div class="stat">
-            <strong id="statPeriods">0</strong>
-            <span>Történelmi korszak</span>
-        </div>
-
-        <div class="stat">
-            <strong id="statPlaces">0</strong>
-            <span>Történelmi helyszín</span>
-        </div>
-
-        <div class="stat">
-            <strong id="statEvents">0</strong>
-            <span>Történelmi esemény</span>
-        </div>
-
-        <div class="stat">
-            <strong id="statGallery">0</strong>
-            <span>Galériaelem</span>
-        </div>
-
-    </div>
-
-    <div class="card">
-
-        <div class="card-header">
-            <h2>Adatkezelés</h2>
-        </div>
-
-        <div class="card-body">
-
-            <p>
-                Az adminisztrációs felület az
-                <strong>atlasz.json</strong>
-                adatállományt kezeli.
-            </p>
-
-            <div class="actions">
-
-                <button
-                    class="btn btn-gold"
-                    onclick="downloadJSON()"
-                >
-                    ⬇ atlasz.json letöltése
-                </button>
-
-                <label class="btn">
-
-                    ⬆ JSON importálása
-
-                    <input
-                        type="file"
-                        id="jsonImport"
-                        accept=".json,application/json"
-                        style="display:none"
-                        onchange="importJSON(event)"
-                    >
-
-                </label>
-
-            </div>
-
-        </div>
-
-    </div>
+</div>
+</div>
 
 </section>
 
+<!-- PERIODS -->
 
-<section
-    id="section-periods"
-    class="hidden"
->
+<section id="section-periods" class="section">
 
-    <div class="card">
+<div class="page-header">
+<div>
+<h2>Történelmi korszakok</h2>
+<p>Korszakok létrehozása, szerkesztése és rendszerezése.</p>
+</div>
+</div>
 
-        <div class="card-header">
-            <h2>Történelmi korszak hozzáadása</h2>
-        </div>
+<div class="card">
 
-        <div class="card-body">
+<div class="form-grid">
 
-            <div class="grid">
+<div class="field">
+<label for="period-id">Azonosító</label>
+<input id="period-id" placeholder="pl. arpad-kor">
+</div>
 
-                <div class="field">
-                    <label>Azonosító</label>
-                    <input id="period-id">
-                </div>
+<div class="field">
+<label for="period-title">Megnevezés</label>
+<input id="period-title" placeholder="Árpád-kor">
+</div>
 
-                <div class="field">
-                    <label>Megnevezés</label>
-                    <input id="period-title">
-                </div>
+<div class="field">
+<label for="period-start">Kezdő év</label>
+<input id="period-start" type="number">
+</div>
 
-                <div class="field">
-                    <label>Kezdő év</label>
-                    <input
-                        id="period-start"
-                        type="number"
-                    >
-                </div>
+<div class="field">
+<label for="period-end">Záró év</label>
+<input id="period-end" type="number">
+</div>
 
-                <div class="field">
-                    <label>Záró év</label>
-                    <input
-                        id="period-end"
-                        type="number"
-                    >
-                </div>
+<div class="field full">
+<label for="period-description">Leírás</label>
+<textarea id="period-description"></textarea>
+</div>
 
-                <div class="field full">
-                    <label>Leírás</label>
-                    <textarea id="period-description"></textarea>
-                </div>
+</div>
 
-            </div>
+<div class="checkbox-row">
+<input id="period-visible" type="checkbox" checked>
+<label for="period-visible">Megjelenjen az atlaszban</label>
+</div>
 
-            <div class="actions">
+<div class="button-row">
+<button class="btn btn-primary" onclick="addPeriod()">＋ Korszak hozzáadása</button>
+<button class="btn" onclick="clearPeriodForm()">Űrlap törlése</button>
+</div>
 
-                <button
-                    class="btn btn-gold"
-                    onclick="addPeriod()"
-                >
-                    ＋ Korszak hozzáadása
-                </button>
+</div>
 
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="card">
-
-        <div class="card-header">
-            <h2>Meglévő korszakok</h2>
-        </div>
-
-        <div class="card-body">
-            <div
-                id="periodList"
-                class="list"
-            ></div>
-        </div>
-
-    </div>
+<div class="card">
+<h3>Meglévő korszakok</h3>
+<div id="periodList" class="list"></div>
+</div>
 
 </section>
 
-
-<section
-    id="section-places"
-    class="hidden"
->
-
-    <div class="card">
-
-        <div class="card-header">
-            <h2>Történelmi helyszín hozzáadása</h2>
-        </div>
-
-        <div class="card-body">
-
-            <div class="grid">
-
-                <div class="field">
-                    <label>Azonosító</label>
-                    <input
-                        id="place-id"
-                        placeholder="pl. ungvar-var"
-                    >
-                </div>
-
-                <div class="field">
-                    <label>Helyszín neve</label>
-                    <input
-                        id="place-title"
-                        placeholder="Ungvár vára"
-                    >
-                </div>
-
-                <div class="field">
-                    <label>Történelmi korszak</label>
-                    <input
-                        id="place-period"
-                        placeholder="pl. Középkor"
-                    >
-                </div>
-
-                <div class="field">
-                    <label>Év / évszám</label>
-                    <input
-                        id="place-year"
-                        placeholder="pl. 1320"
-                    >
-                </div>
-
-                <div class="field full">
-                    <label>Leírás</label>
-                    <textarea id="place-description"></textarea>
-                </div>
-
-            </div>
-
-
-            <div class="coordinates">
-
-                <div class="coordinates-title">
-                    📍 Térképi koordináták
-                </div>
-
-                <div class="field">
-
-                    <label>
-                        LAT – szélesség
-                    </label>
-
-                    <input
-                        id="place-lat"
-                        type="number"
-                        step="any"
-                        placeholder="48.6208"
-                    >
-
-                </div>
-
-                <div class="field">
-
-                    <label>
-                        LNG – hosszúság
-                    </label>
-
-                    <input
-                        id="place-lng"
-                        type="number"
-                        step="any"
-                        placeholder="22.2879"
-                    >
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="grid"
-                style="margin-top:16px"
-            >
-
-                <div class="field">
-
-                    <label>
-                        Kép URL / fájlútvonal
-                    </label>
-
-                    <input
-                        id="place-image"
-                        placeholder="assets/images/history/ungvar.jpg"
-                    >
-
-                </div>
-
-
-                <div class="field image-upload">
-
-                    <label>
-                        📷 Kép feltöltése
-                    </label>
-
-                    <input
-                        id="place-image-file"
-                        type="file"
-                        accept="image/*"
-                        onchange="handleImageUpload('place')"
-                    >
-
-                    <div class="upload-note">
-                        Válassz ki egy képet a számítógépedről.
-                        A kép azonnal megjelenik előnézetként.
-                    </div>
-
-                    <img
-                        id="place-preview"
-                        class="preview"
-                        alt="Kép előnézete"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        Forrás neve
-                    </label>
-
-                    <input
-                        id="place-source"
-                        placeholder="pl. Fortepan"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        Forrás URL
-                    </label>
-
-                    <input
-                        id="place-sourceUrl"
-                        placeholder="https://..."
-                    >
-
-                </div>
-
-
-                <div class="field full">
-
-                    <label>
-                        Forrás szöveges leírása
-                    </label>
-
-                    <textarea
-                        id="place-sourceDescription"
-                        placeholder="A forrás részletes leírása..."
-                    ></textarea>
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        Sorrend
-                    </label>
-
-                    <input
-                        id="place-order"
-                        type="number"
-                        value="1"
-                    >
-
-                </div>
-
-
-                <div class="check">
-
-                    <input
-                        id="place-visible"
-                        type="checkbox"
-                        checked
-                    >
-
-                    <label for="place-visible">
-                        Megjelenjen
-                    </label>
-
-                </div>
-
-
-                <div class="check">
-
-                    <input
-                        id="place-mapVisible"
-                        type="checkbox"
-                        checked
-                    >
-
-                    <label for="place-mapVisible">
-                        Megjelenjen a térképen
-                    </label>
-
-                </div>
-
-            </div>
-
-
-            <div class="actions">
-
-                <button
-                    class="btn btn-gold"
-                    onclick="addPlace()"
-                >
-                    ＋ Helyszín hozzáadása
-                </button>
-
-                <button
-                    class="btn"
-                    onclick="clearPlaceForm()"
-                >
-                    Törlés
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <div class="card-header">
-            <h2>Történelmi helyszínek</h2>
-        </div>
-
-        <div class="card-body">
-
-            <div
-                id="placeList"
-                class="list"
-            ></div>
-
-        </div>
-
-    </div>
+<!-- PLACES -->
+
+<section id="section-places" class="section">
+
+<div class="page-header">
+<div>
+<h2>Történelmi helyszínek</h2>
+<p>Helyszínek, műemlékek és történelmi objektumok kezelése.</p>
+</div>
+</div>
+
+<div class="card">
+
+<div class="form-grid">
+
+<div class="field">
+<label for="place-id">Azonosító</label>
+<input id="place-id" placeholder="pl. ungvar-var">
+</div>
+
+<div class="field">
+<label for="place-title">Megnevezés</label>
+<input id="place-title" placeholder="Ungvár vára">
+</div>
+
+<div class="field">
+<label for="place-period">Korszak</label>
+<select id="place-period"></select>
+</div>
+
+<div class="field">
+<label for="place-year">Év</label>
+<input id="place-year" type="number" placeholder="pl. 1400">
+</div>
+
+<div class="field full">
+<label for="place-description">Leírás</label>
+<textarea id="place-description"></textarea>
+</div>
+
+<div class="field full">
+<label>Kép</label>
+<div class="image-upload">
+<input id="place-image-file" type="file" accept="image/*" onchange="handleImageUpload(event,'place-image','place-preview')">
+<input id="place-image" type="hidden">
+<div class="upload-note">JPG, PNG, WEBP. A kép kiválasztása után automatikusan előnézet jelenik meg.</div>
+<img id="place-preview" class="preview" alt="Kép előnézete">
+</div>
+</div>
+
+<div class="field">
+<label for="place-source">Forrás megnevezése</label>
+<input id="place-source">
+</div>
+
+<div class="field">
+<label for="place-sourceUrl">Forrás URL</label>
+<input id="place-sourceUrl" type="url" placeholder="https://...">
+</div>
+
+<div class="field full">
+<label for="place-sourceDescription">Forrás részletes leírása</label>
+<textarea id="place-sourceDescription" placeholder="A kép vagy adat eredete, szerzője, gyűjteménye, kiadása stb."></textarea>
+</div>
+
+</div>
+
+<div class="coordinates">
+<div class="coordinates-title">📍 Földrajzi koordináták</div>
+
+<div class="form-grid">
+
+<div class="field">
+<label for="place-lat">LAT – szélesség</label>
+<input id="place-lat" type="number" step="any" min="-90" max="90" placeholder="48.6208">
+</div>
+
+<div class="field">
+<label for="place-lng">LNG – hosszúság</label>
+<input id="place-lng" type="number" step="any" min="-180" max="180" placeholder="22.2879">
+</div>
+
+</div>
+
+<div class="button-row">
+<button class="btn" onclick="openCoordinates('place-lat','place-lng')">🌍 Koordináta megnyitása</button>
+</div>
+</div>
+
+<div class="button-row">
+<button class="btn btn-primary" onclick="addPlace()">＋ Helyszín hozzáadása</button>
+<button class="btn" onclick="clearPlaceForm()">Űrlap törlése</button>
+</div>
+
+<div class="checkbox-row">
+<input id="place-visible" type="checkbox" checked>
+<label for="place-visible">Megjelenjen</label>
+</div>
+
+<div class="checkbox-row">
+<input id="place-mapVisible" type="checkbox" checked>
+<label for="place-mapVisible">Jelenjen meg a térképen</label>
+</div>
+
+</div>
+
+<div class="card">
+<h3>Helyszínek</h3>
+<div id="placeList" class="list"></div>
+</div>
 
 </section>
 
+<!-- EVENTS -->
 
-<section
-    id="section-events"
-    class="hidden"
->
+<section id="section-events" class="section">
 
-    <div class="card">
+<div class="page-header">
+<div>
+<h2>Történelmi események</h2>
+<p>Történelmi események térbeli és időbeli kezelése.</p>
+</div>
+</div>
 
-        <div class="card-header">
-            <h2>Történelmi esemény hozzáadása</h2>
-        </div>
+<div class="card">
 
-        <div class="card-body">
+<div class="form-grid">
 
-            <div class="grid">
+<div class="field">
+<label for="event-id">Azonosító</label>
+<input id="event-id">
+</div>
 
-                <div class="field">
-                    <label>Azonosító</label>
-                    <input id="event-id">
-                </div>
+<div class="field">
+<label for="event-title">Esemény megnevezése</label>
+<input id="event-title">
+</div>
 
-                <div class="field">
-                    <label>Esemény neve</label>
-                    <input id="event-title">
-                </div>
+<div class="field">
+<label for="event-year">Év</label>
+<input id="event-year" type="number">
+</div>
 
-                <div class="field">
-                    <label>Év</label>
-                    <input id="event-year">
-                </div>
+<div class="field">
+<label for="event-period">Korszak</label>
+<select id="event-period"></select>
+</div>
 
-                <div class="field">
-                    <label>Korszak</label>
-                    <input id="event-period">
-                </div>
+<div class="field full">
+<label for="event-description">Leírás</label>
+<textarea id="event-description"></textarea>
+</div>
 
-                <div class="field full">
-                    <label>Leírás</label>
-                    <textarea id="event-description"></textarea>
-                </div>
+<div class="field">
+<label for="event-source">Forrás</label>
+<input id="event-source">
+</div>
 
-            </div>
+<div class="field">
+<label for="event-sourceUrl">Forrás URL</label>
+<input id="event-sourceUrl" type="url">
+</div>
 
+<div class="field full">
+<label for="event-sourceDescription">Forrás részletes leírása</label>
+<textarea id="event-sourceDescription"></textarea>
+</div>
 
-            <div class="coordinates">
+</div>
 
-                <div class="coordinates-title">
-                    📍 Esemény térképi koordinátái
-                </div>
+<div class="coordinates">
+<div class="coordinates-title">📍 Esemény helyszíne</div>
 
-                <div class="field">
+<div class="form-grid">
 
-                    <label>
-                        LAT – szélesség
-                    </label>
+<div class="field">
+<label for="event-lat">LAT</label>
+<input id="event-lat" type="number" step="any" min="-90" max="90">
+</div>
 
-                    <input
-                        id="event-lat"
-                        type="number"
-                        step="any"
-                    >
+<div class="field">
+<label for="event-lng">LNG</label>
+<input id="event-lng" type="number" step="any" min="-180" max="180">
+</div>
 
-                </div>
+</div>
 
-                <div class="field">
+<button class="btn" onclick="openCoordinates('event-lat','event-lng')">🌍 Térkép megnyitása</button>
+</div>
 
-                    <label>
-                        LNG – hosszúság
-                    </label>
+<div class="button-row">
+<button class="btn btn-primary" onclick="addEvent()">＋ Esemény hozzáadása</button>
+<button class="btn" onclick="clearEventForm()">Űrlap törlése</button>
+</div>
 
-                    <input
-                        id="event-lng"
-                        type="number"
-                        step="any"
-                    >
+<div class="checkbox-row">
+<input id="event-visible" type="checkbox" checked>
+<label for="event-visible">Megjelenjen</label>
+</div>
 
-                </div>
+<div class="checkbox-row">
+<input id="event-mapVisible" type="checkbox" checked>
+<label for="event-mapVisible">Jelenjen meg a térképen</label>
+</div>
 
-            </div>
+</div>
 
-
-            <div
-                class="grid"
-                style="margin-top:16px"
-            >
-
-                <div class="field">
-                    <label>Forrás neve</label>
-                    <input id="event-source">
-                </div>
-
-                <div class="field">
-                    <label>Forrás URL</label>
-                    <input id="event-sourceUrl">
-                </div>
-
-                <div class="field full">
-
-                    <label>
-                        Forrás szöveges leírása
-                    </label>
-
-                    <textarea
-                        id="event-sourceDescription"
-                    ></textarea>
-
-                </div>
-
-                <div class="field">
-                    <label>Sorrend</label>
-                    <input
-                        id="event-order"
-                        type="number"
-                        value="1"
-                    >
-                </div>
-
-                <div class="check">
-
-                    <input
-                        id="event-visible"
-                        type="checkbox"
-                        checked
-                    >
-
-                    <label for="event-visible">
-                        Megjelenjen
-                    </label>
-
-                </div>
-
-                <div class="check">
-
-                    <input
-                        id="event-mapVisible"
-                        type="checkbox"
-                        checked
-                    >
-
-                    <label for="event-mapVisible">
-                        Megjelenjen a térképen
-                    </label>
-
-                </div>
-
-            </div>
-
-
-            <div class="actions">
-
-                <button
-                    class="btn btn-gold"
-                    onclick="addEvent()"
-                >
-                    ＋ Esemény hozzáadása
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <div class="card-header">
-            <h2>Történelmi események</h2>
-        </div>
-
-        <div class="card-body">
-            <div
-                id="eventList"
-                class="list"
-            ></div>
-        </div>
-
-    </div>
+<div class="card">
+<h3>Események</h3>
+<div id="eventList" class="list"></div>
+</div>
 
 </section>
 
+<!-- PEOPLE -->
 
-<section
-    id="section-people"
-    class="hidden"
->
+<section id="section-people" class="section">
 
-    <div class="card">
+<div class="page-header">
+<div>
+<h2>Történelmi személyiségek</h2>
+<p>Kárpátaljához kapcsolódó történelmi személyek kezelése.</p>
+</div>
+</div>
 
-        <div class="card-header">
-            <h2>Történelmi személyiség</h2>
-        </div>
+<div class="card">
 
-        <div class="card-body">
+<div class="form-grid">
 
-            <div class="grid">
+<div class="field">
+<label for="person-id">Azonosító</label>
+<input id="person-id">
+</div>
 
-                <div class="field">
-                    <label>Azonosító</label>
-                    <input id="person-id">
-                </div>
+<div class="field">
+<label for="person-name">Név</label>
+<input id="person-name">
+</div>
 
-                <div class="field">
-                    <label>Név</label>
-                    <input id="person-name">
-                </div>
+<div class="field">
+<label for="person-period">Korszak</label>
+<select id="person-period"></select>
+</div>
 
-                <div class="field">
-                    <label>Korszak</label>
-                    <input id="person-period">
-                </div>
+<div class="field">
+<label for="person-year">Születési év</label>
+<input id="person-year" type="number">
+</div>
 
-                <div class="field">
-                    <label>Év</label>
-                    <input id="person-year">
-                </div>
+<div class="field full">
+<label for="person-description">Életrajzi / történelmi leírás</label>
+<textarea id="person-description"></textarea>
+</div>
 
-                <div class="field full">
-                    <label>Életrajz / leírás</label>
-                    <textarea id="person-description"></textarea>
-                </div>
+<div class="field full">
+<label>Kép</label>
+<div class="image-upload">
+<input id="person-image-file" type="file" accept="image/*" onchange="handleImageUpload(event,'person-image','person-preview')">
+<input id="person-image" type="hidden">
+<div class="upload-note">Portré vagy történelmi ábrázolás feltöltése.</div>
+<img id="person-preview" class="preview" alt="Kép előnézete">
+</div>
+</div>
 
-                <div class="field">
-                    <label>Kép URL</label>
-                    <input id="person-image">
-                </div>
+<div class="field">
+<label for="person-source">Forrás</label>
+<input id="person-source">
+</div>
 
-                <div class="field image-upload">
+<div class="field">
+<label for="person-sourceUrl">Forrás URL</label>
+<input id="person-sourceUrl" type="url">
+</div>
 
-                    <label>
-                        📷 Kép feltöltése
-                    </label>
+<div class="field full">
+<label for="person-sourceDescription">Forrás részletes leírása</label>
+<textarea id="person-sourceDescription"></textarea>
+</div>
 
-                    <input
-                        id="person-image-file"
-                        type="file"
-                        accept="image/*"
-                        onchange="handleImageUpload('person')"
-                    >
+</div>
 
-                    <img
-                        id="person-preview"
-                        class="preview"
-                        alt="Kép előnézete"
-                    >
+<div class="button-row">
+<button class="btn btn-primary" onclick="addPerson()">＋ Személy hozzáadása</button>
+<button class="btn" onclick="clearPersonForm()">Űrlap törlése</button>
+</div>
 
-                </div>
+<div class="checkbox-row">
+<input id="person-visible" type="checkbox" checked>
+<label for="person-visible">Megjelenjen</label>
+</div>
 
-                <div class="field">
-                    <label>Forrás</label>
-                    <input id="person-source">
-                </div>
+</div>
 
-                <div class="field">
-                    <label>Forrás URL</label>
-                    <input id="person-sourceUrl">
-                </div>
-
-                <div class="field full">
-
-                    <label>
-                        Forrás szöveges leírása
-                    </label>
-
-                    <textarea
-                        id="person-sourceDescription"
-                    ></textarea>
-
-                </div>
-
-            </div>
-
-
-            <div class="actions">
-
-                <button
-                    class="btn btn-gold"
-                    onclick="addPerson()"
-                >
-                    ＋ Személy hozzáadása
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <div class="card-header">
-            <h2>Személyiségek</h2>
-        </div>
-
-        <div class="card-body">
-            <div
-                id="personList"
-                class="list"
-            ></div>
-        </div>
-
-    </div>
+<div class="card">
+<h3>Személyiségek</h3>
+<div id="personList" class="list"></div>
+</div>
 
 </section>
 
+<!-- COUNTIES -->
 
-<section
-    id="section-counties"
-    class="hidden"
->
+<section id="section-counties" class="section">
 
-    <div class="card">
+<div class="page-header">
+<div>
+<h2>Egykori vármegyék</h2>
+<p>Történelmi közigazgatási egységek és GeoJSON adatok kezelése.</p>
+</div>
+</div>
 
-        <div class="card-header">
-            <h2>Egykori vármegye</h2>
-        </div>
+<div class="card">
 
-        <div class="card-body">
+<div class="form-grid">
 
-            <div class="grid">
+<div class="field">
+<label for="county-id">Azonosító</label>
+<input id="county-id">
+</div>
 
-                <div class="field">
-                    <label>Azonosító</label>
-                    <input id="county-id">
-                </div>
+<div class="field">
+<label for="county-title">Vármegye neve</label>
+<input id="county-title">
+</div>
 
-                <div class="field">
-                    <label>Vármegye neve</label>
-                    <input id="county-title">
-                </div>
+<div class="field">
+<label for="county-period">Korszak</label>
+<select id="county-period"></select>
+</div>
 
-                <div class="field">
-                    <label>Korszak</label>
-                    <input id="county-period">
-                </div>
+<div class="field">
+<label for="county-order">Sorrend</label>
+<input id="county-order" type="number" value="1">
+</div>
 
-                <div class="field">
-                    <label>Sorrend</label>
-                    <input
-                        id="county-order"
-                        type="number"
-                        value="1"
-                    >
-                </div>
+<div class="field full">
+<label for="county-description">Leírás</label>
+<textarea id="county-description"></textarea>
+</div>
 
-                <div class="field full">
-                    <label>Leírás</label>
-                    <textarea id="county-description"></textarea>
-                </div>
+<div class="field full">
+<label for="county-geojson">GeoJSON</label>
+<textarea id="county-geojson" placeholder='{"type":"FeatureCollection","features":[]}'></textarea>
+</div>
 
-                <div class="field full">
+<div class="field">
+<label for="county-source">Forrás</label>
+<input id="county-source">
+</div>
 
-                    <label>
-                        GeoJSON
-                    </label>
+<div class="field">
+<label for="county-sourceUrl">Forrás URL</label>
+<input id="county-sourceUrl" type="url">
+</div>
 
-                    <textarea
-                        id="county-geojson"
-                        placeholder='{"type":"FeatureCollection","features":[]}'
-                    ></textarea>
+<div class="field full">
+<label for="county-sourceDescription">Forrás részletes leírása</label>
+<textarea id="county-sourceDescription"></textarea>
+</div>
 
-                </div>
+</div>
 
-                <div class="field">
-                    <label>Kép URL</label>
-                    <input id="county-image">
-                </div>
+<div class="button-row">
+<button class="btn btn-primary" onclick="addCounty()">＋ Vármegye hozzáadása</button>
+<button class="btn" onclick="clearCountyForm()">Űrlap törlése</button>
+</div>
 
-                <div class="field">
-                    <label>Forrás</label>
-                    <input id="county-source">
-                </div>
+<div class="checkbox-row">
+<input id="county-visible" type="checkbox" checked>
+<label for="county-visible">Megjelenjen</label>
+</div>
 
-                <div class="field">
-                    <label>Forrás URL</label>
-                    <input id="county-sourceUrl">
-                </div>
+<div class="checkbox-row">
+<input id="county-mapVisible" type="checkbox" checked>
+<label for="county-mapVisible">Jelenjen meg a térképen</label>
+</div>
 
-                <div class="field full">
+</div>
 
-                    <label>
-                        Forrás szöveges leírása
-                    </label>
-
-                    <textarea
-                        id="county-sourceDescription"
-                    ></textarea>
-
-                </div>
-
-                <div class="check">
-
-                    <input
-                        id="county-visible"
-                        type="checkbox"
-                        checked
-                    >
-
-                    <label for="county-visible">
-                        Megjelenjen
-                    </label>
-
-                </div>
-
-                <div class="check">
-
-                    <input
-                        id="county-mapVisible"
-                        type="checkbox"
-                        checked
-                    >
-
-                    <label for="county-mapVisible">
-                        Megjelenjen a térképen
-                    </label>
-
-                </div>
-
-            </div>
-
-
-            <div class="actions">
-
-                <button
-                    class="btn btn-gold"
-                    onclick="addCounty()"
-                >
-                    ＋ Vármegye hozzáadása
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <div class="card-header">
-            <h2>Vármegyék</h2>
-        </div>
-
-        <div class="card-body">
-
-            <div
-                id="countyList"
-                class="list"
-            ></div>
-
-        </div>
-
-    </div>
+<div class="card">
+<h3>Vármegyék</h3>
+<div id="countyList" class="list"></div>
+</div>
 
 </section>
 
+<!-- MAPS -->
 
-<section
-    id="section-maps"
-    class="hidden"
->
+<section id="section-maps" class="section">
 
-    <div class="card">
+<div class="page-header">
+<div>
+<h2>Történelmi térképek</h2>
+<p>Digitális és történeti térképek adatainak kezelése.</p>
+</div>
+</div>
 
-        <div class="card-header">
-            <h2>Történelmi térkép hozzáadása</h2>
-        </div>
+<div class="card">
 
-        <div class="card-body">
+<div class="form-grid">
 
-            <div class="grid">
+<div class="field">
+<label for="map-id">Azonosító</label>
+<input id="map-id">
+</div>
 
-                <div class="field">
-                    <label>Azonosító</label>
-                    <input id="map-id">
-                </div>
+<div class="field">
+<label for="map-title">Térkép címe</label>
+<input id="map-title">
+</div>
 
-                <div class="field">
-                    <label>Cím</label>
-                    <input id="map-title">
-                </div>
+<div class="field">
+<label for="map-year">Év</label>
+<input id="map-year" type="number">
+</div>
 
-                <div class="field">
-                    <label>Év</label>
-                    <input id="map-year">
-                </div>
+<div class="field">
+<label for="map-period">Korszak</label>
+<select id="map-period"></select>
+</div>
 
-                <div class="field">
-                    <label>Korszak</label>
-                    <input id="map-period">
-                </div>
+<div class="field full">
+<label for="map-description">Leírás</label>
+<textarea id="map-description"></textarea>
+</div>
 
-                <div class="field full">
-                    <label>Leírás</label>
-                    <textarea id="map-description"></textarea>
-                </div>
+<div class="field full">
+<label>Képfájl</label>
+<div class="image-upload">
+<input id="map-image-file" type="file" accept="image/*" onchange="handleImageUpload(event,'map-image','map-preview')">
+<input id="map-image" type="hidden">
+<img id="map-preview" class="preview" alt="Térkép előnézete">
+</div>
+</div>
 
-                <div class="field">
-                    <label>Kép / térkép URL</label>
-                    <input id="map-image">
-                </div>
+<div class="field">
+<label for="map-source">Forrás</label>
+<input id="map-source">
+</div>
 
-                <div class="field image-upload">
+<div class="field">
+<label for="map-sourceUrl">Forrás URL</label>
+<input id="map-sourceUrl" type="url">
+</div>
 
-                    <label>
-                        🗺️ Térkép feltöltése
-                    </label>
+<div class="field full">
+<label for="map-sourceDescription">Forrás részletes leírása</label>
+<textarea id="map-sourceDescription"></textarea>
+</div>
 
-                    <input
-                        id="map-image-file"
-                        type="file"
-                        accept="image/*"
-                        onchange="handleImageUpload('map')"
-                    >
+</div>
 
-                    <img
-                        id="map-preview"
-                        class="preview"
-                        alt="Térkép előnézete"
-                    >
+<div class="button-row">
+<button class="btn btn-primary" onclick="addHistoricalMap()">＋ Térkép hozzáadása</button>
+<button class="btn" onclick="clearMapForm()">Űrlap törlése</button>
+</div>
 
-                </div>
+<div class="checkbox-row">
+<input id="map-visible" type="checkbox" checked>
+<label for="map-visible">Megjelenjen</label>
+</div>
 
-                <div class="field">
-                    <label>Forrás</label>
-                    <input id="map-source">
-                </div>
+</div>
 
-                <div class="field">
-                    <label>Forrás URL</label>
-                    <input id="map-sourceUrl">
-                </div>
-
-                <div class="field full">
-
-                    <label>
-                        Forrás szöveges leírása
-                    </label>
-
-                    <textarea
-                        id="map-sourceDescription"
-                    ></textarea>
-
-                </div>
-
-            </div>
-
-
-            <div class="actions">
-
-                <button
-                    class="btn btn-gold"
-                    onclick="addHistoricalMap()"
-                >
-                    ＋ Térkép hozzáadása
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <div class="card-header">
-            <h2>Történelmi térképek</h2>
-        </div>
-
-        <div class="card-body">
-
-            <div
-                id="mapList"
-                class="list"
-            ></div>
-
-        </div>
-
-    </div>
+<div class="card">
+<h3>Történelmi térképek</h3>
+<div id="mapList" class="list"></div>
+</div>
 
 </section>
 
-
-<section
-    id="section-gallery"
-    class="hidden"
->
-
-    <div class="card">
-
-        <div class="card-header">
-
-            <h2>
-                📷 Galériaelem hozzáadása
-            </h2>
-
-        </div>
-
-
-        <div class="card-body">
-
-
-            <div class="grid">
-
-                <div class="field">
-
-                    <label>
-                        Azonosító
-                    </label>
-
-                    <input
-                        id="gallery-id"
-                        placeholder="pl. gallery-001"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        Kép címe
-                    </label>
-
-                    <input
-                        id="gallery-title"
-                        placeholder="Ungvár vára"
-                    >
-
-                </div>
-
-
-                <div class="field full">
-
-                    <label>
-                        Kép leírása
-                    </label>
-
-                    <textarea
-                        id="gallery-description"
-                        placeholder="A kép rövid történeti vagy földrajzi leírása..."
-                    ></textarea>
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="card"
-                style="margin-top:20px;margin-bottom:0"
-            >
-
-                <div class="card-header">
-
-                    <h2>
-                        📷 Kép feltöltése
-                    </h2>
-
-                </div>
-
-
-                <div class="card-body">
-
-
-                    <div class="grid">
-
-
-                        <div class="field image-upload">
-
-                            <label>
-                                Válassz képet a számítógépedről
-                            </label>
-
-                            <input
-                                id="gallery-image-file"
-                                type="file"
-                                accept="image/jpeg,image/png,image/webp,image/gif,image/avif"
-                                onchange="handleGalleryImageUpload(event)"
-                            >
-
-                            <div class="upload-note">
-                                A kép kiválasztása után azonnal megjelenik
-                                az előnézet. A kép adatként bekerül a
-                                galériaelembe.
-                            </div>
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Kép URL / fájlútvonal
-                            </label>
-
-                            <input
-                                id="gallery-image"
-                                placeholder="assets/images/gallery/ungvar-var.jpg"
-                                oninput="previewGalleryImageFromUrl()"
-                            >
-
-                            <div class="upload-note">
-                                Ha nem töltesz fel fájlt, itt közvetlenül
-                                megadhatod a kép URL-jét vagy fájlútvonalát.
-                            </div>
-
-                        </div>
-
-
-                    </div>
-
-
-                    <img
-                        id="gallery-preview"
-                        class="preview"
-                        alt="Galériakép előnézete"
-                    >
-
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="card"
-                style="margin-top:20px;margin-bottom:0"
-            >
-
-                <div class="card-header">
-
-                    <h2>
-                        📚 Forrásadatok
-                    </h2>
-
-                </div>
-
-
-                <div class="card-body">
-
-
-                    <div class="grid">
-
-
-                        <div class="field">
-
-                            <label>
-                                Forrás neve
-                            </label>
-
-                            <input
-                                id="gallery-source"
-                                placeholder="pl. Fortepan"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                Forrás URL
-                            </label>
-
-                            <input
-                                id="gallery-sourceUrl"
-                                placeholder="https://..."
-                            >
-
-                        </div>
-
-
-                        <div class="field full">
-
-                            <label>
-                                Forrás szöveges leírása
-                            </label>
-
-                            <textarea
-                                id="gallery-sourceDescription"
-                                placeholder="A kép forrásának részletes leírása..."
-                            ></textarea>
-
-                        </div>
-
-
-                    </div>
-
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="card"
-                style="margin-top:20px;margin-bottom:0"
-            >
-
-                <div class="card-header">
-
-                    <h2>
-                        📍 Térképi koordináták
-                    </h2>
-
-                </div>
-
-
-                <div class="card-body">
-
-
-                    <div class="coordinates">
-
-
-                        <div class="coordinates-title">
-                            A kép földrajzi helyének koordinátái
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                LAT – szélesség
-                            </label>
-
-                            <input
-                                id="gallery-lat"
-                                type="number"
-                                step="any"
-                                placeholder="48.6208"
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label>
-                                LNG – hosszúság
-                            </label>
-
-                            <input
-                                id="gallery-lng"
-                                type="number"
-                                step="any"
-                                placeholder="22.2879"
-                            >
-
-                        </div>
-
-
-                    </div>
-
-
-                    <div class="small-note">
-                        Példa Ungvárra:
-                        LAT 48.6208,
-                        LNG 22.2879.
-                    </div>
-
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="grid"
-                style="margin-top:20px"
-            >
-
-
-                <div class="field">
-
-                    <label>
-                        Kategória
-                    </label>
-
-                    <input
-                        id="gallery-category"
-                        placeholder="Történelmi"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        Időszak
-                    </label>
-
-                    <input
-                        id="gallery-period"
-                        placeholder="20. század"
-                    >
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        Sorrend
-                    </label>
-
-                    <input
-                        id="gallery-order"
-                        type="number"
-                        value="1"
-                    >
-
-                </div>
-
-
-                <div class="check">
-
-                    <input
-                        id="gallery-visible"
-                        type="checkbox"
-                        checked
-                    >
-
-                    <label for="gallery-visible">
-                        Megjelenjen a galériában
-                    </label>
-
-                </div>
-
-
-                <div class="check">
-
-                    <input
-                        id="gallery-mapVisible"
-                        type="checkbox"
-                        checked
-                    >
-
-                    <label for="gallery-mapVisible">
-                        Megjelenjen a térképen
-                    </label>
-
-                </div>
-
-
-            </div>
-
-
-            <div class="actions">
-
-
-                <button
-                    class="btn btn-gold"
-                    onclick="addGalleryItem()"
-                >
-                    ＋ KÉP HOZZÁADÁSA
-                </button>
-
-
-                <button
-                    class="btn"
-                    onclick="clearGalleryForm()"
-                >
-                    Űrlap törlése
-                </button>
-
-
-            </div>
-
-
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <div class="card-header">
-
-            <h2>
-                📷 Galéria tartalma
-            </h2>
-
-        </div>
-
-
-        <div class="card-body">
-
-            <div
-                id="galleryList"
-                class="list"
-            ></div>
-
-        </div>
-
-    </div>
+<!-- GALLERY -->
+
+<section id="section-gallery" class="section">
+
+<div class="page-header">
+<div>
+<h2>📷 Galéria</h2>
+<p>Fotók és képi források professzionális adatkezelése.</p>
+</div>
+</div>
+
+<div class="card">
+
+<div class="form-grid">
+
+<div class="field">
+<label for="gallery-id">Azonosító</label>
+<input id="gallery-id" placeholder="Automatikusan is generálható">
+</div>
+
+<div class="field">
+<label for="gallery-title">Cím *</label>
+<input id="gallery-title" placeholder="pl. Ungvár vára">
+</div>
+
+<div class="field full">
+<label for="gallery-description">Kép leírása</label>
+<textarea id="gallery-description" placeholder="A kép történeti, földrajzi vagy kulturális jelentősége."></textarea>
+</div>
+
+<div class="field full">
+<label>Kép feltöltése *</label>
+
+<div class="image-upload">
+
+<input
+id="gallery-image-file"
+type="file"
+accept="image/jpeg,image/png,image/webp,image/gif"
+onchange="handleGalleryImageUpload(event)">
+
+<input
+id="gallery-image"
+type="hidden">
+
+<div class="upload-note">
+A kiválasztott kép automatikusan feldolgozásra és előnézetre kerül.
+Ajánlott formátum: JPG, PNG vagy WEBP.
+</div>
+
+<img
+id="gallery-preview"
+class="preview"
+alt="Galériakép előnézete">
+
+</div>
+</div>
+
+<div class="field">
+<label for="gallery-source">Forrás megnevezése</label>
+<input id="gallery-source" placeholder="pl. Fortepan">
+</div>
+
+<div class="field">
+<label for="gallery-sourceUrl">Forrás URL</label>
+<input id="gallery-sourceUrl" type="url" placeholder="https://...">
+</div>
+
+<div class="field full">
+<label for="gallery-sourceDescription">Forrás részletes leírása</label>
+<textarea
+id="gallery-sourceDescription"
+placeholder="Szerző, gyűjtemény, képazonosító, kiadvány, licenc vagy egyéb bibliográfiai információ."></textarea>
+</div>
+
+<div class="field">
+<label for="gallery-category">Kategória</label>
+<select id="gallery-category">
+<option value="Történelmi">Történelmi</option>
+<option value="Földrajzi">Földrajzi</option>
+<option value="Kulturális">Kulturális</option>
+<option value="Épített örökség">Épített örökség</option>
+<option value="Természeti">Természeti</option>
+<option value="Egyéb">Egyéb</option>
+</select>
+</div>
+
+<div class="field">
+<label for="gallery-period">Korszak</label>
+<select id="gallery-period"></select>
+</div>
+
+</div>
+
+<div class="coordinates">
+
+<div class="coordinates-title">
+📍 Térképi elhelyezés
+</div>
+
+<div class="form-grid">
+
+<div class="field">
+<label for="gallery-lat">LAT – szélesség</label>
+<input
+id="gallery-lat"
+type="number"
+step="any"
+min="-90"
+max="90"
+placeholder="48.6208">
+<small>Érvényes tartomány: −90 és +90.</small>
+</div>
+
+<div class="field">
+<label for="gallery-lng">LNG – hosszúság</label>
+<input
+id="gallery-lng"
+type="number"
+step="any"
+min="-180"
+max="180"
+placeholder="22.2879">
+<small>Érvényes tartomány: −180 és +180.</small>
+</div>
+
+</div>
+
+<div class="button-row">
+<button class="btn" onclick="openCoordinates('gallery-lat','gallery-lng')">
+🌍 Koordináta megnyitása
+</button>
+</div>
+
+</div>
+
+<div class="form-grid three" style="margin-top:16px">
+
+<div class="field">
+<label for="gallery-order">Sorrend</label>
+<input id="gallery-order" type="number" value="1">
+</div>
+
+<div class="checkbox-row">
+<input id="gallery-visible" type="checkbox" checked>
+<label for="gallery-visible">Megjelenjen a galériában</label>
+</div>
+
+<div class="checkbox-row">
+<input id="gallery-mapVisible" type="checkbox" checked>
+<label for="gallery-mapVisible">Jelenjen meg a térképen</label>
+</div>
+
+</div>
+
+<div class="button-row">
+<button class="btn btn-primary" onclick="addGalleryItem()">＋ Galériaelem hozzáadása</button>
+<button class="btn" onclick="clearGalleryForm()">Űrlap törlése</button>
+</div>
+
+</div>
+
+<div class="card">
+<h3>Galériaelemek</h3>
+<div id="galleryList" class="list"></div>
+</div>
 
 </section>
 
+<!-- SOURCES -->
 
-<section
-    id="section-sources"
-    class="hidden"
->
+<section id="section-sources" class="section">
 
-    <div class="card">
+<div class="page-header">
+<div>
+<h2>📚 Források</h2>
+<p>Az atlasz tudományos és képi forrásainak központi kezelése.</p>
+</div>
+</div>
 
-        <div class="card-header">
-            <h2>Forrás hozzáadása</h2>
-        </div>
+<div class="card">
 
-        <div class="card-body">
+<div class="form-grid">
 
-            <div class="grid">
+<div class="field">
+<label for="source-title">Forrás megnevezése</label>
+<input id="source-title">
+</div>
 
-                <div class="field">
-                    <label>Forrás címe</label>
-                    <input id="source-title">
-                </div>
+<div class="field">
+<label for="source-url">Forrás URL</label>
+<input id="source-url" type="url">
+</div>
 
-                <div class="field">
-                    <label>Forrás URL</label>
-                    <input id="source-url">
-                </div>
+<div class="field full">
+<label for="source-description">Forrás leírása</label>
+<textarea id="source-description"></textarea>
+</div>
 
-                <div class="field full">
-                    <label>Leírás</label>
-                    <textarea id="source-description"></textarea>
-                </div>
+</div>
 
-            </div>
+<div class="button-row">
+<button class="btn btn-primary" onclick="addSource()">＋ Forrás hozzáadása</button>
+</div>
 
-            <div class="actions">
+</div>
 
-                <button
-                    class="btn btn-gold"
-                    onclick="addSource()"
-                >
-                    ＋ Forrás hozzáadása
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <div class="card-header">
-            <h2>Források</h2>
-        </div>
-
-        <div class="card-body">
-
-            <div
-                id="sourceList"
-                class="list"
-            ></div>
-
-        </div>
-
-    </div>
+<div class="card">
+<h3>Forrásjegyzék</h3>
+<div id="sourceList" class="list"></div>
+</div>
 
 </section>
 
+<!-- JSON -->
 
-<section
-    id="section-json"
-    class="hidden"
->
+<section id="section-json" class="section">
 
-    <div class="card">
+<div class="page-header">
+<div>
+<h2>💻 JSON szerkesztő</h2>
+<p>Haladó adatkezelés. A módosítás előtt készíts biztonsági mentést.</p>
+</div>
+</div>
 
-        <div class="card-header">
-            <h2>atlasz.json</h2>
-        </div>
+<div class="card">
 
-        <div class="card-body">
+<div class="button-row" style="margin-top:0;margin-bottom:15px">
+<button class="btn btn-primary" onclick="loadJSONEditor()">↻ Adatok betöltése</button>
+<button class="btn btn-success" onclick="applyJSONEditor()">✓ JSON alkalmazása</button>
+<button class="btn" onclick="copyJSON()">📋 Másolás</button>
+<button class="btn" onclick="createBackup()">🛡️ Biztonsági mentés</button>
+</div>
 
-            <textarea
-                id="jsonEditor"
-                class="json-box"
-            ></textarea>
+<textarea id="jsonEditor" class="json-editor" spellcheck="false"></textarea>
 
-            <div class="actions">
-
-                <button
-                    class="btn btn-gold"
-                    onclick="applyJSON()"
-                >
-                    ✓ JSON alkalmazása
-                </button>
-
-                <button
-                    class="btn"
-                    onclick="refreshJSON()"
-                >
-                    ↻ Frissítés
-                </button>
-
-                <button
-                    class="btn"
-                    onclick="copyJSON()"
-                >
-                    📋 JSON másolása
-                </button>
-
-                <button
-                    class="btn"
-                    onclick="downloadJSON()"
-                >
-                    ⬇ JSON letöltése
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
 </main>
-
 </div>
-
-</div>
-
+</section>
 
 <script>
+"use strict";
 
-const ADMIN_PASSWORD = "atlasz2026";
+const ADMIN_PASSWORD="atlasz2026";
 
-const STORAGE_KEY =
-    "karpatalja_atlasz_admin_data";
-
-
-let data = {
-
-    hero:{
-        title:"Kárpátalja",
-        description:
-            "Fedezd fel Kárpátalja földrajzát és történelmét egyetlen interaktív atlaszban."
-    },
-
-    geography:{
-        title:"Földrajzi atlasz",
-        description:
-            "Kárpátalja természetföldrajzi és társadalomföldrajzi viszonyainak tematikus bemutatása.",
-        link:"foldrajzi-terkep.html"
-    },
-
-    history:{
-        title:"Történeti atlasz",
-        description:
-            "Kárpátalja történelmének bemutatása korszakokon, eseményeken, településeken és térképeken keresztül.",
-        link:"tortenelmi-terkep.html"
-    },
-
-    sources:[],
-    historicalPeriods:[],
-    historicalPlaces:[],
-    historicalEvents:[],
-    historicalPeople:[],
-    historicalCounties:[],
-    historicalMaps:[],
-    gallery:[]
-
+let data={
+hero:{
+title:"Kárpátalja",
+description:"Fedezd fel Kárpátalja földrajzát és történelmét egyetlen interaktív atlaszban."
+},
+geography:{
+title:"Földrajzi atlasz",
+description:"Kárpátalja természetföldrajzi és társadalomföldrajzi viszonyainak tematikus bemutatása.",
+link:"foldrajzi-terkep.html"
+},
+history:{
+title:"Történeti atlasz",
+description:"Kárpátalja történelmének bemutatása korszakokon, eseményeken, településeken, személyiségeken és történelmi térképeken keresztül.",
+link:"tortenelmi-terkep.html"
+},
+historicalPeriods:[],
+historicalPlaces:[],
+historicalEvents:[],
+historicalPeople:[],
+historicalCounties:[],
+historicalMaps:[],
+sources:[],
+gallery:[]
 };
 
+let editing={
+period:null,
+place:null,
+event:null,
+person:null,
+county:null,
+map:null,
+gallery:null,
+source:null
+};
 
-function $(id){
-    return document.getElementById(id);
-}
-
+const $=id=>document.getElementById(id);
 
 function escapeHtml(value){
-
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
+return String(value??"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 }
 
-
-function showStatus(message){
-
-    const box = $("status");
-
-    box.textContent = message;
-
-    box.classList.add("show");
-
-    setTimeout(()=>{
-        box.classList.remove("show");
-    },3000);
-
+function slugify(value){
+return String(value||"")
+.normalize("NFD")
+.replace(/[\u0300-\u036f]/g,"")
+.toLowerCase()
+.replace(/[^a-z0-9]+/g,"-")
+.replace(/^-+|-+$/g,"");
 }
 
-
-function ensureArrays(){
-
-    const arrays = [
-
-        "historicalPeriods",
-        "historicalPlaces",
-        "historicalEvents",
-        "historicalPeople",
-        "historicalCounties",
-        "historicalMaps",
-        "gallery",
-        "sources"
-
-    ];
-
-    arrays.forEach(key=>{
-
-        if(!Array.isArray(data[key])){
-            data[key] = [];
-        }
-
-    });
-
+function uniqueId(base,array){
+let id=slugify(base)||"item";
+let original=id;
+let n=2;
+while(array.some(x=>x.id===id)){
+id=original+"-"+n++;
+}
+return id;
 }
 
-
-function loadStoredData(){
-
-    const stored =
-        localStorage.getItem(STORAGE_KEY);
-
-    if(stored){
-
-        try{
-
-            const parsed =
-                JSON.parse(stored);
-
-            data = {
-                ...data,
-                ...parsed
-            };
-
-        }catch(error){
-
-            console.error(error);
-
-        }
-
-    }
-
-    ensureArrays();
-
-    renderAll();
-
+function showStatus(message,type="success"){
+const toast=$("adminToast");
+toast.textContent=message;
+toast.className="";
+toast.classList.add("show",type);
+clearTimeout(window.__toastTimer);
+window.__toastTimer=setTimeout(()=>{
+toast.classList.remove("show");
+},3800);
 }
 
+function login(){
+const password=$("adminPassword").value;
 
-async function loadAtlasJSON(){
-
-    try{
-
-        const response =
-            await fetch(
-                "atlasz.json",
-                {
-                    cache:"no-store"
-                }
-            );
-
-        if(!response.ok){
-            throw new Error(
-                "atlasz.json nem tölthető be."
-            );
-        }
-
-        const json =
-            await response.json();
-
-        const stored =
-            localStorage.getItem(
-                STORAGE_KEY
-            );
-
-        if(!stored){
-
-            data = {
-                ...data,
-                ...json
-            };
-
-        }
-
-        ensureArrays();
-
-        renderAll();
-
-    }catch(error){
-
-        console.warn(error);
-
-        ensureArrays();
-
-        renderAll();
-
-    }
-
+if(password===ADMIN_PASSWORD){
+sessionStorage.setItem("atlasz_admin_logged","true");
+$("loginScreen").style.display="none";
+$("adminScreen").style.display="block";
+loadAtlasJSON();
+}else{
+$("loginError").style.display="block";
 }
-
-
-function saveToLocalStorage(){
-
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(data)
-    );
-
-    showStatus(
-        "Az adatok elmentve a böngésző helyi tárhelyére."
-    );
-
 }
-
-
-function downloadJSON(){
-
-    const blob =
-        new Blob(
-            [
-                JSON.stringify(
-                    data,
-                    null,
-                    4
-                )
-            ],
-            {
-                type:
-                    "application/json;charset=utf-8"
-            }
-        );
-
-    const url =
-        URL.createObjectURL(blob);
-
-    const a =
-        document.createElement("a");
-
-    a.href = url;
-
-    a.download =
-        "atlasz.json";
-
-    document.body.appendChild(a);
-
-    a.click();
-
-    a.remove();
-
-    URL.revokeObjectURL(url);
-
-    showStatus(
-        "Az atlasz.json letöltése elkészült."
-    );
-
-}
-
-
-function copyJSON(){
-
-    navigator.clipboard
-        .writeText(
-            JSON.stringify(
-                data,
-                null,
-                4
-            )
-        )
-        .then(()=>{
-            showStatus(
-                "A JSON a vágólapra másolva."
-            );
-        })
-        .catch(()=>{
-            showStatus(
-                "A másolás nem sikerült."
-            );
-        });
-
-}
-
-
-function refreshJSON(){
-
-    $("jsonEditor").value =
-        JSON.stringify(
-            data,
-            null,
-            4
-        );
-
-}
-
-
-function applyJSON(){
-
-    try{
-
-        const parsed =
-            JSON.parse(
-                $("jsonEditor").value
-            );
-
-        data = {
-            ...data,
-            ...parsed
-        };
-
-        ensureArrays();
-
-        saveToLocalStorage();
-
-        renderAll();
-
-        showStatus(
-            "A JSON sikeresen alkalmazva."
-        );
-
-    }catch(error){
-
-        alert(
-            "Hibás JSON!\n\n" +
-            error.message
-        );
-
-    }
-
-}
-
-
-function importJSON(event){
-
-    const file =
-        event.target.files[0];
-
-    if(!file){
-        return;
-    }
-
-    const reader =
-        new FileReader();
-
-    reader.onload =
-        function(){
-
-            try{
-
-                const parsed =
-                    JSON.parse(
-                        reader.result
-                    );
-
-                data = {
-                    ...data,
-                    ...parsed
-                };
-
-                ensureArrays();
-
-                saveToLocalStorage();
-
-                renderAll();
-
-                showStatus(
-                    "A JSON sikeresen importálva."
-                );
-
-            }catch(error){
-
-                alert(
-                    "Hibás JSON fájl!\n\n" +
-                    error.message
-                );
-
-            }
-
-        };
-
-    reader.readAsText(
-        file,
-        "UTF-8"
-    );
-
-}
-
-
-function showAdmin(){
-
-    $("loginScreen")
-        .style
-        .display = "none";
-
-    $("adminScreen")
-        .style
-        .display = "block";
-
-}
-
 
 function logout(){
-
-    sessionStorage.removeItem(
-        "atlasz_admin_logged"
-    );
-
-    $("adminScreen")
-        .style
-        .display = "none";
-
-    $("loginScreen")
-        .style
-        .display = "flex";
-
-    $("password").value = "";
-
+sessionStorage.removeItem("atlasz_admin_logged");
+location.reload();
 }
 
+$("adminPassword").addEventListener("keydown",e=>{
+if(e.key==="Enter")login();
+});
 
-$("loginForm").addEventListener(
-    "submit",
-    function(event){
+function showAdmin(){
+$("loginScreen").style.display="none";
+$("adminScreen").style.display="block";
+}
 
-        event.preventDefault();
+function showSection(name,button){
+document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+const target=$("section-"+name);
+if(target)target.classList.add("active");
 
-        const password =
-            $("password").value;
+document.querySelectorAll(".sidebar button").forEach(b=>b.classList.remove("active"));
+if(button)button.classList.add("active");
 
-        if(
-            password ===
-            ADMIN_PASSWORD
-        ){
+if(name==="json")loadJSONEditor();
+}
 
-            sessionStorage.setItem(
-                "atlasz_admin_logged",
-                "true"
-            );
+function normalizeData(){
+const arrays=[
+"historicalPeriods",
+"historicalPlaces",
+"historicalEvents",
+"historicalPeople",
+"historicalCounties",
+"historicalMaps",
+"sources",
+"gallery"
+];
 
-            showAdmin();
+arrays.forEach(key=>{
+if(!Array.isArray(data[key]))data[key]=[];
+});
 
-        }else{
+data.hero=data.hero||{
+title:"Kárpátalja",
+description:""
+};
 
-            $("loginError")
-                .style
-                .display = "block";
+data.geography=data.geography||{
+title:"Földrajzi atlasz",
+description:"",
+link:"foldrajzi-terkep.html"
+};
 
-        }
+data.history=data.history||{
+title:"Történeti atlasz",
+description:"",
+link:"tortenelmi-terkep.html"
+};
+}
 
-    }
+async function loadAtlasJSON(){
+try{
+const response=await fetch("atlasz.json?ts="+Date.now(),{
+cache:"no-store"
+});
+
+if(!response.ok)throw new Error("HTTP "+response.status);
+
+const remote=await response.json();
+
+data={
+...data,
+...remote
+};
+
+normalizeData();
+renderAll();
+showStatus("Az atlasz adatai betöltve.","success");
+
+}catch(error){
+normalizeData();
+loadStoredData();
+renderAll();
+showStatus("Az atlasz JSON fájlja nem tölthető be. A helyi adatok használata folyik.","error");
+}
+}
+
+function loadStoredData(){
+try{
+const stored=localStorage.getItem("karpatalja_atlasz_admin");
+
+if(stored){
+const parsed=JSON.parse(stored);
+
+if(parsed&&typeof parsed==="object"&&!Array.isArray(parsed)){
+data={...data,...parsed};
+normalizeData();
+}
+}
+}catch(error){}
+}
+
+function saveToLocalStorage(){
+normalizeData();
+localStorage.setItem(
+"karpatalja_atlasz_admin",
+JSON.stringify(data,null,4)
+);
+window.__atlasAdminDirty=false;
+showStatus("Az adatok mentve lettek a böngésző helyi tárhelyére.","success");
+}
+
+function downloadJSON(){
+normalizeData();
+
+const blob=new Blob(
+[JSON.stringify(data,null,4)],
+{type:"application/json;charset=utf-8"}
 );
 
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
 
-function showSection(
-    section,
-    button
-){
+a.href=url;
+a.download="atlasz.json";
 
-    document
-        .querySelectorAll(
-            '[id^="section-"]'
-        )
-        .forEach(element=>{
-            element.classList.add(
-                "hidden"
-            );
-        });
+document.body.appendChild(a);
+a.click();
+a.remove();
 
-    const target =
-        $("section-" + section);
+URL.revokeObjectURL(url);
 
-    if(target){
-        target.classList.remove(
-            "hidden"
-        );
-    }
+window.__atlasAdminDirty=false;
 
-    document
-        .querySelectorAll(
-            ".sidebar button"
-        )
-        .forEach(btn=>{
-            btn.classList.remove(
-                "active"
-            );
-        });
-
-    if(button){
-        button.classList.add(
-            "active"
-        );
-    }
-
-    const titles = {
-
-        dashboard:
-            "Áttekintés",
-
-        periods:
-            "Történelmi korszakok",
-
-        places:
-            "Történelmi helyszínek",
-
-        events:
-            "Történelmi események",
-
-        people:
-            "Történelmi személyiségek",
-
-        counties:
-            "Egykori vármegyék",
-
-        maps:
-            "Történelmi térképek",
-
-        gallery:
-            "Galéria",
-
-        sources:
-            "Források",
-
-        json:
-            "JSON"
-
-    };
-
-
-    const descriptions = {
-
-        dashboard:
-            "A Kárpátalja Atlasz tartalmainak kezelése.",
-
-        periods:
-            "Történelmi korszakok kezelése.",
-
-        places:
-            "Történelmi helyszínek és térképi pontok kezelése.",
-
-        events:
-            "Történelmi események és térképi pontok kezelése.",
-
-        people:
-            "Történelmi személyiségek kezelése.",
-
-        counties:
-            "Egykori vármegyék és GeoJSON adatok kezelése.",
-
-        maps:
-            "Történelmi térképek kezelése.",
-
-        gallery:
-            "Képek, források és térképi koordináták kezelése.",
-
-        sources:
-            "Az atlaszhoz kapcsolódó források kezelése.",
-
-        json:
-            "A teljes atlasz adatállományának közvetlen szerkesztése."
-
-    };
-
-
-    $("pageTitle").textContent =
-        titles[section] || "Admin";
-
-    $("pageDescription").textContent =
-        descriptions[section] || "";
-
-    if(section === "json"){
-        refreshJSON();
-    }
-
+showStatus("Az atlasz.json letöltése elkészült.","success");
 }
 
+function createBackup(){
+normalizeData();
 
-function addPeriod(){
+const backup={
+application:"Kárpátalja Földrajzi és Történeti Atlasza",
+type:"admin-backup",
+createdAt:new Date().toISOString(),
+data:data
+};
 
-    const item = {
+const blob=new Blob(
+[JSON.stringify(backup,null,4)],
+{type:"application/json;charset=utf-8"}
+);
 
-        id:
-            $("period-id")
-                .value
-                .trim(),
+const url=URL.createObjectURL(blob);
+const a=document.createElement("a");
 
-        title:
-            $("period-title")
-                .value
-                .trim(),
+const stamp=new Date()
+.toISOString()
+.replace(/[:.]/g,"-");
 
-        startYear:
-            $("period-start")
-                .value,
+a.href=url;
+a.download="atlasz-backup-"+stamp+".json";
 
-        endYear:
-            $("period-end")
-                .value,
+document.body.appendChild(a);
+a.click();
+a.remove();
 
-        description:
-            $("period-description")
-                .value
-                .trim(),
+URL.revokeObjectURL(url);
 
-        visible:true
-
-    };
-
-
-    if(
-        !item.id ||
-        !item.title
-    ){
-
-        alert(
-            "Add meg az azonosítót és a korszak nevét."
-        );
-
-        return;
-
-    }
-
-
-    data.historicalPeriods.push(
-        item
-    );
-
-    saveToLocalStorage();
-
-    renderAll();
-
-    $("period-id").value="";
-    $("period-title").value="";
-    $("period-start").value="";
-    $("period-end").value="";
-    $("period-description").value="";
-
-    showStatus(
-        "A korszak hozzáadva."
-    );
-
+showStatus("Biztonsági mentés létrehozva.","success");
 }
 
+function copyJSON(){
+normalizeData();
 
-function addPlace(){
+const text=JSON.stringify(data,null,4);
 
-    const lat =
-        parseFloat(
-            $("place-lat").value
-        );
-
-    const lng =
-        parseFloat(
-            $("place-lng").value
-        );
-
-
-    const item = {
-
-        id:
-            $("place-id")
-                .value
-                .trim(),
-
-        title:
-            $("place-title")
-                .value
-                .trim(),
-
-        period:
-            $("place-period")
-                .value
-                .trim(),
-
-        year:
-            $("place-year")
-                .value
-                .trim(),
-
-        description:
-            $("place-description")
-                .value
-                .trim(),
-
-        image:
-            $("place-image")
-                .value
-                .trim(),
-
-        source:
-            $("place-source")
-                .value
-                .trim(),
-
-        sourceUrl:
-            $("place-sourceUrl")
-                .value
-                .trim(),
-
-        sourceDescription:
-            $("place-sourceDescription")
-                .value
-                .trim(),
-
-        latitude:
-            Number.isFinite(lat)
-                ? lat
-                : null,
-
-        longitude:
-            Number.isFinite(lng)
-                ? lng
-                : null,
-
-        order:
-            parseInt(
-                $("place-order").value,
-                10
-            ) || 1,
-
-        visible:
-            $("place-visible").checked,
-
-        mapVisible:
-            $("place-mapVisible").checked
-
-    };
-
-
-    if(
-        !item.id ||
-        !item.title
-    ){
-
-        alert(
-            "Add meg az azonosítót és a helyszín nevét."
-        );
-
-        return;
-
-    }
-
-
-    data.historicalPlaces.push(
-        item
-    );
-
-    saveToLocalStorage();
-
-    renderAll();
-
-    clearPlaceForm();
-
-    showStatus(
-        "A történelmi helyszín hozzáadva."
-    );
-
+navigator.clipboard.writeText(text)
+.then(()=>{
+showStatus("A JSON a vágólapra került.","success");
+})
+.catch(()=>{
+showStatus("A vágólapra másolás nem sikerült.","error");
+});
 }
 
-
-function addEvent(){
-
-    const lat =
-        parseFloat(
-            $("event-lat").value
-        );
-
-    const lng =
-        parseFloat(
-            $("event-lng").value
-        );
-
-
-    const item = {
-
-        id:
-            $("event-id")
-                .value
-                .trim(),
-
-        title:
-            $("event-title")
-                .value
-                .trim(),
-
-        year:
-            $("event-year")
-                .value
-                .trim(),
-
-        period:
-            $("event-period")
-                .value
-                .trim(),
-
-        description:
-            $("event-description")
-                .value
-                .trim(),
-
-        latitude:
-            Number.isFinite(lat)
-                ? lat
-                : null,
-
-        longitude:
-            Number.isFinite(lng)
-                ? lng
-                : null,
-
-        source:
-            $("event-source")
-                .value
-                .trim(),
-
-        sourceUrl:
-            $("event-sourceUrl")
-                .value
-                .trim(),
-
-        sourceDescription:
-            $("event-sourceDescription")
-                .value
-                .trim(),
-
-        order:
-            parseInt(
-                $("event-order").value,
-                10
-            ) || 1,
-
-        visible:
-            $("event-visible").checked,
-
-        mapVisible:
-            $("event-mapVisible").checked
-
-    };
-
-
-    if(
-        !item.id ||
-        !item.title
-    ){
-
-        alert(
-            "Add meg az azonosítót és az esemény nevét."
-        );
-
-        return;
-
-    }
-
-
-    data.historicalEvents.push(
-        item
-    );
-
-    saveToLocalStorage();
-
-    renderAll();
-
-
-    [
-        "event-id",
-        "event-title",
-        "event-year",
-        "event-period",
-        "event-description",
-        "event-lat",
-        "event-lng",
-        "event-source",
-        "event-sourceUrl",
-        "event-sourceDescription"
-    ].forEach(id=>{
-        $(id).value="";
-    });
-
-
-    showStatus(
-        "A történelmi esemény hozzáadva."
-    );
-
+function loadJSONEditor(){
+$("jsonEditor").value=JSON.stringify(data,null,4);
 }
 
+function applyJSONEditor(){
+try{
+const parsed=JSON.parse($("jsonEditor").value);
 
-function addPerson(){
-
-    const item = {
-
-        id:
-            $("person-id")
-                .value
-                .trim(),
-
-        name:
-            $("person-name")
-                .value
-                .trim(),
-
-        period:
-            $("person-period")
-                .value
-                .trim(),
-
-        year:
-            $("person-year")
-                .value
-                .trim(),
-
-        description:
-            $("person-description")
-                .value
-                .trim(),
-
-        image:
-            $("person-image")
-                .value
-                .trim(),
-
-        source:
-            $("person-source")
-                .value
-                .trim(),
-
-        sourceUrl:
-            $("person-sourceUrl")
-                .value
-                .trim(),
-
-        sourceDescription:
-            $("person-sourceDescription")
-                .value
-                .trim(),
-
-        order:1,
-
-        visible:true
-
-    };
-
-
-    if(
-        !item.id ||
-        !item.name
-    ){
-
-        alert(
-            "Add meg az azonosítót és a nevet."
-        );
-
-        return;
-
-    }
-
-
-    data.historicalPeople.push(
-        item
-    );
-
-    saveToLocalStorage();
-
-    renderAll();
-
-
-    document
-        .querySelectorAll(
-            "#section-people input, #section-people textarea"
-        )
-        .forEach(input=>{
-            input.value="";
-        });
-
-
-    showStatus(
-        "A személyiség hozzáadva."
-    );
-
+if(!parsed||typeof parsed!=="object"||Array.isArray(parsed)){
+throw new Error("A legfelső JSON elemnek objektumnak kell lennie.");
 }
 
+data=parsed;
+normalizeData();
+renderAll();
+saveToLocalStorage();
 
-function addCounty(){
+showStatus("A JSON adatok sikeresen alkalmazva.","success");
 
-    let geojson = null;
-
-    const raw =
-        $("county-geojson")
-            .value
-            .trim();
-
-
-    if(raw){
-
-        try{
-
-            geojson =
-                JSON.parse(raw);
-
-        }catch(error){
-
-            alert(
-                "A GeoJSON formátuma hibás.\n\n" +
-                error.message
-            );
-
-            return;
-
-        }
-
-    }
-
-
-    const item = {
-
-        id:
-            $("county-id")
-                .value
-                .trim(),
-
-        title:
-            $("county-title")
-                .value
-                .trim(),
-
-        period:
-            $("county-period")
-                .value
-                .trim(),
-
-        description:
-            $("county-description")
-                .value
-                .trim(),
-
-        geojson:
-
-            geojson,
-
-        image:
-            $("county-image")
-                .value
-                .trim(),
-
-        source:
-            $("county-source")
-                .value
-                .trim(),
-
-        sourceUrl:
-            $("county-sourceUrl")
-                .value
-                .trim(),
-
-        sourceDescription:
-            $("county-sourceDescription")
-                .value
-                .trim(),
-
-        order:
-            parseInt(
-                $("county-order").value,
-                10
-            ) || 1,
-
-        visible:
-            $("county-visible").checked,
-
-        mapVisible:
-            $("county-mapVisible").checked
-
-    };
-
-
-    if(
-        !item.id ||
-        !item.title
-    ){
-
-        alert(
-            "Add meg az azonosítót és a vármegye nevét."
-        );
-
-        return;
-
-    }
-
-
-    data.historicalCounties.push(
-        item
-    );
-
-    saveToLocalStorage();
-
-    renderAll();
-
-
-    document
-        .querySelectorAll(
-            "#section-counties input, #section-counties textarea"
-        )
-        .forEach(input=>{
-
-            if(
-                input.type !==
-                "checkbox"
-            ){
-
-                input.value="";
-
-            }
-
-        });
-
-
-    showStatus(
-        "A vármegye hozzáadva."
-    );
-
+}catch(error){
+showStatus("Hibás JSON: "+error.message,"error");
+}
 }
 
+function handleImageUpload(event,targetId,previewId){
+const file=event.target.files?.[0];
 
-function addHistoricalMap(){
+if(!file)return;
 
-    const item = {
-
-        id:
-            $("map-id")
-                .value
-                .trim(),
-
-        title:
-            $("map-title")
-                .value
-                .trim(),
-
-        year:
-            $("map-year")
-                .value
-                .trim(),
-
-        period:
-            $("map-period")
-                .value
-                .trim(),
-
-        description:
-            $("map-description")
-                .value
-                .trim(),
-
-        image:
-            $("map-image")
-                .value
-                .trim(),
-
-        source:
-            $("map-source")
-                .value
-                .trim(),
-
-        sourceUrl:
-            $("map-sourceUrl")
-                .value
-                .trim(),
-
-        sourceDescription:
-            $("map-sourceDescription")
-                .value
-                .trim(),
-
-        order:1,
-
-        visible:true
-
-    };
-
-
-    if(
-        !item.id ||
-        !item.title
-    ){
-
-        alert(
-            "Add meg az azonosítót és a térkép címét."
-        );
-
-        return;
-
-    }
-
-
-    data.historicalMaps.push(
-        item
-    );
-
-    saveToLocalStorage();
-
-    renderAll();
-
-
-    document
-        .querySelectorAll(
-            "#section-maps input, #section-maps textarea"
-        )
-        .forEach(input=>{
-            input.value="";
-        });
-
-
-    showStatus(
-        "A történelmi térkép hozzáadva."
-    );
-
+if(!file.type.startsWith("image/")){
+showStatus("Csak képfájl tölthető fel.","error");
+event.target.value="";
+return;
 }
 
-
-/* ==========================================================
-   5.1 – GALÉRIA KÉPFELTÖLTÉS
-========================================================== */
-
-
-function handleGalleryImageUpload(event){
-
-    const input =
-        event.target;
-
-    const file =
-        input.files &&
-        input.files[0];
-
-
-    if(!file){
-        return;
-    }
-
-
-    if(
-        !file.type ||
-        !file.type.startsWith("image/")
-    ){
-
-        alert(
-            "Csak képfájl tölthető fel."
-        );
-
-        input.value="";
-
-        return;
-
-    }
-
-
-    const maxSize =
-        8 * 1024 * 1024;
-
-
-    if(
-        file.size >
-        maxSize
-    ){
-
-        alert(
-            "A kép túl nagy. Maximum 8 MB használható."
-        );
-
-        input.value="";
-
-        return;
-
-    }
-
-
-    const reader =
-        new FileReader();
-
-
-    reader.onload =
-        function(){
-
-            const result =
-                reader.result;
-
-
-            $("gallery-image")
-                .value =
-                result;
-
-
-            const preview =
-                $("gallery-preview");
-
-
-            preview.src =
-                result;
-
-
-            preview.style.display =
-                "block";
-
-
-            showStatus(
-                "A kép betöltve és előnézete elkészült."
-            );
-
-        };
-
-
-    reader.onerror =
-        function(){
-
-            alert(
-                "A kép beolvasása nem sikerült."
-            );
-
-        };
-
-
-    reader.readAsDataURL(
-        file
-    );
-
+if(file.size>20*1024*1024){
+showStatus("A kép maximális mérete 20 MB.","error");
+event.target.value="";
+return;
 }
 
+const reader=new FileReader();
 
-function previewGalleryImageFromUrl(){
+reader.onload=()=>{
+$(targetId).value=reader.result;
+$(previewId).src=reader.result;
+$(previewId).style.display="block";
+showStatus("A kép betöltve és előnézetben megjelenítve.","success");
+window.__atlasAdminDirty=true;
+};
 
-    const value =
-        $("gallery-image")
-            .value
-            .trim();
+reader.onerror=()=>{
+showStatus("A kép beolvasása sikertelen.","error");
+};
 
-
-    const preview =
-        $("gallery-preview");
-
-
-    if(!value){
-
-        preview.src="";
-
-        preview.style.display =
-            "none";
-
-        return;
-
-    }
-
-
-    preview.src =
-        value;
-
-    preview.style.display =
-        "block";
-
-
-    preview.onerror =
-        function(){
-
-            preview.style.display =
-                "none";
-
-        };
-
+reader.readAsDataURL(file);
 }
 
+function compressImage(file){
+return new Promise((resolve,reject)=>{
+const reader=new FileReader();
 
-function clearGalleryForm(){
+reader.onerror=()=>reject(new Error("A kép nem olvasható."));
 
-    [
-        "gallery-id",
-        "gallery-image",
-        "gallery-title",
-        "gallery-description",
-        "gallery-source",
-        "gallery-sourceUrl",
-        "gallery-sourceDescription",
-        "gallery-lat",
-        "gallery-lng",
-        "gallery-category",
-        "gallery-period"
-    ].forEach(id=>{
+reader.onload=()=>{
+const img=new Image();
 
-        $(id).value="";
+img.onerror=()=>reject(new Error("A képformátum nem támogatott."));
 
-    });
+img.onload=()=>{
+const max=2200;
+const scale=Math.min(1,max/Math.max(img.width,img.height));
 
+const width=Math.max(1,Math.round(img.width*scale));
+const height=Math.max(1,Math.round(img.height*scale));
 
-    $("gallery-order").value =
-        "1";
+const canvas=document.createElement("canvas");
 
+canvas.width=width;
+canvas.height=height;
 
-    $("gallery-visible").checked =
-        true;
+const ctx=canvas.getContext("2d");
 
-
-    $("gallery-mapVisible").checked =
-        true;
-
-
-    $("gallery-image-file").value =
-        "";
-
-
-    $("gallery-preview").src =
-        "";
-
-
-    $("gallery-preview").style.display =
-        "none";
-
+if(!ctx){
+reject(new Error("A képfeldolgozás nem érhető el."));
+return;
 }
 
+ctx.drawImage(img,0,0,width,height);
 
-function addGalleryItem(){
+resolve(canvas.toDataURL("image/webp",.86));
+};
 
-    const lat =
-        parseFloat(
-            $("gallery-lat").value
-        );
+img.src=reader.result;
+};
 
-    const lng =
-        parseFloat(
-            $("gallery-lng").value
-        );
-
-
-    const item = {
-
-        id:
-            $("gallery-id")
-                .value
-                .trim(),
-
-        image:
-            $("gallery-image")
-                .value
-                .trim(),
-
-        title:
-            $("gallery-title")
-                .value
-                .trim(),
-
-        description:
-            $("gallery-description")
-                .value
-                .trim(),
-
-        source:
-            $("gallery-source")
-                .value
-                .trim(),
-
-        sourceUrl:
-            $("gallery-sourceUrl")
-                .value
-                .trim(),
-
-        sourceDescription:
-            $("gallery-sourceDescription")
-                .value
-                .trim(),
-
-        latitude:
-            Number.isFinite(lat)
-                ? lat
-                : null,
-
-        longitude:
-            Number.isFinite(lng)
-                ? lng
-                : null,
-
-        category:
-            $("gallery-category")
-                .value
-                .trim(),
-
-        period:
-            $("gallery-period")
-                .value
-                .trim(),
-
-        visible:
-            $("gallery-visible")
-                .checked,
-
-        mapVisible:
-            $("gallery-mapVisible")
-                .checked,
-
-        order:
-            parseInt(
-                $("gallery-order").value,
-                10
-            ) || 1
-
-    };
-
-
-    if(!item.id){
-
-        alert(
-            "Add meg a kép azonosítóját."
-        );
-
-        return;
-
-    }
-
-
-    if(!item.title){
-
-        alert(
-            "Add meg a kép címét."
-        );
-
-        return;
-
-    }
-
-
-    if(!item.image){
-
-        alert(
-            "Tölts fel képet vagy adj meg kép URL-t / fájlútvonalat."
-        );
-
-        return;
-
-    }
-
-
-    data.gallery.push(
-        item
-    );
-
-
-    saveToLocalStorage();
-
-    renderAll();
-
-    clearGalleryForm();
-
-
-    showStatus(
-        "A kép sikeresen hozzáadva a galériához."
-    );
-
+reader.readAsDataURL(file);
+});
 }
 
+async function handleGalleryImageUpload(event){
+const file=event.target.files?.[0];
 
-function addSource(){
+if(!file)return;
 
-    const item = {
-
-        title:
-            $("source-title")
-                .value
-                .trim(),
-
-        description:
-            $("source-description")
-                .value
-                .trim(),
-
-        url:
-            $("source-url")
-                .value
-                .trim(),
-
-        visible:true
-
-    };
-
-
-    if(!item.title){
-
-        alert(
-            "Add meg a forrás címét."
-        );
-
-        return;
-
-    }
-
-
-    data.sources.push(
-        item
-    );
-
-
-    saveToLocalStorage();
-
-    renderAll();
-
-
-    $("source-title").value="";
-    $("source-description").value="";
-    $("source-url").value="";
-
-
-    showStatus(
-        "A forrás hozzáadva."
-    );
-
+if(!file.type.startsWith("image/")){
+showStatus("Csak képfájl tölthető fel.","error");
+event.target.value="";
+return;
 }
 
-
-function removeItem(
-    arrayName,
-    index
-){
-
-    if(
-        !confirm(
-            "Biztosan törölni szeretnéd ezt az elemet?"
-        )
-    ){
-
-        return;
-
-    }
-
-
-    data[arrayName].splice(
-        index,
-        1
-    );
-
-
-    saveToLocalStorage();
-
-    renderAll();
-
-
-    showStatus(
-        "Az elem törölve."
-    );
-
+if(file.size>20*1024*1024){
+showStatus("A kép maximális eredeti mérete 20 MB.","error");
+event.target.value="";
+return;
 }
 
+showStatus("A kép feldolgozása folyamatban…","info");
 
-function renderAll(){
+try{
+const dataUrl=await compressImage(file);
 
-    ensureArrays();
+$("gallery-image").value=dataUrl;
+$("gallery-preview").src=dataUrl;
+$("gallery-preview").style.display="block";
 
-    renderPeriods();
-    renderPlaces();
-    renderEvents();
-    renderPeople();
-    renderCounties();
-    renderMaps();
-    renderGallery();
-    renderSources();
-    renderStats();
-    refreshJSON();
+window.__atlasAdminDirty=true;
 
+showStatus("A kép feldolgozva és előnézetben megjelenítve.","success");
+
+}catch(error){
+showStatus(error.message,"error");
+}
 }
 
-
-function renderStats(){
-
-    $("statPeriods").textContent =
-        data.historicalPeriods.length;
-
-    $("statPlaces").textContent =
-        data.historicalPlaces.length;
-
-    $("statEvents").textContent =
-        data.historicalEvents.length;
-
-    $("statGallery").textContent =
-        data.gallery.length;
-
-}
-
-
-function renderPeriods(){
-
-    const container =
-        $("periodList");
-
-    container.innerHTML="";
-
-
-    if(
-        !data.historicalPeriods.length
-    ){
-
-        container.innerHTML =
-            '<div class="small-note">Még nincs korszak.</div>';
-
-        return;
-
-    }
-
-
-    data.historicalPeriods.forEach(
-        (item,index)=>{
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-            div.className =
-                "list-item";
-
-
-            div.innerHTML = `
-
-                <div class="list-info">
-
-                    <strong>
-                        ${escapeHtml(item.title)}
-                    </strong>
-
-                    <span>
-                        ${escapeHtml(item.startYear || "")}
-                        –
-                        ${escapeHtml(item.endYear || "")}
-                    </span>
-
-                </div>
-
-                <button
-                    class="btn btn-small btn-danger"
-                    onclick="removeItem('historicalPeriods',${index})"
-                >
-                    Törlés
-                </button>
-
-            `;
-
-
-            container.appendChild(
-                div
-            );
-
-        }
-    );
-
-}
-
-
-function renderPlaces(){
-
-    const container =
-        $("placeList");
-
-    container.innerHTML="";
-
-
-    if(
-        !data.historicalPlaces.length
-    ){
-
-        container.innerHTML =
-            '<div class="small-note">Még nincs történelmi helyszín.</div>';
-
-        return;
-
-    }
-
-
-    data.historicalPlaces.forEach(
-        (item,index)=>{
-
-            const coordinates =
-                Number.isFinite(
-                    item.latitude
-                ) &&
-                Number.isFinite(
-                    item.longitude
-                )
-                ? `📍 ${item.latitude}, ${item.longitude}`
-                : "📍 Nincs koordináta";
-
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-            div.className =
-                "list-item";
-
-
-            div.innerHTML = `
-
-                <div class="list-info">
-
-                    <strong>
-                        ${escapeHtml(item.title)}
-                    </strong>
-
-                    <span>
-                        ${escapeHtml(item.period || "")}
-                        ·
-                        ${escapeHtml(item.year || "")}
-                        ·
-                        ${coordinates}
-                    </span>
-
-                </div>
-
-
-                <div class="actions">
-
-                    ${
-                        item.mapVisible &&
-                        Number.isFinite(item.latitude) &&
-                        Number.isFinite(item.longitude)
-                        ? `
-                            <a
-                                class="btn btn-small"
-                                href="tortenelmi-terkep.html?historical=${encodeURIComponent(item.id)}&lat=${item.latitude}&lng=${item.longitude}"
-                                target="_blank"
-                            >
-                                📍 Térkép
-                            </a>
-                        `
-                        : ""
-                    }
-
-
-                    <button
-                        class="btn btn-small btn-danger"
-                        onclick="removeItem('historicalPlaces',${index})"
-                    >
-                        Törlés
-                    </button>
-
-                </div>
-
-            `;
-
-
-            container.appendChild(
-                div
-            );
-
-        }
-    );
-
-}
-
-
-function renderEvents(){
-
-    const container =
-        $("eventList");
-
-    container.innerHTML="";
-
-
-    if(
-        !data.historicalEvents.length
-    ){
-
-        container.innerHTML =
-            '<div class="small-note">Még nincs történelmi esemény.</div>';
-
-        return;
-
-    }
-
-
-    data.historicalEvents.forEach(
-        (item,index)=>{
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-            div.className =
-                "list-item";
-
-
-            div.innerHTML = `
-
-                <div class="list-info">
-
-                    <strong>
-                        ${escapeHtml(item.title)}
-                    </strong>
-
-                    <span>
-                        ${escapeHtml(item.year || "")}
-                        ·
-                        ${escapeHtml(item.period || "")}
-                        ·
-                        ${
-                            Number.isFinite(
-                                item.latitude
-                            )
-                            ? `${item.latitude}, ${item.longitude}`
-                            : "Nincs koordináta"
-                        }
-                    </span>
-
-                </div>
-
-
-                <div class="actions">
-
-                    ${
-                        item.mapVisible &&
-                        Number.isFinite(item.latitude) &&
-                        Number.isFinite(item.longitude)
-                        ? `
-                            <a
-                                class="btn btn-small"
-                                href="tortenelmi-terkep.html?event=${encodeURIComponent(item.id)}&lat=${item.latitude}&lng=${item.longitude}"
-                                target="_blank"
-                            >
-                                📍 Térkép
-                            </a>
-                        `
-                        : ""
-                    }
-
-
-                    <button
-                        class="btn btn-small btn-danger"
-                        onclick="removeItem('historicalEvents',${index})"
-                    >
-                        Törlés
-                    </button>
-
-                </div>
-
-            `;
-
-
-            container.appendChild(
-                div
-            );
-
-        }
-    );
-
-}
-
-
-function renderPeople(){
-
-    const container =
-        $("personList");
-
-    container.innerHTML="";
-
-
-    if(
-        !data.historicalPeople.length
-    ){
-
-        container.innerHTML =
-            '<div class="small-note">Még nincs személyiség.</div>';
-
-        return;
-
-    }
-
-
-    data.historicalPeople.forEach(
-        (item,index)=>{
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-            div.className =
-                "list-item";
-
-
-            div.innerHTML = `
-
-                <div class="list-info">
-
-                    <strong>
-                        ${escapeHtml(item.name)}
-                    </strong>
-
-                    <span>
-                        ${escapeHtml(item.period || "")}
-                        ·
-                        ${escapeHtml(item.year || "")}
-                    </span>
-
-                </div>
-
-
-                <button
-                    class="btn btn-small btn-danger"
-                    onclick="removeItem('historicalPeople',${index})"
-                >
-                    Törlés
-                </button>
-
-            `;
-
-
-            container.appendChild(
-                div
-            );
-
-        }
-    );
-
-}
-
-
-function renderCounties(){
-
-    const container =
-        $("countyList");
-
-    container.innerHTML="";
-
-
-    if(
-        !data.historicalCounties.length
-    ){
-
-        container.innerHTML =
-            '<div class="small-note">Még nincs vármegye.</div>';
-
-        return;
-
-    }
-
-
-    data.historicalCounties.forEach(
-        (item,index)=>{
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-            div.className =
-                "list-item";
-
-
-            div.innerHTML = `
-
-                <div class="list-info">
-
-                    <strong>
-                        ${escapeHtml(item.title)}
-                    </strong>
-
-                    <span>
-                        ${escapeHtml(item.period || "")}
-                        ·
-                        ${
-                            item.geojson
-                            ? "GeoJSON ✓"
-                            : "Nincs GeoJSON"
-                        }
-                    </span>
-
-                </div>
-
-
-                <button
-                    class="btn btn-small btn-danger"
-                    onclick="removeItem('historicalCounties',${index})"
-                >
-                    Törlés
-                </button>
-
-            `;
-
-
-            container.appendChild(
-                div
-            );
-
-        }
-    );
-
-}
-
-
-function renderMaps(){
-
-    const container =
-        $("mapList");
-
-    container.innerHTML="";
-
-
-    if(
-        !data.historicalMaps.length
-    ){
-
-        container.innerHTML =
-            '<div class="small-note">Még nincs történelmi térkép.</div>';
-
-        return;
-
-    }
-
-
-    data.historicalMaps.forEach(
-        (item,index)=>{
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-            div.className =
-                "list-item";
-
-
-            div.innerHTML = `
-
-                <div class="list-info">
-
-                    <strong>
-                        ${escapeHtml(item.title)}
-                    </strong>
-
-                    <span>
-                        ${escapeHtml(item.year || "")}
-                        ·
-                        ${escapeHtml(item.period || "")}
-                    </span>
-
-                </div>
-
-
-                <button
-                    class="btn btn-small btn-danger"
-                    onclick="removeItem('historicalMaps',${index})"
-                >
-                    Törlés
-                </button>
-
-            `;
-
-
-            container.appendChild(
-                div
-            );
-
-        }
-    );
-
-}
-
-
-function renderGallery(){
-
-    const container =
-        $("galleryList");
-
-    container.innerHTML="";
-
-
-    if(
-        !data.gallery.length
-    ){
-
-        container.innerHTML =
-            '<div class="small-note">Még nincs galériaelem.</div>';
-
-        return;
-
-    }
-
-
-    data.gallery
-        .slice()
-        .sort(
-            (a,b)=>
-                (a.order || 0) -
-                (b.order || 0)
-        )
-        .forEach(
-            item=>{
-
-                const originalIndex =
-                    data.gallery.indexOf(
-                        item
-                    );
-
-
-                const coordinates =
-                    Number.isFinite(
-                        item.latitude
-                    ) &&
-                    Number.isFinite(
-                        item.longitude
-                    )
-                    ? `${item.latitude}, ${item.longitude}`
-                    : "Nincs koordináta";
-
-
-                const div =
-                    document.createElement(
-                        "div"
-                    );
-
-                div.className =
-                    "list-item gallery-list-item";
-
-
-                const image =
-                    item.image || "";
-
-
-                div.innerHTML = `
-
-                    <div>
-
-                        ${
-                            image
-                            ? `
-                                <img
-                                    class="gallery-preview"
-                                    src="${escapeHtml(image)}"
-                                    alt="${escapeHtml(item.title)}"
-                                    onerror="this.style.display='none'"
-                                >
-                            `
-                            : `
-                                <div
-                                    class="gallery-preview"
-                                    style="display:flex;align-items:center;justify-content:center"
-                                >
-                                    📷
-                                </div>
-                            `
-                        }
-
-                    </div>
-
-
-                    <div class="list-info">
-
-                        <strong>
-                            ${escapeHtml(item.title)}
-                        </strong>
-
-                        <span>
-                            ${escapeHtml(item.category || "")}
-                            ·
-                            ${escapeHtml(item.period || "")}
-                            ·
-                            📍 ${escapeHtml(coordinates)}
-                        </span>
-
-                        <br>
-
-                        <span>
-                            Forrás:
-                            ${escapeHtml(item.source || "Nincs megadva")}
-                        </span>
-
-                        ${
-                            item.sourceDescription
-                            ? `
-                                <br>
-                                <span>
-                                    ${escapeHtml(
-                                        item.sourceDescription
-                                    )}
-                                </span>
-                            `
-                            : ""
-                        }
-
-                    </div>
-
-
-                    <div class="actions">
-
-                        ${
-                            item.mapVisible &&
-                            Number.isFinite(item.latitude) &&
-                            Number.isFinite(item.longitude)
-                            ? `
-                                <a
-                                    class="btn btn-small"
-                                    href="foldrajzi-terkep.html?gallery=${encodeURIComponent(item.id)}&lat=${item.latitude}&lng=${item.longitude}"
-                                    target="_blank"
-                                >
-                                    📍 Térkép
-                                </a>
-                            `
-                            : ""
-                        }
-
-
-                        ${
-                            item.sourceUrl
-                            ? `
-                                <a
-                                    class="btn btn-small"
-                                    href="${escapeHtml(item.sourceUrl)}"
-                                    target="_blank"
-                                    rel="noopener"
-                                >
-                                    📚 Forrás
-                                </a>
-                            `
-                            : ""
-                        }
-
-
-                        <button
-                            class="btn btn-small btn-danger"
-                            onclick="removeItem('gallery',${originalIndex})"
-                        >
-                            Törlés
-                        </button>
-
-                    </div>
-
-                `;
-
-
-                container.appendChild(
-                    div
-                );
-
-            }
-        );
-
-}
-
-
-function renderSources(){
-
-    const container =
-        $("sourceList");
-
-    container.innerHTML="";
-
-
-    if(
-        !data.sources.length
-    ){
-
-        container.innerHTML =
-            '<div class="small-note">Még nincs forrás.</div>';
-
-        return;
-
-    }
-
-
-    data.sources.forEach(
-        (item,index)=>{
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-            div.className =
-                "list-item";
-
-
-            div.innerHTML = `
-
-                <div class="list-info">
-
-                    <strong>
-                        ${escapeHtml(item.title)}
-                    </strong>
-
-                    <span>
-                        ${escapeHtml(item.description || "")}
-                    </span>
-
-                </div>
-
-
-                <div class="actions">
-
-                    ${
-                        item.url
-                        ? `
-                            <a
-                                class="btn btn-small"
-                                href="${escapeHtml(item.url)}"
-                                target="_blank"
-                                rel="noopener"
-                            >
-                                Megnyitás
-                            </a>
-                        `
-                        : ""
-                    }
-
-
-                    <button
-                        class="btn btn-small btn-danger"
-                        onclick="removeItem('sources',${index})"
-                    >
-                        Törlés
-                    </button>
-
-                </div>
-
-            `;
-
-
-            container.appendChild(
-                div
-            );
-
-        }
-    );
-
-}
-
+function openCoordinates(latId,lngId){
+const lat=Number($(latId).value);
+const lng=Number($(lngId).value);
 
 if(
-    sessionStorage.getItem(
-        "atlasz_admin_logged"
-    ) === "true"
+!Number.isFinite(lat)||
+!Number.isFinite(lng)||
+lat<-90||
+lat>90||
+lng<-180||
+lng>180
 ){
-
-    showAdmin();
-
+showStatus("Érvényes LAT és LNG koordináta szükséges.","error");
+return;
 }
 
+window.open(
+"https://www.openstreetmap.org/?mlat="+encodeURIComponent(lat)+"&mlon="+encodeURIComponent(lng)+"#map=16/"+encodeURIComponent(lat)+"/"+encodeURIComponent(lng),
+"_blank",
+"noopener,noreferrer"
+);
+}
+
+function validateCoordinates(latId,lngId){
+const lat=Number($(latId).value);
+const lng=Number($(lngId).value);
+
+if($(latId).value.trim()!==""&&(!Number.isFinite(lat)||lat<-90||lat>90)){
+$(latId).classList.add("field-invalid");
+return false;
+}
+
+if($(lngId).value.trim()!==""&&(!Number.isFinite(lng)||lng<-180||lng>180)){
+$(lngId).classList.add("field-invalid");
+return false;
+}
+
+$(latId).classList.remove("field-invalid");
+$(lngId).classList.remove("field-invalid");
+
+return true;
+}
+
+function fillPeriodSelect(id,selected=""){
+const select=$(id);
+
+if(!select)return;
+
+select.innerHTML=
+'<option value="">— Nincs megadva —</option>'+
+data.historicalPeriods
+.filter(x=>x.visible!==false)
+.sort((a,b)=>(a.startYear??0)-(b.startYear??0))
+.map(x=>'<option value="'+escapeHtml(x.id)+'">'+escapeHtml(x.title)+'</option>')
+.join("");
+
+select.value=selected||"";
+}
+
+function refreshPeriodSelects(){
+fillPeriodSelect("place-period");
+fillPeriodSelect("event-period");
+fillPeriodSelect("person-period");
+fillPeriodSelect("county-period");
+fillPeriodSelect("map-period");
+fillPeriodSelect("gallery-period");
+}
+
+function addPeriod(){
+const title=$("period-title").value.trim();
+
+if(!title){
+showStatus("A korszak neve kötelező.","error");
+return;
+}
+
+const id=$("period-id").value.trim()||uniqueId(title,data.historicalPeriods);
+
+if(
+data.historicalPeriods.some(x=>x.id===id) &&
+editing.period===null
+){
+showStatus("Ez az azonosító már létezik.","error");
+return;
+}
+
+const item={
+id,
+title,
+startYear:$("period-start").value===""?null:Number($("period-start").value),
+endYear:$("period-end").value===""?null:Number($("period-end").value),
+description:$("period-description").value.trim(),
+visible:$("period-visible").checked
+};
+
+if(editing.period!==null){
+data.historicalPeriods[editing.period]=item;
+editing.period=null;
+showStatus("A korszak módosítva.","success");
+}else{
+data.historicalPeriods.push(item);
+showStatus("A korszak hozzáadva.","success");
+}
+
+clearPeriodForm();
+renderAll();
+saveToLocalStorage();
+}
+
+function editPeriod(index){
+const x=data.historicalPeriods[index];
+
+$("period-id").value=x.id||"";
+$("period-title").value=x.title||"";
+$("period-start").value=x.startYear??"";
+$("period-end").value=x.endYear??"";
+$("period-description").value=x.description||"";
+$("period-visible").checked=x.visible!==false;
+
+editing.period=index;
+
+showSection("periods",document.querySelector('.sidebar button[onclick*="periods"]'));
+
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function clearPeriodForm(){
+editing.period=null;
+[
+"period-id",
+"period-title",
+"period-start",
+"period-end",
+"period-description"
+].forEach(id=>$(id).value="");
+
+$("period-visible").checked=true;
+}
+
+function removeItem(type,index){
+if(!confirm("Biztosan törlöd ezt az elemet?"))return;
+
+data[type].splice(index,1);
+renderAll();
+saveToLocalStorage();
+
+showStatus("Az elem törölve.","success");
+}
+
+function addPlace(){
+const title=$("place-title").value.trim();
+
+if(!title){
+showStatus("A helyszín neve kötelező.","error");
+return;
+}
+
+if(!validateCoordinates("place-lat","place-lng")){
+showStatus("Hibás koordináta.","error");
+return;
+}
+
+const id=$("place-id").value.trim()||uniqueId(title,data.historicalPlaces);
+
+if(data.historicalPlaces.some(x=>x.id===id)&&editing.place===null){
+showStatus("Ez az azonosító már létezik.","error");
+return;
+}
+
+const item={
+id,
+title,
+type:"historical-place",
+period:$("place-period").value||"",
+year:$("place-year").value===""?null:Number($("place-year").value),
+description:$("place-description").value.trim(),
+latitude:$("place-lat").value===""?null:Number($("place-lat").value),
+longitude:$("place-lng").value===""?null:Number($("place-lng").value),
+image:$("place-image").value||"",
+source:$("place-source").value.trim(),
+sourceUrl:$("place-sourceUrl").value.trim(),
+sourceDescription:$("place-sourceDescription").value.trim(),
+visible:$("place-visible").checked,
+mapVisible:$("place-mapVisible").checked,
+order:editing.place!==null?data.historicalPlaces[editing.place].order:data.historicalPlaces.length+1
+};
+
+if(editing.place!==null){
+data.historicalPlaces[editing.place]=item;
+editing.place=null;
+showStatus("A történelmi helyszín módosítva.","success");
+}else{
+data.historicalPlaces.push(item);
+showStatus("A történelmi helyszín hozzáadva.","success");
+}
+
+clearPlaceForm();
+renderAll();
+saveToLocalStorage();
+}
+
+function editPlace(index){
+const x=data.historicalPlaces[index];
+
+$("place-id").value=x.id||"";
+$("place-title").value=x.title||"";
+$("place-period").value=x.period||"";
+$("place-year").value=x.year??"";
+$("place-description").value=x.description||"";
+$("place-lat").value=x.latitude??"";
+$("place-lng").value=x.longitude??"";
+$("place-image").value=x.image||"";
+$("place-source").value=x.source||"";
+$("place-sourceUrl").value=x.sourceUrl||"";
+$("place-sourceDescription").value=x.sourceDescription||"";
+$("place-visible").checked=x.visible!==false;
+$("place-mapVisible").checked=x.mapVisible!==false;
+
+if(x.image){
+$("place-preview").src=x.image;
+$("place-preview").style.display="block";
+}else{
+$("place-preview").style.display="none";
+}
+
+editing.place=index;
+
+showSection("places",document.querySelector('.sidebar button[onclick*="places"]'));
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function clearPlaceForm(){
+editing.place=null;
+
+[
+"place-id",
+"place-title",
+"place-year",
+"place-description",
+"place-image",
+"place-source",
+"place-sourceUrl",
+"place-sourceDescription",
+"place-lat",
+"place-lng"
+].forEach(id=>$(id).value="");
+
+$("place-preview").style.display="none";
+$("place-visible").checked=true;
+$("place-mapVisible").checked=true;
+$("place-image-file").value="";
+}
+
+function addEvent(){
+const title=$("event-title").value.trim();
+
+if(!title){
+showStatus("Az esemény neve kötelező.","error");
+return;
+}
+
+if(!validateCoordinates("event-lat","event-lng")){
+showStatus("Hibás koordináta.","error");
+return;
+}
+
+const id=$("event-id").value.trim()||uniqueId(title,data.historicalEvents);
+
+if(data.historicalEvents.some(x=>x.id===id)&&editing.event===null){
+showStatus("Ez az azonosító már létezik.","error");
+return;
+}
+
+const item={
+id,
+title,
+year:$("event-year").value===""?null:Number($("event-year").value),
+period:$("event-period").value||"",
+type:"event",
+description:$("event-description").value.trim(),
+latitude:$("event-lat").value===""?null:Number($("event-lat").value),
+longitude:$("event-lng").value===""?null:Number($("event-lng").value),
+source:$("event-source").value.trim(),
+sourceUrl:$("event-sourceUrl").value.trim(),
+sourceDescription:$("event-sourceDescription").value.trim(),
+visible:$("event-visible").checked,
+mapVisible:$("event-mapVisible").checked,
+order:editing.event!==null?data.historicalEvents[editing.event].order:data.historicalEvents.length+1
+};
+
+if(editing.event!==null){
+data.historicalEvents[editing.event]=item;
+editing.event=null;
+showStatus("Az esemény módosítva.","success");
+}else{
+data.historicalEvents.push(item);
+showStatus("Az esemény hozzáadva.","success");
+}
+
+clearEventForm();
+renderAll();
+saveToLocalStorage();
+}
+
+function editEvent(index){
+const x=data.historicalEvents[index];
+
+$("event-id").value=x.id||"";
+$("event-title").value=x.title||"";
+$("event-year").value=x.year??"";
+$("event-period").value=x.period||"";
+$("event-description").value=x.description||"";
+$("event-lat").value=x.latitude??"";
+$("event-lng").value=x.longitude??"";
+$("event-source").value=x.source||"";
+$("event-sourceUrl").value=x.sourceUrl||"";
+$("event-sourceDescription").value=x.sourceDescription||"";
+$("event-visible").checked=x.visible!==false;
+$("event-mapVisible").checked=x.mapVisible!==false;
+
+editing.event=index;
+
+showSection("events",document.querySelector('.sidebar button[onclick*="events"]'));
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function clearEventForm(){
+editing.event=null;
+
+[
+"event-id",
+"event-title",
+"event-year",
+"event-description",
+"event-lat",
+"event-lng",
+"event-source",
+"event-sourceUrl",
+"event-sourceDescription"
+].forEach(id=>$(id).value="");
+
+$("event-period").value="";
+$("event-visible").checked=true;
+$("event-mapVisible").checked=true;
+}
+
+function addPerson(){
+const name=$("person-name").value.trim();
+
+if(!name){
+showStatus("A személy neve kötelező.","error");
+return;
+}
+
+const id=$("person-id").value.trim()||uniqueId(name,data.historicalPeople);
+
+if(data.historicalPeople.some(x=>x.id===id)&&editing.person===null){
+showStatus("Ez az azonosító már létezik.","error");
+return;
+}
+
+const item={
+id,
+name,
+period:$("person-period").value||"",
+year:$("person-year").value===""?null:Number($("person-year").value),
+description:$("person-description").value.trim(),
+image:$("person-image").value||"",
+source:$("person-source").value.trim(),
+sourceUrl:$("person-sourceUrl").value.trim(),
+sourceDescription:$("person-sourceDescription").value.trim(),
+visible:$("person-visible").checked,
+order:editing.person!==null?data.historicalPeople[editing.person].order:data.historicalPeople.length+1
+};
+
+if(editing.person!==null){
+data.historicalPeople[editing.person]=item;
+editing.person=null;
+showStatus("A személy módosítva.","success");
+}else{
+data.historicalPeople.push(item);
+showStatus("A személy hozzáadva.","success");
+}
+
+clearPersonForm();
+renderAll();
+saveToLocalStorage();
+}
+
+function editPerson(index){
+const x=data.historicalPeople[index];
+
+$("person-id").value=x.id||"";
+$("person-name").value=x.name||"";
+$("person-period").value=x.period||"";
+$("person-year").value=x.year??"";
+$("person-description").value=x.description||"";
+$("person-image").value=x.image||"";
+$("person-source").value=x.source||"";
+$("person-sourceUrl").value=x.sourceUrl||"";
+$("person-sourceDescription").value=x.sourceDescription||"";
+$("person-visible").checked=x.visible!==false;
+
+if(x.image){
+$("person-preview").src=x.image;
+$("person-preview").style.display="block";
+}else{
+$("person-preview").style.display="none";
+}
+
+editing.person=index;
+
+showSection("people",document.querySelector('.sidebar button[onclick*="people"]'));
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function clearPersonForm(){
+editing.person=null;
+
+[
+"person-id",
+"person-name",
+"person-year",
+"person-description",
+"person-image",
+"person-source",
+"person-sourceUrl",
+"person-sourceDescription"
+].forEach(id=>$(id).value="");
+
+$("person-period").value="";
+$("person-visible").checked=true;
+$("person-preview").style.display="none";
+$("person-image-file").value="";
+}
+
+function addCounty(){
+const title=$("county-title").value.trim();
+
+if(!title){
+showStatus("A vármegye neve kötelező.","error");
+return;
+}
+
+const id=$("county-id").value.trim()||uniqueId(title,data.historicalCounties);
+
+if(data.historicalCounties.some(x=>x.id===id)&&editing.county===null){
+showStatus("Ez az azonosító már létezik.","error");
+return;
+}
+
+let geojson=$("county-geojson").value.trim();
+
+if(geojson){
+try{
+JSON.parse(geojson);
+}catch{
+showStatus("A GeoJSON formátuma hibás.","error");
+return;
+}
+}
+
+const item={
+id,
+title,
+description:$("county-description").value.trim(),
+period:$("county-period").value||"",
+geojson,
+image:"",
+source:$("county-source").value.trim(),
+sourceUrl:$("county-sourceUrl").value.trim(),
+sourceDescription:$("county-sourceDescription").value.trim(),
+visible:$("county-visible").checked,
+mapVisible:$("county-mapVisible").checked,
+order:Number($("county-order").value)||1
+};
+
+if(editing.county!==null){
+data.historicalCounties[editing.county]=item;
+editing.county=null;
+showStatus("A vármegye módosítva.","success");
+}else{
+data.historicalCounties.push(item);
+showStatus("A vármegye hozzáadva.","success");
+}
+
+clearCountyForm();
+renderAll();
+saveToLocalStorage();
+}
+
+function editCounty(index){
+const x=data.historicalCounties[index];
+
+$("county-id").value=x.id||"";
+$("county-title").value=x.title||"";
+$("county-period").value=x.period||"";
+$("county-description").value=x.description||"";
+$("county-geojson").value=x.geojson||"";
+$("county-source").value=x.source||"";
+$("county-sourceUrl").value=x.sourceUrl||"";
+$("county-sourceDescription").value=x.sourceDescription||"";
+$("county-order").value=x.order??1;
+$("county-visible").checked=x.visible!==false;
+$("county-mapVisible").checked=x.mapVisible!==false;
+
+editing.county=index;
+
+showSection("counties",document.querySelector('.sidebar button[onclick*="counties"]'));
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function clearCountyForm(){
+editing.county=null;
+
+[
+"county-id",
+"county-title",
+"county-description",
+"county-geojson",
+"county-source",
+"county-sourceUrl",
+"county-sourceDescription"
+].forEach(id=>$(id).value="");
+
+$("county-period").value="";
+$("county-order").value=1;
+$("county-visible").checked=true;
+$("county-mapVisible").checked=true;
+}
+
+function addHistoricalMap(){
+const title=$("map-title").value.trim();
+
+if(!title){
+showStatus("A térkép címe kötelező.","error");
+return;
+}
+
+const id=$("map-id").value.trim()||uniqueId(title,data.historicalMaps);
+
+if(data.historicalMaps.some(x=>x.id===id)&&editing.map===null){
+showStatus("Ez az azonosító már létezik.","error");
+return;
+}
+
+const item={
+id,
+title,
+year:$("map-year").value===""?null:Number($("map-year").value),
+period:$("map-period").value||"",
+image:$("map-image").value||"",
+description:$("map-description").value.trim(),
+source:$("map-source").value.trim(),
+sourceUrl:$("map-sourceUrl").value.trim(),
+sourceDescription:$("map-sourceDescription").value.trim(),
+visible:$("map-visible").checked,
+order:editing.map!==null?data.historicalMaps[editing.map].order:data.historicalMaps.length+1
+};
+
+if(editing.map!==null){
+data.historicalMaps[editing.map]=item;
+editing.map=null;
+showStatus("A történelmi térkép módosítva.","success");
+}else{
+data.historicalMaps.push(item);
+showStatus("A történelmi térkép hozzáadva.","success");
+}
+
+clearMapForm();
+renderAll();
+saveToLocalStorage();
+}
+
+function editMap(index){
+const x=data.historicalMaps[index];
+
+$("map-id").value=x.id||"";
+$("map-title").value=x.title||"";
+$("map-year").value=x.year??"";
+$("map-period").value=x.period||"";
+$("map-image").value=x.image||"";
+$("map-description").value=x.description||"";
+$("map-source").value=x.source||"";
+$("map-sourceUrl").value=x.sourceUrl||"";
+$("map-sourceDescription").value=x.sourceDescription||"";
+$("map-visible").checked=x.visible!==false;
+
+if(x.image){
+$("map-preview").src=x.image;
+$("map-preview").style.display="block";
+}else{
+$("map-preview").style.display="none";
+}
+
+editing.map=index;
+
+showSection("maps",document.querySelector('.sidebar button[onclick*="maps"]'));
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function clearMapForm(){
+editing.map=null;
+
+[
+"map-id",
+"map-title",
+"map-year",
+"map-image",
+"map-description",
+"map-source",
+"map-sourceUrl",
+"map-sourceDescription"
+].forEach(id=>$(id).value="");
+
+$("map-period").value="";
+$("map-visible").checked=true;
+$("map-preview").style.display="none";
+$("map-image-file").value="";
+}
+
+function addGalleryItem(){
+const title=$("gallery-title").value.trim();
+const image=$("gallery-image").value.trim();
+
+if(!title){
+showStatus("A galériaelem címe kötelező.","error");
+return;
+}
+
+if(!image){
+showStatus("A kép feltöltése kötelező.","error");
+return;
+}
+
+if(!validateCoordinates("gallery-lat","gallery-lng")){
+showStatus("Hibás koordináta.","error");
+return;
+}
+
+const id=$("gallery-id").value.trim()||uniqueId(title,data.gallery);
+
+if(data.gallery.some(x=>x.id===id)&&editing.gallery===null){
+showStatus("Ez az azonosító már létezik.","error");
+return;
+}
+
+const sourceUrl=$("gallery-sourceUrl").value.trim();
+
+if(sourceUrl){
+try{
+const url=new URL(sourceUrl);
+
+if(!["http:","https:"].includes(url.protocol)){
+throw new Error();
+}
+}catch{
+showStatus("A forrás URL-je nem érvényes.","error");
+return;
+}
+}
+
+const item={
+id,
+image,
+title,
+description:$("gallery-description").value.trim(),
+source:$("gallery-source").value.trim(),
+sourceUrl,
+sourceDescription:$("gallery-sourceDescription").value.trim(),
+latitude:$("gallery-lat").value===""?null:Number($("gallery-lat").value),
+longitude:$("gallery-lng").value===""?null:Number($("gallery-lng").value),
+category:$("gallery-category").value,
+period:$("gallery-period").value||"",
+visible:$("gallery-visible").checked,
+mapVisible:$("gallery-mapVisible").checked,
+order:Number($("gallery-order").value)||1
+};
+
+if(editing.gallery!==null){
+data.gallery[editing.gallery]=item;
+editing.gallery=null;
+showStatus("A galériaelem módosítva.","success");
+}else{
+data.gallery.push(item);
+showStatus("A galériaelem hozzáadva.","success");
+}
+
+clearGalleryForm();
+renderAll();
+saveToLocalStorage();
+}
+
+function editGallery(index){
+const x=data.gallery[index];
+
+$("gallery-id").value=x.id||"";
+$("gallery-title").value=x.title||"";
+$("gallery-image").value=x.image||"";
+$("gallery-description").value=x.description||"";
+$("gallery-source").value=x.source||"";
+$("gallery-sourceUrl").value=x.sourceUrl||"";
+$("gallery-sourceDescription").value=x.sourceDescription||"";
+$("gallery-lat").value=x.latitude??"";
+$("gallery-lng").value=x.longitude??"";
+$("gallery-category").value=x.category||"Egyéb";
+$("gallery-period").value=x.period||"";
+$("gallery-visible").checked=x.visible!==false;
+$("gallery-mapVisible").checked=x.mapVisible!==false;
+$("gallery-order").value=x.order??1;
+
+if(x.image){
+$("gallery-preview").src=x.image;
+$("gallery-preview").style.display="block";
+}else{
+$("gallery-preview").style.display="none";
+}
+
+editing.gallery=index;
+
+showSection("gallery",document.querySelector('.sidebar button[onclick*="gallery"]'));
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function clearGalleryForm(){
+editing.gallery=null;
+
+[
+"gallery-id",
+"gallery-title",
+"gallery-image",
+"gallery-description",
+"gallery-source",
+"gallery-sourceUrl",
+"gallery-sourceDescription",
+"gallery-lat",
+"gallery-lng"
+].forEach(id=>$(id).value="");
+
+$("gallery-category").value="Történelmi";
+$("gallery-period").value="";
+$("gallery-visible").checked=true;
+$("gallery-mapVisible").checked=true;
+$("gallery-order").value=1;
+$("gallery-preview").style.display="none";
+$("gallery-image-file").value="";
+}
+
+function addSource(){
+const title=$("source-title").value.trim();
+
+if(!title){
+showStatus("A forrás neve kötelező.","error");
+return;
+}
+
+data.sources.push({
+title,
+description:$("source-description").value.trim(),
+url:$("source-url").value.trim(),
+visible:true
+});
+
+$("source-title").value="";
+$("source-description").value="";
+$("source-url").value="";
+
+renderAll();
+saveToLocalStorage();
+
+showStatus("A forrás hozzáadva.","success");
+}
+
+function editSource(index){
+const x=data.sources[index];
+
+$("source-title").value=x.title||"";
+$("source-description").value=x.description||"";
+$("source-url").value=x.url||"";
+
+editing.source=index;
+
+showSection("sources",document.querySelector('.sidebar button[onclick*="sources"]'));
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderAll(){
+normalizeData();
+refreshPeriodSelects();
+renderPeriods();
+renderPlaces();
+renderEvents();
+renderPeople();
+renderCounties();
+renderMaps();
+renderGallery();
+renderSources();
+updateStats();
+}
+
+function updateStats(){
+$("statPeriods").textContent=data.historicalPeriods.length;
+$("statPlaces").textContent=data.historicalPlaces.length;
+$("statEvents").textContent=data.historicalEvents.length;
+$("statGallery").textContent=data.gallery.length;
+}
+
+function renderPeriods(){
+const c=$("periodList");
+
+if(!data.historicalPeriods.length){
+c.innerHTML='<div class="empty">Még nincs történelmi korszak.</div>';
+return;
+}
+
+c.innerHTML=data.historicalPeriods
+.map((x,i)=>`
+<div class="list-item">
+<div class="list-info">
+<strong>${escapeHtml(x.title)}</strong>
+<span>${x.startYear??"?"} – ${x.endYear??"napjainkig"} · ${escapeHtml(x.description||"")}</span>
+</div>
+<div class="actions">
+<button class="btn btn-small" onclick="editPeriod(${i})">Szerkesztés</button>
+<button class="btn btn-small btn-danger" onclick="removeItem('historicalPeriods',${i})">Törlés</button>
+</div>
+</div>
+`).join("");
+}
+
+function renderPlaces(){
+const c=$("placeList");
+
+if(!data.historicalPlaces.length){
+c.innerHTML='<div class="empty">Még nincs történelmi helyszín.</div>';
+return;
+}
+
+c.innerHTML=data.historicalPlaces
+.map((x,i)=>`
+<div class="list-item">
+<div class="list-info">
+<strong>📍 ${escapeHtml(x.title)}</strong>
+<span>
+${escapeHtml(x.period||"Nincs korszak")}
+${x.latitude!=null&&x.longitude!=null?" · "+x.latitude+", "+x.longitude:""}
+</span>
+</div>
+<div class="actions">
+${x.latitude!=null&&x.longitude!=null?
+`<button class="btn btn-small" onclick="window.open('https://www.openstreetmap.org/?mlat=${x.latitude}&mlon=${x.longitude}#map=16/${x.latitude}/${x.longitude}','_blank')">Térkép</button>`:""}
+<button class="btn btn-small" onclick="editPlace(${i})">Szerkesztés</button>
+<button class="btn btn-small btn-danger" onclick="removeItem('historicalPlaces',${i})">Törlés</button>
+</div>
+</div>
+`).join("");
+}
+
+function renderEvents(){
+const c=$("eventList");
+
+if(!data.historicalEvents.length){
+c.innerHTML='<div class="empty">Még nincs történelmi esemény.</div>';
+return;
+}
+
+c.innerHTML=data.historicalEvents
+.map((x,i)=>`
+<div class="list-item">
+<div class="list-info">
+<strong>⚔️ ${escapeHtml(x.title)}</strong>
+<span>${x.year??"?"} · ${escapeHtml(x.description||"")}</span>
+</div>
+<div class="actions">
+<button class="btn btn-small" onclick="editEvent(${i})">Szerkesztés</button>
+<button class="btn btn-small btn-danger" onclick="removeItem('historicalEvents',${i})">Törlés</button>
+</div>
+</div>
+`).join("");
+}
+
+function renderPeople(){
+const c=$("personList");
+
+if(!data.historicalPeople.length){
+c.innerHTML='<div class="empty">Még nincs történelmi személyiség.</div>';
+return;
+}
+
+c.innerHTML=data.historicalPeople
+.map((x,i)=>`
+<div class="list-item">
+<div class="list-info">
+<strong>👑 ${escapeHtml(x.name)}</strong>
+<span>${escapeHtml(x.period||"")} · ${x.year??""}</span>
+</div>
+<div class="actions">
+<button class="btn btn-small" onclick="editPerson(${i})">Szerkesztés</button>
+<button class="btn btn-small btn-danger" onclick="removeItem('historicalPeople',${i})">Törlés</button>
+</div>
+</div>
+`).join("");
+}
+
+function renderCounties(){
+const c=$("countyList");
+
+if(!data.historicalCounties.length){
+c.innerHTML='<div class="empty">Még nincs vármegye.</div>';
+return;
+}
+
+c.innerHTML=data.historicalCounties
+.map((x,i)=>`
+<div class="list-item">
+<div class="list-info">
+<strong>🏛️ ${escapeHtml(x.title)}</strong>
+<span>${escapeHtml(x.period||"")} · ${x.geojson?"GeoJSON ✓":"GeoJSON nincs megadva"}</span>
+</div>
+<div class="actions">
+<button class="btn btn-small" onclick="editCounty(${i})">Szerkesztés</button>
+<button class="btn btn-small btn-danger" onclick="removeItem('historicalCounties',${i})">Törlés</button>
+</div>
+</div>
+`).join("");
+}
+
+function renderMaps(){
+const c=$("mapList");
+
+if(!data.historicalMaps.length){
+c.innerHTML='<div class="empty">Még nincs történelmi térkép.</div>';
+return;
+}
+
+c.innerHTML=data.historicalMaps
+.map((x,i)=>`
+<div class="list-item">
+<div class="list-info">
+<strong>🗺️ ${escapeHtml(x.title)}</strong>
+<span>${x.year??"?"} · ${escapeHtml(x.period||"")}</span>
+</div>
+<div class="actions">
+<button class="btn btn-small" onclick="editMap(${i})">Szerkesztés</button>
+<button class="btn btn-small btn-danger" onclick="removeItem('historicalMaps',${i})">Törlés</button>
+</div>
+</div>
+`).join("");
+}
+
+function renderGallery(){
+const c=$("galleryList");
+
+if(!data.gallery.length){
+c.innerHTML='<div class="empty">Még nincs galériaelem.</div>';
+return;
+}
+
+c.innerHTML=[...data.gallery]
+.map((x,originalIndex)=>({x,originalIndex}))
+.sort((a,b)=>(a.x.order??0)-(b.x.order??0))
+.map(({x,originalIndex})=>`
+<div class="list-item">
+<div class="list-info">
+<strong>📷 ${escapeHtml(x.title)}</strong>
+<span>
+${escapeHtml(x.category||"")}
+${x.period?" · "+escapeHtml(x.period):""}
+${x.latitude!=null&&x.longitude!=null?" · "+x.latitude+", "+x.longitude:""}
+</span>
+</div>
+<div class="actions">
+${x.latitude!=null&&x.longitude!=null?
+`<button class="btn btn-small" onclick="window.open('https://www.openstreetmap.org/?mlat=${x.latitude}&mlon=${x.longitude}#map=16/${x.latitude}/${x.longitude}','_blank')">📍 Térkép</button>`:""}
+<button class="btn btn-small" onclick="editGallery(${originalIndex})">Szerkesztés</button>
+<button class="btn btn-small btn-danger" onclick="removeItem('gallery',${originalIndex})">Törlés</button>
+</div>
+</div>
+`).join("");
+}
+
+function renderSources(){
+const c=$("sourceList");
+
+if(!data.sources.length){
+c.innerHTML='<div class="empty">Még nincs forrás.</div>';
+return;
+}
+
+c.innerHTML=data.sources
+.map((x,i)=>`
+<div class="list-item">
+<div class="list-info">
+<strong>📚 ${escapeHtml(x.title)}</strong>
+<span>${escapeHtml(x.description||"")}</span>
+</div>
+<div class="actions">
+${x.url?`<a class="btn btn-small" href="${escapeHtml(x.url)}" target="_blank" rel="noopener noreferrer">Megnyitás</a>`:""}
+<button class="btn btn-small" onclick="editSource(${i})">Szerkesztés</button>
+<button class="btn btn-small btn-danger" onclick="removeItem('sources',${i})">Törlés</button>
+</div>
+</div>
+`).join("");
+}
+
+document.addEventListener("input",e=>{
+if(e.target.matches("input,textarea,select")){
+window.__atlasAdminDirty=true;
+}
+});
+
+window.addEventListener("beforeunload",e=>{
+if(window.__atlasAdminDirty){
+e.preventDefault();
+e.returnValue="";
+}
+});
+
+if(sessionStorage.getItem("atlasz_admin_logged")==="true"){
+showAdmin();
+}
 
 loadStoredData();
-
+renderAll();
 loadAtlasJSON();
-
 </script>
 
 </body>
