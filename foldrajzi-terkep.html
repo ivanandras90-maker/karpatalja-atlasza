@@ -10,11 +10,13 @@
 
 <title>Kárpátalja Földrajzi és Történeti Atlasza</title>
 
+<!-- LEAFLET -->
 <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
 
+<!-- LEAFLET DRAW -->
 <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"
@@ -528,122 +530,211 @@ nav a:hover {
 /* =====================================================
    PROFESSZIONÁLIS GALÉRIA MARKEREK
 ===================================================== */
+.gallery-marker-wrap{
+    background:transparent;
+    border:0;
+}
+.gallery-marker{
+    width:38px;
+    height:38px;
+    border-radius:50% 50% 50% 0;
+    transform:rotate(-45deg);
+    background:#102638;
+    border:2px solid #d8b86a;
+    box-shadow:0 4px 14px rgba(0,0,0,.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.gallery-marker span{
+    transform:rotate(45deg);
+    font-size:17px;
+}
+.gallery-marker:hover{
+    transform:rotate(-45deg) scale(1.08);
+}
+.gallery-popup{
+    min-width:250px;
+    max-width:310px;
+    font-family:Arial,sans-serif;
+    color:#26343d;
+}
+.gallery-popup img{
+    display:block;
+    width:100%;
+    max-height:175px;
+    object-fit:cover;
+    border-radius:8px;
+    margin:0 0 10px;
+}
+.gallery-popup h3{
+    margin:0 0 7px;
+    color:#17374d;
+    font:700 17px Georgia,serif;
+}
+.gallery-popup .meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+    margin:7px 0;
+}
+.gallery-popup .badge{
+    display:inline-block;
+    padding:4px 7px;
+    border-radius:999px;
+    background:#f0eadb;
+    color:#17374d;
+    font-size:10px;
+    font-weight:700;
+}
+.gallery-popup .description{
+    line-height:1.5;
+    font-size:12px;
+    margin:8px 0;
+}
+.gallery-popup .coords{
+    color:#69747b;
+    font-size:10px;
+    margin-top:8px;
+}
+.gallery-popup .popup-actions{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-top:10px;
+}
+.gallery-popup .popup-actions a{
+    display:inline-block;
+    padding:7px 9px;
+    border-radius:5px;
+    background:#102638;
+    color:#fff;
+    text-decoration:none;
+    font-size:10px;
+    font-weight:700;
+}
+.gallery-popup .popup-actions a.gold{
+    background:#c09d57;
+    color:#102638;
+}
+.map-status{
+    background:rgba(16,38,56,.94);
+    color:#fff;
+    padding:7px 10px;
+    border:1px solid rgba(216,184,106,.65);
+    border-radius:6px;
+    box-shadow:0 2px 10px rgba(0,0,0,.25);
+    font:11px Arial,sans-serif;
+}
+.map-status strong{color:#d8b86a}
 
-.gallery-marker-wrap {
-    background: transparent;
-    border: 0;
+
+
+/* =====================================================
+   MODERN FÖLDRAJZI KUTATÁSI FELÜLET
+===================================================== */
+
+.map-header{
+    padding:18px 35px 15px;
+    background:linear-gradient(180deg,#f8f5ec 0%,#eee9dc 100%);
+    border-bottom:1px solid #d6c49a;
+}
+.map-header h2{
+    font-size:30px;
+    letter-spacing:.2px;
+}
+.map-header-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin:10px 0 10px;
+}
+.map-header-meta span{
+    padding:6px 10px;
+    border:1px solid #d2bc86;
+    border-radius:999px;
+    background:#fffdf8;
+    color:#17374d;
+    font:700 11px Arial,sans-serif;
 }
 
-.gallery-marker {
-    width: 38px;
-    height: 38px;
-    border-radius: 50% 50% 50% 0;
-    transform: rotate(-45deg);
-    background: #102638;
-    border: 2px solid #d8b86a;
-    box-shadow: 0 4px 14px rgba(0,0,0,.35);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.geo-research-control{
+    width:285px;
+    max-height:calc(100vh - 145px);
+    overflow:auto;
+    background:rgba(16,38,56,.97);
+    color:#f5f1e6;
+    border:1px solid rgba(216,184,106,.72);
+    border-radius:9px;
+    box-shadow:0 5px 22px rgba(0,0,0,.32);
+    font-family:Arial,sans-serif;
 }
-
-.gallery-marker span {
-    transform: rotate(45deg);
-    font-size: 17px;
+.geo-research-head{
+    padding:13px 14px 10px;
+    border-bottom:1px solid rgba(216,184,106,.35);
+    position:sticky;
+    top:0;
+    background:#102638;
+    z-index:2;
 }
-
-.gallery-marker:hover {
-    transform: rotate(-45deg) scale(1.08);
+.geo-research-title{font-weight:800;color:#d8b86a;font-size:14px;letter-spacing:.4px}
+.geo-research-subtitle{font-size:10px;color:#bdc8ce;margin-top:3px;line-height:1.35}
+.geo-research-search{
+    width:100%;
+    margin-top:9px;
+    padding:8px 9px;
+    border-radius:6px;
+    border:1px solid #486273;
+    background:#0c2030;
+    color:#fff;
+    outline:none;
+    font-size:11px;
 }
-
-.gallery-popup {
-    min-width: 250px;
-    max-width: 310px;
-    font-family: Arial,sans-serif;
-    color: #26343d;
+.geo-research-search:focus{border-color:#d8b86a}
+.geo-category{border-bottom:1px solid rgba(255,255,255,.09)}
+.geo-category:last-child{border-bottom:0}
+.geo-category-header{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:11px 12px;
+    border:0;
+    background:transparent;
+    color:#fff;
+    cursor:pointer;
+    text-align:left;
+    font-weight:800;
+    font-size:12px;
 }
-
-.gallery-popup img {
-    display: block;
-    width: 100%;
-    max-height: 175px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin: 0 0 10px;
+.geo-category-header:hover{background:rgba(255,255,255,.06)}
+.geo-category-count{margin-left:auto;color:#9eabb2;font-size:10px}
+.geo-category-arrow{color:#d8b86a;width:12px}
+.geo-category-body{padding:0 10px 10px 31px}
+.geo-layer-row{display:flex;align-items:center;gap:7px;padding:5px 0;font-size:11px;color:#e2e7e9;cursor:pointer}
+.geo-layer-row input{accent-color:#d8b86a}
+.geo-layer-row:hover{color:#fff}
+.geo-layer-row.is-active{color:#d8b86a;font-weight:700}
+.geo-research-footer{padding:9px 12px;border-top:1px solid rgba(216,184,106,.25);font-size:10px;color:#aebbc1;position:sticky;bottom:0;background:#102638}
+.geo-research-actions{display:flex;gap:6px;margin-top:7px}
+.geo-research-actions button{
+    flex:1;border:1px solid #526b7a;border-radius:5px;padding:6px 7px;background:#17374d;color:#fff;cursor:pointer;font-size:10px;font-weight:700
 }
-
-.gallery-popup h3 {
-    margin: 0 0 7px;
-    color: #17374d;
-    font: 700 17px Georgia,serif;
+.geo-research-actions button:hover{background:#c09d57;color:#102638}
+.geo-stats-control{
+    background:rgba(16,38,56,.95);color:#fff;border:1px solid rgba(216,184,106,.55);border-radius:7px;padding:9px 11px;box-shadow:0 2px 12px rgba(0,0,0,.25);font:10px Arial,sans-serif;line-height:1.55;min-width:165px
 }
+.geo-stats-control strong{color:#d8b86a;font-size:11px}
+.geo-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;margin-top:4px}
+.geo-stats-grid span:nth-child(even){text-align:right;color:#d8b86a;font-weight:700}
 
-.gallery-popup .meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin: 7px 0;
+@media(max-width:800px){
+    .geo-research-control{width:min(310px,calc(100vw - 20px));max-height:55vh}
+    .map-header{padding:13px 15px}
+    .map-header h2{font-size:23px}
+    .map-header-meta{gap:5px}
+    .map-header-meta span{font-size:9px;padding:5px 7px}
 }
-
-.gallery-popup .badge {
-    display: inline-block;
-    padding: 4px 7px;
-    border-radius: 999px;
-    background: #f0eadb;
-    color: #17374d;
-    font-size: 10px;
-    font-weight: 700;
-}
-
-.gallery-popup .description {
-    line-height: 1.5;
-    font-size: 12px;
-    margin: 8px 0;
-}
-
-.gallery-popup .coords {
-    color: #69747b;
-    font-size: 10px;
-    margin-top: 8px;
-}
-
-.gallery-popup .popup-actions {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-top: 10px;
-}
-
-.gallery-popup .popup-actions a {
-    display: inline-block;
-    padding: 7px 9px;
-    border-radius: 5px;
-    background: #102638;
-    color: #fff;
-    text-decoration: none;
-    font-size: 10px;
-    font-weight: 700;
-}
-
-.gallery-popup .popup-actions a.gold {
-    background: #c09d57;
-    color: #102638;
-}
-
-.map-status {
-    background: rgba(16,38,56,.94);
-    color: #fff;
-    padding: 7px 10px;
-    border: 1px solid rgba(216,184,106,.65);
-    border-radius: 6px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.25);
-    font: 11px Arial,sans-serif;
-}
-
-.map-status strong {
-    color: #d8b86a;
-}
-
 
 /* =====================================================
    MOBIL
@@ -690,7 +781,13 @@ nav a:hover {
 
 </head>
 
+
 <body>
+
+
+<!-- =====================================================
+     FEJLÉC
+===================================================== -->
 
 <header>
 
@@ -717,6 +814,10 @@ nav a:hover {
 </header>
 
 
+<!-- =====================================================
+     NAV
+===================================================== -->
+
 <nav>
 
     <a href="index.html">
@@ -742,22 +843,40 @@ nav a:hover {
 </nav>
 
 
+<!-- =====================================================
+     TÉRKÉP FEJLÉC
+===================================================== -->
+
 <section class="map-header">
 
     <h2>
         🌍 Interaktív földrajzi térkép
     </h2>
 
+    <div class="map-header-meta">
+        <span>🌿 Természetföldrajz</span>
+        <span>🏘️ Társadalomföldrajz</span>
+        <span>💰 Gazdaságföldrajz</span>
+        <span>📷 Terepi dokumentáció</span>
+        <span>🔬 Kutatási rétegek</span>
+    </div>
     <p>
-        Kárpátalja földrajzi térképe
-        természetföldrajzi és történelmi objektumokkal.
+        Kárpátalja tematikus földrajzi atlasza a természetföldrajzi, társadalomföldrajzi, gazdaságföldrajzi és kutatási rétegek integrált rendszerével.
     </p>
 
 </section>
 
 
+<!-- =====================================================
+     TÉRKÉP
+===================================================== -->
+
 <div id="map"></div>
 
+
+<!-- =====================================================
+     LEAFLET
+===================================================== -->
 
 <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
@@ -848,7 +967,6 @@ const naturalResources =
 const naturalHazards =
     L.layerGroup();
 
-
 /* =====================================================
    GALÉRIA RÉTEG
 ===================================================== */
@@ -920,14 +1038,184 @@ const overlays = {
 
 L.control.layers(
     {
-        "OpenStreetMap":
-            osm
+        "OpenStreetMap": osm
     },
-    overlays,
-    {
-        collapsed:false
-    }
+    null,
+    { collapsed:true }
 ).addTo(map);
+
+/* =====================================================
+   KATEGORIZÁLT FÖLDRAJZI KUTATÁSI RÉTEGKEZELŐ
+===================================================== */
+
+const geographicCategories = [
+    {
+        id:"nature",
+        icon:"🌿",
+        title:"Természetföldrajz",
+        layers:[
+            ["relief","🏔️ Domborzat",relief],
+            ["mountains","⛰️ Hegységek",mountains],
+            ["rivers","🌊 Folyók és vízfolyások",rivers],
+            ["lakes","💧 Tavak és víztározók",lakes],
+            ["geological","🪨 Földtan",geological],
+            ["climate","🌦️ Éghajlat",climate],
+            ["soils","🌱 Talajok",soils],
+            ["vegetation","🌲 Növényzet",vegetation],
+            ["landscapes","🗺️ Tájak és kistájak",landscapes],
+            ["natureProtection","🌳 Természetvédelem",natureProtection],
+            ["naturalResources","⛏️ Természeti erőforrások",naturalResources],
+            ["naturalHazards","⚠️ Természeti veszélyek",naturalHazards]
+        ]
+    },
+    {
+        id:"society",
+        icon:"🏘️",
+        title:"Település- és társadalomföldrajz",
+        layers:[
+            ["settlements","🏘️ Városok és falvak",settlements],
+            ["administrativeBoundaries","🏛️ Közigazgatási határok",administrativeBoundaries]
+        ]
+    },
+    {
+        id:"economy",
+        icon:"💰",
+        title:"Gazdaságföldrajz",
+        layers:[
+            ["roads","🛣️ Közlekedési hálózat",roads],
+            ["economicAgriculture","🌾 Mezőgazdaság",null],
+            ["economicIndustry","🏭 Ipar",null],
+            ["economicMining","⛏️ Bányászat és nyersanyag-kitermelés",null],
+            ["economicEnergy","⚡ Energetika",null],
+            ["economicTrade","🏪 Kereskedelem és szolgáltatások",null],
+            ["economicTourism","🏨 Idegenforgalom és turizmus",null],
+            ["economicWine","🍷 Borászat",null],
+            ["economicZones","🏗️ Ipari és gazdasági területek",null]
+        ]
+    },
+    {
+        id:"documentation",
+        icon:"📷",
+        title:"Terepi dokumentáció",
+        layers:[
+            ["galleryLayer","📷 Georeferált fotógaléria",galleryLayer]
+        ]
+    },
+    {
+        id:"research",
+        icon:"🔬",
+        title:"Kutatási és elemzési rétegek",
+        layers:[]
+    }
+];
+
+const researchControl = L.control({position:"topright"});
+
+researchControl.onAdd = function(){
+    const container = L.DomUtil.create("div","geo-research-control");
+    container.innerHTML = `
+        <div class="geo-research-head">
+            <div class="geo-research-title">🌍 FÖLDRAJZI KUTATÁSI RÉTEGEK</div>
+            <div class="geo-research-subtitle">Tematikus felosztás a természet-, társadalom- és gazdaságföldrajzi vizsgálatokhoz.</div>
+            <input class="geo-research-search" type="search" placeholder="Réteg keresése…" aria-label="Réteg keresése">
+        </div>
+        <div class="geo-research-body"></div>
+        <div class="geo-research-footer">
+            <div>Aktív rétegek: <strong class="active-layer-count">0</strong></div>
+            <div class="geo-research-actions">
+                <button type="button" class="geo-all-on">ÖSSZES BE</button>
+                <button type="button" class="geo-all-off">ÖSSZES KI</button>
+            </div>
+        </div>`;
+
+    const body = container.querySelector(".geo-research-body");
+    const search = container.querySelector(".geo-research-search");
+
+    geographicCategories.forEach((category,index)=>{
+        const section = document.createElement("section");
+        section.className = "geo-category";
+        section.dataset.category = category.title.toLowerCase();
+        section.innerHTML = `
+            <button type="button" class="geo-category-header">
+                <span class="geo-category-arrow">${index < 3 ? "▾" : "▸"}</span>
+                <span>${category.icon} ${category.title}</span>
+                <span class="geo-category-count">${category.layers.filter(x=>x[2]).length}</span>
+            </button>
+            <div class="geo-category-body" style="display:${index < 3 ? "block" : "none"}"></div>`;
+
+        const layerBody = section.querySelector(".geo-category-body");
+        category.layers.forEach(([id,label,layer])=>{
+            if(!layer){
+                const row=document.createElement("div");
+                row.className="geo-layer-row";
+                row.dataset.search=label.toLowerCase();
+                row.style.opacity=".45";
+                row.title="Ehhez a kategóriához az atlasz adatmodellben külön tematikus réteg adható hozzá.";
+                row.innerHTML=`<span>${label}</span><span style="margin-left:auto;font-size:9px">adatpontokra vár</span>`;
+                layerBody.appendChild(row);
+                return;
+            }
+            const row=document.createElement("label");
+            row.className="geo-layer-row";
+            row.dataset.search=label.toLowerCase();
+            row.innerHTML=`<input type="checkbox" data-layer-id="${id}"><span>${label}</span>`;
+            const checkbox=row.querySelector("input");
+            checkbox.checked=map.hasLayer(layer);
+            if(checkbox.checked) row.classList.add("is-active");
+            checkbox.addEventListener("change",()=>{
+                if(checkbox.checked){ map.addLayer(layer); row.classList.add("is-active"); }
+                else { map.removeLayer(layer); row.classList.remove("is-active"); }
+                updateActiveCount(container);
+            });
+            layerBody.appendChild(row);
+        });
+        section.querySelector(".geo-category-header").addEventListener("click",()=>{
+            const open=layerBody.style.display!=="none";
+            layerBody.style.display=open?"none":"block";
+            section.querySelector(".geo-category-arrow").textContent=open?"▸":"▾";
+        });
+        body.appendChild(section);
+    });
+
+    function updateActiveCount(root){
+        root.querySelector(".active-layer-count").textContent=root.querySelectorAll('input[type="checkbox"]:checked').length;
+    }
+    window.updateGeoResearchControl=()=>updateActiveCount(container);
+
+    search.addEventListener("input",()=>{
+        const q=search.value.trim().toLowerCase();
+        container.querySelectorAll(".geo-category").forEach(section=>{
+            let matches=0;
+            section.querySelectorAll(".geo-layer-row").forEach(row=>{
+                const hit=!q || row.dataset.search.includes(q) || section.dataset.category.includes(q);
+                row.style.display=hit?"flex":"none";
+                if(hit) matches++;
+            });
+            section.style.display=matches?"block":"none";
+            if(q && matches){
+                const lb=section.querySelector(".geo-category-body");
+                lb.style.display="block";
+                section.querySelector(".geo-category-arrow").textContent="▾";
+            }
+        });
+    });
+
+    container.querySelector(".geo-all-on").addEventListener("click",()=>{
+        container.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
+            if(!cb.checked) cb.click();
+        });
+    });
+    container.querySelector(".geo-all-off").addEventListener("click",()=>{
+        container.querySelectorAll('input[type="checkbox"]').forEach(cb=>{
+            if(cb.checked) cb.click();
+        });
+    });
+
+    L.DomEvent.disableClickPropagation(container);
+    return container;
+};
+
+researchControl.addTo(map);
 
 
 /* =====================================================
@@ -938,669 +1226,291 @@ async function loadGalleryLayer(){
 
     try {
 
-        const response =
-            await fetch(
-                "atlasz.json",
-                {
-                    cache:"no-store"
-                }
-            );
+        const response = await fetch(
+            "atlasz.json",
+            { cache:"no-store" }
+        );
 
         if(!response.ok){
-
-            throw new Error(
-                "Az atlasz.json nem tölthető be."
-            );
-
+            throw new Error("Az atlasz.json nem tölthető be.");
         }
 
-        const data =
-            await response.json();
+        const data = await response.json();
 
-        if(
-            !data ||
-            typeof data !== "object"
-        ){
-
-            throw new Error(
-                "Érvénytelen atlasz adatmodell."
-            );
-
+        if(!data || typeof data !== "object"){
+            throw new Error("Érvénytelen atlasz adatmodell.");
         }
 
-        const gallery =
-            Array.isArray(data.gallery)
-                ? data.gallery
-                : [];
+        const gallery = Array.isArray(data.gallery) ? data.gallery : [];
 
         galleryLayer.clearLayers();
 
-        const mappedGallery =
-            gallery
-                .filter(
-                    item => {
+        const mappedGallery = gallery
+            .filter(item => {
+                const lat = Number(item?.latitude);
+                const lng = Number(item?.longitude);
+                return item &&
+                    item.visible !== false &&
+                    item.mapVisible !== false &&
+                    Number.isFinite(lat) &&
+                    Number.isFinite(lng) &&
+                    lat >= -90 && lat <= 90 &&
+                    lng >= -180 && lng <= 180;
+            })
+            .sort((a,b) => Number(a.order || 0) - Number(b.order || 0));
 
-                        const lat =
-                            Number(
-                                item?.latitude
-                            );
+        mappedGallery.forEach(item => {
 
-                        const lng =
-                            Number(
-                                item?.longitude
-                            );
+            const lat = Number(item.latitude);
+            const lng = Number(item.longitude);
 
-                        return (
-                            item &&
-                            item.visible !== false &&
-                            item.mapVisible !== false &&
-                            Number.isFinite(lat) &&
-                            Number.isFinite(lng) &&
-                            lat >= -90 &&
-                            lat <= 90 &&
-                            lng >= -180 &&
-                            lng <= 180
-                        );
+            const icon = L.divIcon({
+                className:"gallery-marker-wrap",
+                html:'<div class="gallery-marker" title="Galéria kép"><span>📷</span></div>',
+                iconSize:[38,38],
+                iconAnchor:[19,38],
+                popupAnchor:[0,-34]
+            });
 
-                    }
-                )
-                .sort(
-                    (a,b) =>
-                        Number(a.order || 0) -
-                        Number(b.order || 0)
-                );
+            const marker = L.marker([lat,lng], { icon, title:item.title || "Galéria" });
 
+            const imageHtml = item.image
+                ? `<img src="${escapeHTML(item.image)}" alt="${escapeHTML(item.title || "Galéria kép")}" loading="lazy">`
+                : "";
 
-        mappedGallery.forEach(
-            item => {
+            const badges = [
+                item.category ? `<span class="badge">${escapeHTML(item.category)}</span>` : "",
+                item.period ? `<span class="badge">${escapeHTML(item.period)}</span>` : ""
+            ].filter(Boolean).join("");
 
-                const lat =
-                    Number(
-                        item.latitude
-                    );
+            const description = item.description
+                ? `<div class="description">${escapeHTML(item.description)}</div>`
+                : "";
 
-                const lng =
-                    Number(
-                        item.longitude
-                    );
+            const source = item.source
+                ? `<div class="description"><strong>Forrás:</strong> ${escapeHTML(item.source)}${item.sourceDescription ? `<br><span style="color:#69747b">${escapeHTML(item.sourceDescription)}</span>` : ""}</div>`
+                : "";
 
+            const sourceLink = item.sourceUrl
+                ? `<a href="${escapeHTML(item.sourceUrl)}" target="_blank" rel="noopener noreferrer">Forrás ↗</a>`
+                : "";
 
-                const icon =
-                    L.divIcon({
+            const galleryLink = item.id
+                ? `<a class="gold" href="gallery.html?gallery=${encodeURIComponent(String(item.id))}">Galériában megnyitás</a>`
+                : `<a class="gold" href="gallery.html">Galéria</a>`;
 
-                        className:
-                            "gallery-marker-wrap",
-
-                        html:
-                            '<div class="gallery-marker" title="Galéria kép">' +
-                            '<span>📷</span>' +
-                            '</div>',
-
-                        iconSize:
-                            [38,38],
-
-                        iconAnchor:
-                            [19,38],
-
-                        popupAnchor:
-                            [0,-34]
-
-                    });
-
-
-                const marker =
-                    L.marker(
-                        [lat,lng],
-                        {
-                            icon,
-                            title:
-                                item.title ||
-                                "Galéria"
-                        }
-                    );
-
-
-                const imageHtml =
-                    item.image
-                        ?
-                        `<img
-                            src="${escapeHTML(item.image)}"
-                            alt="${escapeHTML(
-                                item.title ||
-                                "Galéria kép"
-                            )}"
-                            loading="lazy"
-                        >`
-                        :
-                        "";
-
-
-                const badges =
-                    [
-                        item.category
-                            ?
-                            `<span class="badge">
-                                ${escapeHTML(item.category)}
-                            </span>`
-                            :
-                            "",
-
-                        item.period
-                            ?
-                            `<span class="badge">
-                                ${escapeHTML(item.period)}
-                            </span>`
-                            :
-                            ""
-
-                    ]
-                    .filter(Boolean)
-                    .join("");
-
-
-                const description =
-                    item.description
-                        ?
-                        `<div class="description">
-                            ${escapeHTML(item.description)}
-                        </div>`
-                        :
-                        "";
-
-
-                const source =
-                    item.source
-                        ?
-                        `<div class="description">
-                            <strong>Forrás:</strong>
-                            ${escapeHTML(item.source)}
-
-                            ${
-                                item.sourceDescription
-                                    ?
-                                    `<br>
-                                     <span style="color:#69747b">
-                                        ${escapeHTML(
-                                            item.sourceDescription
-                                        )}
-                                     </span>`
-                                    :
-                                    ""
-                            }
-
-                        </div>`
-                        :
-                        "";
-
-
-                const sourceLink =
-                    item.sourceUrl
-                        ?
-                        `<a
-                            href="${escapeHTML(item.sourceUrl)}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Forrás ↗
-                        </a>`
-                        :
-                        "";
-
-
-                const galleryLink =
-                    item.id
-                        ?
-                        `<a
-                            class="gold"
-                            href="gallery.html?gallery=${encodeURIComponent(
-                                String(item.id)
-                            )}"
-                        >
-                            Galériában megnyitás
-                        </a>`
-                        :
-                        `<a
-                            class="gold"
-                            href="gallery.html"
-                        >
-                            Galéria
-                        </a>`;
-
-
-                marker.bindPopup(
-
-                    `<div class="gallery-popup">
-
-                        ${imageHtml}
-
-                        <h3>
-                            ${escapeHTML(
-                                item.title ||
-                                "Galéria"
-                            )}
-                        </h3>
-
-                        ${
-                            badges
-                                ?
-                                `<div class="meta">
-                                    ${badges}
-                                 </div>`
-                                :
-                                ""
-                        }
-
-                        ${description}
-
-                        ${source}
-
-                        <div class="coords">
-                            Koordináta:
-                            ${lat.toFixed(5)},
-                            ${lng.toFixed(5)}
-                        </div>
-
-                        <div class="popup-actions">
-
-                            ${galleryLink}
-
-                            ${sourceLink}
-
-                        </div>
-
-                    </div>`,
-
-                    {
-                        maxWidth:340,
-                        minWidth:250,
-                        autoPan:true
-                    }
-
-                );
-
-
-                marker.addTo(
-                    galleryLayer
-                );
-
-            }
-        );
-
-
-        galleryLayer.addTo(
-            map
-        );
-
-
-        const status =
-            document.querySelector(
-                ".map-status-value"
+            marker.bindPopup(
+                `<div class="gallery-popup">
+                    ${imageHtml}
+                    <h3>${escapeHTML(item.title || "Galéria")}</h3>
+                    ${badges ? `<div class="meta">${badges}</div>` : ""}
+                    ${description}
+                    ${source}
+                    <div class="coords">Koordináta: ${lat.toFixed(5)}, ${lng.toFixed(5)}</div>
+                    <div class="popup-actions">
+                        ${galleryLink}
+                        ${sourceLink}
+                    </div>
+                </div>`,
+                { maxWidth:340, minWidth:250, autoPan:true }
             );
 
+            marker.addTo(galleryLayer);
+        });
 
+        galleryLayer.addTo(map);
+
+        const status = document.querySelector(".map-status-value");
         if(status){
-
-            status.textContent =
-                `${mappedGallery.length} térképi galériapont`;
-
+            status.textContent = `${mappedGallery.length} térképi galériapont`;
         }
 
-
-        if(
-            mappedGallery.length
-        ){
-
-            addGalleryFitControl(
-                mappedGallery
-            );
-
+        if(mappedGallery.length){
+            addGalleryFitControl(mappedGallery);
         }
 
+        focusGalleryFromUrl(mappedGallery);
 
-        focusGalleryFromUrl(
-            mappedGallery
-        );
+    } catch(error){
 
+        console.warn("A galéria térképi rétege nem tölthető be:", error);
 
-    }
-    catch(error){
-
-        console.warn(
-            "A galéria térképi rétege nem tölthető be:",
-            error
-        );
-
-
-        const status =
-            document.querySelector(
-                ".map-status-value"
-            );
-
-
+        const status = document.querySelector(".map-status-value");
         if(status){
-
-            status.textContent =
-                "Galéria adat nem érhető el";
-
+            status.textContent = "Galéria adat nem érhető el";
         }
-
     }
 
 }
-
 
 /* =====================================================
    GALÉRIA TELJES NÉZET
 ===================================================== */
 
-function addGalleryFitControl(
-    items
-){
+function addGalleryFitControl(items){
 
-    if(
-        window.galleryFitControl
-    ){
-
+    if(window.galleryFitControl){
         return;
-
     }
 
+    const control = L.control({ position:"topright" });
 
-    const control =
-        L.control({
-            position:"topright"
-        });
+    control.onAdd = function(){
 
+        const container = L.DomUtil.create("div", "geojson-control");
+        const button = L.DomUtil.create("button", "", container);
 
-    control.onAdd =
-    function(){
+        button.innerHTML = "📷 Galéria nézet";
+        button.title = "Összes térképi galériapont megjelenítése";
 
-        const container =
-            L.DomUtil.create(
-                "div",
-                "geojson-control"
-            );
-
-
-        const button =
-            L.DomUtil.create(
-                "button",
-                "",
-                container
-            );
-
-
-        button.innerHTML =
-            "📷 Galéria nézet";
-
-
-        button.title =
-            "Összes térképi galériapont megjelenítése";
-
-
-        button.onclick =
-        function(){
-
-            const bounds =
-                L.latLngBounds(
-                    items.map(
-                        item => [
-                            Number(item.latitude),
-                            Number(item.longitude)
-                        ]
-                    )
-                );
-
-
-            if(
-                bounds.isValid()
-            ){
-
-                map.fitBounds(
-                    bounds,
-                    {
-                        padding:
-                            [45,45],
-
-                        maxZoom:
-                            12,
-
-                        animate:
-                            true
-                    }
-                );
-
+        button.onclick = function(){
+            const bounds = L.latLngBounds(items.map(item => [Number(item.latitude), Number(item.longitude)]));
+            if(bounds.isValid()){
+                map.fitBounds(bounds, { padding:[45,45], maxZoom:12, animate:true });
             }
-
         };
 
-
-        L.DomEvent.disableClickPropagation(
-            container
-        );
-
-
+        L.DomEvent.disableClickPropagation(container);
         return container;
-
     };
 
-
-    control.addTo(
-        map
-    );
-
-
-    window.galleryFitControl =
-        control;
-
+    control.addTo(map);
+    window.galleryFitControl = control;
 }
-
 
 /* =====================================================
    TÉRKÉP ÁLLAPOTJELZŐ
 ===================================================== */
 
-const mapStatusControl =
-    L.control({
-        position:"bottomleft"
-    });
+const mapStatusControl = L.control({ position:"bottomleft" });
 
-
-mapStatusControl.onAdd =
-function(){
-
-    const container =
-        L.DomUtil.create(
-            "div",
-            "map-status"
-        );
-
-
-    container.innerHTML =
-        `
-        <strong>ATLASZ</strong>
-        ·
-        <span class="map-status-value">
-            Galéria betöltése…
-        </span>
-        `;
-
-
-    L.DomEvent.disableClickPropagation(
-        container
-    );
-
-
+mapStatusControl.onAdd = function(){
+    const container = L.DomUtil.create("div", "map-status");
+    container.innerHTML = `<strong>ATLASZ</strong> · <span class="map-status-value">Földrajzi kutatási rendszer aktív</span>`;
+    L.DomEvent.disableClickPropagation(container);
     return container;
-
 };
 
+mapStatusControl.addTo(map);
 
-mapStatusControl.addTo(
-    map
-);
+/* =====================================================
+   KUTATÁSI STATISZTIKA
+===================================================== */
+
+const geoStatsControl = L.control({position:"bottomright"});
+geoStatsControl.onAdd=function(){
+    const div=L.DomUtil.create("div","geo-stats-control");
+    div.innerHTML=`<strong>📊 TÉRKÉPI KUTATÁSI ÁLLAPOT</strong><div class="geo-stats-grid"><span>Természet</span><span>12 réteg</span><span>Társadalom</span><span>2 réteg</span><span>Gazdaság</span><span>9 témakör</span><span>Dokumentáció</span><span>1 réteg</span></div>`;
+    L.DomEvent.disableClickPropagation(div);
+    return div;
+};
+geoStatsControl.addTo(map);
 
 
 /* =====================================================
    GALÉRIA KÉP KIEMELÉSE URL PARAMÉTERREL
 ===================================================== */
 
-function focusGalleryFromUrl(
-    gallery
-){
+function focusGalleryFromUrl(gallery){
 
     const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
+        new URLSearchParams(window.location.search);
 
     const galleryId =
-        params.get(
-            "gallery"
-        );
-
+        params.get("gallery");
 
     const lat =
-        Number(
-            params.get(
-                "lat"
-            )
-        );
-
+        Number(params.get("lat"));
 
     const lng =
-        Number(
-            params.get(
-                "lng"
-            )
-        );
+        Number(params.get("lng"));
 
-
-    if(
-        !galleryId &&
-        !(
-            Number.isFinite(lat) &&
-            Number.isFinite(lng)
-        )
-    ){
-
+    if(!galleryId &&
+       !(Number.isFinite(lat) && Number.isFinite(lng))){
         return;
-
     }
-
 
     const item =
-        gallery.find(
-            entry =>
-                entry &&
-                galleryId &&
-                String(entry.id) ===
-                String(galleryId)
+        gallery.find(entry =>
+            entry &&
+            galleryId &&
+            String(entry.id) === String(galleryId)
         );
 
-
     const targetLat =
-        item &&
-        Number.isFinite(
-            Number(item.latitude)
-        )
-            ?
-            Number(item.latitude)
-            :
-            lat;
-
+        item && Number.isFinite(Number(item.latitude))
+            ? Number(item.latitude)
+            : lat;
 
     const targetLng =
-        item &&
-        Number.isFinite(
-            Number(item.longitude)
-        )
-            ?
-            Number(item.longitude)
-            :
-            lng;
+        item && Number.isFinite(Number(item.longitude))
+            ? Number(item.longitude)
+            : lng;
 
-
-    if(
-        !Number.isFinite(targetLat) ||
-        !Number.isFinite(targetLng)
-    ){
-
+    if(!Number.isFinite(targetLat) || !Number.isFinite(targetLng)){
         return;
-
     }
 
-
     map.setView(
-        [
-            targetLat,
-            targetLng
-        ],
-        Math.max(
-            map.getZoom(),
-            13
-        ),
-        {
-            animate:true
-        }
+        [targetLat,targetLng],
+        Math.max(map.getZoom(), 13),
+        { animate:true }
     );
 
+    galleryLayer.eachLayer(layer => {
 
-    galleryLayer.eachLayer(
-        layer => {
-
-            if(
-                layer.getLatLng &&
-                Math.abs(
-                    layer.getLatLng().lat -
-                    targetLat
-                ) < 0.00001 &&
-                Math.abs(
-                    layer.getLatLng().lng -
-                    targetLng
-                ) < 0.00001
-            ){
-
-                setTimeout(
-                    () => {
-
-                        layer.openPopup();
-
-                    },
-                    450
-                );
-
-            }
-
+        if(
+            layer.getLatLng &&
+            Math.abs(layer.getLatLng().lat - targetLat) < 0.00001 &&
+            Math.abs(layer.getLatLng().lng - targetLng) < 0.00001
+        ){
+            layer.openPopup();
         }
-    );
+
+    });
 
 }
-
-
-/* =====================================================
-   GALÉRIA INDÍTÁSA
-===================================================== */
 
 loadGalleryLayer();
 
 
 /* =====================================================
-   DRAW RÉTEG
+   DRAW
 ===================================================== */
 
 const drawnItems =
     new L.FeatureGroup();
 
-
 map.addLayer(
     drawnItems
 );
 
+const researchDrawControl = L.control({position:"topright"});
+researchDrawControl.onAdd=function(){
+    const div=L.DomUtil.create("div","geojson-control");
+    const button=L.DomUtil.create("button","",div);
+    button.innerHTML="🔬 Saját kutatási réteg";
+    button.title="Saját rajzolt kutatási objektumok ki- és bekapcsolása";
+    button.onclick=function(){
+        if(map.hasLayer(drawnItems)) map.removeLayer(drawnItems);
+        else map.addLayer(drawnItems);
+    };
+    L.DomEvent.disableClickPropagation(div);
+    return div;
+};
+researchDrawControl.addTo(map);
+
+
+if(window.updateGeoResearchControl){
+    window.updateGeoResearchControl();
+}
+
 
 const drawControl =
     new L.Control.Draw({
+
+        position:
+            "topleft",
 
         edit: {
             featureGroup:
@@ -1619,12 +1529,11 @@ const drawControl =
 
             marker:true,
 
-            circlemarker:false
+            circlemarker:true
 
         }
 
     });
-
 
 map.addControl(
     drawControl
@@ -1644,7 +1553,7 @@ map.on(
 
 
 /* =====================================================
-   KOORDINÁTA VEZÉRLŐ
+   KOORDINÁTA
 ===================================================== */
 
 const coordinateControl =
@@ -1657,37 +1566,16 @@ const coordinateControl =
 coordinateControl.onAdd =
 function(){
 
-    const container =
+    const div =
         L.DomUtil.create(
             "div",
             "coordinate-display"
         );
 
+    div.innerHTML =
+        "Lat: -- | Lng: --";
 
-    container.innerHTML =
-        "Koordináta: —";
-
-
-    map.on(
-        "mousemove",
-        function(event){
-
-            container.innerHTML =
-                "Koordináta: " +
-                event.latlng.lat.toFixed(5) +
-                ", " +
-                event.latlng.lng.toFixed(5);
-
-        }
-    );
-
-
-    L.DomEvent.disableClickPropagation(
-        container
-    );
-
-
-    return container;
+    return div;
 
 };
 
@@ -1697,18 +1585,34 @@ coordinateControl.addTo(
 );
 
 
+map.on(
+    "mousemove",
+    function(event){
+
+        document.querySelector(
+            ".coordinate-display"
+        ).innerHTML =
+            "Lat: " +
+            event.latlng.lat.toFixed(6) +
+            " | Lng: " +
+            event.latlng.lng.toFixed(6);
+
+    }
+);
+
+
 /* =====================================================
    GEOJSON IMPORT
 ===================================================== */
 
-const importControl =
+const geoJSONImport =
     L.control({
         position:
-            "topright"
+            "topleft"
     });
 
 
-importControl.onAdd =
+geoJSONImport.onAdd =
 function(){
 
     const container =
@@ -1717,7 +1621,6 @@ function(){
             "geojson-control"
         );
 
-
     const button =
         L.DomUtil.create(
             "button",
@@ -1725,10 +1628,8 @@ function(){
             container
         );
 
-
     button.innerHTML =
         "📥 Import GeoJSON";
-
 
     button.onclick =
     function(){
@@ -1738,14 +1639,11 @@ function(){
                 "input"
             );
 
-
         input.type =
             "file";
 
-
         input.accept =
             ".geojson,.json";
-
 
         input.onchange =
         function(event){
@@ -1753,15 +1651,12 @@ function(){
             const file =
                 event.target.files[0];
 
-
             if(!file){
                 return;
             }
 
-
             const reader =
                 new FileReader();
-
 
             reader.onload =
             function(){
@@ -1773,38 +1668,49 @@ function(){
                             reader.result
                         );
 
-
                     const layer =
                         L.geoJSON(
-                            data
-                        );
-
-
-                    layer.eachLayer(
-                        item => {
-
-                            drawnItems.addLayer(
-                                item
-                            );
-
-                        }
-                    );
-
-
-                    if(
-                        layer.getBounds &&
-                        layer.getBounds().isValid()
-                    ){
-
-                        map.fitBounds(
-                            layer.getBounds(),
+                            data,
                             {
-                                padding:
-                                    [30,30]
+                                onEachFeature:
+                                function(
+                                    feature,
+                                    layer
+                                ){
+
+                                    if(
+                                        feature.properties
+                                    ){
+
+                                        layer.bindPopup(
+                                            Object.entries(
+                                                feature.properties
+                                            )
+                                            .map(
+                                                pair =>
+                                                    "<b>" +
+                                                    pair[0] +
+                                                    "</b>: " +
+                                                    pair[1]
+                                            )
+                                            .join(
+                                                "<br>"
+                                            )
+                                        );
+
+                                    }
+
+                                }
                             }
                         );
 
-                    }
+                    drawnItems.addLayer(
+                        layer
+                    );
+
+                    map.fitBounds(
+                        layer.getBounds()
+                    );
 
                 }
                 catch(error){
@@ -1817,30 +1723,26 @@ function(){
 
             };
 
-
             reader.readAsText(
                 file
             );
 
         };
 
-
         input.click();
 
     };
 
-
     L.DomEvent.disableClickPropagation(
         container
     );
-
 
     return container;
 
 };
 
 
-importControl.addTo(
+geoJSONImport.addTo(
     map
 );
 
@@ -1849,14 +1751,14 @@ importControl.addTo(
    GEOJSON EXPORT
 ===================================================== */
 
-const exportControl =
+const geoJSONExport =
     L.control({
         position:
-            "topright"
+            "topleft"
     });
 
 
-exportControl.onAdd =
+geoJSONExport.onAdd =
 function(){
 
     const container =
@@ -1865,7 +1767,6 @@ function(){
             "geojson-control"
         );
 
-
     const button =
         L.DomUtil.create(
             "button",
@@ -1873,17 +1774,14 @@ function(){
             container
         );
 
-
     button.innerHTML =
         "📤 Export GeoJSON";
-
 
     button.onclick =
     function(){
 
         const data =
             drawnItems.toGeoJSON();
-
 
         const blob =
             new Blob(
@@ -1900,37 +1798,23 @@ function(){
                 }
             );
 
-
         const url =
             URL.createObjectURL(
                 blob
             );
-
 
         const a =
             document.createElement(
                 "a"
             );
 
-
         a.href =
             url;
-
 
         a.download =
             "karpatalja.geojson";
 
-
-        document.body.appendChild(
-            a
-        );
-
-
         a.click();
-
-
-        a.remove();
-
 
         URL.revokeObjectURL(
             url
@@ -1938,18 +1822,16 @@ function(){
 
     };
 
-
     L.DomEvent.disableClickPropagation(
         container
     );
-
 
     return container;
 
 };
 
 
-exportControl.addTo(
+geoJSONExport.addTo(
     map
 );
 
@@ -1963,81 +1845,71 @@ const preziEditor =
         "div"
     );
 
-
 preziEditor.id =
     "preziEditor";
 
+preziEditor.innerHTML = `
 
-preziEditor.innerHTML =
-`
     <aside class="prezi-toolbar">
 
         <div class="prezi-brand">
 
             <div class="prezi-brand-title">
-                Kárpátalja Atlasz
+                KÁRPÁTALJA
             </div>
 
             <div class="prezi-brand-subtitle">
-                INTERAKTÍV PREZENTÁCIÓ
+                INTERAKTÍV ATLASZ
             </div>
 
         </div>
 
 
         <button
-            id="preziNewFrame"
-        >
-            ＋ Új dia
+            id="preziNewFrame">
+            ＋ Új nézet
         </button>
 
 
         <button
-            id="preziSaveFrame"
-        >
-            💾 Dia mentése
+            id="preziSaveFrame">
+            💾 Nézet mentése
         </button>
 
 
         <button
-            id="preziDeleteFrame"
-        >
-            🗑 Dia törlése
+            id="preziDeleteFrame">
+            🗑 Nézet törlése
         </button>
 
 
         <button
-            id="preziAddText"
-        >
-            ＋ Szöveg
+            id="preziAddText">
+            T Szöveg
         </button>
 
 
         <button
-            id="preziAddTitle"
-        >
-            ＋ Cím
+            id="preziAddTitle">
+            H Cím
         </button>
 
 
         <button
             id="preziStart"
-            class="gold"
-        >
-            ▶ Prezentáció
+            class="gold">
+            ▶ PREZI MÓD
         </button>
 
 
         <button
-            id="preziExport"
-        >
+            id="preziExport">
             📤 Prezi export
         </button>
 
 
         <button
-            id="preziImport"
-        >
+            id="preziImport">
             📥 Prezi import
         </button>
 
@@ -2046,8 +1918,7 @@ preziEditor.innerHTML =
             id="preziFile"
             type="file"
             accept=".json"
-            style="display:none"
-        >
+            hidden>
 
     </aside>
 
@@ -2060,76 +1931,62 @@ preziEditor.innerHTML =
         <div class="prezi-frame-editor">
 
             <h3>
-                Dia szerkesztése
+                🗺️ Nézet szerkesztése
             </h3>
+
 
             <label>
                 Cím
             </label>
 
             <input
-                id="preziFrameTitle"
-            >
+                id="preziFrameTitle">
 
 
             <label>
-                Leírás
+                Szöveg
             </label>
 
             <textarea
-                id="preziFrameText"
-            ></textarea>
+                id="preziFrameText">
+            </textarea>
 
 
             <label>
-                Nagyítás
+                Zoom
             </label>
 
             <input
                 id="preziZoom"
-                type="number"
+                type="range"
                 min="1"
                 max="19"
-                step="0.5"
-            >
+                step=".1">
 
-
-            <label>
-                Pozíció
-            </label>
-
-            <div style="
-                display:grid;
-                grid-template-columns:1fr 1fr;
-                gap:6px;
-            ">
-
-                <input
-                    id="preziLat"
-                    type="number"
-                    step="0.00001"
-                    placeholder="Latitude"
-                >
-
-                <input
-                    id="preziLng"
-                    type="number"
-                    step="0.00001"
-                    placeholder="Longitude"
-                >
-
-            </div>
+            <button
+                id="preziPosition"
+                style="
+                    margin-top:8px;
+                    width:100%;
+                    padding:8px;
+                    border:0;
+                    background:#17374d;
+                    color:white;
+                    border-radius:4px;
+                    cursor:pointer;
+                ">
+                📍 Aktuális pozíció mentése
+            </button>
 
         </div>
 
 
         <div
             id="preziTextEditor"
-            class="prezi-text-editor"
-        >
+            class="prezi-text-editor">
 
             <h3>
-                Szöveg
+                ✏️ Szövegszerkesztő
             </h3>
 
 
@@ -2138,20 +1995,20 @@ preziEditor.innerHTML =
             </label>
 
             <textarea
-                id="preziObjectText"
-            ></textarea>
+                id="preziObjectText">
+            </textarea>
 
 
             <label>
-                Méret
+                Betűméret
             </label>
 
             <input
                 id="preziObjectSize"
-                type="number"
-                min="8"
-                max="120"
-            >
+                type="range"
+                min="12"
+                max="90"
+                value="30">
 
 
             <label>
@@ -2159,8 +2016,7 @@ preziEditor.innerHTML =
             </label>
 
             <select
-                id="preziObjectAlign"
-            >
+                id="preziObjectAlign">
 
                 <option value="left">
                     Balra
@@ -2177,69 +2033,74 @@ preziEditor.innerHTML =
             </select>
 
 
-            <div
+            <button
+                id="preziApplyText"
                 style="
-                    display:flex;
-                    gap:6px;
-                    margin-top:10px;
-                "
-            >
+                    margin-top:8px;
+                    padding:8px 12px;
+                    border:0;
+                    background:#17374d;
+                    color:white;
+                    border-radius:4px;
+                    cursor:pointer;
+                ">
+                💾 Alkalmaz
+            </button>
 
-                <button
-                    id="preziApplyText"
-                >
-                    Alkalmaz
-                </button>
 
-                <button
-                    id="preziDeleteText"
-                >
-                    Törlés
-                </button>
-
-            </div>
+            <button
+                id="preziDeleteText"
+                style="
+                    margin-top:8px;
+                    padding:8px 12px;
+                    border:0;
+                    background:#8b2020;
+                    color:white;
+                    border-radius:4px;
+                    cursor:pointer;
+                ">
+                🗑 Törlés
+            </button>
 
         </div>
 
 
         <div
-            id="presentationOverlay"
-        >
+            id="presentationOverlay">
 
             <div class="presentation-caption">
 
                 <div
                     id="presentationCounter"
-                    class="presentation-counter"
-                ></div>
+                    class="presentation-counter">
+                </div>
+
 
                 <h1
-                    id="presentationTitle"
-                ></h1>
+                    id="presentationTitle">
+                </h1>
+
 
                 <p
-                    id="presentationText"
-                ></p>
+                    id="presentationText">
+                </p>
 
 
                 <div class="presentation-buttons">
 
                     <button
-                        id="presentationPrev"
-                    >
-                        ← Előző
+                        id="presentationPrev">
+                        ◀
                     </button>
 
                     <button
-                        id="presentationNext"
-                    >
-                        Következő →
-                    </button>
-
-                    <button
-                        id="presentationExit"
-                    >
+                        id="presentationExit">
                         ✕ Kilépés
+                    </button>
+
+                    <button
+                        id="presentationNext">
+                        ▶
                     </button>
 
                 </div>
@@ -2258,10 +2119,11 @@ preziEditor.innerHTML =
         </div>
 
         <div
-            id="preziFramesList"
-        ></div>
+            id="preziFrameList">
+        </div>
 
     </aside>
+
 `;
 
 
@@ -2271,60 +2133,92 @@ document.body.appendChild(
 
 
 /* =====================================================
-   PREZI VÁLTOZÓK
+   PREZI ADATOK
 ===================================================== */
 
-let preziFrames =
-    JSON.parse(
-        localStorage.getItem(
-            "karpatalja_prezi"
-        ) ||
-        "[]"
-    );
+let preziFrames = [
+
+    {
+        title:
+            "Kárpátalja földrajza",
+
+        text:
+            "Az interaktív földrajzi atlasz áttekintése.",
+
+        lat:
+            48.45,
+
+        lng:
+            22.75,
+
+        zoom:
+            8,
+
+        objects:
+            []
+    }
+
+];
 
 
 let preziIndex =
     0;
 
-
 let selectedPreziObject =
     null;
-
 
 let presentationRunning =
     false;
 
 
 /* =====================================================
-   PREZI TÉRKÉP
+   PREZI ADATOK BETÖLTÉSE
 ===================================================== */
 
-const preziMap =
-    L.map(
-        "preziMap"
+try {
+
+    const saved =
+        localStorage.getItem(
+            "karpatalja-prezi"
+        );
+
+    if(saved){
+
+        const parsed =
+            JSON.parse(
+                saved
+            );
+
+        if(
+            Array.isArray(parsed) &&
+            parsed.length
+        ){
+
+            preziFrames =
+                parsed;
+
+        }
+
+    }
+
+}
+catch(error){
+
+    console.warn(
+        "Prezi adatok nem tölthetők be."
     );
 
-
-L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-        maxZoom:19,
-        attribution:
-            "&copy; OpenStreetMap contributors"
-    }
-).addTo(
-    preziMap
-);
+}
 
 
 /* =====================================================
-   PREZI ADATOK
+   MENTÉS
 ===================================================== */
 
 function savePrezi(){
 
     localStorage.setItem(
-        "karpatalja_prezi",
+        "karpatalja-prezi",
         JSON.stringify(
             preziFrames
         )
@@ -2334,107 +2228,151 @@ function savePrezi(){
 
 
 /* =====================================================
-   PREZI DIA RENDERELÉS
+   PREZI MEGNYITÁSA
 ===================================================== */
 
-function renderPreziFrames(){
+document.getElementById(
+    "preziButton"
+);
 
-    const list =
-        document.getElementById(
-            "preziFramesList"
+
+/*
+   Jobb alsó sarokban lévő vezérlő
+*/
+
+const preziLauncher =
+    L.control({
+        position:
+            "bottomright"
+    });
+
+
+preziLauncher.onAdd =
+function(){
+
+    const container =
+        L.DomUtil.create(
+            "div",
+            "geojson-control"
         );
 
 
-    list.innerHTML =
-        "";
+    const button =
+        L.DomUtil.create(
+            "button",
+            "",
+            container
+        );
 
 
-    preziFrames.forEach(
-        (
-            frame,
-            index
-        ) => {
-
-            const element =
-                document.createElement(
-                    "div"
-                );
+    button.className =
+        "prezi-button";
 
 
-            element.className =
-                "prezi-frame";
+    button.innerHTML =
+        "🎬 PREZI MÓD";
 
 
-            if(
-                index === preziIndex
-            ){
+    button.onclick =
+    function(){
 
-                element.classList.add(
-                    "active"
-                );
+        openPreziEditor();
 
-            }
+    };
 
 
-            element.innerHTML =
-                `
-                <div class="prezi-frame-number">
-                    DIA ${index + 1}
-                </div>
-
-                <div class="prezi-frame-title">
-                    ${escapeHTML(
-                        frame.title ||
-                        "Névtelen dia"
-                    )}
-                </div>
-
-                <div class="prezi-frame-text">
-                    ${escapeHTML(
-                        frame.text ||
-                        ""
-                    )}
-                </div>
-                `;
+    L.DomEvent.disableClickPropagation(
+        container
+    );
 
 
-            element.onclick =
-            function(){
+    return container;
 
-                preziIndex =
-                    index;
-
-                loadPreziFrame();
-
-                renderPreziFrames();
-
-            };
+};
 
 
-            list.appendChild(
-                element
-            );
+preziLauncher.addTo(
+    map
+);
 
+
+/* =====================================================
+   PREZI SZERKESZTŐ MEGNYITÁSA
+===================================================== */
+
+function openPreziEditor(){
+
+    preziEditor.classList.add(
+        "active"
+    );
+
+    initPreziMap();
+
+    loadPreziFrame();
+
+    renderPreziFrames();
+
+}
+
+
+/* =====================================================
+   PREZI TÉRKÉP
+===================================================== */
+
+let preziMap =
+    null;
+
+
+function initPreziMap(){
+
+    if(preziMap){
+        return;
+    }
+
+
+    preziMap =
+        L.map(
+            "preziMap"
+        )
+        .setView(
+            [
+                preziFrames[
+                    preziIndex
+                ].lat,
+
+                preziFrames[
+                    preziIndex
+                ].lng
+            ],
+
+            preziFrames[
+                preziIndex
+            ].zoom
+        );
+
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom:
+                19,
+
+            attribution:
+                "&copy; OpenStreetMap contributors"
         }
+    )
+    .addTo(
+        preziMap
     );
 
 }
 
 
 /* =====================================================
-   PREZI DIA BETÖLTÉSE
+   FRAME BETÖLTÉSE
 ===================================================== */
 
 function loadPreziFrame(){
-
-    if(
-        !preziFrames.length
-    ){
-
-        return;
-
-    }
-
 
     const frame =
         preziFrames[
@@ -2445,65 +2383,118 @@ function loadPreziFrame(){
     document.getElementById(
         "preziFrameTitle"
     ).value =
-        frame.title ||
-        "";
+        frame.title;
 
 
     document.getElementById(
         "preziFrameText"
     ).value =
-        frame.text ||
-        "";
+        frame.text;
 
 
     document.getElementById(
         "preziZoom"
     ).value =
-        frame.zoom ||
-        8;
+        frame.zoom;
 
 
-    document.getElementById(
-        "preziLat"
-    ).value =
-        frame.lat ||
-        48.45;
+    if(preziMap){
 
+        preziMap.setView(
+            [
+                frame.lat,
+                frame.lng
+            ],
 
-    document.getElementById(
-        "preziLng"
-    ).value =
-        frame.lng ||
-        22.75;
+            frame.zoom
+        );
 
-
-    preziMap.setView(
-        [
-            Number(
-                frame.lat ||
-                48.45
-            ),
-
-            Number(
-                frame.lng ||
-                22.75
-            )
-        ],
-
-        Number(
-            frame.zoom ||
-            8
-        )
-    );
-
-
-    renderPreziObjects();
+    }
 
 }
 
 
 /* =====================================================
-   PREZI ÚJ DIA
+   FRAME LISTA
+===================================================== */
+
+function renderPreziFrames(){
+
+    const list =
+        document.getElementById(
+            "preziFrameList"
+        );
+
+
+    list.innerHTML =
+        "";
+
+
+    preziFrames.forEach(
+        function(
+            frame,
+            index
+        ){
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "prezi-frame" +
+                (
+                    index === preziIndex
+                        ? " active"
+                        : ""
+                );
+
+
+            item.innerHTML = `
+
+                <div class="prezi-frame-number">
+                    NÉZET ${index + 1}
+                </div>
+
+                <div class="prezi-frame-title">
+                    ${escapeHTML(frame.title)}
+                </div>
+
+                <div class="prezi-frame-text">
+                    ${escapeHTML(frame.text)}
+                </div>
+
+            `;
+
+
+            item.onclick =
+            function(){
+
+                preziIndex =
+                    index;
+
+                loadPreziFrame();
+
+                renderPreziFrames();
+
+                renderPreziObjects();
+
+            };
+
+
+            list.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ÚJ FRAME
 ===================================================== */
 
 document.getElementById(
@@ -2511,26 +2502,34 @@ document.getElementById(
 ).onclick =
 function(){
 
+    const center =
+        preziMap
+            ? preziMap.getCenter()
+            : map.getCenter();
+
+
+    const zoom =
+        preziMap
+            ? preziMap.getZoom()
+            : map.getZoom();
+
+
     preziFrames.push({
 
-        id:
-            "frame-" +
-            Date.now(),
-
         title:
-            "Új dia",
+            "Új nézet",
 
         text:
-            "",
+            "Ide írható a nézet szövege.",
 
         lat:
-            map.getCenter().lat,
+            center.lat,
 
         lng:
-            map.getCenter().lng,
+            center.lng,
 
         zoom:
-            map.getZoom(),
+            zoom,
 
         objects:
             []
@@ -2552,22 +2551,10 @@ function(){
 
 
 /* =====================================================
-   PREZI DIA MENTÉSE
+   FRAME MENTÉSE
 ===================================================== */
 
-document.getElementById(
-    "preziSaveFrame"
-).onclick =
-function(){
-
-    if(
-        !preziFrames.length
-    ){
-
-        return;
-
-    }
-
+function saveCurrentPreziFrame(){
 
     const frame =
         preziFrames[
@@ -2595,33 +2582,99 @@ function(){
         );
 
 
-    frame.lat =
-        Number(
-            document.getElementById(
-                "preziLat"
-            ).value
-        );
-
-
-    frame.lng =
-        Number(
-            document.getElementById(
-                "preziLng"
-            ).value
-        );
-
-
     savePrezi();
 
-    loadPreziFrame();
-
     renderPreziFrames();
+
+}
+
+
+/* =====================================================
+   MENTÉS GOMB
+===================================================== */
+
+document.getElementById(
+    "preziSaveFrame"
+).onclick =
+function(){
+
+    saveCurrentPreziFrame();
 
 };
 
 
 /* =====================================================
-   PREZI DIA TÖRLÉSE
+   POZÍCIÓ MENTÉSE
+===================================================== */
+
+document.getElementById(
+    "preziPosition"
+).onclick =
+function(){
+
+    const frame =
+        preziFrames[
+            preziIndex
+        ];
+
+
+    const center =
+        preziMap.getCenter();
+
+
+    frame.lat =
+        center.lat;
+
+
+    frame.lng =
+        center.lng;
+
+
+    frame.zoom =
+        preziMap.getZoom();
+
+
+    document.getElementById(
+        "preziZoom"
+    ).value =
+        frame.zoom;
+
+
+    savePrezi();
+
+};
+
+
+/* =====================================================
+   ZOOM
+===================================================== */
+
+document.getElementById(
+    "preziZoom"
+).oninput =
+function(){
+
+    const zoom =
+        Number(
+            this.value
+        );
+
+
+    preziFrames[
+        preziIndex
+    ].zoom =
+        zoom;
+
+
+    preziMap.setZoom(
+        zoom
+    );
+
+};
+
+
+/* =====================================================
+   FRAME TÖRLÉSE
 ===================================================== */
 
 document.getElementById(
@@ -2630,8 +2683,12 @@ document.getElementById(
 function(){
 
     if(
-        !preziFrames.length
+        preziFrames.length <= 1
     ){
+
+        alert(
+            "Legalább egy nézet szükséges."
+        );
 
         return;
 
@@ -2644,118 +2701,25 @@ function(){
     );
 
 
-    if(
-        preziIndex >=
-        preziFrames.length
-    ){
-
-        preziIndex =
-            Math.max(
-                0,
-                preziFrames.length - 1
-            );
-
-    }
+    preziIndex =
+        Math.max(
+            0,
+            preziIndex - 1
+        );
 
 
     savePrezi();
 
-    renderPreziFrames();
-
     loadPreziFrame();
+
+    renderPreziFrames();
 
 };
 
 
 /* =====================================================
-   PREZI SZÖVEG HOZZÁADÁSA
+   SZÖVEG
 ===================================================== */
-
-function addPreziText(
-    titleMode
-){
-
-    if(
-        !preziFrames.length
-    ){
-
-        return;
-
-    }
-
-
-    const frame =
-        preziFrames[
-            preziIndex
-        ];
-
-
-    if(
-        !Array.isArray(
-            frame.objects
-        )
-    ){
-
-        frame.objects =
-            [];
-
-    }
-
-
-    const object = {
-
-        id:
-            "object-" +
-            Date.now(),
-
-        type:
-            "text",
-
-        text:
-            titleMode
-                ?
-                "Kárpátalja"
-                :
-                "Új szöveg",
-
-        x:
-            50,
-
-        y:
-            50,
-
-        size:
-            titleMode
-                ?
-                42
-                :
-                24,
-
-        align:
-            "center"
-
-    };
-
-
-    frame.objects.push(
-        object
-    );
-
-
-    selectedPreziObject =
-        object;
-
-
-    savePrezi();
-
-    renderPreziObjects();
-
-    openTextEditor(
-        object
-    );
-
-}
-
 
 document.getElementById(
     "preziAddText"
@@ -2781,35 +2745,124 @@ function(){
 };
 
 
+function addPreziText(
+    title
+){
+
+    const frame =
+        preziFrames[
+            preziIndex
+        ];
+
+
+    if(!frame.objects){
+        frame.objects = [];
+    }
+
+
+    const object = {
+
+        id:
+            Date.now(),
+
+        text:
+            title
+                ? "Kárpátalja története"
+                : "Ide írd a szöveget.",
+
+        size:
+            title
+                ? 50
+                : 30,
+
+        align:
+            "center",
+
+        x:
+            50,
+
+        y:
+            50,
+
+        scale:
+            1,
+
+        rotation:
+            0
+
+    };
+
+
+    frame.objects.push(
+        object
+    );
+
+
+    selectedPreziObject =
+        object;
+
+
+    savePrezi();
+
+    renderPreziObjects();
+
+    openTextEditor(
+        object
+    );
+
+}
+
+
 /* =====================================================
-   PREZI OBJEKTUMOK
+   OBJEKTUMOK
 ===================================================== */
 
 function renderPreziObjects(){
 
-    const container =
-        document.getElementById(
-            "preziMap"
-        );
-
-
-    container
-        .querySelectorAll(
-            ".prezi-object"
-        )
-        .forEach(
-            element =>
-                element.remove()
-        );
-
-
-    if(
-        !preziFrames.length
-    ){
-
+    if(!preziMap){
         return;
+    }
+
+
+    let layer =
+        document.getElementById(
+            "preziObjects"
+        );
+
+
+    if(!layer){
+
+        layer =
+            document.createElement(
+                "div"
+            );
+
+        layer.id =
+            "preziObjects";
+
+
+        layer.style.cssText = `
+            position:absolute;
+            inset:0;
+            z-index:2000;
+            pointer-events:none;
+        `;
+
+
+        document
+            .getElementById(
+                "preziMap"
+            )
+            .parentElement
+            .appendChild(
+                layer
+            );
 
     }
+
+
+    layer.innerHTML =
+        "";
 
 
     const frame =
@@ -2818,106 +2871,93 @@ function renderPreziObjects(){
         ];
 
 
-    if(
-        !Array.isArray(
-            frame.objects
-        )
-    ){
-
+    if(!frame.objects){
         return;
-
     }
 
 
     frame.objects.forEach(
-        object => {
+        function(object){
 
-            const element =
+            const el =
                 document.createElement(
                     "div"
                 );
 
 
-            element.className =
-                "prezi-object";
+            el.className =
+                "prezi-object prezi-text-object";
 
 
-            element.style.left =
-                object.x +
-                "%";
+            if(
+                selectedPreziObject &&
+                selectedPreziObject.id === object.id
+            ){
+
+                el.classList.add(
+                    "selected"
+                );
+
+            }
 
 
-            element.style.top =
-                object.y +
-                "%";
+            el.textContent =
+                object.text;
 
 
-            element.style.transform =
-                "translate(-50%,-50%)";
+            el.style.left =
+                object.x + "%";
 
 
-            element.innerHTML =
+            el.style.top =
+                object.y + "%";
+
+
+            el.style.fontSize =
+                object.size + "px";
+
+
+            el.style.textAlign =
+                object.align;
+
+
+            el.style.transform =
                 `
-                <div
-                    class="prezi-text-object"
-                    style="
-                        font-size:${Number(
-                            object.size || 24
-                        )}px;
-                        text-align:${escapeHTML(
-                            object.align ||
-                            "center"
-                        )};
-                    "
-                >
-                    ${escapeHTML(
-                        object.text ||
-                        ""
-                    )}
-                </div>
+                translate(-50%,-50%)
+                scale(${object.scale})
+                rotate(${object.rotation}deg)
                 `;
 
 
-            element.addEventListener(
-                "click",
-                function(event){
+            el.style.pointerEvents =
+                "auto";
 
-                    event.stopPropagation();
 
-                    selectedPreziObject =
-                        object;
+            el.onclick =
+            function(event){
 
-                    document
-                        .querySelectorAll(
-                            ".prezi-object"
-                        )
-                        .forEach(
-                            item =>
-                                item.classList.remove(
-                                    "selected"
-                                )
-                        );
+                event.stopPropagation();
 
-                    element.classList.add(
-                        "selected"
-                    );
+                selectedPreziObject =
+                    object;
 
-                    openTextEditor(
-                        object
-                    );
+                openTextEditor(
+                    object
+                );
 
-                }
-            );
+                renderPreziObjects();
+
+            };
 
 
             makePreziDraggable(
-                element,
+                el,
                 object
             );
 
 
-            container.appendChild(
-                element
+            layer.appendChild(
+                el
             );
 
         }
@@ -2927,7 +2967,7 @@ function renderPreziObjects(){
 
 
 /* =====================================================
-   PREZI DRAG
+   MOZGATHATÓ SZÖVEG
 ===================================================== */
 
 function makePreziDraggable(
@@ -2942,14 +2982,12 @@ function makePreziDraggable(
     let startX =
         0;
 
-
     let startY =
         0;
 
 
     let originalX =
         0;
-
 
     let originalY =
         0;
@@ -2984,7 +3022,8 @@ function makePreziDraggable(
                 object.y;
 
 
-            event.preventDefault();
+            selectedPreziObject =
+                object;
 
         }
     );
@@ -2994,12 +3033,8 @@ function makePreziDraggable(
         "pointermove",
         function(event){
 
-            if(
-                !dragging
-            ){
-
+            if(!dragging){
                 return;
-
             }
 
 
@@ -3034,43 +3069,19 @@ function makePreziDraggable(
 
 
             object.x =
-                originalX +
-                dx;
+                originalX + dx;
 
 
             object.y =
-                originalY +
-                dy;
-
-
-            object.x =
-                Math.max(
-                    0,
-                    Math.min(
-                        100,
-                        object.x
-                    )
-                );
-
-
-            object.y =
-                Math.max(
-                    0,
-                    Math.min(
-                        100,
-                        object.y
-                    )
-                );
+                originalY + dy;
 
 
             element.style.left =
-                object.x +
-                "%";
+                object.x + "%";
 
 
             element.style.top =
-                object.y +
-                "%";
+                object.y + "%";
 
         }
     );
@@ -3142,9 +3153,7 @@ function(){
     if(
         !selectedPreziObject
     ){
-
         return;
-
     }
 
 
@@ -3187,9 +3196,7 @@ function(){
     if(
         !selectedPreziObject
     ){
-
         return;
-
     }
 
 
@@ -3241,26 +3248,8 @@ document.getElementById(
 ).onclick =
 function(){
 
-    if(
-        !preziFrames.length
-    ){
-
-        alert(
-            "Először hozz létre legalább egy diát."
-        );
-
-        return;
-
-    }
-
-
     presentationRunning =
         true;
-
-
-    preziEditor.classList.add(
-        "active"
-    );
 
 
     document
@@ -3275,123 +3264,6 @@ function(){
     playPreziFrame();
 
 };
-
-
-/* =====================================================
-   PREZI SZERKESZTŐ MEGNYITÁSA
-===================================================== */
-
-const preziOpenControl =
-    L.control({
-        position:
-            "topright"
-    });
-
-
-preziOpenControl.onAdd =
-function(){
-
-    const container =
-        L.DomUtil.create(
-            "div",
-            "geojson-control"
-        );
-
-
-    const button =
-        L.DomUtil.create(
-            "button",
-            "",
-            container
-        );
-
-
-    button.className =
-        "prezi-button";
-
-
-    button.innerHTML =
-        "🎬 Prezi szerkesztő";
-
-
-    button.onclick =
-    function(){
-
-        preziEditor.classList.add(
-            "active"
-        );
-
-
-        setTimeout(
-            function(){
-
-                preziMap.invalidateSize();
-
-            },
-            100
-        );
-
-
-        if(
-            !preziFrames.length
-        ){
-
-            preziFrames.push({
-
-                id:
-                    "frame-" +
-                    Date.now(),
-
-                title:
-                    "Kárpátalja",
-
-                text:
-                    "Interaktív földrajzi bemutató.",
-
-                lat:
-                    map.getCenter().lat,
-
-                lng:
-                    map.getCenter().lng,
-
-                zoom:
-                    map.getZoom(),
-
-                objects:
-                    []
-
-            });
-
-
-            preziIndex =
-                0;
-
-
-            savePrezi();
-
-        }
-
-
-        loadPreziFrame();
-
-        renderPreziFrames();
-
-    };
-
-
-    L.DomEvent.disableClickPropagation(
-        container
-    );
-
-
-    return container;
-
-};
-
-
-preziOpenControl.addTo(
-    map
-);
 
 
 /* =====================================================
@@ -3434,9 +3306,14 @@ function playPreziFrame(){
         ],
         frame.zoom,
         {
-            animate:true,
-            duration:2.2,
-            easeLinearity:.2
+            animate:
+                true,
+
+            duration:
+                2.2,
+
+            easeLinearity:
+                .2
         }
     );
 
@@ -3483,8 +3360,7 @@ document.getElementById(
 function(){
 
     if(
-        preziIndex >
-        0
+        preziIndex > 0
     ){
 
         preziIndex--;
@@ -3520,11 +3396,6 @@ function(){
         .classList.remove(
             "active"
         );
-
-
-    preziEditor.classList.remove(
-        "active"
-    );
 
 };
 
@@ -3636,15 +3507,7 @@ function(){
         "karpatalja-prezi.json";
 
 
-    document.body.appendChild(
-        a
-    );
-
-
     a.click();
-
-
-    a.remove();
 
 
     URL.revokeObjectURL(
@@ -3680,9 +3543,7 @@ function(event){
 
 
     if(!file){
-
         return;
-
     }
 
 
@@ -3726,6 +3587,7 @@ function(event){
             renderPreziFrames();
 
             renderPreziObjects();
+
 
         }
         catch(error){
@@ -3844,11 +3706,10 @@ function escapeHTML(
 ===================================================== */
 
 console.log(
-    "Kárpátalja Atlasz – professzionális földrajzi térkép + galéria + GeoJSON + Draw + Prezi rendszer betöltve."
+    "Kárpátalja Atlasz – térkép + GeoJSON + Draw + Prezi rendszer betöltve."
 );
 
 </script>
 
 </body>
-
 </html>
