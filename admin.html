@@ -627,6 +627,18 @@ transform:translateY(0)
 
 .hidden{display:none!important}
 
+/* FÖLDRAJZI TÉRKÉPEK */
+.geographic-map-badge{
+display:inline-block;
+padding:4px 8px;
+border-radius:999px;
+background:#f0eadb;
+color:var(--navy);
+font-size:10px;
+font-weight:bold;
+margin-top:5px
+}
+
 @media(max-width:1100px){
 .dashboard-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 .form-grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -725,6 +737,7 @@ Hibás jelszó.
 <button onclick="showSection('people',this)">👑 Személyiségek</button>
 <button onclick="showSection('counties',this)">🏛️ Vármegyék</button>
 <button onclick="showSection('maps',this)">🗺️ Történelmi térképek</button>
+<button onclick="showSection('geographicMaps',this)">🌍 Földrajzi térképek</button>
 <button onclick="showSection('gallery',this)">📷 Galéria</button>
 <button onclick="showSection('sources',this)">📚 Források</button>
 
@@ -1330,6 +1343,127 @@ Hibás jelszó.
 
 </section>
 
+<!-- GEOGRAPHIC MAPS -->
+
+<section id="section-geographicMaps" class="section">
+
+<div class="page-header">
+<div>
+<h2>🌍 Földrajzi térképek</h2>
+<p>A földrajzi atlasz tematikus térképeinek kezelése a földrajzi térkép rétegei alapján.</p>
+</div>
+</div>
+
+<div class="card">
+
+<div class="form-grid">
+
+<div class="field">
+<label for="geographic-map-id">Azonosító</label>
+<input id="geographic-map-id" placeholder="pl. domborzat">
+</div>
+
+<div class="field">
+<label for="geographic-map-title">Térkép címe *</label>
+<input id="geographic-map-title" placeholder="pl. Kárpátalja domborzata">
+</div>
+
+<div class="field">
+<label for="geographic-map-category">Földrajzi kategória</label>
+<select id="geographic-map-category">
+<option value="Természetföldrajz">🌿 Természetföldrajz</option>
+<option value="Település- és társadalomföldrajz">🏘️ Település- és társadalomföldrajz</option>
+<option value="Gazdaságföldrajz">💰 Gazdaságföldrajz</option>
+<option value="Terepi dokumentáció">📷 Terepi dokumentáció</option>
+<option value="Kutatási és elemzési rétegek">🔬 Kutatási és elemzési rétegek</option>
+</select>
+</div>
+
+<div class="field">
+<label for="geographic-map-layer">Kapcsolódó térképréteg</label>
+<select id="geographic-map-layer">
+<option value="relief">🏔️ Domborzat</option>
+<option value="mountains">⛰️ Hegységek</option>
+<option value="rivers">🌊 Folyók és vízfolyások</option>
+<option value="lakes">💧 Tavak és víztározók</option>
+<option value="geological">🪨 Földtan</option>
+<option value="climate">🌦️ Éghajlat</option>
+<option value="soils">🌱 Talajok</option>
+<option value="vegetation">🌲 Növényzet</option>
+<option value="landscapes">🗺️ Tájak és kistájak</option>
+<option value="natureProtection">🌳 Természetvédelem</option>
+<option value="naturalResources">⛏️ Természeti erőforrások</option>
+<option value="naturalHazards">⚠️ Természeti veszélyek</option>
+<option value="citiesLayer">🏙️ Városok</option>
+<option value="villagesLayer">🏘️ Falvak</option>
+<option value="administrativeBoundaries">🏛️ Közigazgatási határok</option>
+<option value="roads">🛣️ Közlekedési hálózat</option>
+<option value="galleryLayer">📷 Georeferált fotógaléria</option>
+<option value="research">🔬 Saját kutatási réteg</option>
+</select>
+</div>
+
+<div class="field">
+<label for="geographic-map-order">Sorrend</label>
+<input id="geographic-map-order" type="number" value="1">
+</div>
+
+<div class="field full">
+<label for="geographic-map-description">Leírás</label>
+<textarea id="geographic-map-description" placeholder="A térkép földrajzi tartalma, módszertana és felhasználási célja."></textarea>
+</div>
+
+<div class="field full">
+<label>Képfájl / térképi előnézet</label>
+<div class="image-upload">
+<input id="geographic-map-image-file" type="file" accept="image/*" onchange="handleImageUpload(event,'geographic-map-image','geographic-map-preview')">
+<input id="geographic-map-image" type="hidden">
+<div class="upload-note">A tematikus földrajzi térkép előnézeti képe. A tényleges interaktív réteg a foldrajzi-terkep.html térképen jelenik meg.</div>
+<img id="geographic-map-preview" class="preview" alt="Földrajzi térkép előnézete">
+</div>
+</div>
+
+<div class="field">
+<label for="geographic-map-source">Forrás megnevezése</label>
+<input id="geographic-map-source" placeholder="pl. OpenStreetMap, SRTM, kutatási adatbázis">
+</div>
+
+<div class="field">
+<label for="geographic-map-sourceUrl">Forrás URL</label>
+<input id="geographic-map-sourceUrl" type="url" placeholder="https://...">
+</div>
+
+<div class="field full">
+<label for="geographic-map-sourceDescription">Forrás részletes leírása</label>
+<textarea id="geographic-map-sourceDescription" placeholder="Adatforrás, szerző, év, felbontás, módszertan, licenc vagy bibliográfiai adat."></textarea>
+</div>
+
+</div>
+
+<div class="button-row">
+<button class="btn btn-primary" onclick="addGeographicMap()">＋ Földrajzi térkép hozzáadása</button>
+<button class="btn" onclick="clearGeographicMapForm()">Űrlap törlése</button>
+</div>
+
+<div class="checkbox-row">
+<input id="geographic-map-visible" type="checkbox" checked>
+<label for="geographic-map-visible">Megjelenjen az atlaszban</label>
+</div>
+
+<div class="checkbox-row">
+<input id="geographic-map-mapVisible" type="checkbox" checked>
+<label for="geographic-map-mapVisible">Jelenjen meg a földrajzi térképen</label>
+</div>
+
+</div>
+
+<div class="card">
+<h3>Földrajzi térképek</h3>
+<div id="geographicMapList" class="list"></div>
+</div>
+
+</section>
+
 <!-- GALLERY -->
 
 <section id="section-gallery" class="section">
@@ -1600,6 +1734,7 @@ historicalEvents:[],
 historicalPeople:[],
 historicalCounties:[],
 historicalMaps:[],
+geographicMaps:[],
 sources:[],
 gallery:[]
 };
@@ -1611,6 +1746,7 @@ event:null,
 person:null,
 county:null,
 map:null,
+geographicMap:null,
 gallery:null,
 source:null
 };
@@ -1702,6 +1838,7 @@ const arrays=[
 "historicalPeople",
 "historicalCounties",
 "historicalMaps",
+"geographicMaps",
 "sources",
 "gallery"
 ];
@@ -2609,6 +2746,112 @@ $("map-preview").style.display="none";
 $("map-image-file").value="";
 }
 
+function addGeographicMap(){
+const title=$("geographic-map-title").value.trim();
+
+if(!title){
+showStatus("A földrajzi térkép címe kötelező.","error");
+return;
+}
+
+const id=$("geographic-map-id").value.trim()||uniqueId(title,data.geographicMaps);
+
+if(data.geographicMaps.some(x=>x.id===id)&&editing.geographicMap===null){
+showStatus("Ez a földrajzi térkép azonosító már létezik.","error");
+return;
+}
+
+const sourceUrl=$("geographic-map-sourceUrl").value.trim();
+
+if(sourceUrl){
+try{
+const url=new URL(sourceUrl);
+if(!["http:","https:"].includes(url.protocol))throw new Error();
+}catch{
+showStatus("A forrás URL-je nem érvényes.","error");
+return;
+}
+}
+
+const item={
+id,
+title,
+category:$("geographic-map-category").value||"Természetföldrajz",
+layer:$("geographic-map-layer").value||"",
+description:$("geographic-map-description").value.trim(),
+image:$("geographic-map-image").value||"",
+source:$("geographic-map-source").value.trim(),
+sourceUrl,
+sourceDescription:$("geographic-map-sourceDescription").value.trim(),
+visible:$("geographic-map-visible").checked,
+mapVisible:$("geographic-map-mapVisible").checked,
+order:Number($("geographic-map-order").value)||1
+};
+
+if(editing.geographicMap!==null){
+data.geographicMaps[editing.geographicMap]=item;
+editing.geographicMap=null;
+showStatus("A földrajzi térkép módosítva.","success");
+}else{
+data.geographicMaps.push(item);
+showStatus("A földrajzi térkép hozzáadva.","success");
+}
+
+clearGeographicMapForm();
+renderAll();
+saveToLocalStorage();
+}
+
+function editGeographicMap(index){
+const x=data.geographicMaps[index];
+
+$("geographic-map-id").value=x.id||"";
+$("geographic-map-title").value=x.title||"";
+$("geographic-map-category").value=x.category||"Természetföldrajz";
+$("geographic-map-layer").value=x.layer||"relief";
+$("geographic-map-description").value=x.description||"";
+$("geographic-map-image").value=x.image||"";
+$("geographic-map-source").value=x.source||"";
+$("geographic-map-sourceUrl").value=x.sourceUrl||"";
+$("geographic-map-sourceDescription").value=x.sourceDescription||"";
+$("geographic-map-visible").checked=x.visible!==false;
+$("geographic-map-mapVisible").checked=x.mapVisible!==false;
+$("geographic-map-order").value=x.order??1;
+
+if(x.image){
+$("geographic-map-preview").src=x.image;
+$("geographic-map-preview").style.display="block";
+}else{
+$("geographic-map-preview").style.display="none";
+}
+
+editing.geographicMap=index;
+showSection("geographicMaps",document.querySelector('.sidebar button[onclick*="geographicMaps"]'));
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function clearGeographicMapForm(){
+editing.geographicMap=null;
+
+[
+"geographic-map-id",
+"geographic-map-title",
+"geographic-map-description",
+"geographic-map-image",
+"geographic-map-source",
+"geographic-map-sourceUrl",
+"geographic-map-sourceDescription"
+].forEach(id=>$(id).value="");
+
+$("geographic-map-category").value="Természetföldrajz";
+$("geographic-map-layer").value="relief";
+$("geographic-map-order").value=1;
+$("geographic-map-visible").checked=true;
+$("geographic-map-mapVisible").checked=true;
+$("geographic-map-preview").style.display="none";
+$("geographic-map-image-file").value="";
+}
+
 function addGalleryItem(){
 const title=$("gallery-title").value.trim();
 const image=$("gallery-image").value.trim();
@@ -2783,6 +3026,7 @@ renderEvents();
 renderPeople();
 renderCounties();
 renderMaps();
+renderGeographicMaps();
 renderGallery();
 renderSources();
 updateStats();
@@ -2933,6 +3177,33 @@ c.innerHTML=data.historicalMaps
 <div class="actions">
 <button class="btn btn-small" onclick="editMap(${i})">Szerkesztés</button>
 <button class="btn btn-small btn-danger" onclick="removeItem('historicalMaps',${i})">Törlés</button>
+</div>
+</div>
+`).join("");
+}
+
+function renderGeographicMaps(){
+const c=$("geographicMapList");
+
+if(!data.geographicMaps.length){
+c.innerHTML='<div class="empty">Még nincs földrajzi térkép.</div>';
+return;
+}
+
+c.innerHTML=[...data.geographicMaps]
+.map((x,i)=>({x,i}))
+.sort((a,b)=>(a.x.order??0)-(b.x.order??0))
+.map(({x,i})=>`
+<div class="list-item">
+<div class="list-info">
+<strong>🌍 ${escapeHtml(x.title)}</strong>
+<span>${escapeHtml(x.category||"")} · ${escapeHtml(x.layer||"")}</span>
+<span class="geographic-map-badge">${x.mapVisible===false?"Térképen rejtve":"Térképen látható"} · ${x.visible===false?"Atlaszban rejtve":"Atlaszban látható"}</span>
+</div>
+<div class="actions">
+${x.image?`<button class="btn btn-small" onclick="window.open(${JSON.stringify(x.image)},'_blank')">Kép</button>`:""}
+<button class="btn btn-small" onclick="editGeographicMap(${i})">Szerkesztés</button>
+<button class="btn btn-small btn-danger" onclick="removeItem('geographicMaps',${i})">Törlés</button>
 </div>
 </div>
 `).join("");
