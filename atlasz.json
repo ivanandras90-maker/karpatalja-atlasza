@@ -1,0 +1,29 @@
+{
+    "hero": {
+        "title": "Kárpátalja",
+        "description": "Fedezd fel Kárpátalja földrajzát és történelmét egyetlen interaktív atlaszban."
+    },
+
+    "geography": {
+        "title": "Földrajzi atlasz",
+        "description": "Kárpátalja természetföldrajzi és társadalomföldrajzi viszonyainak tematikus bemutatása.",
+        "link": "foldrajzi-terkep.html"
+    },
+
+    "history": {
+        "title": "Történeti atlasz",
+        "description": "Kárpátalja történelmének bemutatása korszakokon, eseményeken, településeken és térképeken keresztül.",
+        "link": "tortenelmi-terkep.html"
+    },
+
+    "sources": [
+        {
+            "title": "Történeti források",
+            "description": "Könyvek, tanulmányok, levéltári és történeti források."
+        },
+        {
+            "title": "Térképészeti források",
+            "description": "Történelmi és modern térképek, atlaszok és térinformatikai adatok."
+        }
+    ]
+}
