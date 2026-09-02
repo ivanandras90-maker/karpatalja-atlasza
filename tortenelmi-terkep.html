@@ -1,406 +1,3476 @@
 <!DOCTYPE html>
 <html lang="hu">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Történelmi interaktív térkép – Kárpátalja</title>
+<title>Kárpátalja Történeti Atlasza</title>
 
 <link
 rel="stylesheet"
 href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
+>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"
+>
 
 <style>
 
-* {
-    box-sizing: border-box;
+*{
+box-sizing:border-box;
 }
 
-body {
-    margin: 0;
-    font-family: Georgia, "Times New Roman", serif;
-    background: #f3f0e7;
+html,
+body{
+margin:0;
+padding:0;
+width:100%;
+height:100%;
 }
 
-/* =========================
-   FEJLÉC
-========================= */
-
-header {
-    background: #102638;
-    color: white;
-    padding: 20px 35px;
-    border-bottom: 1px solid #c09d57;
+body{
+font-family:Georgia,"Times New Roman",serif;
+background:#f3f0e7;
 }
 
-header h1 {
-    margin: 0;
-    font-size: 27px;
+header{
+background:#102638;
+color:white;
+padding:20px 35px;
+border-bottom:1px solid #c09d57;
 }
 
-header p {
-    margin: 5px 0 0;
-    color: #c9ad6c;
-    font-size: 14px;
+header h1{
+margin:0;
+font-size:27px;
 }
 
-/* =========================
-   NAVIGÁCIÓ
-========================= */
-
-nav {
-    background: #17374d;
-    padding: 0 35px;
+header p{
+margin:6px 0 0;
+color:#c9ad6c;
+font-size:14px;
 }
 
-nav a {
-    display: inline-block;
-    padding: 15px;
-    color: white;
-    text-decoration: none;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
+.language-switch{
+margin-top:12px;
+font-family:Arial,sans-serif;
+font-size:13px;
 }
 
-nav a:hover {
-    background: #c09d57;
-    color: #102638;
+.language-switch span,
+.language-switch a{
+margin-right:12px;
 }
 
-/* =========================
-   TÉRKÉP FEJLÉC
-========================= */
-
-.map-header {
-    background: #f3f0e7;
-    padding: 25px 35px;
+.language-switch a{
+color:white;
+text-decoration:none;
 }
 
-.map-header h2 {
-    margin: 0 0 8px;
-    font-size: 30px;
-    color: #17374d;
+.current-language{
+color:#d8b86a;
+font-weight:bold;
 }
 
-.map-header p {
-    margin: 0;
-    color: #5d666c;
+nav{
+background:#17374d;
+padding:0 35px;
 }
 
-/* =========================
-   TÉRKÉP
-========================= */
-
-#map {
-    width: 100%;
-    height: calc(100vh - 205px);
-    min-height: 550px;
+nav a{
+display:inline-block;
+padding:15px;
+color:white;
+text-decoration:none;
+font-family:Arial,sans-serif;
+font-size:14px;
+font-weight:bold;
 }
 
-/* =========================
-   INFORMÁCIÓS PANEL
-========================= */
-
-.map-info {
-    position: absolute;
-    z-index: 1000;
-
-    top: 220px;
-    right: 20px;
-
-    background: white;
-
-    padding: 18px;
-
-    width: 285px;
-
-    box-shadow:
-        0 4px 18px rgba(0,0,0,.2);
-
-    border-radius: 4px;
+nav a:hover{
+background:#c09d57;
+color:#102638;
 }
 
-.map-info h3 {
-    margin-top: 0;
-    color: #17374d;
+.map-header{
+background:#f3f0e7;
+padding:18px 35px;
+border-bottom:1px solid #d4cec1;
 }
 
-.map-info p {
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-    line-height: 1.5;
-    color: #555;
+.map-header h2{
+margin:0 0 7px;
+color:#17374d;
+font-size:28px;
 }
 
-/* =========================
-   MOBIL
-========================= */
+.map-header p{
+margin:0;
+color:#5d666c;
+font-size:14px;
+}
 
-@media (max-width: 700px) {
+#map{
+width:100%;
+height:calc(100vh - 202px);
+min-height:550px;
+}
 
-    .map-info {
-        display: none;
-    }
+.coordinate-display{
+background:rgba(16,38,56,.95);
+color:white;
+padding:7px 10px;
+border-radius:4px;
+font-family:Arial,sans-serif;
+font-size:11px;
+}
 
-    #map {
-        height: calc(100vh - 190px);
-    }
+.geojson-control{
+background:white;
+padding:5px;
+border-radius:4px;
+box-shadow:0 1px 5px rgba(0,0,0,.35);
+margin-bottom:5px;
+}
 
-    nav {
-        padding: 0 10px;
-    }
+.geojson-control button{
+display:block;
+width:170px;
+border:0;
+background:white;
+color:#17374d;
+padding:8px 10px;
+text-align:left;
+cursor:pointer;
+font:bold 11px Arial,sans-serif;
+border-bottom:1px solid #eee;
+}
 
-    nav a {
-        padding: 12px 8px;
-        font-size: 12px;
-    }
+.geojson-control button:last-child{
+border-bottom:0;
+}
+
+.geojson-control button:hover{
+background:#f0eadb;
+}
+
+.prezi-button{
+background:#c09d57!important;
+color:#102638!important;
+font-weight:bold!important;
+}
+
+/* =====================================================
+   PREZI SZERKESZTŐ
+===================================================== */
+
+#preziEditor{
+position:fixed;
+inset:0;
+z-index:10000;
+display:none;
+background:#e9e5da;
+}
+
+#preziEditor.active{
+display:flex;
+}
+
+.prezi-toolbar{
+width:190px;
+background:#102638;
+color:white;
+padding:15px;
+overflow-y:auto;
+flex-shrink:0;
+}
+
+.prezi-brand{
+padding-bottom:15px;
+margin-bottom:12px;
+border-bottom:1px solid #526573;
+}
+
+.prezi-brand-title{
+color:#d8b86a;
+font:bold 19px Georgia,serif;
+}
+
+.prezi-brand-subtitle{
+color:#cbd4d9;
+font:9px Arial,sans-serif;
+letter-spacing:1px;
+margin-top:3px;
+}
+
+.prezi-toolbar button{
+width:100%;
+padding:9px 8px;
+margin-bottom:6px;
+border:0;
+border-radius:4px;
+background:#17374d;
+color:white;
+cursor:pointer;
+text-align:left;
+font:bold 11px Arial,sans-serif;
+}
+
+.prezi-toolbar button:hover{
+background:#28566d;
+}
+
+.prezi-toolbar .gold{
+background:#c09d57;
+color:#102638;
+}
+
+.prezi-workspace{
+position:relative;
+flex:1;
+min-width:0;
+}
+
+#preziMap{
+position:absolute;
+inset:0;
+}
+
+.prezi-frames{
+width:230px;
+background:#f7f5ef;
+border-left:1px solid #c8c2b5;
+padding:12px;
+overflow-y:auto;
+flex-shrink:0;
+}
+
+.prezi-frames-title{
+color:#17374d;
+font:bold 11px Arial,sans-serif;
+letter-spacing:1px;
+padding-bottom:10px;
+border-bottom:1px solid #ccc;
+margin-bottom:10px;
+}
+
+.prezi-frame{
+background:white;
+border:1px solid #ccc;
+border-radius:5px;
+padding:11px;
+margin-bottom:8px;
+cursor:pointer;
+}
+
+.prezi-frame:hover{
+border-color:#c09d57;
+}
+
+.prezi-frame.active{
+border-color:#c09d57;
+box-shadow:0 0 0 2px rgba(192,157,87,.25);
+}
+
+.prezi-frame-number{
+color:#c09d57;
+font:bold 10px Arial,sans-serif;
+}
+
+.prezi-frame-title{
+color:#17374d;
+font:bold 12px Arial,sans-serif;
+margin-top:4px;
+}
+
+.prezi-frame-text{
+color:#777;
+font:10px Arial,sans-serif;
+line-height:1.4;
+margin-top:5px;
+}
+
+.prezi-object{
+position:absolute;
+z-index:2000;
+cursor:move;
+user-select:none;
+transform-origin:center center;
+}
+
+.prezi-text-object{
+padding:8px 12px;
+background:rgba(255,255,255,.9);
+border-radius:5px;
+color:#17374d;
+box-shadow:0 2px 10px rgba(0,0,0,.18);
+white-space:pre-wrap;
+}
+
+.prezi-object.selected{
+outline:2px solid #c09d57;
+outline-offset:4px;
+}
+
+.prezi-frame-editor{
+position:absolute;
+top:60px;
+right:15px;
+width:285px;
+background:rgba(255,255,255,.98);
+border:1px solid #c09d57;
+border-radius:6px;
+padding:12px;
+z-index:4000;
+box-shadow:0 5px 20px rgba(0,0,0,.3);
+}
+
+.prezi-frame-editor h3{
+margin:0 0 10px;
+color:#17374d;
+font-size:14px;
+}
+
+.prezi-frame-editor label,
+.prezi-text-editor label{
+display:block;
+margin:8px 0 4px;
+color:#526573;
+font:bold 10px Arial,sans-serif;
+}
+
+.prezi-frame-editor input,
+.prezi-frame-editor textarea,
+.prezi-text-editor input,
+.prezi-text-editor textarea,
+.prezi-text-editor select{
+width:100%;
+padding:7px;
+border:1px solid #aaa;
+border-radius:4px;
+font:11px Arial,sans-serif;
+}
+
+.prezi-frame-editor textarea{
+min-height:70px;
+resize:vertical;
+}
+
+.prezi-text-editor{
+position:absolute;
+bottom:20px;
+right:15px;
+width:285px;
+background:rgba(255,255,255,.98);
+border:1px solid #c09d57;
+border-radius:6px;
+padding:12px;
+z-index:4500;
+box-shadow:0 5px 20px rgba(0,0,0,.3);
+display:none;
+}
+
+.prezi-text-editor.active{
+display:block;
+}
+
+.prezi-text-editor h3{
+margin:0 0 10px;
+color:#17374d;
+font-size:14px;
+}
+
+.prezi-text-editor textarea{
+min-height:90px;
+resize:vertical;
+}
+
+#presentationOverlay{
+position:absolute;
+inset:0;
+z-index:9000;
+display:none;
+pointer-events:none;
+}
+
+#presentationOverlay.active{
+display:block;
+}
+
+.presentation-caption{
+position:absolute;
+left:50%;
+bottom:30px;
+transform:translateX(-50%);
+width:min(780px,calc(100% - 50px));
+padding:18px 22px;
+background:rgba(16,38,56,.95);
+color:white;
+border:1px solid #c09d57;
+border-radius:8px;
+text-align:center;
+pointer-events:auto;
+box-shadow:0 8px 30px rgba(0,0,0,.4);
+}
+
+.presentation-counter{
+color:#d8b86a;
+font:bold 10px Arial,sans-serif;
+}
+
+.presentation-caption h1{
+margin:5px 0;
+font:29px Georgia,serif;
+}
+
+.presentation-caption p{
+margin:0;
+color:#e2e6e8;
+font:13px Arial,sans-serif;
+line-height:1.5;
+}
+
+.presentation-buttons{
+display:flex;
+justify-content:center;
+gap:8px;
+margin-top:12px;
+}
+
+.presentation-buttons button{
+border:0;
+border-radius:4px;
+padding:8px 14px;
+cursor:pointer;
+font-weight:bold;
+}
+
+/* =====================================================
+   TÖRTÉNELMI IDŐVONAL
+===================================================== */
+
+.history-control{
+background:rgba(16,38,56,.96);
+color:white;
+padding:10px;
+border-radius:5px;
+box-shadow:0 2px 10px rgba(0,0,0,.3);
+width:220px;
+}
+
+.history-control-title{
+color:#d8b86a;
+font:bold 12px Arial,sans-serif;
+margin-bottom:7px;
+}
+
+.history-control select{
+width:100%;
+padding:7px;
+border:1px solid #c09d57;
+border-radius:4px;
+background:white;
+color:#17374d;
+font:12px Arial,sans-serif;
+}
+
+.history-info{
+background:rgba(255,255,255,.96);
+padding:12px;
+border-left:4px solid #c09d57;
+border-radius:5px;
+box-shadow:0 2px 10px rgba(0,0,0,.25);
+width:260px;
+}
+
+.history-info h3{
+margin:0 0 6px;
+color:#17374d;
+font-size:17px;
+}
+
+.history-info p{
+margin:4px 0;
+font:12px Arial,sans-serif;
+line-height:1.45;
+color:#555;
+}
+
+.history-period{
+color:#9b7b38;
+font-weight:bold;
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:800px){
+
+header{
+padding:15px;
+}
+
+header h1{
+font-size:21px;
+}
+
+nav{
+padding:0 8px;
+}
+
+nav a{
+padding:12px 8px;
+font-size:11px;
+}
+
+.map-header{
+padding:15px;
+}
+
+#map{
+height:calc(100vh - 185px);
+}
+
+.prezi-toolbar{
+width:145px;
+}
+
+.prezi-frames{
+width:175px;
+}
 
 }
 
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =========================
-     FEJLÉC
-========================= -->
-
 <header>
 
-    <h1>
-        Kárpátalja Földrajzi és Történeti Atlasza
-    </h1>
+<h1>
+Kárpátalja Történeti Atlasza
+</h1>
 
-    <p>
-        📜 Történelmi atlasz
-    </p>
+<p>
+Történelem • Korszakok • Települések • Történeti térképek
+</p>
 
-</header>
+<div class="language-switch">
 
+<span class="current-language">
+🇭🇺 MAGYAR
+</span>
 
-<!-- =========================
-     NAVIGÁCIÓ
-========================= -->
-
-<nav>
-
-    <a href="index.html">
-        FŐOLDAL
-    </a>
-
-    <a href="foldrajzi-terkep.html">
-        🌍 FÖLDRAJZI TÉRKÉP
-    </a>
-
-    <a href="tortenelmi-terkep.html">
-        📜 TÖRTÉNELMI TÉRKÉP
-    </a>
-
-</nav>
-
-
-<!-- =========================
-     TÉRKÉP CÍM
-========================= -->
-
-<section class="map-header">
-
-    <h2>
-        📜 Interaktív történelmi térkép
-    </h2>
-
-    <p>
-        Kárpátalja történelmi területe,
-        egykori vármegyéi és történelmi helyszínei.
-    </p>
-
-</section>
-
-
-<!-- =========================
-     MAP
-========================= -->
-
-<div id="map"></div>
-
-
-<!-- =========================
-     INFORMÁCIÓ
-========================= -->
-
-<div class="map-info">
-
-    <h3>
-        Történelmi atlasz
-    </h3>
-
-    <p>
-        Ezen a térképen külön rétegként
-        jelennek majd meg az egykori vármegyék,
-        történelmi települések, várak,
-        történelmi utak és események.
-    </p>
+<a href="tortenelmi-terkep-ua.html">
+🇺🇦 УКРАЇНСЬКА
+</a>
 
 </div>
 
+</header>
+
+<nav>
+
+<a href="index.html">
+FŐOLDAL
+</a>
+
+<a href="foldrajzi-terkep.html">
+🌍 FÖLDRAJZI TÉRKÉP
+</a>
+
+<a href="tortenelmi-terkep.html">
+📜 TÖRTÉNELMI TÉRKÉP
+</a>
+
+<a href="gallery.html">
+📷 GALÉRIA
+</a>
+
+<a href="admin.html">
+🔐 ADMIN
+</a>
+
+</nav>
+
+<section class="map-header">
+
+<h2>
+📜 Interaktív történelmi térkép
+</h2>
+
+<p>
+Kárpátalja történelmi korszakainak, településeinek és történeti objektumainak interaktív térképi bemutatása.
+</p>
+
+</section>
+
+<div id="map"></div>
 
 <script
 src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 </script>
 
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js">
+</script>
 
 <script>
 
-/* =========================
-   TÉRKÉP
-========================= */
-
-const map =
-    L.map('map').setView(
-        [48.45, 22.75],
-        8
-    );
-
-
-/* =========================
+/* =====================================================
    ALAPTÉRKÉP
-========================= */
+===================================================== */
 
-const osm =
-    L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        {
-            maxZoom: 19,
+const map=L.map("map").setView(
+[48.45,22.75],
+8
+);
 
-            attribution:
-                '&copy; OpenStreetMap contributors'
-        }
-    );
+const osm=L.tileLayer(
+"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+{
+maxZoom:19,
+attribution:"&copy; OpenStreetMap contributors"
+}
+).addTo(map);
 
-osm.addTo(map);
 
-
-/* =========================
+/* =====================================================
    TÖRTÉNELMI RÉTEGEK
-========================= */
+===================================================== */
+
+const arpadhaz=L.layerGroup();
+
+const kozepkor=L.layerGroup();
+
+const habsburg=L.layerGroup();
+
+const dualizmus=L.layerGroup();
+
+const csehszlovak=L.layerGroup();
+
+const karpatalja1939=L.layerGroup();
+
+const szovjet=L.layerGroup();
+
+const modern=L.layerGroup();
+
+const historicalGalleryLayer=L.layerGroup();
 
 
-/* Ung vármegye */
+/* =====================================================
+   RÉTEGVEZÉRLŐ
+===================================================== */
 
-const ung =
-    L.layerGroup();
+const overlays={
 
+"🏰 Árpád-kor":
+arpadhaz,
 
-/* Bereg vármegye */
+"⚔️ Középkor":
+kozepkor,
 
-const bereg =
-    L.layerGroup();
+"👑 Habsburg-kor":
+habsburg,
 
+"📜 1867–1918":
+dualizmus,
 
-/* Ugocsa vármegye */
+"🇨🇿 1918–1938":
+csehszlovak,
 
-const ugocsa =
-    L.layerGroup();
+"🇭🇺 1939–1944":
+karpatalja1939,
 
+"☭ 1945–1991":
+szovjet,
 
-/* Máramaros vármegye */
+"🇺🇦 1991–napjainkig":
+modern,
 
-const maramaros =
-    L.layerGroup();
+"📷 Galéria":
+historicalGalleryLayer
 
+};
 
-/* Történelmi települések */
-
-const tortenelmiTelepulesek =
-    L.layerGroup();
-
-
-/* Várak és erődítmények */
-
-const varak =
-    L.layerGroup();
-
-
-/* Történelmi események */
-
-const esemenyek =
-    L.layerGroup();
-
-
-/* Történelmi utak */
-
-const utak =
-    L.layerGroup();
+L.control.layers(
+{
+"OpenStreetMap":osm
+},
+overlays,
+{
+collapsed:false
+}
+).addTo(map);
 
 
-/* Régi térképek */
+/* =====================================================
+   TÖRTÉNELMI ADATOK
+===================================================== */
 
-const regiTerkepek =
-    L.layerGroup();
+const historicalData={
 
+arpadhaz:[
+{
+name:"Ungvár",
+lat:48.6208,
+lng:22.2879,
+description:"Ungvár Kárpátalja egyik történelmi központja."
+},
+{
+name:"Munkács",
+lat:48.4410,
+lng:22.7190,
+description:"Munkács történelmi települése és térségi központja."
+},
+{
+name:"Huszt",
+lat:48.1760,
+lng:23.2980,
+description:"Huszt történelmi települése."
+}
+],
 
-/* =========================
-   RÉTEGVÁLASZTÓ
-========================= */
+kozepkor:[
+{
+name:"Ungvár vára",
+lat:48.6208,
+lng:22.2879,
+description:"Ungvár történelmi vára."
+},
+{
+name:"Munkács",
+lat:48.4410,
+lng:22.7190,
+description:"Munkács történelmi központja."
+},
+{
+name:"Huszt vára",
+lat:48.1760,
+lng:23.2980,
+description:"Huszt történelmi vára."
+}
+],
 
-const overlays = {
+habsburg:[
+{
+name:"Ungvár",
+lat:48.6208,
+lng:22.2879,
+description:"Ungvár a térség egyik jelentős történelmi városa."
+},
+{
+name:"Munkács",
+lat:48.4410,
+lng:22.7190,
+description:"Munkács történelmi városa."
+},
+{
+name:"Beregszász",
+lat:48.2056,
+lng:22.6442,
+description:"Beregszász történelmi városa."
+}
+],
 
-    "🏛️ Ung vármegye":
-        ung,
+dualizmus:[
+{
+name:"Ungvár",
+lat:48.6208,
+lng:22.2879,
+description:"Ungvár a dualizmus korának egyik fontos városa."
+},
+{
+name:"Munkács",
+lat:48.4410,
+lng:22.7190,
+description:"Munkács jelentős történelmi települése."
+},
+{
+name:"Beregszász",
+lat:48.2056,
+lng:22.6442,
+description:"Beregszász történelmi városa."
+},
+{
+name:"Nagyszőlős",
+lat:48.1497,
+lng:23.0310,
+description:"Nagyszőlős történelmi települése."
+}
+],
 
-    "🏛️ Bereg vármegye":
-        bereg,
+csehszlovak:[
+{
+name:"Ungvár",
+lat:48.6208,
+lng:22.2879,
+description:"Ungvár a két világháború közötti korszak fontos városa."
+},
+{
+name:"Munkács",
+lat:48.4410,
+lng:22.7190,
+description:"Munkács történelmi városa."
+},
+{
+name:"Beregszász",
+lat:48.2056,
+lng:22.6442,
+description:"Beregszász történelmi települése."
+}
+],
 
-    "🏛️ Ugocsa vármegye":
-        ugocsa,
+karpatalja1939:[
+{
+name:"Ungvár",
+lat:48.6208,
+lng:22.2879,
+description:"Ungvár történelmi városa a korszakban."
+},
+{
+name:"Munkács",
+lat:48.4410,
+lng:22.7190,
+description:"Munkács történelmi városa."
+},
+{
+name:"Beregszász",
+lat:48.2056,
+lng:22.6442,
+description:"Beregszász történelmi települése."
+}
+],
 
-    "🏛️ Máramaros vármegye":
-        maramaros,
+szovjet:[
+{
+name:"Ungvár",
+lat:48.6208,
+lng:22.2879,
+description:"Ungvár a szovjet korszakban."
+},
+{
+name:"Munkács",
+lat:48.4410,
+lng:22.7190,
+description:"Munkács a korszak egyik jelentős városa."
+},
+{
+name:"Beregszász",
+lat:48.2056,
+lng:22.6442,
+description:"Beregszász történelmi települése."
+}
+],
 
-    "🏘️ Történelmi települések":
-        tortenelmiTelepulesek,
-
-    "🏰 Várak és erődítmények":
-        varak,
-
-    "⚔️ Történelmi események":
-        esemenyek,
-
-    "🛤️ Történelmi utak":
-        utak,
-
-    "🗺️ Régi térképek":
-        regiTerkepek
+modern:[
+{
+name:"Ungvár",
+lat:48.6208,
+lng:22.2879,
+description:"Ungvár Kárpátalja mai központja."
+},
+{
+name:"Munkács",
+lat:48.4410,
+lng:22.7190,
+description:"Munkács Kárpátalja egyik jelentős városa."
+},
+{
+name:"Beregszász",
+lat:48.2056,
+lng:22.6442,
+description:"Beregszász jelentős történelmi és kulturális központ."
+},
+{
+name:"Huszt",
+lat:48.1760,
+lng:23.2980,
+description:"Huszt történelmi városa."
+}
+]
 
 };
 
 
-/* =========================
-   LAYER CONTROL
-========================= */
+/* =====================================================
+   KORSZAKOK
+===================================================== */
 
-L.control.layers(
-    {
-        "OpenStreetMap": osm
-    },
-    overlays,
-    {
-        collapsed: false
-    }
-).addTo(map);
+const periodNames={
+
+arpadhaz:"Árpád-kor",
+
+kozepkor:"Középkor",
+
+habsburg:"Habsburg-kor",
+
+dualizmus:"1867–1918",
+
+csehszlovak:"1918–1938",
+
+karpatalja1939:"1939–1944",
+
+szovjet:"1945–1991",
+
+modern:"1991–napjainkig"
+
+};
+
+
+/* =====================================================
+   TÖRTÉNELMI MARKEREK
+===================================================== */
+
+function renderHistoricalLayer(
+layer,
+items,
+period
+){
+
+items.forEach(
+item=>{
+
+const marker=L.marker(
+[
+item.lat,
+item.lng
+]
+);
+
+marker.bindPopup(
+`
+<div style="min-width:210px;">
+
+<h3 style="
+margin:0 0 7px;
+color:#17374d;
+">
+${escapeHTML(item.name)}
+</h3>
+
+<div style="
+color:#9b7b38;
+font-weight:bold;
+margin-bottom:7px;
+">
+${escapeHTML(periodNames[period])}
+</div>
+
+<div style="
+line-height:1.45;
+">
+${escapeHTML(item.description)}
+</div>
+
+</div>
+`
+);
+
+marker.addTo(layer);
+
+}
+);
+
+}
+
+renderHistoricalLayer(
+arpadhaz,
+historicalData.arpadhaz,
+"arpadhaz"
+);
+
+renderHistoricalLayer(
+kozepkor,
+historicalData.kozepkor,
+"kozepkor"
+);
+
+renderHistoricalLayer(
+habsburg,
+historicalData.habsburg,
+"habsburg"
+);
+
+renderHistoricalLayer(
+dualizmus,
+historicalData.dualizmus,
+"dualizmus"
+);
+
+renderHistoricalLayer(
+csehszlovak,
+historicalData.csehszlovak,
+"csehszlovak"
+);
+
+renderHistoricalLayer(
+karpatalja1939,
+historicalData.karpatalja1939,
+"karpatalja1939"
+);
+
+renderHistoricalLayer(
+szovjet,
+historicalData.szovjet,
+"szovjet"
+);
+
+renderHistoricalLayer(
+modern,
+historicalData.modern,
+"modern"
+);
+
+
+/* =====================================================
+   GALÉRIA BETÖLTÉSE
+===================================================== */
+
+async function loadHistoricalGallery(){
+
+try{
+
+const response=await fetch(
+"atlasz.json",
+{
+cache:"no-store"
+}
+);
+
+if(!response.ok){
+
+throw new Error(
+"Az atlasz.json nem tölthető be."
+);
+
+}
+
+const data=await response.json();
+
+const gallery=
+Array.isArray(data.gallery)
+?data.gallery
+:[];
+
+historicalGalleryLayer.clearLayers();
+
+gallery
+.filter(
+item=>
+item &&
+item.visible!==false &&
+item.mapVisible===true &&
+Number.isFinite(
+Number(item.latitude)
+) &&
+Number.isFinite(
+Number(item.longitude)
+)
+)
+.sort(
+(a,b)=>
+Number(a.order||0)-
+Number(b.order||0)
+)
+.forEach(
+item=>{
+
+const lat=Number(
+item.latitude
+);
+
+const lng=Number(
+item.longitude
+);
+
+let imageHtml="";
+
+if(item.image){
+
+imageHtml=
+`
+<img
+src="${escapeHTML(item.image)}"
+alt="${escapeHTML(item.title||"Galéria kép")}"
+style="
+width:220px;
+max-width:100%;
+height:140px;
+object-fit:cover;
+border-radius:5px;
+margin-bottom:8px;
+">
+`;
+
+}
+
+const description=
+item.description
+?
+`
+<div style="
+margin:5px 0;
+line-height:1.45;
+">
+${escapeHTML(item.description)}
+</div>
+`
+:"";
+
+const period=
+item.period
+?
+`
+<div style="
+color:#666;
+margin-top:4px;
+">
+<strong>Korszak:</strong>
+${escapeHTML(item.period)}
+</div>
+`
+:"";
+
+const source=
+item.source
+?
+`
+<div style="
+margin-top:6px;
+">
+<strong>Forrás:</strong>
+${escapeHTML(item.source)}
+</div>
+`
+:"";
+
+const sourceUrl=
+item.sourceUrl
+?
+`
+<div style="
+margin-top:6px;
+">
+<a
+href="${escapeHTML(item.sourceUrl)}"
+target="_blank"
+rel="noopener noreferrer"
+>
+Forrás megnyitása →
+</a>
+</div>
+`
+:"";
+
+const marker=L.marker(
+[
+lat,
+lng
+]
+);
+
+marker.bindPopup(
+`
+<div style="
+min-width:220px;
+max-width:260px;
+">
+
+${imageHtml}
+
+<h3 style="
+margin:0 0 6px;
+color:#17374d;
+">
+${escapeHTML(
+item.title||"Galéria"
+)}
+</h3>
+
+${description}
+
+${period}
+
+${source}
+
+${sourceUrl}
+
+</div>
+`
+);
+
+marker.addTo(
+historicalGalleryLayer
+);
+
+}
+);
+
+historicalGalleryLayer.addTo(map);
+
+focusGalleryFromUrl(
+gallery
+);
+
+}
+catch(error){
+
+console.warn(
+"A történeti galéria nem tölthető be:",
+error
+);
+
+}
+
+}
+
+loadHistoricalGallery();
+
+
+/* =====================================================
+   GALÉRIA URL FÓKUSZ
+===================================================== */
+
+function focusGalleryFromUrl(
+gallery
+){
+
+const params=
+new URLSearchParams(
+window.location.search
+);
+
+const galleryId=
+params.get("gallery");
+
+const lat=
+Number(
+params.get("lat")
+);
+
+const lng=
+Number(
+params.get("lng")
+);
+
+if(
+!galleryId &&
+!(
+Number.isFinite(lat)&&
+Number.isFinite(lng)
+)
+){
+
+return;
+
+}
+
+const item=
+gallery.find(
+entry=>
+entry &&
+galleryId &&
+String(entry.id)===
+String(galleryId)
+);
+
+const targetLat=
+item &&
+Number.isFinite(
+Number(item.latitude)
+)
+?
+Number(item.latitude)
+:
+lat;
+
+const targetLng=
+item &&
+Number.isFinite(
+Number(item.longitude)
+)
+?
+Number(item.longitude)
+:
+lng;
+
+if(
+!Number.isFinite(targetLat)||
+!Number.isFinite(targetLng)
+){
+
+return;
+
+}
+
+map.setView(
+[
+targetLat,
+targetLng
+],
+Math.max(
+map.getZoom(),
+13
+),
+{
+animate:true
+}
+);
+
+historicalGalleryLayer.eachLayer(
+layer=>{
+
+if(
+layer.getLatLng &&
+Math.abs(
+layer.getLatLng().lat-
+targetLat
+)<0.00001 &&
+Math.abs(
+layer.getLatLng().lng-
+targetLng
+)<0.00001
+){
+
+layer.openPopup();
+
+}
+
+}
+);
+
+}
+
+
+/* =====================================================
+   KORSZAK VÁLASZTÓ
+===================================================== */
+
+const historyControl=L.control(
+{
+position:"topright"
+}
+);
+
+historyControl.onAdd=function(){
+
+const container=L.DomUtil.create(
+"div",
+"history-control"
+);
+
+container.innerHTML=`
+
+<div class="history-control-title">
+📜 TÖRTÉNELMI KORSZAK
+</div>
+
+<select id="historyPeriodSelect">
+
+<option value="">
+— Korszak kiválasztása —
+</option>
+
+<option value="arpadhaz">
+Árpád-kor
+</option>
+
+<option value="kozepkor">
+Középkor
+</option>
+
+<option value="habsburg">
+Habsburg-kor
+</option>
+
+<option value="dualizmus">
+1867–1918
+</option>
+
+<option value="csehszlovak">
+1918–1938
+</option>
+
+<option value="karpatalja1939">
+1939–1944
+</option>
+
+<option value="szovjet">
+1945–1991
+</option>
+
+<option value="modern">
+1991–napjainkig
+</option>
+
+</select>
+
+`;
+
+L.DomEvent.disableClickPropagation(
+container
+);
+
+return container;
+
+};
+
+historyControl.addTo(map);
+
+document.getElementById(
+"historyPeriodSelect"
+).addEventListener(
+"change",
+function(){
+
+const value=this.value;
+
+if(!value)return;
+
+const layerMap={
+arpadhaz:arpadhaz,
+kozepkor:kozepkor,
+habsburg:habsburg,
+dualizmus:dualizmus,
+csehszlovak:csehszlovak,
+karpatalja1939:karpatalja1939,
+szovjet:szovjet,
+modern:modern
+};
+
+Object.values(
+layerMap
+).forEach(
+layer=>{
+
+if(map.hasLayer(layer)){
+
+map.removeLayer(layer);
+
+}
+
+}
+);
+
+const selectedLayer=
+layerMap[value];
+
+selectedLayer.addTo(map);
+
+const bounds=
+selectedLayer.getBounds();
+
+if(bounds.isValid()){
+
+map.fitBounds(
+bounds,
+{
+padding:[40,40]
+}
+);
+
+}
+
+}
+);
+
+
+/* =====================================================
+   KOORDINÁTA
+===================================================== */
+
+const coordinateControl=L.control(
+{
+position:"bottomleft"
+}
+);
+
+coordinateControl.onAdd=function(){
+
+const div=L.DomUtil.create(
+"div",
+"coordinate-display"
+);
+
+div.innerHTML=
+"Lat: -- | Lng: --";
+
+return div;
+
+};
+
+coordinateControl.addTo(map);
+
+map.on(
+"mousemove",
+function(event){
+
+const display=
+document.querySelector(
+".coordinate-display"
+);
+
+if(display){
+
+display.innerHTML=
+"Lat: "+
+event.latlng.lat.toFixed(6)+
+" | Lng: "+
+event.latlng.lng.toFixed(6);
+
+}
+
+}
+);
+
+
+/* =====================================================
+   DRAW
+===================================================== */
+
+const drawnItems=
+new L.FeatureGroup();
+
+map.addLayer(
+drawnItems
+);
+
+const drawControl=
+new L.Control.Draw(
+{
+
+position:"topleft",
+
+edit:{
+featureGroup:
+drawnItems
+},
+
+draw:{
+polygon:true,
+polyline:true,
+rectangle:true,
+circle:true,
+marker:true,
+circlemarker:true
+}
+
+}
+);
+
+map.addControl(
+drawControl
+);
+
+map.on(
+L.Draw.Event.CREATED,
+function(event){
+
+drawnItems.addLayer(
+event.layer
+);
+
+}
+);
+
+
+/* =====================================================
+   GEOJSON IMPORT
+===================================================== */
+
+const geoJSONImport=
+L.control(
+{
+position:"topleft"
+}
+);
+
+geoJSONImport.onAdd=function(){
+
+const container=L.DomUtil.create(
+"div",
+"geojson-control"
+);
+
+const button=L.DomUtil.create(
+"button",
+"",
+container
+);
+
+button.innerHTML=
+"📥 Import GeoJSON";
+
+button.onclick=function(){
+
+const input=
+document.createElement(
+"input"
+);
+
+input.type="file";
+
+input.accept=
+".geojson,.json";
+
+input.onchange=
+function(event){
+
+const file=
+event.target.files[0];
+
+if(!file)return;
+
+const reader=
+new FileReader();
+
+reader.onload=function(){
+
+try{
+
+const data=
+JSON.parse(
+reader.result
+);
+
+const layer=
+L.geoJSON(
+data,
+{
+
+onEachFeature:
+function(
+feature,
+layer
+){
+
+if(
+feature.properties
+){
+
+layer.bindPopup(
+Object.entries(
+feature.properties
+)
+.map(
+pair=>
+"<b>"+
+escapeHTML(pair[0])+
+"</b>: "+
+escapeHTML(pair[1])
+)
+.join("<br>")
+);
+
+}
+
+}
+
+}
+);
+
+drawnItems.addLayer(
+layer
+);
+
+const bounds=
+layer.getBounds();
+
+if(bounds.isValid()){
+
+map.fitBounds(
+bounds
+);
+
+}
+
+}
+catch(error){
+
+alert(
+"Hibás GeoJSON fájl."
+);
+
+}
+
+};
+
+reader.readAsText(
+file
+);
+
+};
+
+input.click();
+
+};
+
+L.DomEvent.disableClickPropagation(
+container
+);
+
+return container;
+
+};
+
+geoJSONImport.addTo(
+map
+);
+
+
+/* =====================================================
+   GEOJSON EXPORT
+===================================================== */
+
+const geoJSONExport=
+L.control(
+{
+position:"topleft"
+}
+);
+
+geoJSONExport.onAdd=function(){
+
+const container=L.DomUtil.create(
+"div",
+"geojson-control"
+);
+
+const button=L.DomUtil.create(
+"button",
+"",
+container
+);
+
+button.innerHTML=
+"📤 Export GeoJSON";
+
+button.onclick=function(){
+
+const data=
+drawnItems.toGeoJSON();
+
+const blob=
+new Blob(
+[
+JSON.stringify(
+data,
+null,
+2
+)
+],
+{
+type:"application/geo+json"
+}
+);
+
+const url=
+URL.createObjectURL(
+blob
+);
+
+const a=
+document.createElement(
+"a"
+);
+
+a.href=url;
+
+a.download=
+"karpatalja-tortenelmi.geojson";
+
+document.body.appendChild(a);
+
+a.click();
+
+a.remove();
+
+URL.revokeObjectURL(
+url
+);
+
+};
+
+L.DomEvent.disableClickPropagation(
+container
+);
+
+return container;
+
+};
+
+geoJSONExport.addTo(
+map
+);
+
+
+/* =====================================================
+   PREZI SZERKESZTŐ
+===================================================== */
+
+const preziEditor=
+document.createElement(
+"div"
+);
+
+preziEditor.id=
+"preziEditor";
+
+preziEditor.innerHTML=`
+
+<aside class="prezi-toolbar">
+
+<div class="prezi-brand">
+
+<div class="prezi-brand-title">
+KÁRPÁTALJA
+</div>
+
+<div class="prezi-brand-subtitle">
+TÖRTÉNETI ATLASZ
+</div>
+
+</div>
+
+<button id="preziNewFrame">
+＋ Új nézet
+</button>
+
+<button id="preziSaveFrame">
+💾 Nézet mentése
+</button>
+
+<button id="preziDeleteFrame">
+🗑 Nézet törlése
+</button>
+
+<button id="preziAddText">
+T Szöveg
+</button>
+
+<button id="preziAddTitle">
+H Cím
+</button>
+
+<button id="preziStart" class="gold">
+▶ PREZI MÓD
+</button>
+
+<button id="preziExport">
+📤 Prezi export
+</button>
+
+<button id="preziImport">
+📥 Prezi import
+</button>
+
+<input
+id="preziFile"
+type="file"
+accept=".json"
+hidden
+>
+
+</aside>
+
+
+<main class="prezi-workspace">
+
+<div id="preziMap"></div>
+
+
+<div class="prezi-frame-editor">
+
+<h3>
+🗺️ Nézet szerkesztése
+</h3>
+
+<label>
+Cím
+</label>
+
+<input
+id="preziFrameTitle"
+>
+
+<label>
+Szöveg
+</label>
+
+<textarea
+id="preziFrameText"
+></textarea>
+
+<label>
+Zoom
+</label>
+
+<input
+id="preziZoom"
+type="range"
+min="1"
+max="19"
+step=".1"
+>
+
+<button
+id="preziPosition"
+style="
+margin-top:8px;
+width:100%;
+padding:8px;
+border:0;
+background:#17374d;
+color:white;
+border-radius:4px;
+cursor:pointer;
+"
+>
+📍 Aktuális pozíció mentése
+</button>
+
+</div>
+
+
+<div
+id="preziTextEditor"
+class="prezi-text-editor"
+>
+
+<h3>
+✏️ Szövegszerkesztő
+</h3>
+
+<label>
+Szöveg
+</label>
+
+<textarea
+id="preziObjectText"
+></textarea>
+
+<label>
+Betűméret
+</label>
+
+<input
+id="preziObjectSize"
+type="range"
+min="12"
+max="90"
+value="30"
+>
+
+<label>
+Igazítás
+</label>
+
+<select
+id="preziObjectAlign"
+>
+
+<option value="left">
+Balra
+</option>
+
+<option value="center">
+Középre
+</option>
+
+<option value="right">
+Jobbra
+</option>
+
+</select>
+
+<button
+id="preziApplyText"
+style="
+margin-top:8px;
+padding:8px 12px;
+border:0;
+background:#17374d;
+color:white;
+border-radius:4px;
+cursor:pointer;
+"
+>
+💾 Alkalmaz
+</button>
+
+<button
+id="preziDeleteText"
+style="
+margin-top:8px;
+padding:8px 12px;
+border:0;
+background:#8b2020;
+color:white;
+border-radius:4px;
+cursor:pointer;
+"
+>
+🗑 Törlés
+</button>
+
+</div>
+
+
+<div
+id="presentationOverlay"
+>
+
+<div class="presentation-caption">
+
+<div
+id="presentationCounter"
+class="presentation-counter"
+>
+</div>
+
+<h1
+id="presentationTitle"
+>
+</h1>
+
+<p
+id="presentationText"
+>
+</p>
+
+<div class="presentation-buttons">
+
+<button id="presentationPrev">
+◀
+</button>
+
+<button id="presentationExit">
+✕ Kilépés
+</button>
+
+<button id="presentationNext">
+▶
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+
+<aside class="prezi-frames">
+
+<div class="prezi-frames-title">
+TÖRTÉNELMI PREZENTÁCIÓ
+</div>
+
+<div
+id="preziFrameList"
+>
+</div>
+
+</aside>
+
+`;
+
+document.body.appendChild(
+preziEditor
+);
+
+
+/* =====================================================
+   PREZI ALAPADATOK
+===================================================== */
+
+let preziFrames=[
+
+{
+title:"Kárpátalja története",
+text:"Az interaktív történeti atlasz áttekintése.",
+lat:48.45,
+lng:22.75,
+zoom:8,
+objects:[]
+},
+
+{
+title:"Középkori Kárpátalja",
+text:"A történelmi települések és várak térképi bemutatása.",
+lat:48.45,
+lng:22.75,
+zoom:9,
+objects:[]
+}
+
+];
+
+let preziIndex=0;
+
+let selectedPreziObject=null;
+
+let presentationRunning=false;
+
+
+/* =====================================================
+   PREZI LOCALSTORAGE
+===================================================== */
+
+try{
+
+const saved=
+localStorage.getItem(
+"karpatalja-tortenelmi-prezi"
+);
+
+if(saved){
+
+const parsed=
+JSON.parse(saved);
+
+if(
+Array.isArray(parsed)&&
+parsed.length
+){
+
+preziFrames=parsed;
+
+}
+
+}
+
+}
+catch(error){
+
+console.warn(
+"Történeti Prezi adatok nem tölthetők be."
+);
+
+}
+
+
+/* =====================================================
+   MENTÉS
+===================================================== */
+
+function savePrezi(){
+
+localStorage.setItem(
+"karpatalja-tortenelmi-prezi",
+JSON.stringify(
+preziFrames
+)
+);
+
+}
+
+
+/* =====================================================
+   PREZI INDÍTÓ
+===================================================== */
+
+const preziLauncher=
+L.control(
+{
+position:"bottomright"
+}
+);
+
+preziLauncher.onAdd=function(){
+
+const container=
+L.DomUtil.create(
+"div",
+"geojson-control"
+);
+
+const button=
+L.DomUtil.create(
+"button",
+"",
+container
+);
+
+button.className=
+"prezi-button";
+
+button.innerHTML=
+"🎬 PREZI MÓD";
+
+button.onclick=function(){
+
+openPreziEditor();
+
+};
+
+L.DomEvent.disableClickPropagation(
+container
+);
+
+return container;
+
+};
+
+preziLauncher.addTo(
+map
+);
+
+
+/* =====================================================
+   PREZI SZERKESZTŐ MEGNYITÁSA
+===================================================== */
+
+function openPreziEditor(){
+
+preziEditor.classList.add(
+"active"
+);
+
+initPreziMap();
+
+loadPreziFrame();
+
+renderPreziFrames();
+
+setTimeout(
+()=>{
+
+if(preziMap){
+
+preziMap.invalidateSize();
+
+}
+
+renderPreziObjects();
+
+},
+100
+);
+
+}
+
+
+/* =====================================================
+   PREZI TÉRKÉP
+===================================================== */
+
+let preziMap=null;
+
+function initPreziMap(){
+
+if(preziMap)return;
+
+const frame=
+preziFrames[
+preziIndex
+];
+
+preziMap=
+L.map(
+"preziMap"
+).setView(
+[
+frame.lat,
+frame.lng
+],
+frame.zoom
+);
+
+L.tileLayer(
+"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+{
+maxZoom:19,
+attribution:
+"&copy; OpenStreetMap contributors"
+}
+).addTo(
+preziMap
+);
+
+}
+
+
+/* =====================================================
+   FRAME BETÖLTÉSE
+===================================================== */
+
+function loadPreziFrame(){
+
+const frame=
+preziFrames[
+preziIndex
+];
+
+document.getElementById(
+"preziFrameTitle"
+).value=
+frame.title||"";
+
+document.getElementById(
+"preziFrameText"
+).value=
+frame.text||"";
+
+document.getElementById(
+"preziZoom"
+).value=
+frame.zoom||8;
+
+if(preziMap){
+
+preziMap.setView(
+[
+frame.lat,
+frame.lng
+],
+frame.zoom
+);
+
+renderPreziObjects();
+
+}
+
+}
+
+
+/* =====================================================
+   FRAME LISTA
+===================================================== */
+
+function renderPreziFrames(){
+
+const list=
+document.getElementById(
+"preziFrameList"
+);
+
+list.innerHTML="";
+
+preziFrames.forEach(
+function(
+frame,
+index
+){
+
+const item=
+document.createElement(
+"div"
+);
+
+item.className=
+"prezi-frame"+
+(
+index===preziIndex
+?" active"
+:""
+);
+
+item.innerHTML=`
+
+<div class="prezi-frame-number">
+NÉZET ${index+1}
+</div>
+
+<div class="prezi-frame-title">
+${escapeHTML(frame.title)}
+</div>
+
+<div class="prezi-frame-text">
+${escapeHTML(frame.text)}
+</div>
+
+`;
+
+item.onclick=function(){
+
+preziIndex=index;
+
+selectedPreziObject=null;
+
+loadPreziFrame();
+
+renderPreziFrames();
+
+renderPreziObjects();
+
+};
+
+list.appendChild(
+item
+);
+
+}
+
+);
+
+}
+
+
+/* =====================================================
+   ÚJ FRAME
+===================================================== */
+
+document.getElementById(
+"preziNewFrame"
+).onclick=function(){
+
+const center=
+preziMap
+?
+preziMap.getCenter()
+:
+map.getCenter();
+
+const zoom=
+preziMap
+?
+preziMap.getZoom()
+:
+map.getZoom();
+
+preziFrames.push(
+{
+
+title:"Új történelmi nézet",
+
+text:"Ide írható a történelmi nézet szövege.",
+
+lat:center.lat,
+
+lng:center.lng,
+
+zoom:zoom,
+
+objects:[]
+
+}
+);
+
+preziIndex=
+preziFrames.length-1;
+
+savePrezi();
+
+loadPreziFrame();
+
+renderPreziFrames();
+
+};
+
+
+/* =====================================================
+   FRAME MENTÉSE
+===================================================== */
+
+function saveCurrentPreziFrame(){
+
+const frame=
+preziFrames[
+preziIndex
+];
+
+frame.title=
+document.getElementById(
+"preziFrameTitle"
+).value;
+
+frame.text=
+document.getElementById(
+"preziFrameText"
+).value;
+
+frame.zoom=
+Number(
+document.getElementById(
+"preziZoom"
+).value
+);
+
+savePrezi();
+
+renderPreziFrames();
+
+}
+
+document.getElementById(
+"preziSaveFrame"
+).onclick=function(){
+
+saveCurrentPreziFrame();
+
+};
+
+
+/* =====================================================
+   POZÍCIÓ MENTÉSE
+===================================================== */
+
+document.getElementById(
+"preziPosition"
+).onclick=function(){
+
+if(!preziMap)return;
+
+const frame=
+preziFrames[
+preziIndex
+];
+
+const center=
+preziMap.getCenter();
+
+frame.lat=
+center.lat;
+
+frame.lng=
+center.lng;
+
+frame.zoom=
+preziMap.getZoom();
+
+document.getElementById(
+"preziZoom"
+).value=
+frame.zoom;
+
+savePrezi();
+
+};
+
+
+/* =====================================================
+   ZOOM
+===================================================== */
+
+document.getElementById(
+"preziZoom"
+).oninput=function(){
+
+if(!preziMap)return;
+
+const zoom=
+Number(
+this.value
+);
+
+preziFrames[
+preziIndex
+].zoom=
+zoom;
+
+preziMap.setZoom(
+zoom
+);
+
+};
+
+
+/* =====================================================
+   FRAME TÖRLÉS
+===================================================== */
+
+document.getElementById(
+"preziDeleteFrame"
+).onclick=function(){
+
+if(
+preziFrames.length<=1
+){
+
+alert(
+"Legalább egy nézet szükséges."
+);
+
+return;
+
+}
+
+preziFrames.splice(
+preziIndex,
+1
+);
+
+preziIndex=
+Math.max(
+0,
+preziIndex-1
+);
+
+savePrezi();
+
+loadPreziFrame();
+
+renderPreziFrames();
+
+};
+
+
+/* =====================================================
+   SZÖVEG
+===================================================== */
+
+document.getElementById(
+"preziAddText"
+).onclick=function(){
+
+addPreziText(
+false
+);
+
+};
+
+document.getElementById(
+"preziAddTitle"
+).onclick=function(){
+
+addPreziText(
+true
+);
+
+};
+
+
+function addPreziText(
+title
+){
+
+const frame=
+preziFrames[
+preziIndex
+];
+
+if(!frame.objects){
+
+frame.objects=[];
+
+}
+
+const object={
+
+id:
+Date.now()+
+Math.random(),
+
+text:
+title
+?
+"Kárpátalja története"
+:
+"Ide írd a szöveget.",
+
+size:
+title
+?
+50
+:
+30,
+
+align:
+"center",
+
+x:50,
+
+y:50,
+
+scale:1,
+
+rotation:0
+
+};
+
+frame.objects.push(
+object
+);
+
+selectedPreziObject=
+object;
+
+savePrezi();
+
+renderPreziObjects();
+
+openTextEditor(
+object
+);
+
+}
+
+
+/* =====================================================
+   PREZI OBJEKTUMOK
+===================================================== */
+
+function renderPreziObjects(){
+
+if(!preziMap)return;
+
+let layer=
+document.getElementById(
+"preziObjects"
+);
+
+if(!layer){
+
+layer=
+document.createElement(
+"div"
+);
+
+layer.id=
+"preziObjects";
+
+layer.style.cssText=
+"position:absolute;inset:0;z-index:2000;pointer-events:none;";
+
+document.getElementById(
+"preziMap"
+).parentElement.appendChild(
+layer
+);
+
+}
+
+layer.innerHTML="";
+
+const frame=
+preziFrames[
+preziIndex
+];
+
+if(!frame.objects)return;
+
+frame.objects.forEach(
+function(object){
+
+const el=
+document.createElement(
+"div"
+);
+
+el.className=
+"prezi-object prezi-text-object";
+
+if(
+selectedPreziObject &&
+selectedPreziObject.id===
+object.id
+){
+
+el.classList.add(
+"selected"
+);
+
+}
+
+el.textContent=
+object.text;
+
+el.style.left=
+object.x+"%";
+
+el.style.top=
+object.y+"%";
+
+el.style.fontSize=
+object.size+"px";
+
+el.style.textAlign=
+object.align;
+
+el.style.transform=
+`
+translate(-50%,-50%)
+scale(${object.scale||1})
+rotate(${object.rotation||0}deg)
+`;
+
+el.style.pointerEvents=
+"auto";
+
+el.onclick=function(
+event
+){
+
+event.stopPropagation();
+
+selectedPreziObject=
+object;
+
+openTextEditor(
+object
+);
+
+renderPreziObjects();
+
+};
+
+makePreziDraggable(
+el,
+object
+);
+
+layer.appendChild(
+el
+);
+
+}
+
+);
+
+}
+
+
+/* =====================================================
+   MOZGATHATÓ SZÖVEG
+===================================================== */
+
+function makePreziDraggable(
+element,
+object
+){
+
+let dragging=false;
+
+let startX=0;
+
+let startY=0;
+
+let originalX=0;
+
+let originalY=0;
+
+element.addEventListener(
+"pointerdown",
+function(event){
+
+dragging=true;
+
+element.setPointerCapture(
+event.pointerId
+);
+
+startX=
+event.clientX;
+
+startY=
+event.clientY;
+
+originalX=
+object.x;
+
+originalY=
+object.y;
+
+selectedPreziObject=
+object;
+
+}
+);
+
+element.addEventListener(
+"pointermove",
+function(event){
+
+if(!dragging)return;
+
+const rect=
+document.getElementById(
+"preziMap"
+).getBoundingClientRect();
+
+const dx=
+(
+event.clientX-
+startX
+)/
+rect.width*
+100;
+
+const dy=
+(
+event.clientY-
+startY
+)/
+rect.height*
+100;
+
+object.x=
+originalX+
+dx;
+
+object.y=
+originalY+
+dy;
+
+element.style.left=
+object.x+"%";
+
+element.style.top=
+object.y+"%";
+
+}
+);
+
+element.addEventListener(
+"pointerup",
+function(){
+
+dragging=false;
+
+savePrezi();
+
+renderPreziObjects();
+
+}
+);
+
+}
+
+
+/* =====================================================
+   SZÖVEGSZERKESZTŐ
+===================================================== */
+
+function openTextEditor(
+object
+){
+
+const editor=
+document.getElementById(
+"preziTextEditor"
+);
+
+editor.classList.add(
+"active"
+);
+
+document.getElementById(
+"preziObjectText"
+).value=
+object.text;
+
+document.getElementById(
+"preziObjectSize"
+).value=
+object.size;
+
+document.getElementById(
+"preziObjectAlign"
+).value=
+object.align;
+
+}
+
+
+/* =====================================================
+   SZÖVEG ALKALMAZÁSA
+===================================================== */
+
+document.getElementById(
+"preziApplyText"
+).onclick=function(){
+
+if(!selectedPreziObject)return;
+
+selectedPreziObject.text=
+document.getElementById(
+"preziObjectText"
+).value;
+
+selectedPreziObject.size=
+Number(
+document.getElementById(
+"preziObjectSize"
+).value
+);
+
+selectedPreziObject.align=
+document.getElementById(
+"preziObjectAlign"
+).value;
+
+savePrezi();
+
+renderPreziObjects();
+
+};
+
+
+/* =====================================================
+   SZÖVEG TÖRLÉSE
+===================================================== */
+
+document.getElementById(
+"preziDeleteText"
+).onclick=function(){
+
+if(!selectedPreziObject)return;
+
+const frame=
+preziFrames[
+preziIndex
+];
+
+frame.objects=
+(frame.objects||[])
+.filter(
+function(object){
+
+return object.id!==
+selectedPreziObject.id;
+
+}
+);
+
+selectedPreziObject=
+null;
+
+document.getElementById(
+"preziTextEditor"
+).classList.remove(
+"active"
+);
+
+savePrezi();
+
+renderPreziObjects();
+
+};
+
+
+/* =====================================================
+   PREZI INDÍTÁSA
+===================================================== */
+
+document.getElementById(
+"preziStart"
+).onclick=function(){
+
+presentationRunning=
+true;
+
+document.getElementById(
+"presentationOverlay"
+).classList.add(
+"active"
+);
+
+playPreziFrame();
+
+};
+
+
+/* =====================================================
+   PREZENTÁCIÓ
+===================================================== */
+
+function playPreziFrame(){
+
+const frame=
+preziFrames[
+preziIndex
+];
+
+document.getElementById(
+"presentationCounter"
+).textContent=
+"KÁRPÁTALJA TÖRTÉNETI ATLASZ • "+
+(preziIndex+1)+
+" / "+
+preziFrames.length;
+
+document.getElementById(
+"presentationTitle"
+).textContent=
+frame.title||"";
+
+document.getElementById(
+"presentationText"
+).textContent=
+frame.text||"";
+
+if(preziMap){
+
+preziMap.flyTo(
+[
+frame.lat,
+frame.lng
+],
+frame.zoom,
+{
+animate:true,
+duration:2.2,
+easeLinearity:.2
+}
+);
+
+}
+
+renderPreziObjects();
+
+}
+
+
+/* =====================================================
+   KÖVETKEZŐ
+===================================================== */
+
+document.getElementById(
+"presentationNext"
+).onclick=function(){
+
+if(
+preziIndex<
+preziFrames.length-1
+){
+
+preziIndex++;
+
+playPreziFrame();
+
+loadPreziFrame();
+
+renderPreziFrames();
+
+}
+
+};
+
+
+/* =====================================================
+   ELŐZŐ
+===================================================== */
+
+document.getElementById(
+"presentationPrev"
+).onclick=function(){
+
+if(
+preziIndex>0
+){
+
+preziIndex--;
+
+playPreziFrame();
+
+loadPreziFrame();
+
+renderPreziFrames();
+
+}
+
+};
+
+
+/* =====================================================
+   KILÉPÉS
+===================================================== */
+
+document.getElementById(
+"presentationExit"
+).onclick=function(){
+
+presentationRunning=
+false;
+
+document.getElementById(
+"presentationOverlay"
+).classList.remove(
+"active"
+);
+
+};
+
+
+/* =====================================================
+   BILLENTYŰ
+===================================================== */
+
+document.addEventListener(
+"keydown",
+function(event){
+
+if(!presentationRunning)return;
+
+if(
+event.key==="ArrowRight"
+){
+
+document.getElementById(
+"presentationNext"
+).click();
+
+}
+
+if(
+event.key==="ArrowLeft"
+){
+
+document.getElementById(
+"presentationPrev"
+).click();
+
+}
+
+if(
+event.key==="Escape"
+){
+
+document.getElementById(
+"presentationExit"
+).click();
+
+}
+
+}
+);
+
+
+/* =====================================================
+   PREZI EXPORT
+===================================================== */
+
+document.getElementById(
+"preziExport"
+).onclick=function(){
+
+const blob=
+new Blob(
+[
+JSON.stringify(
+preziFrames,
+null,
+2
+)
+],
+{
+type:"application/json"
+}
+);
+
+const url=
+URL.createObjectURL(
+blob
+);
+
+const a=
+document.createElement(
+"a"
+);
+
+a.href=url;
+
+a.download=
+"karpatalja-tortenelmi-prezi.json";
+
+document.body.appendChild(
+a
+);
+
+a.click();
+
+a.remove();
+
+URL.revokeObjectURL(
+url
+);
+
+};
+
+
+/* =====================================================
+   PREZI IMPORT
+===================================================== */
+
+document.getElementById(
+"preziImport"
+).onclick=function(){
+
+document.getElementById(
+"preziFile"
+).click();
+
+};
+
+
+document.getElementById(
+"preziFile"
+).onchange=function(
+event
+){
+
+const file=
+event.target.files[0];
+
+if(!file)return;
+
+const reader=
+new FileReader();
+
+reader.onload=function(){
+
+try{
+
+const data=
+JSON.parse(
+reader.result
+);
+
+if(
+!Array.isArray(data)||
+!data.length
+){
+
+throw new Error();
+
+}
+
+preziFrames=
+data;
+
+preziIndex=0;
+
+selectedPreziObject=
+null;
+
+savePrezi();
+
+loadPreziFrame();
+
+renderPreziFrames();
+
+renderPreziObjects();
+
+}
+catch(error){
+
+alert(
+"Hibás Prezi JSON fájl."
+);
+
+}
+
+};
+
+reader.readAsText(
+file
+);
+
+};
+
+
+/* =====================================================
+   TÉRKÉP VISSZA
+===================================================== */
+
+const backControl=
+L.control(
+{
+position:"bottomright"
+}
+);
+
+backControl.onAdd=function(){
+
+const container=
+L.DomUtil.create(
+"div",
+"geojson-control"
+);
+
+const button=
+L.DomUtil.create(
+"button",
+"",
+container
+);
+
+button.innerHTML=
+"🗺️ Térkép";
+
+button.onclick=function(){
+
+preziEditor.classList.remove(
+"active"
+);
+
+if(preziMap){
+
+setTimeout(
+()=>{
+preziMap.invalidateSize();
+},
+100
+);
+
+}
+
+};
+
+L.DomEvent.disableClickPropagation(
+container
+);
+
+return container;
+
+};
+
+backControl.addTo(
+map
+);
+
+
+/* =====================================================
+   HTML BIZTONSÁG
+===================================================== */
+
+function escapeHTML(
+value
+){
+
+return String(
+value??""
+)
+.replace(
+/&/g,
+"&amp;"
+)
+.replace(
+/</g,
+"&lt;"
+)
+.replace(
+/>/g,
+"&gt;"
+)
+.replace(
+/"/g,
+"&quot;"
+)
+.replace(
+/'/g,
+"&#039;"
+);
+
+}
+
+
+/* =====================================================
+   INDÍTÁS
+===================================================== */
+
+console.log(
+"Kárpátalja Történeti Atlasz – történelmi térkép + korszakok + Galéria + GeoJSON + Draw + Prezi rendszer betöltve."
+);
 
 </script>
 
-
 </body>
-
 </html>
