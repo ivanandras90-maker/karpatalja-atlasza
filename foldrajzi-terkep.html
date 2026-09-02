@@ -656,6 +656,7 @@ document.addEventListener("click",function(event){
     gap:7px;
     margin:10px 0 10px;
 }
+.map-header-research-dropdown{position:relative;display:inline-block;margin:11px 0 9px;z-index:1200}.map-header-research-trigger{border:1px solid #b8954d;border-radius:6px;padding:8px 12px;background:#17374d;color:#fff;cursor:pointer;font:700 11px Arial,sans-serif;box-shadow:0 1px 3px rgba(0,0,0,.12)}.map-header-research-trigger:hover{background:#c09d57;color:#102638}.map-header-research-menu{position:absolute;top:calc(100% + 5px);left:0;min-width:235px;background:#fffdf8;border:1px solid #c09d57;border-radius:7px;box-shadow:0 8px 24px rgba(0,0,0,.22);padding:5px;z-index:1300}.map-header-research-menu button{display:block;width:100%;border:0;border-radius:5px;padding:9px 11px;background:transparent;color:#17374d;text-align:left;cursor:pointer;font:700 11px Arial,sans-serif}.map-header-research-menu button:hover{background:#f0eadb;color:#102638}.map-header-research-menu[hidden]{display:none!important}
 .map-header-meta span{
     padding:6px 10px;
     border:1px solid #d2bc86;
@@ -676,6 +677,7 @@ document.addEventListener("click",function(event){
     box-shadow:0 5px 22px rgba(0,0,0,.32);
     font-family:Arial,sans-serif;
 }
+.geo-research-head-row{display:flex;align-items:center;gap:8px}.geo-research-head-row>div{min-width:0;flex:1}.geo-research-collapse{width:28px;height:28px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#d8b86a;cursor:pointer;font:700 13px Arial,sans-serif}.geo-research-collapse:hover{background:#c09d57;color:#102638}
 .geo-research-head{
     padding:13px 14px 10px;
     border-bottom:1px solid rgba(216,184,106,.35);
@@ -1163,6 +1165,7 @@ document.addEventListener("click",function(event){
     box-shadow:0 6px 25px rgba(0,0,0,.38);
     font-family:Arial,sans-serif;
 }
+.draw-research-head-row{display:flex;align-items:center;gap:8px}.draw-research-head-row>div{min-width:0;flex:1}.draw-research-collapse{width:28px;height:28px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#d8b86a;cursor:pointer;font:700 13px Arial,sans-serif}.draw-research-collapse:hover{background:#c09d57;color:#102638}
 .draw-research-head{
     position:sticky;
     top:0;
@@ -1291,6 +1294,7 @@ document.addEventListener("click",function(event){
     z-index:5000;
 }
 .feature-editor-panel[hidden]{display:none}
+.feature-editor-titlebar-actions{display:flex;align-items:center;gap:5px;flex:0 0 auto}.feature-editor-collapse{width:28px;height:28px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#d8b86a;cursor:pointer;font:700 13px Arial,sans-serif}.feature-editor-collapse:hover{background:#c09d57;color:#102638}
 .feature-editor-titlebar{
     display:flex;
     align-items:center;
@@ -1479,6 +1483,15 @@ document.addEventListener("click",function(event){
         <span>💰 Gazdaságföldrajz</span>
         <span>📷 Terepi dokumentáció</span>
         <span>🔬 Kutatási rétegek</span>
+    </div>
+
+    <div class="map-header-research-dropdown" id="headerResearchDropdown">
+        <button type="button" class="map-header-research-trigger" id="headerResearchMenuButton" aria-expanded="false">🔬 Kutatási eszközök ▾</button>
+        <div class="map-header-research-menu" id="headerResearchMenu" hidden>
+            <button type="button" id="headerResearchObjectsButton">🔬 Kutatási objektumok</button>
+            <button type="button" id="headerResearchLayersButton">🌍 Földrajzi kutatási rétegek</button>
+            <button type="button" id="headerFeatureEditorButton">✏️ Feature Editor</button>
+        </div>
     </div>
     <p>
         Kárpátalja tematikus földrajzi atlasza a természetföldrajzi, társadalomföldrajzi, gazdaságföldrajzi és kutatási rétegek integrált rendszerével.
@@ -1874,21 +1887,37 @@ researchControl.onAdd = function(){
     const container = L.DomUtil.create("div","geo-research-control");
     container.innerHTML = `
         <div class="geo-research-head">
-            <div class="geo-research-title">🌍 FÖLDRAJZI KUTATÁSI RÉTEGEK</div>
-            <div class="geo-research-subtitle">Tematikus felosztás a természet-, társadalom- és gazdaságföldrajzi vizsgálatokhoz.</div>
+            <div class="geo-research-head-row">
+                <div>
+                    <div class="geo-research-title">🌍 FÖLDRAJZI KUTATÁSI RÉTEGEK</div>
+                    <div class="geo-research-subtitle">Tematikus felosztás a természet-, társadalom- és gazdaságföldrajzi vizsgálatokhoz.</div>
+                </div>
+                <button type="button" class="geo-research-collapse" title="Panel összecsukása">▾</button>
+            </div>
             <input class="geo-research-search" type="search" placeholder="Réteg keresése…" aria-label="Réteg keresése">
         </div>
-        <div class="geo-research-body"></div>
-        <div class="geo-research-footer">
-            <div>Aktív rétegek: <strong class="active-layer-count">0</strong></div>
-            <div class="geo-research-actions">
-                <button type="button" class="geo-all-on">ÖSSZES BE</button>
-                <button type="button" class="geo-all-off">ÖSSZES KI</button>
+        <div class="geo-research-content">
+            <div class="geo-research-body"></div>
+            <div class="geo-research-footer">
+                <div>Aktív rétegek: <strong class="active-layer-count">0</strong></div>
+                <div class="geo-research-actions">
+                    <button type="button" class="geo-all-on">ÖSSZES BE</button>
+                    <button type="button" class="geo-all-off">ÖSSZES KI</button>
+                </div>
             </div>
         </div>`;
 
     const body = container.querySelector(".geo-research-body");
     const search = container.querySelector(".geo-research-search");
+    const content = container.querySelector(".geo-research-content");
+    const collapseButton = container.querySelector(".geo-research-collapse");
+    collapseButton.addEventListener("click",()=>{
+        const collapsed=content.style.display==="none";
+        content.style.display=collapsed?"block":"none";
+        search.style.display=collapsed?"block":"none";
+        collapseButton.textContent=collapsed?"▾":"▸";
+        collapseButton.title=collapsed?"Panel összecsukása":"Panel megnyitása";
+    });
 
     geographicCategories.forEach((category,index)=>{
         const section = document.createElement("section");
@@ -1975,6 +2004,7 @@ researchControl.onAdd = function(){
 };
 
 researchControl.addTo(map);
+if(researchControl.getContainer?.()) researchControl.getContainer().style.display="none";
 
 
 /* =====================================================
@@ -3048,7 +3078,7 @@ geoStatsControl.onAdd=function(){
     L.DomEvent.disableClickPropagation(div);
     return div;
 };
-geoStatsControl.addTo(map);
+// geoStatsControl elrejtve a felhasználói térképfelületen.
 
 
 /* =====================================================
@@ -3663,30 +3693,19 @@ function loadDrawLocal(){
     }catch(e){console.warn("Draw betöltés sikertelen",e);}
 }
 
-const researchDrawControl=L.control({position:"topright"});
-researchDrawControl.onAdd=function(){
-    const div=L.DomUtil.create("div","geojson-control");
-    const button=L.DomUtil.create("button","",div);
-    button.innerHTML="🔬 Kutatási objektumok";
-    button.title="Pont, Polyline és Polygon objektumok kezelése, mérése és elemzése";
-    button.onclick=()=>{
-        const panel=document.getElementById("drawResearchPanel");
-        if(panel) panel.style.display=panel.style.display==="none"?"block":"none";
-    };
-    L.DomEvent.disableClickPropagation(div);L.DomEvent.disableScrollPropagation(div);
-    return div;
-};
-researchDrawControl.addTo(map);
-
 const drawResearchPanel=L.control({position:"topright"});
 drawResearchPanel.onAdd=function(){
     const div=L.DomUtil.create("div","draw-research-control");
     div.id="drawResearchPanel";
-    div.innerHTML=`<div class="draw-research-head"><div class="draw-research-title">🔬 KUTATÁSI OBJEKTUMOK</div><div class="draw-research-subtitle">Point · Polyline · Polygon · WGS84 koordináták · hossz- és területmérés</div><div class="draw-research-toolbar"><select id="drawLengthUnit"><option value="cm">cm</option><option value="m" selected>m</option><option value="km">km</option><option value="mi">mérföld</option></select><select id="drawAreaUnit"><option value="cm2">cm²</option><option value="m2" selected>m²</option><option value="are">ár</option><option value="ha">hektár</option><option value="km2">km²</option></select><button id="drawAnalysisAll">📊 Elemzés</button><button id="drawExportGeo">GeoJSON</button><button id="drawExportCSV">CSV</button></div></div><div id="drawResearchObjectList" class="draw-object-list"></div>`;
+    div.innerHTML=`<div class="draw-research-head"><div class="draw-research-head-row"><div><div class="draw-research-title">🔬 KUTATÁSI OBJEKTUMOK</div><div class="draw-research-subtitle">Point · Polyline · Polygon · WGS84 koordináták · hossz- és területmérés</div></div><button type="button" class="draw-research-collapse" id="drawResearchCollapse" title="Kutatási objektumok összecsukása">▾</button></div><div class="draw-research-toolbar"><select id="drawLengthUnit"><option value="cm">cm</option><option value="m" selected>m</option><option value="km">km</option><option value="mi">mérföld</option></select><select id="drawAreaUnit"><option value="cm2">cm²</option><option value="m2" selected>m²</option><option value="are">ár</option><option value="ha">hektár</option><option value="km2">km²</option></select><button id="drawAnalysisAll">📊 Elemzés</button><button id="drawExportGeo">GeoJSON</button><button id="drawExportCSV">CSV</button></div></div><div class="draw-research-content"><div id="drawResearchObjectList" class="draw-object-list"></div></div>`;
+    const collapse=div.querySelector("#drawResearchCollapse");
+    const content=div.querySelector(".draw-research-content");
+    if(collapse&&content){collapse.onclick=()=>{const collapsed=content.style.display==="none";content.style.display=collapsed?"block":"none";collapse.textContent=collapsed?"▾":"▸";collapse.title=collapsed?"Kutatási objektumok összecsukása":"Kutatási objektumok megnyitása";};}
     L.DomEvent.disableClickPropagation(div);L.DomEvent.disableScrollPropagation(div);
     return div;
 };
 drawResearchPanel.addTo(map);
+if(drawResearchPanel.getContainer?.()) drawResearchPanel.getContainer().style.display="none";
 
 document.getElementById("drawLengthUnit").addEventListener("change",e=>{drawState.lengthUnit=e.target.value;const el=document.getElementById("featureLengthUnit");if(el) el.value=e.target.value;renderDrawResearchControl();renderFeatureEditor();[...drawState.objects.values()].forEach(refreshLayerPopup);});
 document.getElementById("drawAreaUnit").addEventListener("change",e=>{drawState.areaUnit=e.target.value;const el=document.getElementById("featureAreaUnit");if(el) el.value=e.target.value;renderDrawResearchControl();renderFeatureEditor();[...drawState.objects.values()].forEach(refreshLayerPopup);});
@@ -3830,6 +3849,7 @@ drawUndoControl.onAdd=function(){
     return div;
 };
 drawUndoControl.addTo(map);
+if(drawUndoControl.getContainer?.()) drawUndoControl.getContainer().style.display="none";
 
 function applyDraftStyleInput(){
     const color=document.getElementById("drawDraftColor");
@@ -3858,6 +3878,7 @@ drawDraftStyleControl.onAdd=function(){
     return div;
 };
 drawDraftStyleControl.addTo(map);
+if(drawDraftStyleControl.getContainer?.()) drawDraftStyleControl.getContainer().style.display="none";
 
 function bindDraftStyleControls(){
     ["drawDraftColor","drawDraftFillColor","drawDraftWeight","drawDraftOpacity","drawDraftFillOpacity"].forEach(id=>{
@@ -3900,16 +3921,20 @@ featureEditorBar.onAdd=function(){
     return div;
 };
 featureEditorBar.addTo(map);
+if(featureEditorBar.getContainer?.()) featureEditorBar.getContainer().style.display="none";
 
 const featureEditorPanel=L.control({position:"bottomleft"});
 featureEditorPanel.onAdd=function(){
     const div=L.DomUtil.create("div","feature-editor-panel");
     div.id="featureEditorPanel";
     div.hidden=true;
-    div.innerHTML=`<div class="feature-editor-titlebar"><div class="feature-editor-titlebar-main"><strong>✏️ FEATURE EDITOR</strong><br><small>Point · Polyline · Polygon · koordináták · mérés · terepi metaadat · Excel Join</small><div class="feature-editor-settings"><span class="fe-setting-label">⚙ Beállítások:</span><label>Vonal <input id="featureDraftColor" type="color" value="#17374d" title="Rajzolási szín"></label><label>Kitöltés <input id="featureDraftFill" type="color" value="#c09d57" title="Kitöltési szín"></label><label>Vastagság <input id="featureDraftWeight" type="number" min="1" max="20" step="1" value="4"></label><label>Stílus <select id="featureDraftDash"><option value="">Folytonos</option><option value="8 6">Szaggatott</option><option value="2 6">Pontozott</option></select></label><label>Hossz <select id="featureLengthUnit"><option value="cm">cm</option><option value="m" selected>m</option><option value="km">km</option><option value="mi">mérföld</option></select></label><label>Terület <select id="featureAreaUnit"><option value="cm2">cm²</option><option value="m2" selected>m²</option><option value="are">ár</option><option value="ha">hektár</option><option value="km2">km²</option></select></label><button type="button" class="fe-column-button" id="featureAddColumn">＋ Oszlop</button><button type="button" class="fe-join-button" id="featureJoinExcel">🔗 Join Excel</button><input type="file" id="featureEditorJoinFileInput" accept=".xlsx,.xls,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"></div><div id="featureJoinStatus" class="feature-editor-join-status"></div></div><button type="button" class="feature-editor-close" id="featureEditorClose">×</button></div><div class="feature-editor-grid"><div class="feature-editor-list" id="featureEditorList"></div><div class="feature-editor-detail" id="featureEditorDetail"><div class="feature-editor-empty">Kattints egy objektum sorára a részletes adatok megnyitásához.</div></div></div>`;
+    div.innerHTML=`<div class="feature-editor-titlebar"><div class="feature-editor-titlebar-main"><strong>✏️ FEATURE EDITOR</strong><br><small>Point · Polyline · Polygon · koordináták · mérés · terepi metaadat · Excel Join</small><div class="feature-editor-settings"><span class="fe-setting-label">⚙ Beállítások:</span><label>Vonal <input id="featureDraftColor" type="color" value="#17374d" title="Rajzolási szín"></label><label>Kitöltés <input id="featureDraftFill" type="color" value="#c09d57" title="Kitöltési szín"></label><label>Vastagság <input id="featureDraftWeight" type="number" min="1" max="20" step="1" value="4"></label><label>Stílus <select id="featureDraftDash"><option value="">Folytonos</option><option value="8 6">Szaggatott</option><option value="2 6">Pontozott</option></select></label><label>Hossz <select id="featureLengthUnit"><option value="cm">cm</option><option value="m" selected>m</option><option value="km">km</option><option value="mi">mérföld</option></select></label><label>Terület <select id="featureAreaUnit"><option value="cm2">cm²</option><option value="m2" selected>m²</option><option value="are">ár</option><option value="ha">hektár</option><option value="km2">km²</option></select></label><button type="button" class="fe-column-button" id="featureAddColumn">＋ Oszlop</button><button type="button" class="fe-join-button" id="featureJoinExcel">🔗 Join Excel</button><input type="file" id="featureEditorJoinFileInput" accept=".xlsx,.xls,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"></div><div id="featureJoinStatus" class="feature-editor-join-status"></div></div><div class="feature-editor-titlebar-actions"><button type="button" class="feature-editor-collapse" id="featureEditorCollapse" title="Feature Editor összecsukása">▾</button><button type="button" class="feature-editor-close" id="featureEditorClose">×</button></div></div><div class="feature-editor-grid"><div class="feature-editor-list" id="featureEditorList"></div><div class="feature-editor-detail" id="featureEditorDetail"><div class="feature-editor-empty">Kattints egy objektum sorára a részletes adatok megnyitásához.</div></div></div>`;
     setTimeout(()=>{
         const close=div.querySelector("#featureEditorClose");
         if(close) close.onclick=()=>div.hidden=true;
+        const collapse=div.querySelector("#featureEditorCollapse");
+        const grid=div.querySelector(".feature-editor-grid");
+        if(collapse&&grid){collapse.onclick=()=>{const collapsed=grid.style.display==="none";grid.style.display=collapsed?"grid":"none";collapse.textContent=collapsed?"▾":"▸";collapse.title=collapsed?"Feature Editor összecsukása":"Feature Editor megnyitása";};}
     },0);
     L.DomEvent.disableClickPropagation(div);
     L.DomEvent.disableScrollPropagation(div);
@@ -3917,6 +3942,85 @@ featureEditorPanel.onAdd=function(){
 };
 featureEditorPanel.addTo(map);
 bindFeatureEditorSettings();
+
+const headerResearchMenuButton=document.getElementById("headerResearchMenuButton");
+const headerResearchMenu=document.getElementById("headerResearchMenu");
+const headerResearchDropdown=document.getElementById("headerResearchDropdown");
+const headerResearchObjectsButton=document.getElementById("headerResearchObjectsButton");
+const headerResearchLayersButton=document.getElementById("headerResearchLayersButton");
+const headerFeatureEditorButton=document.getElementById("headerFeatureEditorButton");
+
+function closeHeaderResearchMenu(){
+    if(headerResearchMenu){headerResearchMenu.hidden=true;}
+    if(headerResearchMenuButton){headerResearchMenuButton.setAttribute("aria-expanded","false");headerResearchMenuButton.textContent="🔬 Kutatási eszközök ▾";}
+}
+
+function openHeaderResearchMenu(){
+    if(headerResearchMenu){headerResearchMenu.hidden=false;}
+    if(headerResearchMenuButton){headerResearchMenuButton.setAttribute("aria-expanded","true");headerResearchMenuButton.textContent="🔬 Kutatási eszközök ▴";}
+}
+
+if(headerResearchMenuButton){
+    headerResearchMenuButton.addEventListener("click",event=>{
+        event.stopPropagation();
+        if(headerResearchMenu?.hidden) openHeaderResearchMenu();
+        else closeHeaderResearchMenu();
+    });
+}
+
+if(headerResearchObjectsButton){
+    headerResearchObjectsButton.onclick=()=>{
+        const panel=document.getElementById("drawResearchPanel");
+        if(panel){
+            panel.style.display="block";
+            const content=panel.querySelector(".draw-research-content");
+            const collapse=panel.querySelector("#drawResearchCollapse");
+            if(content)content.style.display="block";
+            if(collapse){collapse.textContent="▾";collapse.title="Kutatási objektumok összecsukása";}
+        }
+        if(!map.hasLayer(drawnItems))map.addLayer(drawnItems);
+        renderDrawResearchControl();
+        closeHeaderResearchMenu();
+    };
+}
+
+if(headerResearchLayersButton){
+    headerResearchLayersButton.onclick=()=>{
+        const el=researchControl.getContainer?.();
+        if(el){
+            el.style.display="block";
+            const content=el.querySelector(".geo-research-content");
+            const search=el.querySelector(".geo-research-search");
+            const collapse=el.querySelector(".geo-research-collapse");
+            if(content)content.style.display="block";
+            if(search)search.style.display="block";
+            if(collapse){collapse.textContent="▾";collapse.title="Panel összecsukása";}
+        }
+        researchControl.addTo(map);
+        closeHeaderResearchMenu();
+    };
+}
+
+if(headerFeatureEditorButton){
+    headerFeatureEditorButton.onclick=()=>{
+        const panel=document.getElementById("featureEditorPanel");
+        if(panel){panel.hidden=false;renderFeatureEditor();}
+        closeHeaderResearchMenu();
+    };
+}
+
+document.addEventListener("click",event=>{
+    if(headerResearchDropdown && !headerResearchDropdown.contains(event.target)) closeHeaderResearchMenu();
+});
+
+// A kutatási panelek a térképen alapból rejtve maradnak, és a fejléc lenyíló menüjéből nyithatók meg.
+const _drawResearchPanelElement=document.getElementById("drawResearchPanel");
+const _researchControlElement=researchControl.getContainer?.();
+if(_drawResearchPanelElement) _drawResearchPanelElement.style.display="none";
+if(_researchControlElement) _researchControlElement.style.display="none";
+if(typeof drawDraftStyleControl!=="undefined"){const el=drawDraftStyleControl.getContainer?.();if(el)el.style.display="none";}
+if(typeof drawUndoControl!=="undefined"){const el=drawUndoControl.getContainer?.();if(el)el.style.display="none";}
+if(typeof featureEditorBar!=="undefined"){const el=featureEditorBar.getContainer?.();if(el)el.style.display="none";}
 
 function setFeatureEditorJoinStatus(message,type="active"){
     const el=document.getElementById("featureJoinStatus");
@@ -6396,3 +6500,5 @@ console.log(
 
 </body>
 </html>
+
+<style id="atlas-final-ui-overrides">.draw-draft-style-control{display:none!important}</style>
