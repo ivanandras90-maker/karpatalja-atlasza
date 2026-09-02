@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Admin – Kárpátalja Atlasz</title>
+
+<style>
+
+/* ==================================================
+   ALAP
+================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f1eee5;
+    color: #263238;
+}
+
+
+/* ==================================================
+   LOGIN
+================================================== */
+
+#loginScreen {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            rgba(16,38,56,.95),
+            rgba(16,38,56,.98)
+        );
+}
+
+.login-box {
+
+    width: 420px;
+
+    max-width: calc(100% - 40px);
+
+    background: white;
+
+    padding: 45px;
+
+    border-top: 5px solid #c09d57;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.35);
+}
+
+.login-logo {
+
+    text-align: center;
+
+    font-size: 42px;
+
+    margin-bottom: 15px;
+}
+
+.login-box h1 {
+
+    margin: 0;
+
+    text-align: center;
+
+    color: #102638;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-weight: normal;
+}
+
+.login-box p {
+
+    text-align: center;
+
+    color: #687178;
+
+    margin-bottom: 30px;
+}
+
+.login-box label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    color: #39464d;
+}
+
+.login-box input {
+
+    width: 100%;
+
+    padding: 14px;
+
+    margin-bottom: 18px;
+
+    border: 1px solid #ccd1d3;
+
+    font-size: 15px;
+}
+
+.login-box input:focus {
+
+    outline: none;
+
+    border-color: #c09d57;
+}
+
+.login-button {
+
+    width: 100%;
+
+    padding: 15px;
+
+    background: #17374d;
+
+    color: white;
+
+    border: none;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    font-size: 14px;
+}
+
+.login-button:hover {
+
+    background: #102638;
+}
+
+.login-error {
+
+    display: none;
+
+    margin-top: 15px;
+
+    padding: 12px;
+
+    background: #f8dddd;
+
+    color: #9b2226;
+
+    font-size: 13px;
+
+    text-align: center;
+}
+
+
+/* ==================================================
+   ADMIN
+================================================== */
+
+#adminScreen {
+
+    display: none;
+
+    min-height: 100vh;
+}
+
+
+/* ==================================================
+   HEADER
+================================================== */
+
+.admin-header {
+
+    height: 75px;
+
+    background: #102638;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 30px;
+
+    border-bottom: 1px solid #c09d57;
+}
+
+.admin-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+.admin-title strong {
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 21px;
+
+    font-weight: normal;
+}
+
+.admin-badge {
+
+    padding: 5px 9px;
+
+    border: 1px solid #c09d57;
+
+    color: #d2b56c;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+}
+
+.logout {
+
+    background: transparent;
+
+    border: 1px solid #c09d57;
+
+    color: #d2b56c;
+
+    padding: 9px 15px;
+
+    cursor: pointer;
+}
+
+.logout:hover {
+
+    background: #c09d57;
+
+    color: #102638;
+}
+
+
+/* ==================================================
+   LAYOUT
+================================================== */
+
+.admin-layout {
+
+    display: grid;
+
+    grid-template-columns: 260px 1fr;
+
+    min-height: calc(100vh - 75px);
+}
+
+
+/* ==================================================
+   SIDEBAR
+================================================== */
+
+.sidebar {
+
+    background: #17374d;
+
+    color: white;
+
+    padding: 25px 15px;
+}
+
+.sidebar-title {
+
+    color: #d2b56c;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    margin: 5px 10px 15px;
+}
+
+.sidebar button {
+
+    width: 100%;
+
+    text-align: left;
+
+    padding: 13px 15px;
+
+    margin-bottom: 4px;
+
+    background: transparent;
+
+    color: white;
+
+    border: none;
+
+    cursor: pointer;
+
+    font-size: 13px;
+}
+
+.sidebar button:hover {
+
+    background: rgba(255,255,255,.08);
+}
+
+.sidebar button.active {
+
+    background: #c09d57;
+
+    color: #102638;
+
+    font-weight: bold;
+}
+
+
+/* ==================================================
+   MAIN
+================================================== */
+
+.admin-main {
+
+    padding: 35px;
+
+    max-width: 1300px;
+
+    width: 100%;
+}
+
+.page-heading {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 30px;
+}
+
+.page-heading h1 {
+
+    margin: 0;
+
+    color: #102638;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-weight: normal;
+
+    font-size: 32px;
+}
+
+.page-heading p {
+
+    margin: 6px 0 0;
+
+    color: #69747a;
+}
+
+
+/* ==================================================
+   BUTTONS
+================================================== */
+
+.btn {
+
+    padding: 11px 17px;
+
+    border: none;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    font-size: 13px;
+}
+
+.btn-primary {
+
+    background: #17374d;
+
+    color: white;
+}
+
+.btn-primary:hover {
+
+    background: #102638;
+}
+
+.btn-gold {
+
+    background: #c09d57;
+
+    color: #102638;
+}
+
+.btn-danger {
+
+    background: #a94442;
+
+    color: white;
+}
+
+.btn-light {
+
+    background: #e7e4dc;
+
+    color: #263238;
+}
+
+
+/* ==================================================
+   PANEL
+================================================== */
+
+.editor-panel {
+
+    background: white;
+
+    border: 1px solid #ddd6c8;
+
+    margin-bottom: 18px;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.05);
+}
+
+.editor-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 18px 20px;
+
+    background: #f8f6f0;
+
+    border-bottom: 1px solid #e1ddd4;
+}
+
+.editor-header-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+.editor-header h3 {
+
+    margin: 0;
+
+    color: #102638;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 21px;
+
+    font-weight: normal;
+}
+
+.panel-id {
+
+    color: #8a8f92;
+
+    font-size: 11px;
+}
+
+.editor-body {
+
+    padding: 22px;
+}
+
+.form-group {
+
+    margin-bottom: 20px;
+}
+
+.form-group label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #39464d;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+
+    width: 100%;
+
+    padding: 12px;
+
+    border: 1px solid #ccd1d3;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 14px;
+}
+
+.form-group textarea {
+
+    min-height: 110px;
+
+    resize: vertical;
+
+    line-height: 1.6;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+
+    outline: none;
+
+    border-color: #c09d57;
+}
+
+.editor-actions {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding-top: 15px;
+
+    border-top: 1px solid #eeeeee;
+}
+
+.panel-actions {
+
+    display: flex;
+
+    gap: 8px;
+}
+
+
+/* ==================================================
+   STATUS
+================================================== */
+
+.status {
+
+    padding: 13px 18px;
+
+    margin-bottom: 20px;
+
+    display: none;
+
+    font-size: 13px;
+}
+
+.status.success {
+
+    display: block;
+
+    background: #e0eee3;
+
+    color: #245b32;
+}
+
+.status.error {
+
+    display: block;
+
+    background: #f8dddd;
+
+    color: #8d2929;
+}
+
+
+/* ==================================================
+   EMPTY
+================================================== */
+
+.empty {
+
+    padding: 60px;
+
+    text-align: center;
+
+    background: white;
+
+    border: 1px solid #ddd6c8;
+
+    color: #7b8388;
+}
+
+
+/* ==================================================
+   TOGGLE
+================================================== */
+
+.switch {
+
+    position: relative;
+
+    display: inline-block;
+
+    width: 44px;
+
+    height: 24px;
+}
+
+.switch input {
+
+    opacity: 0;
+
+    width: 0;
+
+    height: 0;
+}
+
+.slider {
+
+    position: absolute;
+
+    cursor: pointer;
+
+    inset: 0;
+
+    background: #bbb;
+
+    transition: .2s;
+}
+
+.slider:before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 18px;
+
+    height: 18px;
+
+    left: 3px;
+
+    top: 3px;
+
+    background: white;
+
+    transition: .2s;
+}
+
+.switch input:checked + .slider {
+
+    background: #17374d;
+}
+
+.switch input:checked + .slider:before {
+
+    transform: translateX(20px);
+}
+
+.slider {
+
+    border-radius: 30px;
+}
+
+.slider:before {
+
+    border-radius: 50%;
+}
+
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
+@media(max-width: 800px) {
+
+    .admin-layout {
+
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+
+        padding: 10px;
+    }
+
+    .sidebar button {
+
+        display: inline-block;
+
+        width: auto;
+    }
+
+    .admin-main {
+
+        padding: 20px;
+    }
+
+    .admin-header {
+
+        padding: 0 15px;
+    }
+
+    .admin-title strong {
+
+        font-size: 15px;
+    }
+
+    .admin-badge {
+
+        display: none;
+    }
+
+    .page-heading {
+
+        display: block;
+    }
+
+    .page-heading .btn {
+
+        margin-top: 15px;
+    }
+
+    .editor-header {
+
+        align-items: flex-start;
+
+        gap: 10px;
+    }
+
+    .editor-actions {
+
+        display: block;
+    }
+
+    .panel-actions {
+
+        margin-top: 15px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==================================================
+     LOGIN
+================================================== -->
+
+<div id="loginScreen">
+
+    <div class="login-box">
+
+        <div class="login-logo">
+            🗺️
+        </div>
+
+        <h1>
+            Atlasz Admin
+        </h1>
+
+        <p>
+            Kárpátalja Földrajzi és Történeti Atlasza
+        </p>
+
+        <form id="loginForm">
+
+            <label for="password">
+                ADMIN JELSZÓ
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Adja meg a jelszót"
+                autocomplete="current-password"
+                required
+            >
+
+            <button
+                type="submit"
+                class="login-button">
+
+                🔐 BELÉPÉS
+
+            </button>
+
+        </form>
+
+        <div
+            id="loginError"
+            class="login-error">
+
+            Hibás jelszó.
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==================================================
+     ADMIN FELÜLET
+================================================== -->
+
+<div id="adminScreen">
+
+
+    <!-- HEADER -->
+
+    <header class="admin-header">
+
+        <div class="admin-title">
+
+            <strong>
+                Kárpátalja Atlasz
+            </strong>
+
+            <span class="admin-badge">
+                ADMIN
+            </span>
+
+        </div>
+
+        <button
+            class="logout"
+            onclick="logout()">
+
+            🚪 Kijelentkezés
+
+        </button>
+
+    </header>
+
+
+    <!-- LAYOUT -->
+
+    <div class="admin-layout">
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-title">
+                TARTALOM
+            </div>
+
+            <button
+                class="active"
+                onclick="showSection('all', this)">
+
+                📋 Összes panel
+
+            </button>
+
+            <button
+                onclick="showSection('hero', this)">
+
+                🏠 Főoldal / Hero
+
+            </button>
+
+            <button
+                onclick="showSection('geography', this)">
+
+                🌍 Földrajz
+
+            </button>
+
+            <button
+                onclick="showSection('history', this)">
+
+                📜 Történelem
+
+            </button>
+
+            <button
+                onclick="showSection('counties', this)">
+
+                🏛️ Vármegyék
+
+            </button>
+
+            <button
+                onclick="showSection('sources', this)">
+
+                📚 Források
+
+            </button>
+
+        </aside>
+
+
+        <!-- MAIN -->
+
+        <main class="admin-main">
+
+
+            <div class="page-heading">
+
+                <div>
+
+                    <h1>
+                        Tartalomkezelés
+                    </h1>
+
+                    <p>
+                        A főoldal paneljeinek kezelése
+                    </p>
+
+                </div>
+
+                <button
+                    class="btn btn-gold"
+                    onclick="addPanel()">
+
+                    ＋ ÚJ PANEL
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="status"
+                class="status">
+            </div>
+
+
+            <div id="panelContainer">
+            </div>
+
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ==================================================
+   BEÁLLÍTÁSOK
+================================================== */
+
+/*
+    FIGYELEM:
+
+    Ez csak egy ideiglenes kliensoldali jelszó.
+
+    Éles szerveren ezt szerveroldali
+    hitelesítésre kell cserélni.
+*/
+
+const ADMIN_PASSWORD = "atlasz2026";
+
+const STORAGE_KEY =
+    "karpatalja_atlasz_admin_data";
+
+
+/* ==================================================
+   ALAP ADATOK
+================================================== */
+
+const defaultPanels = [
+
+    {
+        id: "hero",
+        section: "hero",
+        title: "Kárpátalja",
+        label: "DIGITÁLIS FÖLDRAJZI ÉS TÖRTÉNETI ATLASZ",
+        description:
+            "Fedezd fel Kárpátalja földrajzát, történelmét, egykori vármegyéit, településeit és történelmi örökségét egyetlen interaktív atlaszban.",
+        link: "",
+        visible: true
+    },
+
+    {
+        id: "geography",
+        section: "geography",
+        title: "Földrajzi atlasz",
+        label: "🌍 FÖLDRAJZ",
+        description:
+            "Kárpátalja természetföldrajzi és társadalomföldrajzi viszonyainak tematikus bemutatása.",
+        link: "foldrajzi-terkep.html",
+        visible: true
+    },
+
+    {
+        id: "nature",
+        section: "geography",
+        title: "🌿 Természetföldrajz",
+        label: "Földrajz",
+        description:
+            "Domborzat, földtan, vízrajz, éghajlat, talaj, növényzet, állatvilág, tájak, természetvédelem, természeti erőforrások és természeti veszélyek.",
+        link: "",
+        visible: true
+    },
+
+    {
+        id: "settlements",
+        section: "geography",
+        title: "🏘️ Települések",
+        label: "Földrajz",
+        description:
+            "Városok, falvak és a településhálózat földrajzi bemutatása.",
+        link: "",
+        visible: true
+    },
+
+    {
+        id: "administration",
+        section: "geography",
+        title: "🏛️ Közigazgatás",
+        label: "Földrajz",
+        description:
+            "Közigazgatási egységek, területi struktúrák és határok.",
+        link: "",
+        visible: true
+    },
+
+    {
+        id: "history",
+        section: "history",
+        title: "Történeti atlasz",
+        label: "📜 TÖRTÉNELEM",
+        description:
+            "Kárpátalja történelmének bemutatása történelmi korszakokon, eseményeken, településeken, személyiségeken, vármegyéken és térképeken keresztül.",
+        link: "tortenelmi-terkep.html",
+        visible: true
+    },
+
+    {
+        id: "periods",
+        section: "history",
+        title: "⏳ Történelmi korszakok",
+        label: "Történelem",
+        description:
+            "A térség története az ókortól napjainkig.",
+        link: "",
+        visible: true
+    },
+
+    {
+        id: "events",
+        section: "history",
+        title: "⚔️ Történelmi események",
+        label: "Történelem",
+        description:
+            "A térség történetének fontos eseményei és történelmi fordulópontjai.",
+        link: "",
+        visible: true
+    },
+
+    {
+        id: "people",
+        section: "history",
+        title: "👑 Történelmi személyiségek",
+        label: "Történelem",
+        description:
+            "Kárpátaljához kapcsolódó jelentős történelmi személyek.",
+        link: "",
+        visible: true
+    },
+
+    {
+        id: "oldmaps",
+        section: "history",
+        title: "🗺️ Történelmi térképek",
+        label: "Történelem",
+        description:
+            "Történelmi térképek és a területi változások kartográfiai bemutatása.",
+        link: "",
+        visible: true
+    },
+
+    {
+        id: "counties",
+        section: "counties",
+        title: "Egykori vármegyék",
+        label: "🏛️ TÖRTÉNELMI KÖZIGAZGATÁS",
+        description:
+            "A mai Kárpátalja területéhez történetileg kapcsolódó egykori vármegyék.",
+        link: "",
+        visible: true
+    },
+
+    {
+        id: "ung",
+        section: "counties",
+        title: "Ung vármegye",
+        label: "Vármegyék",
+        description:
+            "Története, területe, közigazgatása és települései.",
+        link: "",
+        visible: true
+    },
+
+    {
+        id: "bereg",
+        section: "counties",
+        title: "Bereg vármegye",
+        label: "Vármegyék",
+        description:
+            "Története, területe, közigazgatása és települései.",
+        link: "",
+        visible: true
+    },
+
+    {
+        id: "ugocsa",
+        section: "counties",
+        title: "Ugocsa vármegye",
+        label: "Vármegyék",
+        description:
+            "Története, területe, közigazgatása és települései.",
+        link: "",
+        visible: true
+    },
+
+    {
+        id: "maramaros",
+        section: "counties",
+        title: "Máramaros vármegye",
+        label: "Vármegyék",
+        description:
+            "Története, területe, közigazgatása és települései.",
+        link: "",
+        visible: true
+    },
+
+    {
+        id: "history-sources",
+        section: "sources",
+        title: "📖 Történeti források",
+        label: "Források",
+        description:
+            "Könyvek, tanulmányok, levéltári és történeti források.",
+        link: "",
+        visible: true
+    },
+
+    {
+        id: "map-sources",
+        section: "sources",
+        title: "🗺️ Térképészeti források",
+        label: "Források",
+        description:
+            "Történelmi és modern térképek, atlaszok és térinformatikai adatok.",
+        link: "",
+        visible: true
+    },
+
+    {
+        id: "literature",
+        section: "sources",
+        title: "📑 Szakirodalom",
+        label: "Források",
+        description:
+            "A kutatáshoz felhasznált és ajánlott szakirodalom.",
+        link: "",
+        visible: true
+    }
+
+];
+
+
+/* ==================================================
+   ADATOK BETÖLTÉSE
+================================================== */
+
+let panels =
+    JSON.parse(
+        localStorage.getItem(STORAGE_KEY)
+    ) || defaultPanels;
+
+
+/* ==================================================
+   LOGIN
+================================================== */
+
+document
+    .getElementById("loginForm")
+    .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        const password =
+            document.getElementById("password").value;
+
+        if(password === ADMIN_PASSWORD) {
+
+            sessionStorage.setItem(
+                "atlasz_admin_logged",
+                "true"
+            );
+
+            showAdmin();
+
+        } else {
+
+            document
+                .getElementById("loginError")
+                .style.display = "block";
+
+        }
+
+    });
+
+
+/* ==================================================
+   INDÍTÁS
+================================================== */
+
+if(
+    sessionStorage.getItem(
+        "atlasz_admin_logged"
+    ) === "true"
+) {
+
+    showAdmin();
+
+}
+
+
+/* ==================================================
+   ADMIN MEGJELENÍTÉSE
+================================================== */
+
+function showAdmin() {
+
+    document
+        .getElementById("loginScreen")
+        .style.display = "none";
+
+    document
+        .getElementById("adminScreen")
+        .style.display = "block";
+
+    renderPanels("all");
+
+}
+
+
+/* ==================================================
+   KIJELENTKEZÉS
+================================================== */
+
+function logout() {
+
+    sessionStorage.removeItem(
+        "atlasz_admin_logged"
+    );
+
+    location.reload();
+
+}
+
+
+/* ==================================================
+   PANEL LISTA
+================================================== */
+
+let currentSection = "all";
+
+
+function showSection(section, button) {
+
+    currentSection = section;
+
+    document
+        .querySelectorAll(".sidebar button")
+        .forEach(btn => {
+
+            btn.classList.remove("active");
+
+        });
+
+    if(button) {
+
+        button.classList.add("active");
+
+    }
+
+    renderPanels(section);
+
+}
+
+
+/* ==================================================
+   PANEL KIRAJZOLÁSA
+================================================== */
+
+function renderPanels(section) {
+
+    const container =
+        document.getElementById(
+            "panelContainer"
+        );
+
+    container.innerHTML = "";
+
+    let filtered = panels;
+
+    if(section !== "all") {
+
+        filtered =
+            panels.filter(
+                panel =>
+                    panel.section === section
+            );
+
+    }
+
+    if(filtered.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty">
+                Nincs ebben a kategóriában panel.
+            </div>
+        `;
+
+        return;
+
+    }
+
+    filtered.forEach(panel => {
+
+        container.appendChild(
+            createPanelElement(panel)
+        );
+
+    });
+
+}
+
+
+/* ==================================================
+   PANEL HTML
+================================================== */
+
+function createPanelElement(panel) {
+
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className = "editor-panel";
+
+    wrapper.innerHTML = `
+
+        <div class="editor-header">
+
+            <div class="editor-header-left">
+
+                <h3>
+                    ${escapeHtml(panel.title)}
+                </h3>
+
+                <span class="panel-id">
+                    ID: ${escapeHtml(panel.id)}
+                </span>
+
+            </div>
+
+            <label class="switch">
+
+                <input
+                    type="checkbox"
+                    ${panel.visible ? "checked" : ""}
+                    onchange="togglePanel('${panel.id}')">
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+
+        <div class="editor-body">
+
+            <div class="form-group">
+
+                <label>
+                    PANEL CÍME
+                </label>
+
+                <input
+                    type="text"
+                    id="title-${panel.id}"
+                    value="${escapeAttribute(panel.title)}">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    KATEGÓRIA
+                </label>
+
+                <select
+                    id="section-${panel.id}">
+
+                    <option
+                        value="hero"
+                        ${panel.section === "hero" ? "selected" : ""}>
+                        Főoldal / Hero
+                    </option>
+
+                    <option
+                        value="geography"
+                        ${panel.section === "geography" ? "selected" : ""}>
+                        Földrajz
+                    </option>
+
+                    <option
+                        value="history"
+                        ${panel.section === "history" ? "selected" : ""}>
+                        Történelem
+                    </option>
+
+                    <option
+                        value="counties"
+                        ${panel.section === "counties" ? "selected" : ""}>
+                        Vármegyék
+                    </option>
+
+                    <option
+                        value="sources"
+                        ${panel.section === "sources" ? "selected" : ""}>
+                        Források
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    LEÍRÁS
+                </label>
+
+                <textarea
+                    id="description-${panel.id}">${escapeHtml(panel.description)}</textarea>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    HIVATKOZÁS / LINK
+                </label>
+
+                <input
+                    type="text"
+                    id="link-${panel.id}"
+                    value="${escapeAttribute(panel.link || "")}"
+                    placeholder="pl. foldrajzi-terkep.html">
+
+            </div>
+
+
+            <div class="editor-actions">
+
+                <small>
+                    Állapot:
+                    <strong>
+                        ${panel.visible ? "Látható" : "Rejtett"}
+                    </strong>
+                </small>
+
+                <div class="panel-actions">
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="savePanel('${panel.id}')">
+
+                        💾 Mentés
+
+                    </button>
+
+                    <button
+                        class="btn btn-danger"
+                        onclick="deletePanel('${panel.id}')">
+
+                        🗑️ Törlés
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+    return wrapper;
+
+}
+
+
+/* ==================================================
+   PANEL MENTÉSE
+================================================== */
+
+function savePanel(id) {
+
+    const panel =
+        panels.find(
+            item => item.id === id
+        );
+
+    if(!panel) return;
+
+
+    panel.title =
+        document.getElementById(
+            `title-${id}`
+        ).value;
+
+
+    panel.section =
+        document.getElementById(
+            `section-${id}`
+        ).value;
+
+
+    panel.description =
+        document.getElementById(
+            `description-${id}`
+        ).value;
+
+
+    panel.link =
+        document.getElementById(
+            `link-${id}`
+        ).value;
+
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(panels)
+    );
+
+
+    showStatus(
+        "A panel sikeresen el lett mentve.",
+        "success"
+    );
+
+
+    renderPanels(currentSection);
+
+}
+
+
+/* ==================================================
+   PANEL KI/BE
+================================================== */
+
+function togglePanel(id) {
+
+    const panel =
+        panels.find(
+            item => item.id === id
+        );
+
+    if(!panel) return;
+
+    panel.visible =
+        !panel.visible;
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(panels)
+    );
+
+    renderPanels(currentSection);
+
+}
+
+
+/* ==================================================
+   PANEL TÖRLÉSE
+================================================== */
+
+function deletePanel(id) {
+
+    const panel =
+        panels.find(
+            item => item.id === id
+        );
+
+    if(!panel) return;
+
+
+    const confirmed =
+        confirm(
+            `Biztosan törölni szeretnéd ezt a panelt?\n\n${panel.title}`
+        );
+
+
+    if(!confirmed) return;
+
+
+    panels =
+        panels.filter(
+            item => item.id !== id
+        );
+
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(panels)
+    );
+
+
+    showStatus(
+        "A panel törölve lett.",
+        "success"
+    );
+
+
+    renderPanels(currentSection);
+
+}
+
+
+/* ==================================================
+   ÚJ PANEL
+================================================== */
+
+function addPanel() {
+
+    const id =
+        "panel-" +
+        Date.now();
+
+
+    const newPanel = {
+
+        id: id,
+
+        section:
+            currentSection === "all"
+                ? "geography"
+                : currentSection,
+
+        title:
+            "Új panel",
+
+        label:
+            "ÚJ",
+
+        description:
+            "Írd ide a panel leírását.",
+
+        link:
+            "",
+
+        visible:
+            true
+
+    };
+
+
+    panels.push(newPanel);
+
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(panels)
+    );
+
+
+    renderPanels(
+        currentSection === "all"
+            ? "all"
+            : newPanel.section
+    );
+
+
+    showStatus(
+        "Új panel létrehozva. Töltsd ki és mentsd el.",
+        "success"
+    );
+
+}
+
+
+/* ==================================================
+   STATUS
+================================================== */
+
+function showStatus(message, type) {
+
+    const status =
+        document.getElementById("status");
+
+    status.textContent =
+        message;
+
+    status.className =
+        "status " + type;
+
+
+    setTimeout(() => {
+
+        status.className =
+            "status";
+
+    }, 3000);
+
+}
+
+
+/* ==================================================
+   BIZTONSÁGOS HTML
+================================================== */
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replace(/&/g, "&amp;")
+
+        .replace(/</g, "&lt;")
+
+        .replace(/>/g, "&gt;")
+
+        .replace(/"/g, "&quot;")
+
+        .replace(/'/g, "&#039;");
+
+}
+
+
+function escapeAttribute(value) {
+
+    return escapeHtml(value);
+
+}
+
+</script>
+
+</body>
+
+</html>
