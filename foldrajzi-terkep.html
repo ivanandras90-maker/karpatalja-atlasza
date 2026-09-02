@@ -728,6 +728,239 @@ nav a:hover {
 .geo-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;margin-top:4px}
 .geo-stats-grid span:nth-child(even){text-align:right;color:#d8b86a;font-weight:700}
 
+.settlement-marker-wrap{
+    background:transparent;
+    border:0;
+}
+.settlement-marker{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:2px solid #fff;
+    box-shadow:0 3px 12px rgba(0,0,0,.35);
+    font-size:14px;
+}
+.city-marker{
+    background:#8b5e34;
+}
+.village-marker{
+    background:#5f7f62;
+}
+.settlement-popup{
+    font-family:Arial,sans-serif;
+    min-width:245px;
+    color:#263238;
+}
+.settlement-popup h3{
+    margin:0 0 6px;
+    color:#102638;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:19px;
+}
+.settlement-popup .settlement-badge{
+    display:inline-block;
+    padding:4px 7px;
+    border-radius:999px;
+    background:#102638;
+    color:#d8b86a;
+    font-size:10px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+.settlement-popup .settlement-id{
+    font-size:10px;
+    color:#68747b;
+    border-top:1px solid #e1e5e7;
+    padding-top:7px;
+    margin-top:8px;
+}
+.settlement-popup .settlement-actions{
+    display:flex;
+    gap:7px;
+    margin-top:10px;
+}
+.settlement-popup button{
+    border:1px solid #b8954d;
+    border-radius:6px;
+    padding:7px 9px;
+    background:#102638;
+    color:#fff;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:800;
+}
+.settlement-popup button:hover{
+    background:#d8b86a;
+    color:#102638;
+}
+.settlement-stats-modal{
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    background:rgba(4,15,24,.78);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+.settlement-stats-window{
+    width:min(1120px,96vw);
+    max-height:92vh;
+    overflow:auto;
+    background:#f3f0e7;
+    color:#263238;
+    border:1px solid #c09d57;
+    border-radius:12px;
+    box-shadow:0 20px 70px rgba(0,0,0,.45);
+}
+.settlement-stats-head{
+    position:sticky;
+    top:0;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    padding:16px 20px;
+    background:#102638;
+    color:#fff;
+    border-bottom:1px solid #c09d57;
+}
+.settlement-stats-head h2{
+    margin:0;
+    font:700 22px Georgia,"Times New Roman",serif;
+    color:#fff;
+}
+.settlement-stats-head small{
+    color:#d8b86a;
+    display:block;
+    margin-top:3px;
+}
+.settlement-stats-close{
+    border:1px solid #c09d57;
+    background:transparent;
+    color:#fff;
+    border-radius:6px;
+    width:36px;
+    height:36px;
+    cursor:pointer;
+    font-size:18px;
+}
+.settlement-stats-body{
+    padding:18px;
+}
+.settlement-stats-summary{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+    margin-bottom:16px;
+}
+.settlement-stat-card{
+    background:#fff;
+    border:1px solid #d8d0c0;
+    border-radius:8px;
+    padding:11px;
+}
+.settlement-stat-card strong{
+    display:block;
+    color:#102638;
+    font-size:18px;
+}
+.settlement-stat-card span{
+    color:#68747b;
+    font-size:10px;
+}
+.settlement-table-wrap{
+    overflow:auto;
+    background:#fff;
+    border:1px solid #d8d0c0;
+    border-radius:8px;
+    margin-bottom:18px;
+}
+.settlement-data-table{
+    width:100%;
+    border-collapse:collapse;
+    font:12px Arial,sans-serif;
+}
+.settlement-data-table th{
+    background:#102638;
+    color:#d8b86a;
+    padding:9px;
+    text-align:left;
+    white-space:nowrap;
+}
+.settlement-data-table td{
+    padding:8px 9px;
+    border-bottom:1px solid #e5e7e8;
+    white-space:nowrap;
+}
+.settlement-data-table tr:hover td{
+    background:#f7f2e6;
+}
+.settlement-charts{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+}
+.settlement-chart-card{
+    background:#fff;
+    border:1px solid #d8d0c0;
+    border-radius:8px;
+    padding:12px;
+    min-height:300px;
+}
+.settlement-chart-card h3{
+    margin:0 0 8px;
+    color:#102638;
+    font:700 15px Georgia,"Times New Roman",serif;
+}
+.settlement-chart-card canvas{
+    width:100%!important;
+    height:245px!important;
+}
+.settlement-no-data{
+    padding:22px;
+    background:#fff;
+    border:1px dashed #c09d57;
+    border-radius:8px;
+    line-height:1.55;
+}
+.settlement-no-data strong{
+    color:#102638;
+}
+.settlement-schema{
+    margin-top:10px;
+    padding:10px;
+    background:#f7f2e6;
+    border-radius:6px;
+    font:11px/1.5 Consolas,monospace;
+    white-space:pre-wrap;
+}
+.settlement-stats-control{
+    background:rgba(16,38,56,.96);
+    border:1px solid rgba(216,184,106,.6);
+    border-radius:7px;
+    box-shadow:0 3px 15px rgba(0,0,0,.3);
+    padding:8px;
+}
+.settlement-stats-control button{
+    border:1px solid #526b7a;
+    background:#17374d;
+    color:#fff;
+    border-radius:5px;
+    padding:7px 9px;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:800;
+}
+.settlement-stats-control button:hover{
+    background:#d8b86a;
+    color:#102638;
+}
+
 @media(max-width:800px){
     .geo-research-control{width:min(310px,calc(100vw - 20px));max-height:55vh}
     .map-header{padding:13px 15px}
@@ -886,6 +1119,10 @@ nav a:hover {
     src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js">
 </script>
 
+<script
+    src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.min.js">
+</script>
+
 
 <script>
 
@@ -893,12 +1130,15 @@ nav a:hover {
    ALAP TÉRKÉP
 ===================================================== */
 
-const map =
-    L.map("map")
-     .setView(
-         [48.45,22.75],
-         8
-     );
+const KARPATALJA_CENTER = [48.45, 23.55];
+const KARPATALJA_ZOOM = 9;
+
+const map = L.map("map", {
+    center: KARPATALJA_CENTER,
+    zoom: KARPATALJA_ZOOM,
+    minZoom: 7,
+    maxZoom: 18
+});
 
 
 /* =====================================================
@@ -1009,7 +1249,13 @@ const rivers =
 const lakes =
     L.layerGroup();
 
-const settlements =
+const citiesLayer =
+    L.layerGroup();
+
+const villagesLayer =
+    L.layerGroup();
+
+const settlementStatsLayer =
     L.layerGroup();
 
 const roads =
@@ -1068,8 +1314,14 @@ const overlays = {
     "💧 Tavak":
         lakes,
 
-    "🏘️ Települések":
-        settlements,
+    "🏙️ Városok":
+        citiesLayer,
+
+    "🏘️ Falvak":
+        villagesLayer,
+
+    "📊 Települési statisztikák":
+        settlementStatsLayer,
 
     "🛣️ Utak":
         roads,
@@ -1160,7 +1412,8 @@ const geographicCategories = [
         icon:"🏘️",
         title:"Település- és társadalomföldrajz",
         layers:[
-            ["settlements","🏘️ Városok és falvak",settlements],
+            ["citiesLayer","🏙️ Városok",citiesLayer],
+            ["villagesLayer","🏘️ Falvak",villagesLayer],
             ["administrativeBoundaries","🏛️ Közigazgatási határok",administrativeBoundaries]
         ]
     },
@@ -1303,6 +1556,891 @@ researchControl.onAdd = function(){
 };
 
 researchControl.addTo(map);
+
+
+/* =====================================================
+   TELEPÜLÉSEK + ID ALAPÚ STATISZTIKAI ADATMODELL
+===================================================== */
+
+/*
+   TÁMOGATOTT TELEPÜLÉSI ADATMODELL AZ atlasz.json-BAN:
+
+   "settlements": [
+       {
+           "id": "ungvar",
+           "title": "Ungvár",
+           "type": "city",
+           "latitude": 48.6208,
+           "longitude": 22.2879,
+           "description": "..."
+       }
+   ],
+
+   "settlementStatistics": [
+       {
+           "settlementId": "ungvar",
+           "year": 2020,
+           "population": 115000,
+           "unemployment": 6.2,
+           "gdp": 1250
+       }
+   ]
+
+   Vagy táblázatos formában:
+
+   "settlementStatistics": {
+       "ungvar": [
+           {"year":2020,"population":115000,"unemployment":6.2},
+           {"year":2021,"population":114500,"unemployment":6.0}
+       ]
+   }
+
+   A rendszer az ID alapján kapcsolja össze a települést
+   és a statisztikai sorokat.
+*/
+
+const settlementState = {
+    settlements: [],
+    statistics: [],
+    charts: []
+};
+
+function normalizeSettlementType(item){
+
+    const raw = String(
+        item?.type ||
+        item?.settlementType ||
+        item?.category ||
+        ""
+    ).toLowerCase().trim();
+
+    if(
+        raw === "city" ||
+        raw === "város" ||
+        raw === "varos" ||
+        raw === "cities" ||
+        raw === "urban"
+    ){
+        return "city";
+    }
+
+    if(
+        raw === "village" ||
+        raw === "falu" ||
+        raw === "falvak" ||
+        raw === "villages" ||
+        raw === "rural"
+    ){
+        return "village";
+    }
+
+    return "village";
+}
+
+function getSettlementTitle(item){
+    return String(
+        item?.title ||
+        item?.name ||
+        item?.settlementName ||
+        item?.id ||
+        "Ismeretlen település"
+    );
+}
+
+function getSettlementId(item){
+    return String(
+        item?.id ||
+        item?.settlementId ||
+        item?.code ||
+        ""
+    ).trim();
+}
+
+function getStatisticsRows(statistics, settlementId){
+
+    if(!statistics){
+        return [];
+    }
+
+    if(Array.isArray(statistics)){
+        return statistics.filter(row =>
+            row &&
+            String(
+                row.settlementId ??
+                row.settlement_id ??
+                row.id ??
+                ""
+            ) === String(settlementId)
+        );
+    }
+
+    if(typeof statistics === "object"){
+        const direct = statistics[String(settlementId)];
+
+        if(Array.isArray(direct)){
+            return direct;
+        }
+
+        if(direct && typeof direct === "object"){
+            if(Array.isArray(direct.rows)){
+                return direct.rows;
+            }
+            return [direct];
+        }
+    }
+
+    return [];
+}
+
+function getEmbeddedStatistics(settlement){
+
+    if(Array.isArray(settlement?.statistics)){
+        return settlement.statistics;
+    }
+
+    if(Array.isArray(settlement?.data)){
+        return settlement.data;
+    }
+
+    if(settlement?.statistics &&
+       typeof settlement.statistics === "object"){
+
+        if(Array.isArray(settlement.statistics.rows)){
+            return settlement.statistics.rows;
+        }
+
+        return [settlement.statistics];
+    }
+
+    return [];
+}
+
+function normalizeStatsRows(rows, settlementId){
+
+    return rows
+        .filter(row => row && typeof row === "object")
+        .map(row => {
+
+            const normalized = {};
+
+            Object.entries(row).forEach(([key,value]) => {
+
+                if(
+                    key === "settlementId" ||
+                    key === "settlement_id" ||
+                    key === "id"
+                ){
+                    return;
+                }
+
+                normalized[key] = value;
+            });
+
+            normalized.__settlementId = settlementId;
+
+            return normalized;
+        });
+}
+
+function getNumericColumns(rows){
+
+    if(!rows.length){
+        return [];
+    }
+
+    const keys = new Set();
+
+    rows.forEach(row => {
+
+        Object.entries(row).forEach(([key,value]) => {
+
+            if(
+                key.startsWith("__") ||
+                key === "year" ||
+                key === "év" ||
+                key === "date" ||
+                key === "dátum"
+            ){
+                return;
+            }
+
+            if(
+                typeof value === "number" &&
+                Number.isFinite(value)
+            ){
+                keys.add(key);
+                return;
+            }
+
+            const numeric =
+                typeof value === "string" &&
+                value.trim() !== "" &&
+                Number.isFinite(Number(value.replace(",", ".")));
+
+            if(numeric){
+                keys.add(key);
+            }
+
+        });
+
+    });
+
+    return [...keys];
+}
+
+function getYearValue(row,index){
+
+    const value =
+        row.year ??
+        row.év ??
+        row.Year ??
+        row.date ??
+        row.dátum;
+
+    if(value !== undefined && value !== null && value !== ""){
+        const parsed = Number(String(value).slice(0,4));
+        if(Number.isFinite(parsed)){
+            return parsed;
+        }
+        return String(value);
+    }
+
+    return index + 1;
+}
+
+function formatStatValue(value){
+
+    if(value === null || value === undefined || value === ""){
+        return "—";
+    }
+
+    if(typeof value === "number"){
+        return new Intl.NumberFormat("hu-HU",{
+            maximumFractionDigits:4
+        }).format(value);
+    }
+
+    return escapeHTML(String(value));
+}
+
+function destroySettlementCharts(){
+
+    settlementState.charts.forEach(chart => {
+        try{
+            chart.destroy();
+        }catch(error){}
+    });
+
+    settlementState.charts = [];
+}
+
+function openSettlementStatistics(settlement){
+
+    destroySettlementCharts();
+
+    const id = getSettlementId(settlement);
+    const title = getSettlementTitle(settlement);
+
+    const embeddedRows =
+        normalizeStatsRows(
+            getEmbeddedStatistics(settlement),
+            id
+        );
+
+    const centralRows =
+        normalizeStatsRows(
+            getStatisticsRows(
+                settlementState.statistics,
+                id
+            ),
+            id
+        );
+
+    const rows =
+        embeddedRows.length
+            ? embeddedRows
+            : centralRows;
+
+    const modal =
+        document.createElement("div");
+
+    modal.className =
+        "settlement-stats-modal";
+
+    const numericColumns =
+        getNumericColumns(rows);
+
+    const columns =
+        rows.length
+            ? Object.keys(rows[0]).filter(
+                key => !key.startsWith("__")
+            )
+            : [];
+
+    const latest =
+        rows.length
+            ? rows[rows.length - 1]
+            : null;
+
+    const summary =
+        numericColumns
+            .slice(0,4)
+            .map(key => {
+
+                const value =
+                    latest ? latest[key] : null;
+
+                return `
+                    <div class="settlement-stat-card">
+                        <strong>${formatStatValue(value)}</strong>
+                        <span>${escapeHTML(key)}</span>
+                    </div>
+                `;
+
+            })
+            .join("");
+
+    let tableHTML = "";
+
+    if(rows.length){
+
+        tableHTML = `
+            <div class="settlement-table-wrap">
+                <table class="settlement-data-table">
+                    <thead>
+                        <tr>
+                            ${columns.map(
+                                key => `<th>${escapeHTML(key)}</th>`
+                            ).join("")}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows.map(row => `
+                            <tr>
+                                ${columns.map(
+                                    key => `<td>${formatStatValue(row[key])}</td>`
+                                ).join("")}
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            </div>
+        `;
+
+    }else{
+
+        tableHTML = `
+            <div class="settlement-no-data">
+                <strong>📊 Ehhez a településhez még nincs statisztikai táblázat.</strong>
+                <br>
+                Az adatokat a település <strong>ID</strong> értékével kell összekapcsolni.
+                <div class="settlement-schema">{
+  "settlementId": "${escapeHTML(id)}",
+  "year": 2025,
+  "population": 0,
+  "unemployment": 0,
+  "gdp": 0
+}</div>
+            </div>
+        `;
+
+    }
+
+    modal.innerHTML = `
+        <div class="settlement-stats-window">
+            <div class="settlement-stats-head">
+                <div>
+                    <h2>📊 ${escapeHTML(title)}</h2>
+                    <small>Települési statisztikai adatlap · ID: ${escapeHTML(id || "—")}</small>
+                </div>
+                <button class="settlement-stats-close" type="button" aria-label="Bezárás">×</button>
+            </div>
+
+            <div class="settlement-stats-body">
+
+                ${
+                    summary
+                        ? `<div class="settlement-stats-summary">${summary}</div>`
+                        : ""
+                }
+
+                ${tableHTML}
+
+                ${
+                    numericColumns.length
+                        ? `<div class="settlement-charts" id="settlementCharts"></div>`
+                        : ""
+                }
+
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const close = () => {
+
+        destroySettlementCharts();
+
+        modal.remove();
+
+    };
+
+    modal.querySelector(
+        ".settlement-stats-close"
+    ).addEventListener(
+        "click",
+        close
+    );
+
+    modal.addEventListener(
+        "click",
+        event => {
+
+            if(event.target === modal){
+                close();
+            }
+
+        }
+    );
+
+    document.addEventListener(
+        "keydown",
+        function escapeHandler(event){
+
+            if(event.key === "Escape"){
+
+                close();
+
+                document.removeEventListener(
+                    "keydown",
+                    escapeHandler
+                );
+
+            }
+
+        }
+    );
+
+    if(
+        rows.length &&
+        numericColumns.length &&
+        window.Chart
+    ){
+
+        const chartsRoot =
+            modal.querySelector("#settlementCharts");
+
+        numericColumns.forEach((key,index) => {
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "settlement-chart-card";
+
+            const canvas =
+                document.createElement("canvas");
+
+            card.innerHTML =
+                `<h3>📈 ${escapeHTML(key)}</h3>`;
+
+            card.appendChild(canvas);
+
+            chartsRoot.appendChild(card);
+
+            const labels =
+                rows.map(
+                    (row,rowIndex) =>
+                        String(getYearValue(row,rowIndex))
+                );
+
+            const values =
+                rows.map(row => {
+
+                    const value =
+                        row[key];
+
+                    if(typeof value === "number"){
+                        return value;
+                    }
+
+                    const numeric =
+                        Number(
+                            String(value ?? "")
+                                .replace(",", ".")
+                        );
+
+                    return Number.isFinite(numeric)
+                        ? numeric
+                        : null;
+
+                });
+
+            const chart =
+                new Chart(
+                    canvas.getContext("2d"),
+                    {
+                        type:
+                            rows.length > 1
+                                ? "line"
+                                : "bar",
+
+                        data:{
+                            labels,
+                            datasets:[{
+                                label:key,
+                                data:values,
+                                borderWidth:2,
+                                tension:.25,
+                                fill:false
+                            }]
+                        },
+
+                        options:{
+                            responsive:true,
+                            maintainAspectRatio:false,
+
+                            plugins:{
+                                legend:{
+                                    display:false
+                                }
+                            },
+
+                            scales:{
+                                y:{
+                                    beginAtZero:false
+                                }
+                            }
+                        }
+                    }
+                );
+
+            settlementState.charts.push(chart);
+
+        });
+
+    }
+}
+
+function createSettlementMarker(settlement){
+
+    const type =
+        normalizeSettlementType(settlement);
+
+    const isCity =
+        type === "city";
+
+    const icon =
+        L.divIcon({
+            className:
+                "settlement-marker-wrap",
+
+            html:
+                `<div class="settlement-marker ${isCity ? "city-marker" : "village-marker"}">${isCity ? "🏙️" : "🏘️"}</div>`,
+
+            iconSize:[30,30],
+            iconAnchor:[15,15],
+            popupAnchor:[0,-18]
+        });
+
+    return icon;
+}
+
+function addSettlementToMap(settlement){
+
+    const id =
+        getSettlementId(settlement);
+
+    const title =
+        getSettlementTitle(settlement);
+
+    const lat =
+        Number(
+            settlement.latitude ??
+            settlement.lat
+        );
+
+    const lng =
+        Number(
+            settlement.longitude ??
+            settlement.lng ??
+            settlement.lon
+        );
+
+    if(
+        !id ||
+        !Number.isFinite(lat) ||
+        !Number.isFinite(lng) ||
+        lat < -90 ||
+        lat > 90 ||
+        lng < -180 ||
+        lng > 180
+    ){
+        return;
+    }
+
+    const type =
+        normalizeSettlementType(settlement);
+
+    const layer =
+        type === "city"
+            ? citiesLayer
+            : villagesLayer;
+
+    const statsRows =
+        normalizeStatsRows(
+            getEmbeddedStatistics(settlement),
+            id
+        );
+
+    const popup =
+        L.popup({
+            maxWidth:330,
+            minWidth:245,
+            autoPan:true
+        }).setContent(`
+            <div class="settlement-popup">
+
+                <span class="settlement-badge">
+                    ${type === "city" ? "🏙️ VÁROS" : "🏘️ FALU"}
+                </span>
+
+                <h3>${escapeHTML(title)}</h3>
+
+                ${
+                    settlement.description
+                        ? `<div>${escapeHTML(settlement.description)}</div>`
+                        : ""
+                }
+
+                <div class="settlement-id">
+                    Települési ID:
+                    <strong>${escapeHTML(id)}</strong>
+                </div>
+
+                <div class="settlement-actions">
+                    <button
+                        type="button"
+                        class="settlement-stat-button">
+                        📊 Statisztikák
+                    </button>
+                </div>
+
+            </div>
+        `);
+
+    const marker =
+        L.marker(
+            [lat,lng],
+            {
+                icon:createSettlementMarker(settlement),
+                title:title,
+                riseOnHover:true
+            }
+        );
+
+    marker.bindPopup(popup);
+
+    marker.on(
+        "popupopen",
+        event => {
+
+            const button =
+                event.popup
+                    .getElement()
+                    ?.querySelector(
+                        ".settlement-stat-button"
+                    );
+
+            if(button){
+
+                button.onclick = () =>
+                    openSettlementStatistics(
+                        settlement
+                    );
+
+            }
+
+        }
+    );
+
+    marker.addTo(layer);
+}
+
+async function loadSettlementsAndStatistics(){
+
+    try{
+
+        const response =
+            await fetch(
+                "atlasz.json",
+                {cache:"no-store"}
+            );
+
+        if(!response.ok){
+            throw new Error(
+                "Az atlasz.json nem tölthető be."
+            );
+        }
+
+        const data =
+            await response.json();
+
+        const settlements =
+            Array.isArray(data.settlements)
+                ? data.settlements
+                : [
+                    ...(Array.isArray(data.cities)
+                        ? data.cities.map(item => ({
+                            ...item,
+                            type:"city"
+                        }))
+                        : []),
+
+                    ...(Array.isArray(data.villages)
+                        ? data.villages.map(item => ({
+                            ...item,
+                            type:"village"
+                        }))
+                        : [])
+                ];
+
+        settlementState.settlements =
+            settlements;
+
+        settlementState.statistics =
+            data.settlementStatistics ||
+            data.telepulesiStatisztikak ||
+            data.telepulesStatistics ||
+            [];
+
+        citiesLayer.clearLayers();
+        villagesLayer.clearLayers();
+        settlementStatsLayer.clearLayers();
+
+        settlements.forEach(
+            addSettlementToMap
+        );
+
+        const cityCount =
+            settlements.filter(
+                item =>
+                    normalizeSettlementType(item) === "city"
+            ).length;
+
+        const villageCount =
+            settlements.filter(
+                item =>
+                    normalizeSettlementType(item) === "village"
+            ).length;
+
+        const statsCount =
+            Array.isArray(settlementState.statistics)
+                ? settlementState.statistics.length
+                : Object.keys(
+                    settlementState.statistics || {}
+                ).length;
+
+        const status =
+            document.querySelector(
+                ".map-status-value"
+            );
+
+        if(status){
+
+            status.textContent =
+                `${cityCount} város · ${villageCount} falu · ${statsCount} statisztikai adatcsoport`;
+
+        }
+
+        if(
+            settlements.length &&
+            !map.hasLayer(citiesLayer) &&
+            !map.hasLayer(villagesLayer)
+        ){
+
+            citiesLayer.addTo(map);
+            villagesLayer.addTo(map);
+
+            if(window.updateGeoResearchControl){
+                window.updateGeoResearchControl();
+            }
+
+        }
+
+    }catch(error){
+
+        console.warn(
+            "A települési/statisztikai rendszer nem tölthető be:",
+            error
+        );
+
+    }
+
+}
+
+const settlementStatsButtonControl =
+    L.control({
+        position:"topleft"
+    });
+
+settlementStatsButtonControl.onAdd =
+function(){
+
+    const div =
+        L.DomUtil.create(
+            "div",
+            "settlement-stats-control"
+        );
+
+    const button =
+        L.DomUtil.create(
+            "button",
+            "",
+            div
+        );
+
+    button.type =
+        "button";
+
+    button.innerHTML =
+        "📊 Települési statisztikák";
+
+    button.title =
+        "ID alapján kapcsolt települési táblázatok és automatikus diagramok";
+
+    button.onclick =
+        function(){
+
+            if(
+                settlementState.settlements.length
+            ){
+
+                openSettlementStatistics(
+                    settlementState.settlements[0]
+                );
+
+            }else{
+
+                alert(
+                    "Még nincs betöltött települési adat. Az atlasz.json settlements/cities/villages tömbjét töltsd fel."
+                );
+
+            }
+
+        };
+
+    L.DomEvent.disableClickPropagation(
+        div
+    );
+
+    return div;
+};
+
+settlementStatsButtonControl.addTo(map);
+
+loadSettlementsAndStatistics();
 
 
 /* =====================================================
