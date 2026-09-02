@@ -1136,7 +1136,8 @@ const KARPATALJA_ZOOM = 9;
 const map = L.map("map", {
     center: KARPATALJA_CENTER,
     zoom: KARPATALJA_ZOOM,
-    zoomControl: true
+    zoomControl: true,
+    minZoom: 0
 });
 
 // Alapértelmezett megnyitáskor mindig Kárpátalja legyen középen.
@@ -2700,6 +2701,24 @@ function focusGalleryFromUrl(gallery){
 }
 
 loadGalleryLayer();
+
+// Alapértelmezett indulási nézet: Kárpátalja.
+// Konkrét URL-hely esetén azt nem írjuk felül.
+function restoreDefaultKarpataljaView(){
+    const params = new URLSearchParams(window.location.search);
+    const lat = Number(params.get("lat"));
+    const lng = Number(params.get("lng"));
+    const hasExplicitFocus =
+        params.has("gallery") ||
+        (Number.isFinite(lat) && Number.isFinite(lng));
+
+    if(!hasExplicitFocus){
+        map.setView(KARPATALJA_CENTER, KARPATALJA_ZOOM, { animate:false });
+    }
+}
+
+restoreDefaultKarpataljaView();
+setTimeout(restoreDefaultKarpataljaView, 300);
 
 
 /* =====================================================
