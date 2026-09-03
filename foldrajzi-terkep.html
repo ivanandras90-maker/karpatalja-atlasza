@@ -1589,6 +1589,9 @@ document.addEventListener("click",function(event){
 .lfe-excel-actions button{border:1px solid #b8954d;border-radius:5px;padding:8px 11px;cursor:pointer;font-weight:800}
 .lfe-excel-primary{background:#176b3a;color:#fff}
 .lfe-excel-secondary{background:#ddd;color:#333}
+.lfe-feature-label{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;}
+.lfe-feature-label::before{display:none!important;}
+.lfe-feature-label .lfe-feature-label-text{white-space:nowrap;display:inline-block;pointer-events:none;transform:translate(-50%,-50%);padding:1px 4px;border-radius:3px;background:rgba(255,255,255,.88);box-shadow:0 1px 4px rgba(0,0,0,.18);line-height:1.15;}
 .lfe-label-marker{display:none!important}
 .lfe-feature-label{
     background:transparent!important;
@@ -7045,7 +7048,7 @@ function lfeZoomScale(){
 function lfePointRadius(layer){
     const m=lfeMeta(layer,0);
     const base=Math.max(2,Number(m.radius)||6);
-    return Math.max(2,Math.min(40,base*lfeZoomScale()));
+    return Math.max(0.01,Math.min(40,base*lfeZoomScale()));
 }
 
 function lfeApplyPointStyle(layer){
@@ -7303,8 +7306,8 @@ function lfeRenderDetail(){
         <div class="lfe-grid">
             <div class="lfe-field"><label>Vonal / szimbólum színe</label><input id="lfeDColor" type="color" value="${popupEsc(m.color)}"></div>
             <div class="lfe-field"><label>Kitöltési szín</label><input id="lfeDFill" type="color" value="${popupEsc(m.fillColor)}"></div>
-            <div class="lfe-field"><label>Vastagság</label><input id="lfeDWeight" type="number" min="0.5" max="20" step=".5" value="${m.weight}"></div>
-            <div class="lfe-field"><label>Pont méret</label><input id="lfeDRadius" type="number" min="2" max="40" step="1" value="${m.radius}"></div>
+            <div class="lfe-field"><label>Vastagság</label><input id="lfeDWeight" type="number" min="0.01" max="20" step="0.01" value="${m.weight}"></div>
+            <div class="lfe-field"><label>Pont méret</label><input id="lfeDRadius" type="number" min="0.01" max="40" step="0.01" value="${m.radius}"></div>
             <div class="lfe-field"><label>Felirat mező</label><select id="lfeDLabelField"><option value="">— nincs felirat —</option>${options}</select></div>
             <div class="lfe-field"><label>Felirat színe</label><input id="lfeDLabelColor" type="color" value="${popupEsc(m.labelColor)}"></div>
             <div class="lfe-field"><label>Betűméret</label><input id="lfeDFontSize" type="number" min="6" max="72" value="${m.fontSize}"></div>
@@ -7326,9 +7329,11 @@ function lfeRenderDetail(){
     const sync=()=>{
         m.color=document.getElementById("lfeDColor").value;
         m.fillColor=document.getElementById("lfeDFill").value;
-        m.weight=Number(document.getElementById("lfeDWeight").value)||1;
-        m.radius=Number(document.getElementById("lfeDRadius").value)||6;
+        m.weight=Math.max(0.01,Math.min(20,Number(document.getElementById("lfeDWeight").value)||0.01));
+        m.radius=Math.max(0.01,Math.min(40,Number(document.getElementById("lfeDRadius").value)||0.01));
         m.labelField=document.getElementById("lfeDLabelField").value;
+        // Ha a felhasználó kiválaszt egy mezőt, a felirat automatikusan legyen látható.
+        if(m.labelField) m.labelVisible=true;
         m.labelColor=document.getElementById("lfeDLabelColor").value;
         m.fontSize=Number(document.getElementById("lfeDFontSize").value)||14;
         m.fontFamily=document.getElementById("lfeDFontFamily").value;
@@ -7341,6 +7346,15 @@ function lfeRenderDetail(){
         lfeSetVisible(layer,m.visible);
         lfeUpdateLabel(layer);
     };
+    const labelFieldSelect=root.querySelector("#lfeDLabelField");
+    if(labelFieldSelect){
+        labelFieldSelect.addEventListener("change",()=>{
+            m.labelField=labelFieldSelect.value;
+            m.labelVisible=!!m.labelField;
+            lfeUpdateLabel(layer);
+            lfeSavePersistent();
+        });
+    }
     root.querySelectorAll("input,select").forEach(el=>el.addEventListener("change",sync));
     root.querySelectorAll("input[type=color],input[type=number]").forEach(el=>el.addEventListener("input",sync));
     root.querySelector("#lfeZoomObject").onclick=()=>{
