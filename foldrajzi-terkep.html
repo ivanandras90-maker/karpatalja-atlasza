@@ -692,6 +692,35 @@ document.addEventListener("click",function(event){
     color:#17374d;
     font:700 11px Arial,sans-serif;
 }
+.atlas-command-bar{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:7px;
+    margin:11px 0 9px;
+}
+.atlas-command-button{
+    border:1px solid #b8954d;
+    border-radius:6px;
+    padding:8px 12px;
+    background:#17374d;
+    color:#fff;
+    cursor:pointer;
+    font:700 11px Arial,sans-serif;
+    box-shadow:0 1px 3px rgba(0,0,0,.12);
+}
+.atlas-command-button:hover{
+    background:#c09d57;
+    color:#102638;
+}
+.atlas-command-button.atlas-command-success{
+    background:#176b3a;
+    border-color:#8aa36c;
+}
+.atlas-command-button.atlas-command-success:hover{
+    background:#d8b86a;
+    color:#102638;
+}
 
 .geo-research-control{
     width:285px;
@@ -1669,19 +1698,20 @@ document.addEventListener("click",function(event){
         </div>
     </div>
 
-    <button type="button"
-            class="map-header-statistics-trigger"
-            id="headerSettlementStatisticsButton"
-            title="Települési statisztikák megnyitása">
-        📊 Települési statisztikák
-    </button>
-
-    <button type="button"
-            class="map-header-statistics-trigger feature-editor-header-button"
-            id="headerLayerFeatureEditorButton"
-            title="Bármely térképréteg objektumainak szerkesztése">
-        ⚙️ Réteg Feature Editor
-    </button>
+    <div class="atlas-command-bar" role="toolbar" aria-label="Atlasz főparancsok">
+        <button type="button" class="atlas-command-button" id="headerOpenDataButton" title="GeoJSON, KML, Shapefile ZIP vagy GeoTIFF megnyitása">
+            📂 Megnyitás
+        </button>
+        <button type="button" class="atlas-command-button atlas-command-success" id="headerExportDataButton" title="Adatok exportálása">
+            📤 Export
+        </button>
+        <button type="button" class="atlas-command-button" id="headerGalleryViewButton" title="Összes galériapont megjelenítése">
+            📷 Galéria nézet
+        </button>
+        <button type="button" class="atlas-command-button feature-editor-header-button" id="headerLayerFeatureEditorButton" title="Bármely térképréteg objektumainak szerkesztése">
+            ⚙️ Réteg Feature Editor
+        </button>
+    </div>
     <p>
         Kárpátalja tematikus földrajzi atlasza a természetföldrajzi, társadalomföldrajzi, gazdaságföldrajzi és kutatási rétegek integrált rendszerével.
     </p>
@@ -1941,9 +1971,6 @@ const overlays = {
     "🏘️ Falvak":
         villagesLayer,
 
-    "📊 Települési statisztikák":
-        settlementStatsLayer,
-
     "🛣️ Utak":
         roads,
 
@@ -2116,6 +2143,7 @@ layerOpacityControl.onAdd=function(){
     return div;
 };
 layerOpacityControl.addTo(map);
+if(layerOpacityControl.getContainer?.()) layerOpacityControl.getContainer().style.display="none";
 
 /* =====================================================
    KATEGORIZÁLT FÖLDRAJZI KUTATÁSI RÉTEGKEZELŐ
@@ -3294,6 +3322,18 @@ async function loadGalleryLayer(){
 
 function addGalleryFitControl(items){
 
+    window._atlasGalleryItems = items || [];
+
+    window.focusAtlasGalleryView = function(){
+        const list = window._atlasGalleryItems || [];
+        const bounds = L.latLngBounds(
+            list.map(item => [Number(item.latitude), Number(item.longitude)])
+        );
+        if(bounds.isValid()){
+            map.fitBounds(bounds, { padding:[45,45], maxZoom:12, animate:true });
+        }
+    };
+
     if(window.galleryFitControl){
         return;
     }
@@ -3309,10 +3349,7 @@ function addGalleryFitControl(items){
         button.title = "Összes térképi galériapont megjelenítése";
 
         button.onclick = function(){
-            const bounds = L.latLngBounds(items.map(item => [Number(item.latitude), Number(item.longitude)]));
-            if(bounds.isValid()){
-                map.fitBounds(bounds, { padding:[45,45], maxZoom:12, animate:true });
-            }
+            if(window.focusAtlasGalleryView) window.focusAtlasGalleryView();
         };
 
         L.DomEvent.disableClickPropagation(container);
@@ -4221,6 +4258,9 @@ const headerResearchDropdown=document.getElementById("headerResearchDropdown");
 const headerResearchObjectsButton=document.getElementById("headerResearchObjectsButton");
 const headerResearchLayersButton=document.getElementById("headerResearchLayersButton");
 const headerFeatureEditorButton=document.getElementById("headerFeatureEditorButton");
+const headerOpenDataButton=document.getElementById("headerOpenDataButton");
+const headerExportDataButton=document.getElementById("headerExportDataButton");
+const headerGalleryViewButton=document.getElementById("headerGalleryViewButton");
 
 function closeHeaderResearchMenu(){
     if(headerResearchMenu){headerResearchMenu.hidden=true;}
@@ -4278,6 +4318,32 @@ if(headerFeatureEditorButton){
         const panel=document.getElementById("featureEditorPanel");
         if(panel){panel.hidden=false;renderFeatureEditor();}
         closeHeaderResearchMenu();
+    };
+}
+
+if(headerOpenDataButton){
+    headerOpenDataButton.onclick=()=>{
+        if(typeof openDataFile==="function") openDataFile();
+    };
+}
+if(headerExportDataButton){
+    headerExportDataButton.onclick=()=>{
+        if(typeof openSaveExportDialog==="function") openSaveExportDialog();
+    };
+}
+if(headerGalleryViewButton){
+    headerGalleryViewButton.onclick=()=>{
+        if(typeof window.focusAtlasGalleryView==="function" && (window._atlasGalleryItems||[]).length){
+            window.focusAtlasGalleryView();
+        }else{
+            const gallery = typeof galleryLayer!=="undefined" ? galleryLayer : null;
+            if(gallery && map.hasLayer(gallery)){
+                const bounds=gallery.getBounds?.();
+                if(bounds && bounds.isValid()) map.fitBounds(bounds,{padding:[45,45],maxZoom:12,animate:true});
+            }else{
+                alert("ℹ️ A galéria adatai még nem töltődtek be.");
+            }
+        }
     };
 }
 
@@ -4912,6 +4978,7 @@ dataIOControl.onAdd=function(){
     return container;
 };
 dataIOControl.addTo(map);
+if(dataIOControl.getContainer?.()) dataIOControl.getContainer().style.display="none";
 
 /* =====================================================
    PREZI SZERKESZTŐ
