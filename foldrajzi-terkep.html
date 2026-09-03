@@ -1429,6 +1429,139 @@ document.addEventListener("click",function(event){
  .draw-property-field.full{grid-column:auto}
 }
 
+
+
+/* =====================================================
+   RÉTEG FEATURE EDITOR – ÚJ ADATKEZELŐ FELÜLET
+===================================================== */
+.layer-feature-editor-modal{
+    position:fixed;inset:0;z-index:120000;
+    background:rgba(4,15,24,.82);
+    display:flex;align-items:center;justify-content:center;
+    padding:18px;
+}
+.layer-feature-editor-window{
+    width:min(1500px,98vw);height:min(92vh,980px);
+    background:#f3f0e7;border:1px solid #c09d57;border-radius:12px;
+    box-shadow:0 25px 90px rgba(0,0,0,.55);
+    overflow:hidden;display:flex;flex-direction:column;
+}
+.lfe-head{
+    display:flex;align-items:center;gap:12px;padding:12px 16px;
+    background:#102638;color:#fff;border-bottom:1px solid #c09d57;
+    flex:0 0 auto;
+}
+.lfe-head-title{min-width:0;flex:1}
+.lfe-head-title strong{display:block;color:#d8b86a;font:700 18px Georgia,serif}
+.lfe-head-title small{display:block;color:#c6d0d5;font:10px Arial,sans-serif;margin-top:3px}
+.lfe-head-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.lfe-head-actions button,.lfe-toolbar button{
+    border:1px solid #526b7a;border-radius:6px;background:#17374d;color:#fff;
+    padding:7px 10px;cursor:pointer;font:700 10px Arial,sans-serif;
+}
+.lfe-head-actions button:hover,.lfe-toolbar button:hover{background:#c09d57;color:#102638}
+.lfe-head-actions .lfe-close{font-size:18px;width:34px;height:34px;padding:0}
+.lfe-toolbar{
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    padding:9px 12px;background:#fffdf8;border-bottom:1px solid #d8d0c0;
+    flex:0 0 auto;
+}
+.lfe-toolbar label{font:700 10px Arial,sans-serif;color:#526573}
+.lfe-toolbar select,.lfe-toolbar input[type=search]{
+    min-width:190px;padding:8px;border:1px solid #aaa;border-radius:6px;
+    background:#fff;color:#26343d;font:11px Arial,sans-serif;
+}
+.lfe-toolbar input[type=search]{min-width:220px}
+.lfe-toolbar .lfe-count{margin-left:auto;color:#68747b;font:700 10px Arial,sans-serif}
+.lfe-toolbar .lfe-excel{background:#176b3a;border-color:#176b3a}
+.lfe-toolbar .lfe-export{background:#102638}
+.lfe-status{padding:7px 12px;background:#f7f2e6;color:#526573;font:10px Arial,sans-serif;border-bottom:1px solid #ddd5c5;display:none}
+.lfe-status.show{display:block}
+.lfe-body{display:flex;min-height:0;flex:1}
+.lfe-table-wrap{flex:1;min-width:0;overflow:auto;background:#fff}
+.lfe-table{border-collapse:separate;border-spacing:0;min-width:100%;font:10px Arial,sans-serif}
+.lfe-table th{
+    position:sticky;top:0;z-index:5;background:#17374d;color:#d8b86a;
+    padding:8px 7px;text-align:left;white-space:nowrap;border-right:1px solid #426174;
+}
+.lfe-table td{
+    padding:5px 6px;border-bottom:1px solid #e7e2d8;border-right:1px solid #eeeae1;
+    white-space:nowrap;background:#fff;
+}
+.lfe-table tr:hover td{background:#f7f2e6}
+.lfe-table tr.lfe-selected td{background:#e9e0cb}
+.lfe-table td[contenteditable="true"]{cursor:text;min-width:85px}
+.lfe-table td[contenteditable="true"]:focus{outline:2px solid #c09d57;outline-offset:-2px;background:#fffdf8}
+.lfe-table .lfe-system{background:#f3f0e7;color:#526573}
+.lfe-eye{
+    width:30px;height:26px;border:1px solid #aaa;border-radius:5px;
+    cursor:pointer;font-size:14px;background:#176b3a;color:#fff;
+}
+.lfe-eye.off{background:#8b2020}
+.lfe-color{
+    width:32px;height:25px;padding:2px;border:1px solid #aaa;border-radius:5px;cursor:pointer;
+}
+.lfe-detail{
+    width:330px;flex:0 0 330px;border-left:1px solid #d8d0c0;background:#f8f5ec;
+    overflow:auto;padding:13px;
+}
+.lfe-detail h3{margin:0 0 8px;color:#102638;font:700 18px Georgia,serif}
+.lfe-detail .lfe-sub{color:#68747b;font:10px/1.45 Arial,sans-serif;margin-bottom:10px}
+.lfe-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lfe-field{background:#fff;border:1px solid #ddd5c5;border-radius:6px;padding:7px}
+.lfe-field.full{grid-column:1/-1}
+.lfe-field label{display:block;color:#526573;font:700 9px Arial,sans-serif;margin-bottom:4px}
+.lfe-field input,.lfe-field select{
+    width:100%;padding:7px;border:1px solid #aaa;border-radius:5px;
+    background:#fff;font:10px Arial,sans-serif;
+}
+.lfe-field input[type=color]{height:31px;padding:2px}
+.lfe-check{display:flex!important;align-items:center;gap:7px}
+.lfe-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.lfe-actions button{
+    border:1px solid #b8954d;background:#fff;color:#17374d;border-radius:5px;
+    padding:7px 9px;cursor:pointer;font:700 9px Arial,sans-serif;
+}
+.lfe-actions button:hover{background:#d8b86a}
+.lfe-excel-modal{
+    position:fixed;inset:0;z-index:130000;background:rgba(4,15,24,.82);
+    display:flex;align-items:center;justify-content:center;padding:18px;
+}
+.lfe-excel-window{
+    width:min(760px,96vw);max-height:90vh;overflow:auto;background:#f3f0e7;
+    border:1px solid #c09d57;border-radius:11px;box-shadow:0 20px 70px rgba(0,0,0,.5)
+}
+.lfe-excel-head{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:#102638;color:#fff;border-bottom:1px solid #c09d57}
+.lfe-excel-head h3{margin:0;font:700 18px Georgia,serif}
+.lfe-excel-body{padding:15px}
+.lfe-excel-section{background:#fff;border:1px solid #d8d0c0;border-radius:7px;padding:11px;margin-bottom:10px}
+.lfe-excel-section h4{margin:0 0 8px;color:#102638;font:700 13px Georgia,serif}
+.lfe-excel-section input[type=file]{width:100%;font:10px Arial,sans-serif}
+.lfe-excel-section select{width:100%;padding:8px;border:1px solid #aaa;border-radius:5px;font:10px Arial,sans-serif}
+.lfe-excel-file-list{margin-top:8px;display:grid;gap:5px}
+.lfe-excel-file{display:flex;justify-content:space-between;align-items:center;padding:7px;background:#f7f2e6;border-radius:5px;font:10px Arial,sans-serif}
+.lfe-excel-file button{border:0;background:transparent;color:#8b2020;cursor:pointer;font-weight:800}
+.lfe-excel-help{font:10px/1.5 Arial,sans-serif;color:#68747b;margin-top:7px}
+.lfe-excel-actions{display:flex;justify-content:flex-end;gap:7px;margin-top:10px}
+.lfe-excel-actions button{border:1px solid #b8954d;border-radius:5px;padding:8px 11px;cursor:pointer;font-weight:800}
+.lfe-excel-primary{background:#176b3a;color:#fff}
+.lfe-excel-secondary{background:#ddd;color:#333}
+.lfe-label-marker{
+    background:transparent!important;border:0!important;
+}
+.lfe-label-marker > div{
+    white-space:nowrap;pointer-events:none;transform:translate(-50%,-50%);
+    padding:1px 4px;border-radius:3px;background:rgba(255,255,255,.82);
+    box-shadow:0 1px 4px rgba(0,0,0,.18);line-height:1.15;
+}
+@media(max-width:900px){
+    .layer-feature-editor-window{height:94vh}
+    .lfe-body{display:block;overflow:auto}
+    .lfe-table-wrap{height:58%}
+    .lfe-detail{width:100%;height:42%;border-left:0;border-top:1px solid #d8d0c0}
+    .lfe-toolbar .lfe-count{margin-left:0}
+}
+
 </style>
 
 </head>
@@ -1527,6 +1660,13 @@ document.addEventListener("click",function(event){
             id="headerSettlementStatisticsButton"
             title="Települési statisztikák megnyitása">
         📊 Települési statisztikák
+    </button>
+
+    <button type="button"
+            class="map-header-statistics-trigger feature-editor-header-button"
+            id="headerLayerFeatureEditorButton"
+            title="Bármely térképréteg objektumainak szerkesztése">
+        ⚙️ Réteg Feature Editor
     </button>
     <p>
         Kárpátalja tematikus földrajzi atlasza a természetföldrajzi, társadalomföldrajzi, gazdaságföldrajzi és kutatási rétegek integrált rendszerével.
@@ -2730,6 +2870,11 @@ function addSettlementToMap(settlement){
                 riseOnHover:true
             }
         );
+
+    marker.feature = {
+        type:"Feature",
+        properties:{...settlement, id:id, name:title, settlementType:type}
+    };
 
     marker.bindPopup(popup);
 
@@ -6495,6 +6640,597 @@ function escapeHTML(
 console.log(
     "Kárpátalja Atlasz – térkép + GeoJSON + Draw + Prezi rendszer betöltve."
 );
+
+
+/* =====================================================
+   RÉTEG FEATURE EDITOR – TÉRKÉPRÉTEG / OBJEKTUM / EXCEL
+   A meglévő atlasz rétegeit nem lecseréli, hanem szerkeszthető
+   nézetként becsomagolja.
+===================================================== */
+
+const lfeState = {
+    layerKey:null,
+    selectedIndex:0,
+    search:"",
+    excelJoins:[],
+    labelMarkers:new WeakMap(),
+    meta:new WeakMap()
+};
+
+function lfeLayerEntries(){
+    const entries=[];
+    const seen=new Set();
+
+    Object.entries(overlays).forEach(([name,group])=>{
+        if(!group || seen.has(group)) return;
+        seen.add(group);
+        entries.push({key:"overlay:"+name,name:name,group:group});
+    });
+
+    if(typeof importedVectorLayers!=="undefined" && importedVectorLayers){
+        entries.push({key:"imported",name:"📥 Importált vektoros rétegek",group:importedVectorLayers});
+    }
+
+    if(typeof drawnItems!=="undefined" && drawnItems){
+        entries.push({key:"drawn",name:"✏️ Rajzolt kutatási objektumok",group:drawnItems});
+    }
+
+    return entries;
+}
+
+function lfeGetEntry(){
+    return lfeLayerEntries().find(x=>x.key===lfeState.layerKey) || lfeLayerEntries()[0] || null;
+}
+
+function lfeChildren(group){
+    if(!group || !group.eachLayer) return [];
+    const arr=[];
+    group.eachLayer(layer=>{
+        if(layer && typeof layer.toGeoJSON==="function") arr.push(layer);
+    });
+    return arr;
+}
+
+function lfeProperties(layer){
+    const p=(layer?.feature?.properties && typeof layer.feature.properties==="object")
+        ? {...layer.feature.properties} : {};
+    if(layer?.options?.title && p.name==null) p.name=layer.options.title;
+    return p;
+}
+
+function lfeGuessName(props,index){
+    const preferred=["name","Name","Név","név","Település","Településnév","Településnév 1910","title","Title"];
+    for(const k of preferred) if(props[k]!=null && String(props[k]).trim()!=="") return String(props[k]);
+    const key=Object.keys(props).find(k=>typeof props[k]==="string" && props[k].trim());
+    return key ? String(props[key]) : `Objektum ${index+1}`;
+}
+
+function lfeFeatureGeometryType(layer){
+    if(layer instanceof L.Marker || layer instanceof L.CircleMarker) return "Point";
+    if(layer instanceof L.Polygon) return "Polygon";
+    if(layer instanceof L.Polyline) return "LineString";
+    try{
+        const g=layer.toGeoJSON()?.geometry?.type;
+        return g || "Feature";
+    }catch(e){return "Feature";}
+}
+
+function lfeMeta(layer,index){
+    let m=lfeState.meta.get(layer);
+    if(m) return m;
+    const props=lfeProperties(layer);
+    const geometry=lfeFeatureGeometryType(layer);
+    const color=layer.options?.color || (geometry==="Polygon"?"#8b2020":"#17374d");
+    const fill=layer.options?.fillColor || (geometry==="Point"?"#d8b86a":"#c09d57");
+    const field=lfeGuessLabelField(props);
+    m={
+        visible:true,
+        color,
+        fillColor:fill,
+        weight:Number(layer.options?.weight||2),
+        opacity:Number(layer.options?.opacity??1),
+        fillOpacity:Number(layer.options?.fillOpacity??(geometry==="Point"?.9:.25)),
+        radius:Number(layer.options?.radius||6),
+        labelVisible:!!field,
+        labelField:field||"",
+        minZoom:9,
+        maxZoom:22,
+        labelColor:"#17374d",
+        fontSize:14,
+        fontFamily:"Georgia",
+        fontWeight:"700",
+        fontStyle:"normal",
+        labelBackground:"rgba(255,255,255,.82)",
+        joined:{}
+    };
+    lfeState.meta.set(layer,m);
+    return m;
+}
+
+function lfeGuessLabelField(props){
+    const keys=Object.keys(props||{});
+    const preferred=["Településnév 1910","Település","Településnév","name","Name","Név","név","title","Title"];
+    return preferred.find(k=>keys.includes(k)) || keys.find(k=>typeof props[k]==="string" && props[k].trim()) || keys[0] || "";
+}
+
+function lfeSetVisible(layer,visible){
+    const m=lfeMeta(layer,0);
+    m.visible=!!visible;
+    if(visible){
+        if(!map.hasLayer(layer) && layer._lfeGroup) layer._lfeGroup.addLayer(layer);
+        else if(!map.hasLayer(layer) && layer._map==null && layer._lfeGroup && map.hasLayer(layer._lfeGroup)) layer._lfeGroup.addLayer(layer);
+    }else{
+        if(layer._lfeGroup && layer._lfeGroup.hasLayer(layer)) layer._lfeGroup.removeLayer(layer);
+        else if(map.hasLayer(layer)) map.removeLayer(layer);
+    }
+    lfeUpdateLabel(layer);
+}
+
+function lfeApplyStyle(layer){
+    const m=lfeMeta(layer,0);
+    const type=lfeFeatureGeometryType(layer);
+    if(layer instanceof L.Marker){
+        layer.options.color=m.color;
+        layer.options.fillColor=m.fillColor;
+        layer.options.opacity=m.opacity;
+        layer.setIcon(L.divIcon({
+            className:"draw-point-icon",
+            html:`<span style="display:block;width:${Math.max(6,m.radius*2)}px;height:${Math.max(6,m.radius*2)}px;border-radius:50%;background:${popupEsc(m.fillColor)};border:${Math.max(1,Math.min(6,m.weight))}px solid ${popupEsc(m.color)};opacity:${m.opacity};box-shadow:0 1px 6px rgba(0,0,0,.3)"></span>`,
+            iconSize:[Math.max(18,m.radius*2+10),Math.max(18,m.radius*2+10)],
+            iconAnchor:[Math.max(9,m.radius+5),Math.max(9,m.radius+5)],
+            popupAnchor:[0,-Math.max(10,m.radius)]
+        }));
+        return;
+    }
+    if(layer.setStyle){
+        layer.setStyle({
+            color:m.color,
+            fillColor:m.fillColor,
+            weight:m.weight,
+            opacity:m.opacity,
+            fillOpacity:m.fillOpacity
+        });
+    }
+}
+
+function lfeLabelPoint(layer){
+    try{
+        if(layer instanceof L.Marker || layer instanceof L.CircleMarker) return layer.getLatLng();
+        const b=layer.getBounds?.();
+        if(b && b.isValid()) return b.getCenter();
+        const gj=layer.toGeoJSON();
+        const c=gj?.geometry?.coordinates;
+        if(gj?.geometry?.type==="Point") return L.latLng(c[1],c[0]);
+    }catch(e){}
+    return null;
+}
+
+function lfeUpdateLabel(layer){
+    const old=lfeState.labelMarkers.get(layer);
+    if(old){ map.removeLayer(old); lfeState.labelMarkers.delete(layer); }
+    const m=lfeMeta(layer,0);
+    const props=lfeProperties(layer);
+    const text=props[m.labelField];
+    const z=map.getZoom();
+    if(!m.visible || !m.labelVisible || !m.labelField || text==null || String(text)==="" || z<m.minZoom || z>m.maxZoom) return;
+    const pos=lfeLabelPoint(layer);
+    if(!pos) return;
+    const html=`<div style="color:${popupEsc(m.labelColor)};font-size:${Number(m.fontSize)||14}px;font-family:${popupEsc(m.fontFamily||"Arial")};font-weight:${popupEsc(m.fontWeight||"700")};font-style:${popupEsc(m.fontStyle||"normal")};background:${popupEsc(m.labelBackground||"rgba(255,255,255,.82)")};">${popupEsc(text)}</div>`;
+    const marker=L.marker(pos,{interactive:false,zIndexOffset:1000,icon:L.divIcon({className:"lfe-label-marker",html,iconSize:[0,0],iconAnchor:[0,0]})});
+    lfeState.labelMarkers.set(layer,marker);
+    if(map.hasLayer(layer._lfeGroup) || map.hasLayer(layer)) marker.addTo(map);
+}
+
+function lfeRefreshLabels(){
+    const entry=lfeGetEntry();
+    lfeLayerEntries().forEach(e=>lfeChildren(e.group).forEach(l=>lfeUpdateLabel(l)));
+}
+
+map.on("zoomend",lfeRefreshLabels);
+
+function lfeAllPropertyKeys(layers){
+    const keys=[];
+    const seen=new Set();
+    layers.forEach(layer=>{
+        Object.keys(lfeProperties(layer)).forEach(k=>{
+            if(!seen.has(k)){seen.add(k);keys.push(k);}
+        });
+        const m=lfeMeta(layer,0);
+        Object.keys(m.joined||{}).forEach(k=>{
+            if(!seen.has(k)){seen.add(k);keys.push(k);}
+        });
+    });
+    return keys;
+}
+
+function lfeExcelValueForLayer(layer,key){
+    const m=lfeMeta(layer,0);
+    return m.joined?.[key] ?? "";
+}
+
+function lfeSetProperty(layer,key,value){
+    layer.feature=layer.feature||{type:"Feature",properties:{}};
+    layer.feature.properties=layer.feature.properties||{};
+    layer.feature.properties[key]=value;
+    if(key==="name" || key==="Név" || key==="Település" || key==="Településnév" || key==="Településnév 1910"){
+        if(layer.options) layer.options.title=String(value);
+    }
+}
+
+function lfeRender(){
+    const modal=document.getElementById("layerFeatureEditorModal");
+    if(!modal) return;
+    const select=modal.querySelector("#lfeLayerSelect");
+    const entry=lfeGetEntry();
+    if(!entry) return;
+    if(select && select.value!==entry.key) select.value=entry.key;
+
+    const all=lfeChildren(entry.group);
+    all.forEach((layer,i)=>{layer._lfeGroup=entry.group;lfeMeta(layer,i);lfeApplyStyle(layer);});
+    const keys=lfeAllPropertyKeys(all);
+    const query=lfeState.search.trim().toLowerCase();
+    const visibleRows=all.map((layer,index)=>({layer,index,props:lfeProperties(layer)}))
+        .filter(x=>!query || Object.values({...x.props,...lfeMeta(x.layer,x.index).joined}).some(v=>String(v??"").toLowerCase().includes(query)));
+
+    const count=modal.querySelector("#lfeCount");
+    if(count) count.textContent=`${visibleRows.length} / ${all.length} objektum`;
+
+    const table=modal.querySelector("#lfeTable");
+    if(!table) return;
+
+    const sourceHeaders=keys.map(k=>`<th>${popupEsc(k)}</th>`).join("");
+    const rows=visibleRows.map(({layer,index,props})=>{
+        const m=lfeMeta(layer,index);
+        const name=lfeGuessName(props,index);
+        const cells=keys.map(k=>{
+            const v=props[k] ?? lfeExcelValueForLayer(layer,k) ?? "";
+            return `<td contenteditable="true" data-lfe-edit="${popupEsc(k)}" data-lfe-index="${index}">${popupEsc(v)}</td>`;
+        }).join("");
+        return `<tr data-lfe-row="${index}" class="${lfeState.selectedIndex===index?"lfe-selected":""}">
+            <td class="lfe-system"><button type="button" class="lfe-eye ${m.visible?"":"off"}" data-lfe-visible="${index}" title="${m.visible?"Megjelenítés kikapcsolása":"Megjelenítés bekapcsolása"}">${m.visible?"👁":"○"}</button></td>
+            <td class="lfe-system">${index+1}</td>
+            <td class="lfe-system">${popupEsc(lfeFeatureGeometryType(layer))}</td>
+            <td class="lfe-system"><input class="lfe-color" type="color" value="${popupEsc(m.color)}" data-lfe-color="${index}" title="Vonal/szimbólum színe"></td>
+            <td class="lfe-system"><input class="lfe-color" type="color" value="${popupEsc(m.fillColor)}" data-lfe-fill="${index}" title="Kitöltés"></td>
+            <td class="lfe-system">${popupEsc(name)}</td>
+            ${cells}
+        </tr>`;
+    }).join("");
+
+    table.innerHTML=`<thead><tr>
+        <th>Megjelenítés</th><th>ID / sor</th><th>Geometria</th><th>Szín</th><th>Kitöltés</th><th>Objektum neve</th>
+        ${sourceHeaders}
+    </tr></thead><tbody>${rows || `<tr><td colspan="${keys.length+6}" style="padding:20px">Nincs találat.</td></tr>`}</tbody>`;
+
+    table.querySelectorAll("[data-lfe-row]").forEach(row=>{
+        row.addEventListener("click",e=>{
+            if(e.target.closest("button,input,[contenteditable=true]")) return;
+            lfeState.selectedIndex=Number(row.dataset.lfeRow);
+            lfeRender();
+            lfeRenderDetail();
+        });
+    });
+    table.querySelectorAll("[data-lfe-visible]").forEach(btn=>btn.onclick=e=>{
+        e.stopPropagation();
+        const layer=all[Number(btn.dataset.lfeVisible)];
+        if(!layer) return;
+        lfeSetVisible(layer,!lfeMeta(layer,0).visible);
+        lfeState.selectedIndex=Number(btn.dataset.lfeVisible);
+        lfeRender(); lfeRenderDetail();
+    });
+    table.querySelectorAll("[data-lfe-color]").forEach(input=>input.oninput=e=>{
+        const layer=all[Number(input.dataset.lfeColor)]; if(!layer)return;
+        lfeMeta(layer,0).color=input.value;lfeApplyStyle(layer);lfeUpdateLabel(layer);
+    });
+    table.querySelectorAll("[data-lfe-fill]").forEach(input=>input.oninput=e=>{
+        const layer=all[Number(input.dataset.lfeFill)]; if(!layer)return;
+        lfeMeta(layer,0).fillColor=input.value;lfeApplyStyle(layer);lfeUpdateLabel(layer);
+    });
+    table.querySelectorAll("[data-lfe-edit]").forEach(cell=>cell.addEventListener("blur",()=>{
+        const layer=all[Number(cell.dataset.lfeIndex)];
+        if(!layer)return;
+        const key=cell.dataset.lfeEdit;
+        const value=cell.textContent.trim();
+        if(lfeProperties(layer)[key]!==undefined){
+            const oldValue=lfeProperties(layer)[key];
+            let typed=value;
+            if(typeof oldValue==="number" && value!=="" && Number.isFinite(Number(value))) typed=Number(value);
+            else if(typeof oldValue==="boolean") typed=/^(true|1|igen|yes)$/i.test(value);
+            lfeSetProperty(layer,key,typed);
+        }else lfeMeta(layer,0).joined[key]=value;
+        lfeUpdateLabel(layer);
+    }));
+    lfeRenderDetail();
+}
+
+function lfeRenderDetail(){
+    const root=document.getElementById("lfeDetail");
+    const entry=lfeGetEntry();
+    if(!root||!entry)return;
+    const all=lfeChildren(entry.group);
+    const layer=all[lfeState.selectedIndex] || all[0];
+    if(!layer){root.innerHTML="<div class='lfe-sub'>A kiválasztott rétegben nincs szerkeszthető objektum.</div>";return;}
+    lfeState.selectedIndex=all.indexOf(layer);
+    const props=lfeProperties(layer),m=lfeMeta(layer,0),keys=Object.keys(props);
+    const options=keys.map(k=>`<option value="${popupEsc(k)}" ${m.labelField===k?"selected":""}>${popupEsc(k)}</option>`).join("");
+    root.innerHTML=`
+        <h3>${popupEsc(lfeGuessName(props,lfeState.selectedIndex))}</h3>
+        <div class="lfe-sub">${popupEsc(entry.name)} · ${popupEsc(lfeFeatureGeometryType(layer))} · sor ${lfeState.selectedIndex+1}</div>
+        <div class="lfe-grid">
+            <div class="lfe-field"><label>Vonal / szimbólum színe</label><input id="lfeDColor" type="color" value="${popupEsc(m.color)}"></div>
+            <div class="lfe-field"><label>Kitöltési szín</label><input id="lfeDFill" type="color" value="${popupEsc(m.fillColor)}"></div>
+            <div class="lfe-field"><label>Vastagság</label><input id="lfeDWeight" type="number" min="0.5" max="20" step=".5" value="${m.weight}"></div>
+            <div class="lfe-field"><label>Pont méret</label><input id="lfeDRadius" type="number" min="2" max="40" step="1" value="${m.radius}"></div>
+            <div class="lfe-field"><label>Felirat mező</label><select id="lfeDLabelField"><option value="">— nincs felirat —</option>${options}</select></div>
+            <div class="lfe-field"><label>Felirat színe</label><input id="lfeDLabelColor" type="color" value="${popupEsc(m.labelColor)}"></div>
+            <div class="lfe-field"><label>Betűméret</label><input id="lfeDFontSize" type="number" min="6" max="72" value="${m.fontSize}"></div>
+            <div class="lfe-field"><label>Betűtípus</label><select id="lfeDFontFamily">
+                ${["Arial","Georgia","Times New Roman","Verdana","Tahoma","Courier New","Trebuchet MS"].map(f=>`<option ${m.fontFamily===f?"selected":""}>${f}</option>`).join("")}
+            </select></div>
+            <div class="lfe-field"><label>Betűvastagság</label><select id="lfeDFontWeight"><option value="400" ${m.fontWeight==="400"?"selected":""}>Normál</option><option value="700" ${m.fontWeight==="700"?"selected":""}>Félkövér</option></select></div>
+            <div class="lfe-field"><label>Min. zoom</label><input id="lfeDMinZoom" type="number" min="0" max="22" step=".1" value="${m.minZoom}"></div>
+            <div class="lfe-field"><label>Max. zoom</label><input id="lfeDMaxZoom" type="number" min="0" max="22" step=".1" value="${m.maxZoom}"></div>
+            <div class="lfe-field"><label class="lfe-check"><input id="lfeDVisible" type="checkbox" ${m.visible?"checked":""}> Objektum látható</label></div>
+            <div class="lfe-field"><label class="lfe-check"><input id="lfeDLabelVisible" type="checkbox" ${m.labelVisible?"checked":""}> Felirat látható</label></div>
+        </div>
+        <div class="lfe-actions">
+            <button type="button" id="lfeZoomObject">🎯 Nézet</button>
+            <button type="button" id="lfeSaveState">💾 Rétegállapot mentése</button>
+            <button type="button" id="lfeExportLayer">📤 Réteg GeoJSON</button>
+        </div>`;
+
+    const sync=()=>{
+        m.color=document.getElementById("lfeDColor").value;
+        m.fillColor=document.getElementById("lfeDFill").value;
+        m.weight=Number(document.getElementById("lfeDWeight").value)||1;
+        m.radius=Number(document.getElementById("lfeDRadius").value)||6;
+        m.labelField=document.getElementById("lfeDLabelField").value;
+        m.labelColor=document.getElementById("lfeDLabelColor").value;
+        m.fontSize=Number(document.getElementById("lfeDFontSize").value)||14;
+        m.fontFamily=document.getElementById("lfeDFontFamily").value;
+        m.fontWeight=document.getElementById("lfeDFontWeight").value;
+        m.minZoom=Number(document.getElementById("lfeDMinZoom").value)||0;
+        m.maxZoom=Number(document.getElementById("lfeDMaxZoom").value)||22;
+        m.visible=document.getElementById("lfeDVisible").checked;
+        m.labelVisible=document.getElementById("lfeDLabelVisible").checked;
+        lfeApplyStyle(layer);
+        lfeSetVisible(layer,m.visible);
+        lfeUpdateLabel(layer);
+    };
+    root.querySelectorAll("input,select").forEach(el=>el.addEventListener("change",sync));
+    root.querySelectorAll("input[type=color],input[type=number]").forEach(el=>el.addEventListener("input",sync));
+    root.querySelector("#lfeZoomObject").onclick=()=>{
+        if(layer instanceof L.Marker) map.setView(layer.getLatLng(),Math.max(map.getZoom(),12));
+        else if(layer.getBounds?.().isValid()) map.fitBounds(layer.getBounds(),{padding:[40,40]});
+    };
+    root.querySelector("#lfeSaveState").onclick=()=>lfeSavePersistent();
+    root.querySelector("#lfeExportLayer").onclick=()=>lfeExportCurrentLayer();
+}
+
+function lfeOpenEditor(){
+    let modal=document.getElementById("layerFeatureEditorModal");
+    if(!modal){
+        modal=document.createElement("div");
+        modal.id="layerFeatureEditorModal";
+        modal.className="layer-feature-editor-modal";
+        modal.innerHTML=`
+        <div class="layer-feature-editor-window">
+            <div class="lfe-head">
+                <div class="lfe-head-title"><strong>⚙️ RÉTEG FEATURE EDITOR</strong><small>Réteg kiválasztása → objektumok soronkénti szerkesztése → feliratok → Excel kapcsolatok</small></div>
+                <div class="lfe-head-actions">
+                    <button type="button" id="lfeExcelButton">📎 Excel csatolás</button>
+                    <button type="button" id="lfeExportAll">📤 Összes réteg GeoJSON</button>
+                    <button type="button" class="lfe-close" id="lfeClose">×</button>
+                </div>
+            </div>
+            <div class="lfe-toolbar">
+                <label>Réteg:</label>
+                <select id="lfeLayerSelect"></select>
+                <input id="lfeSearch" type="search" placeholder="Objektum / mező keresése…">
+                <span id="lfeCount" class="lfe-count"></span>
+            </div>
+            <div id="lfeStatus" class="lfe-status"></div>
+            <div class="lfe-body">
+                <div class="lfe-table-wrap"><table id="lfeTable" class="lfe-table"></table></div>
+                <aside id="lfeDetail" class="lfe-detail"></aside>
+            </div>
+        </div>`;
+        document.body.appendChild(modal);
+
+        modal.querySelector("#lfeClose").onclick=()=>modal.remove();
+        modal.addEventListener("click",e=>{if(e.target===modal)modal.remove();});
+        modal.querySelector("#lfeLayerSelect").onchange=e=>{
+            lfeState.layerKey=e.target.value;lfeState.selectedIndex=0;lfeState.search="";modal.querySelector("#lfeSearch").value="";lfeRender();
+        };
+        modal.querySelector("#lfeSearch").oninput=e=>{lfeState.search=e.target.value;lfeRender();};
+        modal.querySelector("#lfeExcelButton").onclick=()=>lfeOpenExcelModal();
+        modal.querySelector("#lfeExportAll").onclick=()=>lfeExportAllLayers();
+    }
+    const entries=lfeLayerEntries();
+    const select=modal.querySelector("#lfeLayerSelect");
+    select.innerHTML=entries.map(e=>`<option value="${popupEsc(e.key)}">${popupEsc(e.name)}</option>`).join("");
+    if(!lfeState.layerKey || !entries.some(e=>e.key===lfeState.layerKey)) lfeState.layerKey=entries[0]?.key||null;
+    select.value=lfeState.layerKey||"";
+    modal.style.display="flex";
+    lfeRender();
+}
+
+function lfeFeatureCollection(entry){
+    const all=lfeChildren(entry.group);
+    return {
+        type:"FeatureCollection",
+        name:entry.name,
+        features:all.map((layer,index)=>{
+            const gj=layer.toGeoJSON();
+            const props={...lfeProperties(layer)};
+            const m=lfeMeta(layer,index);
+            props.__atlasEditor={
+                visible:m.visible,
+                style:{color:m.color,fillColor:m.fillColor,weight:m.weight,opacity:m.opacity,fillOpacity:m.fillOpacity,radius:m.radius},
+                label:{visible:m.labelVisible,field:m.labelField,minZoom:m.minZoom,maxZoom:m.maxZoom,color:m.labelColor,fontSize:m.fontSize,fontFamily:m.fontFamily,fontWeight:m.fontWeight}
+            };
+            Object.assign(props,m.joined||{});
+            gj.properties=props;
+            return gj;
+        })
+    };
+}
+
+function lfeExportCurrentLayer(){
+    const entry=lfeGetEntry(); if(!entry)return;
+    const blob=new Blob([JSON.stringify(lfeFeatureCollection(entry),null,2)],{type:"application/geo+json"});
+    downloadBlob(blob,`${slugifyFilename(entry.name)}.geojson`);
+}
+
+function lfeExportAllLayers(){
+    const data=lfeLayerEntries().map(e=>lfeFeatureCollection(e));
+    const blob=new Blob([JSON.stringify({type:"FeatureCollection",layers:data},null,2)],{type:"application/json"});
+    downloadBlob(blob,"karpatalja-atlasz-retegek.geojson.json");
+}
+
+function lfeSavePersistent(){
+    const state=[];
+    lfeLayerEntries().forEach(entry=>{
+        lfeChildren(entry.group).forEach((layer,index)=>{
+            const m=lfeMeta(layer,index);
+            state.push({layerKey:entry.key,index,visible:m.visible,color:m.color,fillColor:m.fillColor,weight:m.weight,opacity:m.opacity,fillOpacity:m.fillOpacity,radius:m.radius,labelVisible:m.labelVisible,labelField:m.labelField,minZoom:m.minZoom,maxZoom:m.maxZoom,labelColor:m.labelColor,fontSize:m.fontSize,fontFamily:m.fontFamily,fontWeight:m.fontWeight,joined:m.joined||{},properties:lfeProperties(layer)});
+        });
+    });
+    try{localStorage.setItem("karpataljaLayerFeatureEditor",JSON.stringify({version:1,state,excelJoins:lfeState.excelJoins}));}
+    catch(e){console.warn("Réteg Feature Editor mentése sikertelen",e);}
+    lfeShowStatus("✅ A réteg- és objektumbeállítások elmentve ebben a böngészőben.","success");
+}
+
+function lfeLoadPersistent(){
+    try{
+        const raw=localStorage.getItem("karpataljaLayerFeatureEditor"); if(!raw)return;
+        const data=JSON.parse(raw);
+        (data.state||[]).forEach(s=>{
+            const entry=lfeLayerEntries().find(e=>e.key===s.layerKey); if(!entry)return;
+            const layer=lfeChildren(entry.group)[s.index]; if(!layer)return;
+            const m=lfeMeta(layer,s.index);
+            Object.assign(m,s);
+            Object.keys(s.properties||{}).forEach(k=>lfeSetProperty(layer,k,s.properties[k]));
+            lfeApplyStyle(layer); lfeSetVisible(layer,m.visible); lfeUpdateLabel(layer);
+        });
+        lfeState.excelJoins=data.excelJoins||[];
+    }catch(e){console.warn("Réteg Feature Editor betöltése sikertelen",e);}
+}
+
+function lfeShowStatus(message,type="show"){
+    const el=document.getElementById("lfeStatus"); if(!el)return;
+    el.textContent=message;el.className=`lfe-status show ${type}`;
+    clearTimeout(lfeShowStatus.t);lfeShowStatus.t=setTimeout(()=>el.classList.remove("show"),4000);
+}
+
+function lfeOpenExcelModal(){
+    const modal=document.createElement("div");
+    modal.className="lfe-excel-modal";
+    modal.innerHTML=`
+      <div class="lfe-excel-window">
+        <div class="lfe-excel-head"><h3>📎 Excel adatok csatolása</h3><button id="lfeExcelClose" class="lfe-close" style="width:34px;height:34px">×</button></div>
+        <div class="lfe-excel-body">
+          <div class="lfe-excel-section">
+            <h4>1. Egy vagy több Excel fájl</h4>
+            <input id="lfeExcelFiles" type="file" multiple accept=".xlsx,.xls,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
+            <div id="lfeExcelFileList" class="lfe-excel-file-list"></div>
+          </div>
+          <div class="lfe-excel-section">
+            <h4>2. Párosítási kulcs</h4>
+            <label style="font:700 10px Arial;color:#526573">GeoJSON / réteg ID mező</label>
+            <select id="lfeJoinGeoKey"></select>
+            <div class="lfe-excel-help">A GeoJSON forrás eredeti oszlopneveit változatlanul hagyjuk. A kiválasztott ID / Sorszám mező alapján történik a párosítás.</div>
+          </div>
+          <div class="lfe-excel-section">
+            <h4>3. Excel oszlop</h4>
+            <select id="lfeJoinExcelKey" disabled><option>Előbb válassz fájlt</option></select>
+            <div id="lfeJoinPreview" class="lfe-excel-help"></div>
+          </div>
+          <div class="lfe-excel-actions">
+            <button id="lfeExcelCancel" class="lfe-excel-secondary">Mégse</button>
+            <button id="lfeExcelAttach" class="lfe-excel-primary">🔗 Párosítás és csatolás</button>
+          </div>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+
+    const entry=lfeGetEntry(),layers=entry?lfeChildren(entry.group):[];
+    const propsKeys=lfeAllPropertyKeys(layers);
+    const geoSel=modal.querySelector("#lfeJoinGeoKey");
+    geoSel.innerHTML=propsKeys.map(k=>`<option value="${popupEsc(k)}">${popupEsc(k)}</option>`).join("");
+    const filesInput=modal.querySelector("#lfeExcelFiles");
+    let parsedFiles=[];
+
+    filesInput.onchange=async()=>{
+        parsedFiles=[];
+        modal.querySelector("#lfeExcelFileList").innerHTML="Betöltés…";
+        for(const file of [...filesInput.files]){
+            try{
+                const buffer=await file.arrayBuffer();
+                let wb;
+                if(file.name.toLowerCase().endsWith(".csv")){
+                    const txt=new TextDecoder("utf-8").decode(buffer);
+                    wb=XLSX.read(txt,{type:"string"});
+                }else wb=XLSX.read(buffer,{type:"array"});
+                const sheets=wb.SheetNames||[];
+                const rows=sheets.length?XLSX.utils.sheet_to_json(wb.Sheets[sheets[0]],{defval:""}):[];
+                parsedFiles.push({name:file.name,rows,sheet:sheets[0]||""});
+            }catch(err){console.error(err);}
+        }
+        modal.querySelector("#lfeExcelFileList").innerHTML=parsedFiles.map(f=>`<div class="lfe-excel-file"><span>📄 ${popupEsc(f.name)} · ${f.rows.length} sor</span><span>${popupEsc(f.sheet)}</span></div>`).join("");
+        const keySel=modal.querySelector("#lfeJoinExcelKey");
+        const keys=parsedFiles[0]?.rows?.length?Object.keys(parsedFiles[0].rows[0]):[];
+        keySel.disabled=!keys.length;
+        keySel.innerHTML=keys.map(k=>`<option value="${popupEsc(k)}">${popupEsc(k)}</option>`).join("");
+        modal.querySelector("#lfeJoinPreview").textContent=keys.length?`Első fájl: ${parsedFiles[0].rows.length} adat sor · kulcsok: ${keys.join(", ")}`:"";
+    };
+
+    modal.querySelector("#lfeExcelClose").onclick=()=>modal.remove();
+    modal.querySelector("#lfeExcelCancel").onclick=()=>modal.remove();
+    modal.querySelector("#lfeExcelAttach").onclick=()=>{
+        if(!parsedFiles.length){alert("Válassz legalább egy Excel fájlt.");return;}
+        const geoKey=geoSel.value,excelKey=modal.querySelector("#lfeJoinExcelKey").value;
+        if(!geoKey||!excelKey){alert("Válassz párosítási mezőket.");return;}
+        const entry=lfeGetEntry(),layers=lfeChildren(entry.group);
+        let matchedTotal=0;
+        parsedFiles.forEach(file=>{
+            const index=new Map(file.rows.map(row=>[String(row[excelKey]??"").trim(),row]));
+            const excelColumns=new Set(file.rows.flatMap(r=>Object.keys(r)));
+            layers.forEach((layer,i)=>{
+                const gv=String(lfeProperties(layer)[geoKey]??"").trim();
+                const row=index.get(gv);
+                if(!row)return;
+                matchedTotal++;
+                const m=lfeMeta(layer,i);
+                m.joined=m.joined||{};
+                Object.entries(row).forEach(([k,v])=>{
+                    if(k===excelKey) return;
+                    m.joined[k]=v;
+                });
+            });
+            lfeState.excelJoins.push({file:file.name,layer:entry.key,geoKey,excelKey,rows:file.rows.length});
+        });
+        lfeSavePersistent();
+        lfeRender();
+        modal.remove();
+        lfeShowStatus(`✅ Excel csatolva. ${matchedTotal} egyezés megtalálva.`,"success");
+    };
+}
+
+const originalLfeOpen = lfeOpenEditor;
+
+const lfeHeaderButton=document.getElementById("headerLayerFeatureEditorButton");
+if(lfeHeaderButton) lfeHeaderButton.onclick=()=>lfeOpenEditor();
+
+/* A régi Kutatási eszközök menü Feature Editor gombja is az új editorra mutat. */
+if(typeof headerFeatureEditorButton!=="undefined" && headerFeatureEditorButton){
+    headerFeatureEditorButton.onclick=()=>lfeOpenEditor();
+}
+
+/* A statikus rétegek betöltése után az állapot visszaállítható. */
+setTimeout(lfeLoadPersistent,1200);
+setTimeout(lfeLoadPersistent,3000);
+setTimeout(lfeLoadPersistent,6000);
 
 </script>
 
