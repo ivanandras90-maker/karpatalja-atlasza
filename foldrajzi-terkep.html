@@ -1694,7 +1694,7 @@ document.addEventListener("click",function(event){
         <div class="map-header-research-menu" id="headerResearchMenu" hidden>
             <button type="button" id="headerResearchObjectsButton">🔬 Kutatási objektumok</button>
             <button type="button" id="headerResearchLayersButton">🌍 Földrajzi kutatási rétegek</button>
-            <button type="button" id="headerFeatureEditorButton">✏️ Feature Editor</button>
+            <button type="button" id="headerFeatureEditorButton">✏️ Draw Feature Editor</button>
         </div>
     </div>
 
@@ -1708,7 +1708,7 @@ document.addEventListener("click",function(event){
         <button type="button" class="atlas-command-button" id="headerGalleryViewButton" title="Összes galériapont megjelenítése">
             📷 Galéria nézet
         </button>
-        <button type="button" class="atlas-command-button feature-editor-header-button" id="headerLayerFeatureEditorButton" title="Bármely térképréteg objektumainak szerkesztése">
+        <button type="button" class="atlas-command-button feature-editor-header-button" id="headerLayerFeatureEditorButton" title="Betöltött GeoJSON és egyéb térképrétegek attribútumainak és megjelenésének szerkesztése">
             ⚙️ Réteg Feature Editor
         </button>
     </div>
@@ -3784,7 +3784,7 @@ function removeDrawObject(id){
     drawState.styles.delete(id);
     if(drawState.selectedId===id) drawState.selectedId=null;
     renderDrawResearchControl();
-    renderFeatureEditor();
+    renderDrawFeatureEditor();
     saveDrawLocal();
 }
 
@@ -3830,7 +3830,7 @@ function openDrawStyleEditor(id){
         };
         syncObjectAfterEdit(obj);
         saveDrawLocal();
-        renderFeatureEditor();
+        renderDrawFeatureEditor();
         close();
     };
 }
@@ -3868,7 +3868,7 @@ function openDrawPropertyEditor(id){
         obj.note=modal.querySelector("#drawPropNote").value.trim();
         syncObjectAfterEdit(obj);
         saveDrawLocal();
-        renderFeatureEditor();
+        renderDrawFeatureEditor();
         close();
     };
 }
@@ -3996,7 +3996,7 @@ function loadDrawLocal(){
             });
         });
         renderDrawResearchControl();
-        renderFeatureEditor();
+        renderDrawFeatureEditor();
     }catch(e){console.warn("Draw betöltés sikertelen",e);}
 }
 
@@ -4016,8 +4016,8 @@ drawResearchPanel.onAdd=function(){
 drawResearchPanel.addTo(map);
 if(drawResearchPanel.getContainer?.()) drawResearchPanel.getContainer().style.display="none";
 
-document.getElementById("drawLengthUnit").addEventListener("change",e=>{drawState.lengthUnit=e.target.value;const el=document.getElementById("featureLengthUnit");if(el) el.value=e.target.value;renderDrawResearchControl();renderFeatureEditor();[...drawState.objects.values()].forEach(refreshLayerPopup);});
-document.getElementById("drawAreaUnit").addEventListener("change",e=>{drawState.areaUnit=e.target.value;const el=document.getElementById("featureAreaUnit");if(el) el.value=e.target.value;renderDrawResearchControl();renderFeatureEditor();[...drawState.objects.values()].forEach(refreshLayerPopup);});
+document.getElementById("drawLengthUnit").addEventListener("change",e=>{drawState.lengthUnit=e.target.value;const el=document.getElementById("featureLengthUnit");if(el) el.value=e.target.value;renderDrawResearchControl();renderDrawFeatureEditor();[...drawState.objects.values()].forEach(refreshLayerPopup);});
+document.getElementById("drawAreaUnit").addEventListener("change",e=>{drawState.areaUnit=e.target.value;const el=document.getElementById("featureAreaUnit");if(el) el.value=e.target.value;renderDrawResearchControl();renderDrawFeatureEditor();[...drawState.objects.values()].forEach(refreshLayerPopup);});
 document.getElementById("drawAnalysisAll").onclick=()=>openDrawAnalysis();
 document.getElementById("drawExportGeo").onclick=exportResearchGeoJSON;
 document.getElementById("drawExportCSV").onclick=exportDrawCSV;
@@ -4093,7 +4093,7 @@ map.on(L.Draw.Event.EDITED,function(event){
         }
     });
     renderDrawResearchControl();
-    renderFeatureEditor();
+    renderDrawFeatureEditor();
     saveDrawLocal();
 });
 
@@ -4103,7 +4103,7 @@ map.on(L.Draw.Event.DELETED,function(event){
         if(obj){drawState.objects.delete(obj.id);drawState.styles.delete(obj.id);}
     });
     renderDrawResearchControl();
-    renderFeatureEditor();
+    renderDrawFeatureEditor();
     saveDrawLocal();
 });
 
@@ -4221,10 +4221,10 @@ featureEditorBar.onAdd=function(){
     const button=L.DomUtil.create("button","",div);
     button.type="button";
     button.id="featureEditorToggle";
-    button.textContent="✏️ Feature Editor · objektumok";
+    button.textContent="✏️ Draw Feature Editor · objektumok";
     button.onclick=()=>{
         const panel=document.getElementById("featureEditorPanel");
-        if(panel){panel.hidden=!panel.hidden;if(!panel.hidden) renderFeatureEditor();}
+        if(panel){panel.hidden=!panel.hidden;if(!panel.hidden) renderDrawFeatureEditor();}
     };
     L.DomEvent.disableClickPropagation(div);
     return div;
@@ -4237,13 +4237,13 @@ featureEditorPanel.onAdd=function(){
     const div=L.DomUtil.create("div","feature-editor-panel");
     div.id="featureEditorPanel";
     div.hidden=true;
-    div.innerHTML=`<div class="feature-editor-titlebar"><div class="feature-editor-titlebar-main"><strong>✏️ FEATURE EDITOR</strong><br><small>Point · Polyline · Polygon · koordináták · mérés · terepi metaadat · Excel Join</small><div class="feature-editor-settings"><span class="fe-setting-label">⚙ Beállítások:</span><label>Vonal <input id="featureDraftColor" type="color" value="#17374d" title="Rajzolási szín"></label><label>Kitöltés <input id="featureDraftFill" type="color" value="#c09d57" title="Kitöltési szín"></label><label>Vastagság <input id="featureDraftWeight" type="number" min="1" max="20" step="1" value="4"></label><label>Stílus <select id="featureDraftDash"><option value="">Folytonos</option><option value="8 6">Szaggatott</option><option value="2 6">Pontozott</option></select></label><label>Hossz <select id="featureLengthUnit"><option value="cm">cm</option><option value="m" selected>m</option><option value="km">km</option><option value="mi">mérföld</option></select></label><label>Terület <select id="featureAreaUnit"><option value="cm2">cm²</option><option value="m2" selected>m²</option><option value="are">ár</option><option value="ha">hektár</option><option value="km2">km²</option></select></label><button type="button" class="fe-column-button" id="featureAddColumn">＋ Oszlop</button><button type="button" class="fe-join-button" id="featureJoinExcel">🔗 Join Excel</button><input type="file" id="featureEditorJoinFileInput" accept=".xlsx,.xls,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"></div><div id="featureJoinStatus" class="feature-editor-join-status"></div></div><div class="feature-editor-titlebar-actions"><button type="button" class="feature-editor-collapse" id="featureEditorCollapse" title="Feature Editor összecsukása">▾</button><button type="button" class="feature-editor-close" id="featureEditorClose">×</button></div></div><div class="feature-editor-grid"><div class="feature-editor-list" id="featureEditorList"></div><div class="feature-editor-detail" id="featureEditorDetail"><div class="feature-editor-empty">Kattints egy objektum sorára a részletes adatok megnyitásához.</div></div></div>`;
+    div.innerHTML=`<div class="feature-editor-titlebar"><div class="feature-editor-titlebar-main"><strong>✏️ DRAW FEATURE EDITOR</strong><br><small>Rajzolt objektumok teljes beállítása · attribútumok · koordináták · mérés · terepi metaadat · Excel Join</small><div class="feature-editor-settings"><span class="fe-setting-label">⚙ Beállítások:</span><label>Vonal <input id="featureDraftColor" type="color" value="#17374d" title="Rajzolási szín"></label><label>Kitöltés <input id="featureDraftFill" type="color" value="#c09d57" title="Kitöltési szín"></label><label>Vastagság <input id="featureDraftWeight" type="number" min="1" max="20" step="1" value="4"></label><label>Stílus <select id="featureDraftDash"><option value="">Folytonos</option><option value="8 6">Szaggatott</option><option value="2 6">Pontozott</option></select></label><label>Hossz <select id="featureLengthUnit"><option value="cm">cm</option><option value="m" selected>m</option><option value="km">km</option><option value="mi">mérföld</option></select></label><label>Terület <select id="featureAreaUnit"><option value="cm2">cm²</option><option value="m2" selected>m²</option><option value="are">ár</option><option value="ha">hektár</option><option value="km2">km²</option></select></label><button type="button" class="fe-column-button" id="featureAddColumn">＋ Oszlop</button><button type="button" class="fe-join-button" id="featureJoinExcel">🔗 Join Excel</button><input type="file" id="featureEditorJoinFileInput" accept=".xlsx,.xls,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"></div><div id="featureJoinStatus" class="feature-editor-join-status"></div></div><div class="feature-editor-titlebar-actions"><button type="button" class="feature-editor-collapse" id="featureEditorCollapse" title="Draw Feature Editor összecsukása">▾</button><button type="button" class="feature-editor-close" id="featureEditorClose">×</button></div></div><div class="feature-editor-grid"><div class="feature-editor-list" id="featureEditorList"></div><div class="feature-editor-detail" id="featureEditorDetail"><div class="feature-editor-empty">Kattints egy objektum sorára a részletes adatok megnyitásához.</div></div></div>`;
     setTimeout(()=>{
         const close=div.querySelector("#featureEditorClose");
         if(close) close.onclick=()=>div.hidden=true;
         const collapse=div.querySelector("#featureEditorCollapse");
         const grid=div.querySelector(".feature-editor-grid");
-        if(collapse&&grid){collapse.onclick=()=>{const collapsed=grid.style.display==="none";grid.style.display=collapsed?"grid":"none";collapse.textContent=collapsed?"▾":"▸";collapse.title=collapsed?"Feature Editor összecsukása":"Feature Editor megnyitása";};}
+        if(collapse&&grid){collapse.onclick=()=>{const collapsed=grid.style.display==="none";grid.style.display=collapsed?"grid":"none";collapse.textContent=collapsed?"▾":"▸";collapse.title=collapsed?"Draw Feature Editor összecsukása":"Draw Feature Editor megnyitása";};}
     },0);
     L.DomEvent.disableClickPropagation(div);
     L.DomEvent.disableScrollPropagation(div);
@@ -4316,7 +4316,7 @@ if(headerResearchLayersButton){
 if(headerFeatureEditorButton){
     headerFeatureEditorButton.onclick=()=>{
         const panel=document.getElementById("featureEditorPanel");
-        if(panel){panel.hidden=false;renderFeatureEditor();}
+        if(panel){panel.hidden=false;renderDrawFeatureEditor();}
         closeHeaderResearchMenu();
     };
 }
@@ -4408,7 +4408,7 @@ function applyJoinedRows(rows,idHeader){
     });
     saveDrawLocal();
     renderDrawResearchControl();
-    renderFeatureEditor();
+    renderDrawFeatureEditor();
     return {matched,total:objects.length,columns:dataHeaders.length};
 }
 
@@ -4469,7 +4469,7 @@ function addFeatureEditorColumn(){
         drawState.objects.forEach(obj=>{obj.customFields=obj.customFields||{};if(!(name in obj.customFields)) obj.customFields[name]="";});
         saveDrawLocal();
         renderDrawResearchControl();
-        renderFeatureEditor();
+        renderDrawFeatureEditor();
         modal.remove();
     };
     modal.querySelector("#featureColumnName").focus();
@@ -4504,7 +4504,7 @@ function bindFeatureEditorSettings(){
         const da=document.getElementById("drawAreaUnit");
         if(dl) dl.value=drawState.lengthUnit;
         if(da) da.value=drawState.areaUnit;
-        renderDrawResearchControl();renderFeatureEditor();[...drawState.objects.values()].forEach(refreshLayerPopup);
+        renderDrawResearchControl();renderDrawFeatureEditor();[...drawState.objects.values()].forEach(refreshLayerPopup);
     };
     if(l) l.addEventListener("change",syncUnits);
     if(a) a.addEventListener("change",syncUnits);
@@ -4515,7 +4515,7 @@ function bindFeatureEditorSettings(){
     if(joinButton&&fileInput){joinButton.onclick=()=>{fileInput.value="";fileInput.click();};fileInput.onchange=e=>{const file=e.target.files?.[0];if(file) importJoinWorkbook(file);};}
 }
 
-function renderFeatureEditor(){
+function renderDrawFeatureEditor(){
     const list=document.getElementById("featureEditorList");
     const detail=document.getElementById("featureEditorDetail");
     if(!list||!detail) return;
@@ -4601,7 +4601,7 @@ function calculateObjectCentroid(layer){
 
 loadDrawLocal();
 renderDrawResearchControl();
-renderFeatureEditor();
+renderDrawFeatureEditor();
 
 /* =====================================================
    KOORDINÁTA
@@ -4887,9 +4887,24 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
         ? `📥 ${sourceName}`
         : `📥 ${sourceName} ${importedVectorNumber}`;
 
-    /* A teljes betöltött GeoJSON egy önálló szerkeszthető atlaszréteg. */
-    importedGroup._lfeRegistry=[layer];
-    layer._lfeGroup=importedGroup;
+    /*
+     * FONTOS: az L.geoJSON() eredménye egy FeatureGroup.
+     * Ha magát ezt a csoportot tesszük a Feature Editor registry-be,
+     * akkor az editor csak egyetlen "FeatureCollection" objektumot lát,
+     * ezért a GeoJSON feature-ek attribútumai nem jelennek meg.
+     *
+     * A tényleges child layereket regisztráljuk külön-külön, és az
+     * importedGroup közvetlen gyermekévé tesszük őket. Így minden
+     * GeoJSON Feature saját sor, saját geometry és saját properties lesz.
+     */
+    const featureLayers=[];
+    layer.eachLayer(child=>{
+        if(!child || typeof child.toGeoJSON!=="function") return;
+        child._lfeGroup=importedGroup;
+        featureLayers.push(child);
+        importedGroup.addLayer(child);
+    });
+    importedGroup._lfeRegistry=featureLayers;
     importedVectorRegistry.push({key:`imported:${importedVectorNumber}`,name:layerName,group:importedGroup,sourceName});
     importedVectorLayers.addLayer(importedGroup);
     importedGroup.addTo(map);
@@ -7243,7 +7258,7 @@ function lfeOpenEditor(){
         modal.innerHTML=`
         <div class="layer-feature-editor-window">
             <div class="lfe-head">
-                <div class="lfe-head-title"><strong>⚙️ RÉTEG FEATURE EDITOR</strong><small>Réteg kiválasztása → objektumok soronkénti szerkesztése → feliratok → Excel kapcsolatok</small></div>
+                <div class="lfe-head-title"><strong>⚙️ LAYER FEATURE EDITOR</strong><small>Betöltött GeoJSON réteg → attribútumok → feliratok → betűméret → stílus → Excel kapcsolatok</small></div>
                 <div class="lfe-head-actions">
                     <button type="button" id="lfeExcelButton">📎 Excel csatolás</button>
                     <button type="button" id="lfeExportAll">📤 Összes réteg GeoJSON</button>
@@ -7451,7 +7466,11 @@ if(lfeHeaderButton) lfeHeaderButton.onclick=()=>lfeOpenEditor();
 
 /* A régi Kutatási eszközök menü Feature Editor gombja is az új editorra mutat. */
 if(typeof headerFeatureEditorButton!=="undefined" && headerFeatureEditorButton){
-    headerFeatureEditorButton.onclick=()=>lfeOpenEditor();
+    headerFeatureEditorButton.onclick=()=>{
+    const panel=document.getElementById("featureEditorPanel");
+    if(panel){panel.hidden=false;renderDrawFeatureEditor();}
+    closeHeaderResearchMenu();
+};
 }
 
 /* A statikus rétegek betöltése után az állapot visszaállítható. */
