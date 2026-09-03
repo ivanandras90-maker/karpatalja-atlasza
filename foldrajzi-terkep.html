@@ -1589,13 +1589,24 @@ document.addEventListener("click",function(event){
 .lfe-excel-actions button{border:1px solid #b8954d;border-radius:5px;padding:8px 11px;cursor:pointer;font-weight:800}
 .lfe-excel-primary{background:#176b3a;color:#fff}
 .lfe-excel-secondary{background:#ddd;color:#333}
-.lfe-label-marker{
-    background:transparent!important;border:0!important;
+.lfe-label-marker{display:none!important}
+.lfe-feature-label{
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+    padding:0!important;
 }
-.lfe-label-marker > div{
-    white-space:nowrap;pointer-events:none;transform:translate(-50%,-50%);
-    padding:1px 4px;border-radius:3px;background:rgba(255,255,255,.82);
-    box-shadow:0 1px 4px rgba(0,0,0,.18);line-height:1.15;
+.lfe-feature-label::before{display:none!important}
+.lfe-feature-label-text{
+    display:inline-block;
+    white-space:nowrap;
+    pointer-events:none;
+    padding:2px 5px;
+    border-radius:4px;
+    box-shadow:0 1px 5px rgba(0,0,0,.20);
+    line-height:1.15;
+    transform:translate(-50%,-50%);
+    transform-origin:center center;
 }
 @media(max-width:900px){
     .layer-feature-editor-window{height:94vh}
@@ -6989,8 +7000,8 @@ function lfeMeta(layer,index){
         radius:Number(savedStyle.radius ?? layer.options?.radius ?? 6),
         labelVisible:savedLabel.visible!==undefined ? !!savedLabel.visible : !!field,
         labelField:savedLabel.field || field || "",
-        minZoom:Number(savedLabel.minZoom ?? 9),
-        maxZoom:Number(savedLabel.maxZoom ?? 22),
+        minZoom:Number(savedLabel.minZoom ?? 0),
+        maxZoom:Number(savedLabel.maxZoom ?? 24),
         labelColor:savedLabel.color || "#17374d",
         fontSize:Number(savedLabel.fontSize ?? 14),
         fontFamily:savedLabel.fontFamily || "Georgia",
@@ -7063,19 +7074,47 @@ function lfeLabelPoint(layer){
 }
 
 function lfeUpdateLabel(layer){
+    /*
+     * PROFESSZIONÁLIS FELIRATKEZELÉS
+     * A felirat nem külön térképi Marker többé. A GeoJSON objektumhoz
+     * kötött Leaflet Tooltipként működik, ezért a felirat mindig ugyanahhoz
+     * a földrajzi objektumhoz tartozik, és zoom/pan közben nem tud elúszni.
+     */
     const old=lfeState.labelMarkers.get(layer);
-    if(old){ map.removeLayer(old); lfeState.labelMarkers.delete(layer); }
+    if(old){
+        try{ map.removeLayer(old); }catch(e){}
+        lfeState.labelMarkers.delete(layer);
+    }
+    if(layer && layer.getTooltip){
+        try{ layer.unbindTooltip(); }catch(e){}
+    }
+
     const m=lfeMeta(layer,0);
     const props=lfeProperties(layer);
     const text=props[m.labelField];
     const z=map.getZoom();
-    if(!m.visible || !m.labelVisible || !m.labelField || text==null || String(text)==="" || z<m.minZoom || z>m.maxZoom) return;
-    const pos=lfeLabelPoint(layer);
-    if(!pos) return;
-    const html=`<div style="color:${popupEsc(m.labelColor)};font-size:${Number(m.fontSize)||14}px;font-family:${popupEsc(m.fontFamily||"Arial")};font-weight:${popupEsc(m.fontWeight||"700")};font-style:${popupEsc(m.fontStyle||"normal")};background:${popupEsc(m.labelBackground||"rgba(255,255,255,.82)")};">${popupEsc(text)}</div>`;
-    const marker=L.marker(pos,{interactive:false,zIndexOffset:1000,icon:L.divIcon({className:"lfe-label-marker",html,iconSize:[0,0],iconAnchor:[0,0]})});
-    lfeState.labelMarkers.set(layer,marker);
-    if(map.hasLayer(layer._lfeGroup) || map.hasLayer(layer)) marker.addTo(map);
+    const hasText=text!=null && String(text).trim()!=="";
+    const inZoom=z>=m.minZoom && z<=m.maxZoom;
+
+    if(!layer || !m.visible || !m.labelVisible || !m.labelField || !hasText || !inZoom) return;
+
+    const html=`<span class="lfe-feature-label-text" style="color:${popupEsc(m.labelColor)};font-size:${Number(m.fontSize)||14}px;font-family:${popupEsc(m.fontFamily||"Arial")};font-weight:${popupEsc(m.fontWeight||"700")};font-style:${popupEsc(m.fontStyle||"normal")};background:${popupEsc(m.labelBackground||"rgba(255,255,255,.88)")};">${popupEsc(text)}</span>`;
+
+    if(typeof layer.bindTooltip!=="function") return;
+
+    const tooltip=layer.bindTooltip(html,{
+        permanent:true,
+        direction:"center",
+        className:"lfe-feature-label",
+        opacity:1,
+        interactive:false,
+        sticky:false
+    }).getTooltip();
+
+    lfeState.labelMarkers.set(layer,tooltip);
+    if(map.hasLayer(layer._lfeGroup) || map.hasLayer(layer)){
+        try{ layer.openTooltip(); }catch(e){}
+    }
 }
 
 function lfeRefreshLabels(){
@@ -7084,6 +7123,18 @@ function lfeRefreshLabels(){
 }
 
 map.on("zoomend",lfeRefreshLabels);
+map.on("moveend",lfeRefreshLabels);
+
+// Ha egy réteg ki-/bekapcsolódik, a hozzá tartozó felirat is azonnal frissüljön.
+map.on("layeradd",e=>{
+    if(e.layer && e.layer._lfeGroup) lfeUpdateLabel(e.layer);
+});
+map.on("layerremove",e=>{
+    const layer=e.layer;
+    if(!layer) return;
+    const old=lfeState.labelMarkers.get(layer);
+    if(old){ try{map.removeLayer(old);}catch(err){} lfeState.labelMarkers.delete(layer); }
+});
 
 function lfeAllPropertyKeys(layers){
     const keys=[];
