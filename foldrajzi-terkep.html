@@ -7034,9 +7034,41 @@ function lfeSetVisible(layer,visible){
     lfeUpdateLabel(layer);
 }
 
+function lfeZoomScale(){
+    // A Layer Feature Editorben megadott pontméret a 12-es zoomon
+    // értendő. Zoomoláskor a pont finoman, de valódi térképi
+    // méretezéssel követi a nézetet; nem marad fix pixelméretű.
+    const z=map.getZoom();
+    return Math.max(.38,Math.min(1.85,Math.pow(2,(z-12)/4)));
+}
+
+function lfePointRadius(layer){
+    const m=lfeMeta(layer,0);
+    const base=Math.max(2,Number(m.radius)||6);
+    return Math.max(2,Math.min(40,base*lfeZoomScale()));
+}
+
+function lfeApplyPointStyle(layer){
+    if(!(layer instanceof L.CircleMarker)) return;
+    const m=lfeMeta(layer,0);
+    const r=lfePointRadius(layer);
+    layer.setStyle({
+        color:m.color,
+        fillColor:m.fillColor,
+        weight:m.weight,
+        opacity:m.opacity,
+        fillOpacity:m.fillOpacity,
+        radius:r
+    });
+}
+
 function lfeApplyStyle(layer){
     const m=lfeMeta(layer,0);
     const type=lfeFeatureGeometryType(layer);
+    if(layer instanceof L.CircleMarker){
+        lfeApplyPointStyle(layer);
+        return;
+    }
     if(layer instanceof L.Marker){
         layer.options.color=m.color;
         layer.options.fillColor=m.fillColor;
@@ -7118,8 +7150,12 @@ function lfeUpdateLabel(layer){
 }
 
 function lfeRefreshLabels(){
-    const entry=lfeGetEntry();
-    lfeLayerEntries().forEach(e=>lfeChildren(e.group).forEach(l=>lfeUpdateLabel(l)));
+    // Zoom eseménynél először a pontok valódi geometriai megjelenési
+    // méretét frissítjük, majd a hozzájuk kötött feliratokat.
+    lfeLayerEntries().forEach(e=>lfeChildren(e.group).forEach(layer=>{
+        if(layer instanceof L.CircleMarker) lfeApplyPointStyle(layer);
+        lfeUpdateLabel(layer);
+    }));
 }
 
 map.on("zoomend",lfeRefreshLabels);
