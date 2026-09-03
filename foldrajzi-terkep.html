@@ -4912,6 +4912,15 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
     if(typeof refreshLayerOpacityControl==="function") refreshLayerOpacityControl();
     const bounds=layer.getBounds&&layer.getBounds();
     if(bounds&&bounds.isValid()) map.fitBounds(bounds,{padding:[35,35]});
+
+    // Az újonnan megnyitott GeoJSON automatikusan a Layer Feature Editorba kerül.
+    // Először visszatöltjük a korábban mentett objektum- és feliratbeállításokat,
+    // majd az aktuálisan importált réteget választjuk ki.
+    lfeState.layerKey=`imported:${importedVectorNumber}`;
+    lfeState.selectedIndex=0;
+    lfeState.search="";
+    if(typeof lfeLoadPersistent==="function") lfeLoadPersistent();
+    if(typeof lfeOpenEditor==="function") lfeOpenEditor();
 }
 
 async function importKMLFile(file){
@@ -6908,9 +6917,8 @@ function lfeLayerEntries(){
         entries.push({key:"imported-raster",name:"🛰️ Importált raszterrétegek",group:importedRasterLayers});
     }
 
-    if(typeof drawnItems!=="undefined" && drawnItems){
-        entries.push({key:"drawn",name:"✏️ Rajzolt kutatási objektumok",group:drawnItems});
-    }
+    // A Draw objektumok szándékosan NEM kerülnek ide.
+    // Ezek kizárólag a DRAW FEATURE EDITOR hatáskörébe tartoznak.
 
     return entries;
 }
@@ -6935,6 +6943,9 @@ function lfeChildren(group){
 function lfeProperties(layer){
     const p=(layer?.feature?.properties && typeof layer.feature.properties==="object")
         ? {...layer.feature.properties} : {};
+    // A GeoJSON exportból visszahozott belső editor-metaadat ne jelenjen meg
+    // normál attribútumként a táblázatban. Az értékeit az lfeMeta() használja.
+    delete p.__atlasEditor;
     if(layer?.options?.title && p.name==null) p.name=layer.options.title;
     return p;
 }
@@ -6960,28 +6971,32 @@ function lfeMeta(layer,index){
     let m=lfeState.meta.get(layer);
     if(m) return m;
     const props=lfeProperties(layer);
+    const rawMeta=layer?.feature?.properties?.__atlasEditor;
+    const saved=rawMeta && typeof rawMeta==="object" ? rawMeta : {};
     const geometry=lfeFeatureGeometryType(layer);
     const color=layer.options?.color || (geometry==="Polygon"?"#8b2020":"#17374d");
     const fill=layer.options?.fillColor || (geometry==="Point"?"#d8b86a":"#c09d57");
     const field=lfeGuessLabelField(props);
+    const savedStyle=saved.style&&typeof saved.style==="object"?saved.style:{};
+    const savedLabel=saved.label&&typeof saved.label==="object"?saved.label:{};
     m={
-        visible:true,
-        color,
-        fillColor:fill,
-        weight:Number(layer.options?.weight||2),
-        opacity:Number(layer.options?.opacity??1),
-        fillOpacity:Number(layer.options?.fillOpacity??(geometry==="Point"?.9:.25)),
-        radius:Number(layer.options?.radius||6),
-        labelVisible:!!field,
-        labelField:field||"",
-        minZoom:9,
-        maxZoom:22,
-        labelColor:"#17374d",
-        fontSize:14,
-        fontFamily:"Georgia",
-        fontWeight:"700",
-        fontStyle:"normal",
-        labelBackground:"rgba(255,255,255,.82)",
+        visible:saved.visible!==undefined ? !!saved.visible : true,
+        color:savedStyle.color || color,
+        fillColor:savedStyle.fillColor || fill,
+        weight:Number(savedStyle.weight ?? layer.options?.weight ?? 2),
+        opacity:Number(savedStyle.opacity ?? layer.options?.opacity ?? 1),
+        fillOpacity:Number(savedStyle.fillOpacity ?? layer.options?.fillOpacity ?? (geometry==="Point"?.9:.25)),
+        radius:Number(savedStyle.radius ?? layer.options?.radius ?? 6),
+        labelVisible:savedLabel.visible!==undefined ? !!savedLabel.visible : !!field,
+        labelField:savedLabel.field || field || "",
+        minZoom:Number(savedLabel.minZoom ?? 9),
+        maxZoom:Number(savedLabel.maxZoom ?? 22),
+        labelColor:savedLabel.color || "#17374d",
+        fontSize:Number(savedLabel.fontSize ?? 14),
+        fontFamily:savedLabel.fontFamily || "Georgia",
+        fontWeight:String(savedLabel.fontWeight ?? "700"),
+        fontStyle:savedLabel.fontStyle || "normal",
+        labelBackground:savedLabel.background || "rgba(255,255,255,.82)",
         joined:{}
     };
     lfeState.meta.set(layer,m);
