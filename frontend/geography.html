@@ -4882,35 +4882,99 @@ function openSaveExportDialog(){
 }
 
 async function addImportedGeoJSON(data,label="Importált GeoJSON"){
-    const payload=Array.isArray(data)?{type:"FeatureCollection",features:data.flatMap(d=>d.features||[])}:data;
+    /*
+     * ROBUSZTUS GEOJSON IMPORT
+     * - Feature / FeatureCollection / Geometry támogatás
+     * - MultiLineString és MultiPolygon teljes kezelése
+     * - Leaflet clipping kikapcsolva (noClip), hogy a határvonal ne tűnjön el
+     *   a renderer vágása miatt
+     * - GeoJSON saját stroke/stroke-width/stroke-opacity értékeinek megtartása
+     * - biztonságos numerikus értékek és alapértelmezett stílusok
+     */
+    if(!data || typeof data!=="object") throw new Error("A GeoJSON tartalma üres vagy érvénytelen.");
+
+    let payload=data;
+    if(payload.type==="Feature") payload={type:"FeatureCollection",features:[payload]};
+    else if(payload.type && payload.type!=="FeatureCollection" && payload.coordinates){
+        payload={type:"FeatureCollection",features:[{type:"Feature",properties:{},geometry:payload}]};
+    }else if(Array.isArray(data)){
+        const features=[];
+        for(const item of data){
+            if(!item) continue;
+            if(item.type==="FeatureCollection") features.push(...(item.features||[]));
+            else if(item.type==="Feature") features.push(item);
+            else if(item.type && item.coordinates) features.push({type:"Feature",properties:{},geometry:item});
+        }
+        payload={type:"FeatureCollection",features};
+    }
+
+    if(payload.type!=="FeatureCollection" || !Array.isArray(payload.features)){
+        throw new Error("Nem érvényes GeoJSON FeatureCollection.");
+    }
+
+    const validFeatures=payload.features.filter(f=>
+        f && f.type==="Feature" && f.geometry && f.geometry.coordinates
+    );
+    if(!validFeatures.length) throw new Error("A GeoJSON nem tartalmaz megjeleníthető geometriát.");
+    payload={...payload,features:validFeatures};
+
     const sourceName=String(label||"Importált GeoJSON");
     const importedGroup=L.layerGroup();
     importedGroup._lfeRegistry=[];
+
+    const safeNumber=(value,fallback)=>{
+        const n=Number(value);
+        return Number.isFinite(n)?n:fallback;
+    };
+    const safeColor=(value,fallback)=>{
+        const v=String(value??"").trim();
+        return v||fallback;
+    };
+    const styleForFeature=(feature)=>{
+        const p=feature?.properties||{};
+        return {
+            color:safeColor(p.stroke,"#312E81"),
+            weight:Math.max(0.01,safeNumber(p["stroke-width"],2)),
+            opacity:Math.max(0,Math.min(1,safeNumber(p["stroke-opacity"],1))),
+            fillColor:safeColor(p.fill,"#312E81"),
+            fillOpacity:Math.max(0,Math.min(1,safeNumber(p["fill-opacity"],0.20))),
+            lineCap:"round",
+            lineJoin:"round",
+            smoothFactor:0,
+            noClip:true
+        };
+    };
+
     const layer=L.geoJSON(payload,{
-        style:feature=>({color:feature?.properties?.stroke||"#8b2020",weight:Number(feature?.properties?.['stroke-width']||3),opacity:Number(feature?.properties?.['stroke-opacity']??1),fillColor:feature?.properties?.fill||"#c09d57",fillOpacity:Number(feature?.properties?.['fill-opacity']??.25)}),
-        pointToLayer:(feature,latlng)=>L.circleMarker(latlng,{radius:6,color:feature?.properties?.stroke||"#8b2020",weight:2,fillColor:feature?.properties?.fill||"#c09d57",fillOpacity:Number(feature?.properties?.['fill-opacity']??.8)}),
+        renderer:L.canvas({padding:0.5}),
+        style:styleForFeature,
+        pointToLayer:(feature,latlng)=>{
+            const p=feature?.properties||{};
+            return L.circleMarker(latlng,{
+                radius:Math.max(0.1,safeNumber(p["point-radius"],6)),
+                color:safeColor(p.stroke,"#312E81"),
+                weight:Math.max(0.01,safeNumber(p["stroke-width"],2)),
+                opacity:Math.max(0,Math.min(1,safeNumber(p["stroke-opacity"],1))),
+                fillColor:safeColor(p.fill,"#312E81"),
+                fillOpacity:Math.max(0,Math.min(1,safeNumber(p["fill-opacity"],0.8)))
+            });
+        },
         onEachFeature:(feature,child)=>{
+            child.options.noClip=true;
             if(feature.properties){
-                const html=Object.entries(feature.properties).map(([k,v])=>`<b>${popupEsc(k)}</b>: ${popupEsc(v)}`).join("<br>");
+                const html=Object.entries(feature.properties)
+                    .map(([k,v])=>`<b>${popupEsc(k)}</b>: ${popupEsc(v)}`)
+                    .join("<br>");
                 if(html) child.bindPopup(`<div style="font:11px Arial,sans-serif">${html}</div>`);
             }
         }
     });
+
     importedVectorNumber++;
-    const layerName = importedVectorNumber===1 && sourceName==="GeoJSON"
+    const layerName=importedVectorNumber===1 && sourceName==="GeoJSON"
         ? `📥 ${sourceName}`
         : `📥 ${sourceName} ${importedVectorNumber}`;
 
-    /*
-     * FONTOS: az L.geoJSON() eredménye egy FeatureGroup.
-     * Ha magát ezt a csoportot tesszük a Feature Editor registry-be,
-     * akkor az editor csak egyetlen "FeatureCollection" objektumot lát,
-     * ezért a GeoJSON feature-ek attribútumai nem jelennek meg.
-     *
-     * A tényleges child layereket regisztráljuk külön-külön, és az
-     * importedGroup közvetlen gyermekévé tesszük őket. Így minden
-     * GeoJSON Feature saját sor, saját geometry és saját properties lesz.
-     */
     const featureLayers=[];
     layer.eachLayer(child=>{
         if(!child || typeof child.toGeoJSON!=="function") return;
@@ -4918,18 +4982,31 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
         featureLayers.push(child);
         importedGroup.addLayer(child);
     });
+
+    if(!featureLayers.length) throw new Error("A GeoJSON geometriái nem rajzolhatók ki.");
+
     importedGroup._lfeRegistry=featureLayers;
-    importedVectorRegistry.push({key:`imported:${importedVectorNumber}`,name:layerName,group:importedGroup,sourceName});
+    importedVectorRegistry.push({
+        key:`imported:${importedVectorNumber}`,
+        name:layerName,
+        group:importedGroup,
+        sourceName,
+        featureCount:featureLayers.length
+    });
     importedVectorLayers.addLayer(importedGroup);
     importedGroup.addTo(map);
     layerControl.addOverlay(importedGroup,layerName);
     if(typeof refreshLayerOpacityControl==="function") refreshLayerOpacityControl();
-    const bounds=layer.getBounds&&layer.getBounds();
-    if(bounds&&bounds.isValid()) map.fitBounds(bounds,{padding:[35,35]});
 
-    // Az újonnan megnyitott GeoJSON automatikusan a Layer Feature Editorba kerül.
-    // Először visszatöltjük a korábban mentett objektum- és feliratbeállításokat,
-    // majd az aktuálisan importált réteget választjuk ki.
+    const bounds=layer.getBounds&&layer.getBounds();
+    if(bounds&&bounds.isValid()){
+        map.fitBounds(bounds,{padding:[45,45],maxZoom:11});
+        setTimeout(()=>{
+            if(map&&bounds.isValid()) map.fitBounds(bounds,{padding:[45,45],maxZoom:11});
+            if(map&&typeof map.invalidateSize==="function") map.invalidateSize({pan:false});
+        },120);
+    }
+
     lfeState.layerKey=`imported:${importedVectorNumber}`;
     lfeState.selectedIndex=0;
     lfeState.search="";
