@@ -1,6 +1,5 @@
 {
   "type": "FeatureCollection",
-  "name": "📥 GeoJSON 3",
   "features": [
     {
       "type": "Feature",
@@ -49092,28 +49091,7 @@
         "stroke-opacity": 1,
         "stroke-width": 1,
         "fill": "#312E81",
-        "fill-opacity": 0.3,
-        "__atlasEditor": {
-          "visible": true,
-          "style": {
-            "color": "#7f2e2e",
-            "fillColor": "#312e81",
-            "weight": 3,
-            "opacity": 1,
-            "fillOpacity": 0.3,
-            "radius": 6
-          },
-          "label": {
-            "visible": true,
-            "field": "stroke",
-            "minZoom": 0,
-            "maxZoom": 24,
-            "color": "#17374d",
-            "fontSize": 14,
-            "fontFamily": "Georgia",
-            "fontWeight": "700"
-          }
-        }
+        "fill-opacity": 0.3
       },
       "bbox": [
         22.137081,
