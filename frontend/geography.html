@@ -4833,27 +4833,92 @@ function openSaveExportDialog(){
 async function addImportedGeoJSON(data,label="Importált GeoJSON",openEditor=true,preferredName=null){
     /*
      * ROBUSZTUS GEOJSON IMPORT
-     * A GeoJSON réteg közvetlenül egy Leaflet GeoJSON layer lesz.
-     * Nem másoljuk át egy másik LayerGroup-ba, mert az korábbi verzióban
-     * bizonyos Feature / MultiGeometry eseteknél láthatatlan réteget okozhatott.
+     * Támogatott: FeatureCollection, Feature és minden szabványos GeoJSON
+     * geometria. Az önálló geometriákat FeatureCollection-be csomagoljuk,
+     * így a Leaflet és a Layer Feature Editor ugyanazt a réteget kapja.
      */
     let payload=data;
 
+    const geometryTypes=new Set([
+        "Point",
+        "MultiPoint",
+        "LineString",
+        "MultiLineString",
+        "Polygon",
+        "MultiPolygon",
+        "GeometryCollection"
+    ]);
+
+    // Több objektumot tartalmazó JSON tömb kezelése.
     if(Array.isArray(payload)){
         const features=[];
+
         payload.forEach(item=>{
-            if(!item) return;
-            if(item.type==="FeatureCollection" && Array.isArray(item.features)) features.push(...item.features);
-            else if(item.type==="Feature") features.push(item);
+            if(!item || typeof item!=="object") return;
+
+            if(item.type==="FeatureCollection" && Array.isArray(item.features)){
+                features.push(...item.features);
+            }
+            else if(item.type==="Feature"){
+                features.push(item);
+            }
+            else if(geometryTypes.has(item.type)){
+                features.push({
+                    type:"Feature",
+                    properties:{},
+                    geometry:item
+                });
+            }
         });
+
         payload={type:"FeatureCollection",features};
     }
 
-    if(!payload || typeof payload!=="object") throw new Error("A GeoJSON tartalma nem érvényes JSON objektum.");
-    if(payload.type==="Feature") payload={type:"FeatureCollection",features:[payload]};
+    if(!payload || typeof payload!=="object"){
+        throw new Error("A GeoJSON tartalma nem érvényes JSON objektum.");
+    }
 
-    if(payload.type!=="FeatureCollection" && !payload.type?.includes("Geometry")){
-        throw new Error("A fájl nem érvényes GeoJSON Feature vagy FeatureCollection.");
+    // Egyetlen Feature -> FeatureCollection.
+    if(payload.type==="Feature"){
+        payload={
+            type:"FeatureCollection",
+            features:[payload]
+        };
+    }
+
+    // Egyetlen önálló geometria -> FeatureCollection.
+    if(geometryTypes.has(payload.type)){
+        payload={
+            type:"FeatureCollection",
+            features:[{
+                type:"Feature",
+                properties:{},
+                geometry:payload
+            }]
+        };
+    }
+
+    // Végső szerkezeti ellenőrzés.
+    if(payload.type!=="FeatureCollection" || !Array.isArray(payload.features)){
+        throw new Error(
+            `A fájl nem érvényes GeoJSON. Észlelt típus: ${payload.type || "ismeretlen"}`
+        );
+    }
+
+    if(payload.features.length===0){
+        throw new Error("A GeoJSON nem tartalmaz megjeleníthető objektumot.");
+    }
+
+    // Hibás Feature-ek kiszűrése, hogy egyetlen rossz rekord se akadályozza
+    // a teljes réteg betöltését.
+    payload.features=payload.features.filter(feature=>{
+        if(!feature || feature.type!=="Feature" || !feature.geometry) return false;
+        if(!geometryTypes.has(feature.geometry.type)) return false;
+        return true;
+    });
+
+    if(payload.features.length===0){
+        throw new Error("A GeoJSON nem tartalmaz érvényes geometriai objektumot.");
     }
 
     const sourceName=String(label||"Importált GeoJSON");
