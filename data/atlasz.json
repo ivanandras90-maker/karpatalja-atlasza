@@ -536,7 +536,12 @@
       "updatedAt": "2026-09-05T18:39:36.923Z",
       "kind": "geojson",
       "visible": true,
-      "opacity": 1
+      "opacity": 1,
+      "style": {
+        "color": "#8b2020",
+        "fillColor": "#c09d57",
+        "weight": 3
+      }
     }
   ]
 }
