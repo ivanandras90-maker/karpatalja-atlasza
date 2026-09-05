@@ -3,10 +3,12 @@
   "application": "Kárpátalja Földrajzi és Történeti Atlasza",
   "language": "hu",
   "lastUpdated": "2026-09-05",
+
   "hero": {
     "title": "Kárpátalja",
     "description": "Fedezd fel Kárpátalja földrajzát és történelmét egyetlen interaktív atlaszban."
   },
+
   "geography": {
     "id": "geography",
     "title": "Földrajzi atlasz",
@@ -14,6 +16,7 @@
     "link": "geography.html",
     "visible": true
   },
+
   "history": {
     "id": "history",
     "title": "Történeti atlasz",
@@ -21,6 +24,7 @@
     "link": "history.html",
     "visible": true
   },
+
   "historicalPeriods": [
     {
       "id": "arpad-kor",
@@ -140,6 +144,7 @@
       "order": 9
     }
   ],
+
   "historicalPlaces": [
     {
       "id": "ungvar-var",
@@ -227,6 +232,7 @@
       "order": 5
     }
   ],
+
   "historicalEvents": [
     {
       "id": "honfoglalas",
@@ -357,6 +363,7 @@
       "order": 8
     }
   ],
+
   "historicalPeople": [
     {
       "id": "ii-rakoczi-ferenc",
@@ -387,6 +394,7 @@
       "order": 2
     }
   ],
+
   "historicalCounties": [
     {
       "id": "ung",
@@ -445,6 +453,7 @@
       "order": 4
     }
   ],
+
   "historicalMaps": [
     {
       "id": "magyar-kiralysag-1910",
@@ -475,6 +484,7 @@
       "order": 2
     }
   ],
+
   "sources": [
     {
       "id": "torteneti-forrasok",
@@ -499,11 +509,12 @@
       "title": "Képi források",
       "description": "Történelmi fényképek, képes dokumentációk és digitális képgyűjtemények.",
       "url": "",
-      "sourceDescription": "Történelmi fényképek, digitális gyűjtemények, archív képek és egyéb vizuális dokumentációk.",
+      "sourceDescription": "Történelmi fényképek, digitális gyűjtemények, archív képek és egyéb vizuális dokumentumok.",
       "visible": true,
       "order": 3
     }
   ],
+
   "gallery": [
     {
       "id": "gallery-001",
@@ -523,25 +534,28 @@
       "order": 1
     }
   ],
+
   "mapLayers": [
     {
       "id": "geojson:geojson.geojson",
-      "name": "📥 GeoJSON 3",
+      "name": "Kárpátalja",
       "file": "geojson.geojson",
       "path": "geojson.geojson",
       "type": "GeoJSON",
+      "kind": "geojson",
       "source": "Layer Feature Editor",
       "enabled": true,
-      "description": "Tartósan az Atlasz projekt gyökerében tárolt földrajzi GeoJSON réteg.",
-      "updatedAt": "2026-09-05T18:39:36.923Z",
-      "kind": "geojson",
       "visible": true,
       "opacity": 1,
       "style": {
-        "color": "#8b2020",
-        "fillColor": "#c09d57",
-        "weight": 3
-      }
+        "color": "#312E81",
+        "fillColor": "#312E81",
+        "weight": 2,
+        "opacity": 1,
+        "fillOpacity": 0.3
+      },
+      "description": "Tartósan az Atlasz projekt gyökerében tárolt saját GeoJSON földrajzi réteg.",
+      "updatedAt": "2026-09-05T18:39:36.923Z"
     }
   ]
 }
