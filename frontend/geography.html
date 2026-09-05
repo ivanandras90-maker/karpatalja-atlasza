@@ -4946,7 +4946,12 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON",openEditor=tru
             fillOpacity:Number(feature?.properties?.["fill-opacity"] ?? .8)
         }),
         onEachFeature:(feature,child)=>{
-            child._lfeGroup=importedGroup;
+            /*
+             * FONTOS: az L.geoJSON() létrehozása közben az importedGroup
+             * változó még nincs inicializálva. Ezért itt nem hivatkozunk rá.
+             * A _lfeGroup kapcsolatot közvetlenül az L.geoJSON létrejötte
+             * után, az eachLayer ciklusban állítjuk be.
+             */
             child.feature=feature;
             const props=feature?.properties;
             if(props && typeof props==="object"){
