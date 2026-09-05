@@ -11,14 +11,14 @@
     "id": "geography",
     "title": "Földrajzi atlasz",
     "description": "Kárpátalja természetföldrajzi és társadalomföldrajzi viszonyainak tematikus bemutatása.",
-    "link": "foldrajzi-terkep.html",
+    "link": "geography.html",
     "visible": true
   },
   "history": {
     "id": "history",
     "title": "Történeti atlasz",
     "description": "Kárpátalja történelmének bemutatása korszakokon, eseményeken, településeken, személyiségeken és történelmi térképeken keresztül.",
-    "link": "tortenelmi-terkep.html",
+    "link": "history.html",
     "visible": true
   },
   "historicalPeriods": [
@@ -533,7 +533,10 @@
       "source": "Layer Feature Editor",
       "enabled": true,
       "description": "Tartósan az Atlasz projekt gyökerében tárolt földrajzi GeoJSON réteg.",
-      "updatedAt": "2026-09-05T18:39:36.923Z"
+      "updatedAt": "2026-09-05T18:39:36.923Z",
+      "kind": "geojson",
+      "visible": true,
+      "opacity": 1
     }
   ]
 }
