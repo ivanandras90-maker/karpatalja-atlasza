@@ -1503,6 +1503,9 @@ document.addEventListener("click",function(event){
     padding:7px 10px;cursor:pointer;font:700 10px Arial,sans-serif;
 }
 .lfe-head-actions button:hover,.lfe-toolbar button:hover{background:#c09d57;color:#102638}
+.lfe-head-actions .lfe-atlas-save{background:#176b3a;border-color:#176b3a}
+.lfe-head-actions .lfe-atlas-delete{background:#7d2424;border-color:#7d2424}
+.lfe-head-actions .lfe-atlas-button{background:#244e67;border-color:#6e8fa4}
 .lfe-head-actions .lfe-close{font-size:18px;width:34px;height:34px;padding:0}
 .lfe-toolbar{
     display:flex;align-items:center;gap:8px;flex-wrap:wrap;
@@ -1718,9 +1721,6 @@ document.addEventListener("click",function(event){
         </button>
         <button type="button" class="atlas-command-button atlas-command-success" id="headerExportDataButton" title="Adatok exportálása">
             📤 Export
-        </button>
-        <button type="button" class="atlas-command-button" id="headerGalleryViewButton" title="Összes galériapont megjelenítése">
-            📷 Galéria nézet
         </button>
         <button type="button" class="atlas-command-button feature-editor-header-button" id="headerLayerFeatureEditorButton" title="Betöltött GeoJSON és egyéb térképrétegek attribútumainak és megjelenésének szerkesztése">
             ⚙️ Réteg Feature Editor
@@ -3312,10 +3312,6 @@ async function loadGalleryLayer(){
             status.textContent = `${mappedGallery.length} térképi galériapont`;
         }
 
-        if(mappedGallery.length){
-            addGalleryFitControl(mappedGallery);
-        }
-
         focusGalleryFromUrl(mappedGallery);
 
     } catch(error){
@@ -3328,50 +3324,6 @@ async function loadGalleryLayer(){
         }
     }
 
-}
-
-/* =====================================================
-   GALÉRIA TELJES NÉZET
-===================================================== */
-
-function addGalleryFitControl(items){
-
-    window._atlasGalleryItems = items || [];
-
-    window.focusAtlasGalleryView = function(){
-        const list = window._atlasGalleryItems || [];
-        const bounds = L.latLngBounds(
-            list.map(item => [Number(item.latitude), Number(item.longitude)])
-        );
-        if(bounds.isValid()){
-            map.fitBounds(bounds, { padding:[45,45], maxZoom:12, animate:true });
-        }
-    };
-
-    if(window.galleryFitControl){
-        return;
-    }
-
-    const control = L.control({ position:"topright" });
-
-    control.onAdd = function(){
-
-        const container = L.DomUtil.create("div", "geojson-control");
-        const button = L.DomUtil.create("button", "", container);
-
-        button.innerHTML = "📷 Galéria nézet";
-        button.title = "Összes térképi galériapont megjelenítése";
-
-        button.onclick = function(){
-            if(window.focusAtlasGalleryView) window.focusAtlasGalleryView();
-        };
-
-        L.DomEvent.disableClickPropagation(container);
-        return container;
-    };
-
-    control.addTo(map);
-    window.galleryFitControl = control;
 }
 
 /* =====================================================
@@ -4274,7 +4226,6 @@ const headerResearchLayersButton=document.getElementById("headerResearchLayersBu
 const headerFeatureEditorButton=document.getElementById("headerFeatureEditorButton");
 const headerOpenDataButton=document.getElementById("headerOpenDataButton");
 const headerExportDataButton=document.getElementById("headerExportDataButton");
-const headerGalleryViewButton=document.getElementById("headerGalleryViewButton");
 
 function closeHeaderResearchMenu(){
     if(headerResearchMenu){headerResearchMenu.hidden=true;}
@@ -4343,21 +4294,6 @@ if(headerOpenDataButton){
 if(headerExportDataButton){
     headerExportDataButton.onclick=()=>{
         if(typeof openSaveExportDialog==="function") openSaveExportDialog();
-    };
-}
-if(headerGalleryViewButton){
-    headerGalleryViewButton.onclick=()=>{
-        if(typeof window.focusAtlasGalleryView==="function" && (window._atlasGalleryItems||[]).length){
-            window.focusAtlasGalleryView();
-        }else{
-            const gallery = typeof galleryLayer!=="undefined" ? galleryLayer : null;
-            if(gallery && map.hasLayer(gallery)){
-                const bounds=gallery.getBounds?.();
-                if(bounds && bounds.isValid()) map.fitBounds(bounds,{padding:[45,45],maxZoom:12,animate:true});
-            }else{
-                alert("ℹ️ A galéria adatai még nem töltődtek be.");
-            }
-        }
     };
 }
 
@@ -4881,7 +4817,7 @@ function openSaveExportDialog(){
     };
 }
 
-async function addImportedGeoJSON(data,label="Importált GeoJSON"){
+async function addImportedGeoJSON(data,label="Importált GeoJSON", openEditor=true, preferredName=null){
     const payload=Array.isArray(data)?{type:"FeatureCollection",features:data.flatMap(d=>d.features||[])}:data;
     const sourceName=String(label||"Importált GeoJSON");
     const importedGroup=L.layerGroup();
@@ -4897,9 +4833,9 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
         }
     });
     importedVectorNumber++;
-    const layerName = importedVectorNumber===1 && sourceName==="GeoJSON"
+    const layerName = preferredName || (importedVectorNumber===1 && sourceName==="GeoJSON"
         ? `📥 ${sourceName}`
-        : `📥 ${sourceName} ${importedVectorNumber}`;
+        : `📥 ${sourceName} ${importedVectorNumber}`);
 
     /*
      * FONTOS: az L.geoJSON() eredménye egy FeatureGroup.
@@ -4934,7 +4870,7 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
     lfeState.selectedIndex=0;
     lfeState.search="";
     if(typeof lfeLoadPersistent==="function") lfeLoadPersistent();
-    if(typeof lfeOpenEditor==="function") lfeOpenEditor();
+    if(openEditor && typeof lfeOpenEditor==="function") lfeOpenEditor();
 }
 
 async function importKMLFile(file){
@@ -6898,6 +6834,10 @@ console.log(
    nézetként becsomagolja.
 ===================================================== */
 
+let atlasProjectDirectoryHandle = null;
+let atlasSavedLayerManifest = null;
+const atlasSavedLayerKeys = new Set();
+
 const lfeState = {
     layerKey:null,
     selectedIndex:0,
@@ -7377,6 +7317,9 @@ function lfeOpenEditor(){
                 <div class="lfe-head-title"><strong>⚙️ LAYER FEATURE EDITOR</strong><small>Betöltött GeoJSON réteg → attribútumok → feliratok → betűméret → stílus → Excel kapcsolatok</small></div>
                 <div class="lfe-head-actions">
                     <button type="button" id="lfeExcelButton">📎 Excel csatolás</button>
+                    <button type="button" id="lfeChooseAtlasFolder" class="lfe-atlas-button">📁 Atlasz mappa</button>
+                    <button type="button" id="lfeSaveAtlasLayer" class="lfe-atlas-save">💾 Mentés az Atlaszba</button>
+                    <button type="button" id="lfeDeleteAtlasLayer" class="lfe-atlas-delete">🗑️ Réteg törlése</button>
                     <button type="button" id="lfeExportAll">📤 Összes réteg GeoJSON</button>
                     <button type="button" class="lfe-close" id="lfeClose">×</button>
                 </div>
@@ -7402,6 +7345,9 @@ function lfeOpenEditor(){
         };
         modal.querySelector("#lfeSearch").oninput=e=>{lfeState.search=e.target.value;lfeRender();};
         modal.querySelector("#lfeExcelButton").onclick=()=>lfeOpenExcelModal();
+        modal.querySelector("#lfeChooseAtlasFolder").onclick=()=>lfeChooseAtlasFolder();
+        modal.querySelector("#lfeSaveAtlasLayer").onclick=()=>lfeSaveSelectedLayerToAtlas();
+        modal.querySelector("#lfeDeleteAtlasLayer").onclick=()=>lfeDeleteSelectedAtlasLayer();
         modal.querySelector("#lfeExportAll").onclick=()=>lfeExportAllLayers();
     }
     const entries=lfeLayerEntries();
@@ -7444,6 +7390,161 @@ function lfeExportAllLayers(){
     const data=lfeLayerEntries().map(e=>lfeFeatureCollection(e));
     const blob=new Blob([JSON.stringify({type:"FeatureCollection",layers:data},null,2)],{type:"application/json"});
     downloadBlob(blob,"karpatalja-atlasz-retegek.geojson.json");
+}
+
+async function lfeChooseAtlasFolder(){
+    if(!window.showDirectoryPicker){
+        alert("Ehhez a funkcióhoz Chrome vagy Edge szükséges. A böngésző nem támogatja a helyi mappába írást.");
+        return null;
+    }
+    try{
+        atlasProjectDirectoryHandle=await window.showDirectoryPicker({mode:"readwrite"});
+        lfeShowStatus("✅ Az Atlasz projekt gyökérmappája kiválasztva. Ezután menthető a GeoJSON és az atlasz.json.","success");
+        return atlasProjectDirectoryHandle;
+    }catch(e){
+        if(e?.name!=="AbortError") console.warn(e);
+        return null;
+    }
+}
+
+function lfeSelectedImportedEntry(){
+    const entry=lfeGetEntry();
+    if(!entry || !String(entry.key||"").startsWith("imported:")) return null;
+    return entry;
+}
+
+function lfeAtlasFilename(entry){
+    const raw=entry?.sourceName || entry?.name || "atlasz-reteg";
+    let name=String(raw).replace(/^📥\s*/," ").trim();
+    name=name.replace(/\.(geojson|json)$/i,"");
+    name=slugifyFilename(name)||"atlasz-reteg";
+    return `${name}.geojson`;
+}
+
+async function lfeReadAtlasManifest(){
+    try{
+        const response=await fetch("../data/atlasz.json",{cache:"no-store"});
+        if(!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data=await response.json();
+        data.mapLayers=Array.isArray(data.mapLayers)?data.mapLayers:[];
+        atlasSavedLayerManifest=data;
+        atlasSavedLayerKeys.clear();
+        data.mapLayers.forEach(x=>{if(x?.id) atlasSavedLayerKeys.add(String(x.id));});
+        return data;
+    }catch(e){
+        console.warn("atlasz.json olvasása sikertelen",e);
+        throw new Error("Az atlasz.json nem olvasható. A műveletet futó weboldalon (GitHub Pages vagy helyi webszerver) indítsd el.");
+    }
+}
+
+async function lfeWriteAtlasManifest(data){
+    if(!atlasProjectDirectoryHandle) throw new Error("Előbb válaszd ki az Atlasz projekt gyökérmappáját a 📁 Atlasz mappa gombbal.");
+    const dataDir=await atlasProjectDirectoryHandle.getDirectoryHandle("data",{create:true});
+    const fileHandle=await dataDir.getFileHandle("atlasz.json",{create:true});
+    const writable=await fileHandle.createWritable();
+    data.lastUpdated=new Date().toISOString().slice(0,10);
+    await writable.write(JSON.stringify(data,null,2));
+    await writable.close();
+    atlasSavedLayerManifest=data;
+}
+
+async function lfeSaveSelectedLayerToAtlas(){
+    const entry=lfeSelectedImportedEntry();
+    if(!entry){
+        alert("A Mentés az Atlaszba funkcióhoz először egy Megnyitás gombbal betöltött GeoJSON réteget válassz ki.");
+        return;
+    }
+    if(!atlasProjectDirectoryHandle){
+        const ok=await lfeChooseAtlasFolder();
+        if(!ok) return;
+    }
+    try{
+        const filename=lfeAtlasFilename(entry);
+        const collection=lfeFeatureCollection(entry);
+        const rootFile=await atlasProjectDirectoryHandle.getFileHandle(filename,{create:true});
+        const writable=await rootFile.createWritable();
+        await writable.write(JSON.stringify(collection,null,2));
+        await writable.close();
+
+        const manifest=await lfeReadAtlasManifest();
+        const id=`geojson:${filename}`;
+        const record={
+            id,
+            name:entry.name,
+            file:filename,
+            path:filename,
+            type:"GeoJSON",
+            source:"Layer Feature Editor",
+            enabled:true,
+            description:"Tartósan az Atlasz projekt gyökerében tárolt földrajzi GeoJSON réteg.",
+            updatedAt:new Date().toISOString()
+        };
+        const index=manifest.mapLayers.findIndex(x=>x?.id===id || x?.file===filename);
+        if(index>=0) manifest.mapLayers[index]=record;
+        else manifest.mapLayers.push(record);
+        await lfeWriteAtlasManifest(manifest);
+        atlasSavedLayerKeys.add(id);
+        lfeShowStatus(`✅ Mentve az Atlaszba: ${filename} + data/atlasz.json`,"success");
+    }catch(e){
+        console.error(e);
+        lfeShowStatus(`❌ Atlasz mentési hiba: ${e.message||e}`,"error");
+        alert(`Az Atlasz mentése nem sikerült.\n\n${e.message||e}`);
+    }
+}
+
+async function lfeDeleteSelectedAtlasLayer(){
+    const entry=lfeSelectedImportedEntry();
+    if(!entry){
+        alert("Először válassz ki egy importált GeoJSON réteget.");
+        return;
+    }
+    if(!atlasProjectDirectoryHandle){
+        const ok=await lfeChooseAtlasFolder();
+        if(!ok) return;
+    }
+    try{
+        const filename=lfeAtlasFilename(entry);
+        if(!confirm(`Biztosan törlöd az Atlaszból ezt a réteget?\n\n${filename}\n\nA GeoJSON fájl és az atlasz.json bejegyzése is törlődik.`)) return;
+        try{ await atlasProjectDirectoryHandle.removeEntry(filename); }catch(e){ if(e?.name!=="NotFoundError") throw e; }
+        const manifest=await lfeReadAtlasManifest();
+        manifest.mapLayers=manifest.mapLayers.filter(x=>x?.file!==filename && x?.id!==`geojson:${filename}`);
+        await lfeWriteAtlasManifest(manifest);
+        atlasSavedLayerKeys.delete(`geojson:${filename}`);
+        importedVectorRegistry.splice(importedVectorRegistry.indexOf(entry),1);
+        try{ map.removeLayer(entry.group); }catch(e){}
+        try{ layerControl.removeLayer(entry.group); }catch(e){}
+        const currentEntries=lfeLayerEntries();
+        lfeState.layerKey=currentEntries[0]?.key||null;
+        lfeState.selectedIndex=0;
+        lfeRender();
+        lfeShowStatus(`✅ Törölve az Atlaszból: ${filename}`,"success");
+    }catch(e){
+        console.error(e);
+        lfeShowStatus(`❌ Atlasz törlési hiba: ${e.message||e}`,"error");
+        alert(`Az Atlasz réteg törlése nem sikerült.\n\n${e.message||e}`);
+    }
+}
+
+async function loadAtlasSavedLayers(){
+    try{
+        const manifest=await lfeReadAtlasManifest();
+        for(const item of manifest.mapLayers||[]){
+            if(!item?.file) continue;
+            const id=String(item.id||`geojson:${item.file}`);
+            if(atlasSavedLayerKeys.has(`loaded:${id}`)) continue;
+            try{
+                const response=await fetch(`../${encodeURI(item.file)}`,{cache:"no-store"});
+                if(!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data=await response.json();
+                await addImportedGeoJSON(data,item.name||item.file,false,item.name||item.file);
+                atlasSavedLayerKeys.add(`loaded:${id}`);
+            }catch(e){
+                console.warn(`Mentett Atlasz réteg nem tölthető be: ${item.file}`,e);
+            }
+        }
+    }catch(e){
+        console.warn("Nincs betölthető tartós Atlasz-réteg vagy az atlasz.json még nem tartalmaz mapLayers tömböt.",e);
+    }
 }
 
 function lfeSavePersistent(){
@@ -7590,11 +7691,44 @@ if(typeof headerFeatureEditorButton!=="undefined" && headerFeatureEditorButton){
 }
 
 /* A statikus rétegek betöltése után az állapot visszaállítható. */
-setTimeout(lfeLoadPersistent,1200);
-setTimeout(lfeLoadPersistent,3000);
-setTimeout(lfeLoadPersistent,6000);
+setTimeout(loadAtlasSavedLayers,900);
+setTimeout(lfeLoadPersistent,1600);
+setTimeout(lfeLoadPersistent,3200);
+setTimeout(lfeLoadPersistent,6200);
 
 </script>
+
+
+<style id="atlas-editor-position-fix">
+/* Draw Feature Editor: ne a Leaflet bottom-left kontroll szélességéhez igazodjon.
+   Így az editor mindig a teljes térképszélességhez/ablakhoz igazítva, középen jelenik meg. */
+.feature-editor-panel {
+    position: fixed !important;
+    left: 50vw !important;
+    bottom: 14px !important;
+    transform: translateX(-50%) !important;
+    width: min(1080px, calc(100vw - 28px)) !important;
+    max-height: min(58vh, 560px) !important;
+    z-index: 10050 !important;
+    margin: 0 !important;
+}
+.feature-editor-bar {
+    position: fixed !important;
+    left: 50vw !important;
+    bottom: 14px !important;
+    transform: translateX(-50%) !important;
+    z-index: 10049 !important;
+    margin: 0 !important;
+}
+@media (max-width: 700px) {
+    .feature-editor-panel {
+        left: 50vw !important;
+        bottom: 8px !important;
+        width: calc(100vw - 16px) !important;
+        max-height: 72vh !important;
+    }
+}
+</style>
 
 </body>
 </html>
