@@ -51,21 +51,23 @@ body {
 ===================================================== */
 
 header {
-    background: #102638;
-    color: white;
-    padding: 20px 35px;
-    border-bottom: 1px solid #c09d57;
+    background:#102638;
+    color:#fff;
+    padding:10px 24px 9px;
+    border-bottom:1px solid rgba(192,157,87,.7);
 }
-
 header h1 {
-    margin: 0;
-    font-size: 27px;
+    margin:0;
+    font-size:21px;
+    line-height:1.15;
+    font-weight:600;
+    letter-spacing:.15px;
 }
-
 header p {
-    margin: 6px 0 0;
-    color: #c9ad6c;
-    font-size: 14px;
+    margin:3px 0 0;
+    color:#c9ad6c;
+    font-size:10px;
+    letter-spacing:.2px;
 }
 
 
@@ -74,9 +76,9 @@ header p {
 ===================================================== */
 
 .language-switch {
-    margin-top: 12px;
-    font-family: Arial, sans-serif;
-    font-size: 13px;
+    margin-top:5px;
+    font-family:Arial,sans-serif;
+    font-size:10px;
 }
 
 .language-switch span,
@@ -100,18 +102,19 @@ header p {
 ===================================================== */
 
 nav {
-    background: #17374d;
-    padding: 0 35px;
+    background:#17374d;
+    padding:0 24px;
+    min-height:36px;
 }
 
 nav a {
-    display: inline-block;
-    padding: 15px;
+    display:inline-block;
+    padding:10px 12px;
     color: white;
     text-decoration: none;
     font-family: Arial, sans-serif;
-    font-size: 14px;
-    font-weight: bold;
+    font-size:11px;
+    font-weight:700;
 }
 
 nav a:hover {
@@ -148,17 +151,10 @@ nav a:hover {
 
 #map {
     width: 100%;
-    height: calc(100vh - 205px);
+    height: calc(100vh - 135px);
     min-height: 550px;
 }
 
-
-document.addEventListener("click",function(event){
-    const edit=event.target.closest("[data-draw-edit]");
-    const coords=event.target.closest("[data-draw-coords]");
-    if(edit){event.preventDefault();openDrawPropertyEditor(edit.dataset.drawEdit);}
-    if(coords){event.preventDefault();openDrawAnalysis(coords.dataset.drawCoords);}
-});
 
 /* =====================================================
    KOORDINÁTA
@@ -653,24 +649,26 @@ document.addEventListener("click",function(event){
 ===================================================== */
 
 .map-header{
-    padding:18px 35px 15px;
+    padding:10px 24px 9px;
     background:linear-gradient(180deg,#f8f5ec 0%,#eee9dc 100%);
     border-bottom:1px solid #d6c49a;
 }
 .map-header h2{
-    font-size:30px;
-    letter-spacing:.2px;
+    font-size:21px;
+    line-height:1.15;
+    margin:0 0 5px;
+    letter-spacing:.15px;
 }
 .map-header-meta{
     display:flex;
     flex-wrap:wrap;
-    gap:7px;
-    margin:10px 0 10px;
+    gap:5px;
+    margin:5px 0 5px;
 }
-.map-header-research-dropdown{position:relative;display:inline-block;margin:11px 0 9px;z-index:1200}.map-header-research-trigger{border:1px solid #b8954d;border-radius:6px;padding:8px 12px;background:#17374d;color:#fff;cursor:pointer;font:700 11px Arial,sans-serif;box-shadow:0 1px 3px rgba(0,0,0,.12)}.map-header-research-trigger:hover{background:#c09d57;color:#102638}.map-header-research-menu{position:absolute;top:calc(100% + 5px);left:0;min-width:235px;background:#fffdf8;border:1px solid #c09d57;border-radius:7px;box-shadow:0 8px 24px rgba(0,0,0,.22);padding:5px;z-index:1300}.map-header-research-menu button{display:block;width:100%;border:0;border-radius:5px;padding:9px 11px;background:transparent;color:#17374d;text-align:left;cursor:pointer;font:700 11px Arial,sans-serif}.map-header-research-menu button:hover{background:#f0eadb;color:#102638}.map-header-research-menu[hidden]{display:none!important}
+.map-header-research-dropdown{position:relative;display:inline-block;margin:5px 0 5px;z-index:1200}.map-header-research-trigger{border:1px solid #b8954d;border-radius:6px;padding:8px 12px;background:#17374d;color:#fff;cursor:pointer;font:700 11px Arial,sans-serif;box-shadow:0 1px 3px rgba(0,0,0,.12)}.map-header-research-trigger:hover{background:#c09d57;color:#102638}.map-header-research-menu{position:absolute;top:calc(100% + 5px);left:0;min-width:235px;background:#fffdf8;border:1px solid #c09d57;border-radius:7px;box-shadow:0 8px 24px rgba(0,0,0,.22);padding:5px;z-index:1300}.map-header-research-menu button{display:block;width:100%;border:0;border-radius:5px;padding:9px 11px;background:transparent;color:#17374d;text-align:left;cursor:pointer;font:700 11px Arial,sans-serif}.map-header-research-menu button:hover{background:#f0eadb;color:#102638}.map-header-research-menu[hidden]{display:none!important}
 .map-header-statistics-trigger{
     display:inline-block;
-    margin:11px 0 9px 7px;
+    margin:5px 0 5px 5px;
     border:1px solid #b8954d;
     border-radius:6px;
     padding:8px 12px;
@@ -685,7 +683,7 @@ document.addEventListener("click",function(event){
     color:#102638;
 }
 .map-header-meta span{
-    padding:6px 10px;
+    padding:4px 8px;
     border:1px solid #d2bc86;
     border-radius:999px;
     background:#fffdf8;
@@ -696,13 +694,13 @@ document.addEventListener("click",function(event){
     display:flex;
     flex-wrap:wrap;
     align-items:center;
-    gap:7px;
-    margin:11px 0 9px;
+    gap:5px;
+    margin:5px 0 5px;
 }
 .atlas-command-button{
     border:1px solid #b8954d;
-    border-radius:6px;
-    padding:8px 12px;
+    border-radius:5px;
+    padding:6px 10px;
     background:#17374d;
     color:#fff;
     cursor:pointer;
@@ -1171,8 +1169,8 @@ document.addEventListener("click",function(event){
 }
 @media(max-width:800px){
     .geo-research-control{width:min(310px,calc(100vw - 20px));max-height:55vh}
-    .map-header{padding:13px 15px}
-    .map-header h2{font-size:23px}
+    .map-header{padding:9px 12px}
+    .map-header h2{font-size:19px}
     .map-header-meta{gap:5px}
     .map-header-meta span{font-size:9px;padding:5px 7px}
     .map-header-statistics-trigger{margin-left:0;margin-right:6px;font-size:10px;padding:7px 10px}
@@ -4966,229 +4964,159 @@ function openSaveExportDialog(){
 
 async function addImportedGeoJSON(data,label="Importált GeoJSON",openEditor=true,preferredName=null){
     /*
-     * ROBUSZTUS GEOJSON IMPORT
-     * Támogatott: FeatureCollection, Feature és minden szabványos GeoJSON
-     * geometria. Az önálló geometriákat FeatureCollection-be csomagoljuk,
-     * így a Leaflet és a Layer Feature Editor ugyanazt a réteget kapja.
+     * STABIL GEOJSON IMPORT / MEGNYITÁS
+     * A vonalas geometriákat (LineString + MultiLineString) szándékosan
+     * közvetlen Leaflet Polyline rétegekké építjük fel. Így a koordináta-
+     * vonalak akkor is biztosan kirajzolódnak, ha a Leaflet GeoJSON
+     * belső csoportkezelése eltérő.
      */
     let payload=data;
+    const geometryTypes=new Set(["Point","MultiPoint","LineString","MultiLineString","Polygon","MultiPolygon","GeometryCollection"]);
 
-    const geometryTypes=new Set([
-        "Point",
-        "MultiPoint",
-        "LineString",
-        "MultiLineString",
-        "Polygon",
-        "MultiPolygon",
-        "GeometryCollection"
-    ]);
-
-    // Több objektumot tartalmazó JSON tömb kezelése.
     if(Array.isArray(payload)){
         const features=[];
-
         payload.forEach(item=>{
             if(!item || typeof item!=="object") return;
-
-            if(item.type==="FeatureCollection" && Array.isArray(item.features)){
-                features.push(...item.features);
-            }
-            else if(item.type==="Feature"){
-                features.push(item);
-            }
-            else if(geometryTypes.has(item.type)){
-                features.push({
-                    type:"Feature",
-                    properties:{},
-                    geometry:item
-                });
-            }
+            if(item.type==="FeatureCollection" && Array.isArray(item.features)) features.push(...item.features);
+            else if(item.type==="Feature") features.push(item);
+            else if(geometryTypes.has(item.type)) features.push({type:"Feature",properties:{},geometry:item});
         });
-
         payload={type:"FeatureCollection",features};
     }
-
-    if(!payload || typeof payload!=="object"){
-        throw new Error("A GeoJSON tartalma nem érvényes JSON objektum.");
-    }
-
-    // Egyetlen Feature -> FeatureCollection.
-    if(payload.type==="Feature"){
-        payload={
-            type:"FeatureCollection",
-            features:[payload]
-        };
-    }
-
-    // Egyetlen önálló geometria -> FeatureCollection.
-    if(geometryTypes.has(payload.type)){
-        payload={
-            type:"FeatureCollection",
-            features:[{
-                type:"Feature",
-                properties:{},
-                geometry:payload
-            }]
-        };
-    }
-
-    // Végső szerkezeti ellenőrzés.
-    if(payload.type!=="FeatureCollection" || !Array.isArray(payload.features)){
-        throw new Error(
-            `A fájl nem érvényes GeoJSON. Észlelt típus: ${payload.type || "ismeretlen"}`
-        );
-    }
-
-    if(payload.features.length===0){
-        throw new Error("A GeoJSON nem tartalmaz megjeleníthető objektumot.");
-    }
-
-    // Hibás Feature-ek kiszűrése, hogy egyetlen rossz rekord se akadályozza
-    // a teljes réteg betöltését.
-    payload.features=payload.features.filter(feature=>{
-        if(!feature || feature.type!=="Feature" || !feature.geometry) return false;
-        if(!geometryTypes.has(feature.geometry.type)) return false;
-        return true;
-    });
-
-    if(payload.features.length===0){
-        throw new Error("A GeoJSON nem tartalmaz érvényes geometriai objektumot.");
-    }
+    if(!payload || typeof payload!=="object") throw new Error("A GeoJSON tartalma nem érvényes JSON objektum.");
+    if(payload.type==="Feature") payload={type:"FeatureCollection",features:[payload]};
+    if(geometryTypes.has(payload.type)) payload={type:"FeatureCollection",features:[{type:"Feature",properties:{},geometry:payload}]};
+    if(payload.type!=="FeatureCollection" || !Array.isArray(payload.features)) throw new Error(`A fájl nem érvényes GeoJSON. Észlelt típus: ${payload.type||"ismeretlen"}`);
+    payload.features=payload.features.filter(f=>f && f.type==="Feature" && f.geometry && geometryTypes.has(f.geometry.type));
+    if(!payload.features.length) throw new Error("A GeoJSON nem tartalmaz érvényes geometriai objektumot.");
 
     const sourceName=String(label||"Importált GeoJSON");
     importedVectorNumber++;
+    const layerName=preferredName || (importedVectorNumber===1 && sourceName==="GeoJSON" ? `📥 ${sourceName}` : `📥 ${sourceName} ${importedVectorNumber}`);
 
-    const layerName=preferredName || (
-        importedVectorNumber===1 && sourceName==="GeoJSON"
-            ? `📥 ${sourceName}`
-            : `📥 ${sourceName} ${importedVectorNumber}`
-    );
-
-    const geoJsonStyleValue=(feature,key,fallback)=>{
+    const styleValue=(feature,key,fallback)=>{
         const p=feature?.properties||{};
         const v=p[key];
         return v==null || v==="" || String(v).toLowerCase()==="none" ? fallback : v;
     };
-    const geoJsonNumber=(feature,keys,fallback,min,max)=>{
+    const num=(feature,keys,fallback,min,max)=>{
         const p=feature?.properties||{};
-        for(const key of keys){
-            const n=Number(p[key]);
-            if(Number.isFinite(n)) return Math.max(min,Math.min(max,n));
-        }
+        for(const key of keys){const n=Number(p[key]);if(Number.isFinite(n))return Math.max(min,Math.min(max,n));}
         return fallback;
     };
+    const featureStyle=feature=>({
+        color:String(styleValue(feature,"stroke","#312E81")),
+        weight:num(feature,["stroke-width","strokeWidth","weight"],3,.5,20),
+        opacity:num(feature,["stroke-opacity","strokeOpacity","opacity"],1,0,1),
+        fillColor:String(styleValue(feature,"fill","#c09d57")),
+        fillOpacity:num(feature,["fill-opacity","fillOpacity"],.25,0,1)
+    });
+    const pointStyle=feature=>({
+        radius:num(feature,["radius","point-radius"],6,.01,40),
+        ...featureStyle(feature)
+    });
 
-    const importedGroup=L.geoJSON(payload,{
-        style:feature=>({
-            color:String(geoJsonStyleValue(feature,"stroke","#8b2020")),
-            weight:geoJsonNumber(feature,["stroke-width","strokeWidth","weight"],3,0.5,20),
-            opacity:geoJsonNumber(feature,["stroke-opacity","strokeOpacity","opacity"],1,0,1),
-            fillColor:String(geoJsonStyleValue(feature,"fill","#c09d57")),
-            fillOpacity:geoJsonNumber(feature,["fill-opacity","fillOpacity"],.25,0,1)
-        }),
-        pointToLayer:(feature,latlng)=>L.circleMarker(latlng,{
-            radius:geoJsonNumber(feature,["radius","point-radius"],6,0.01,40),
-            color:String(geoJsonStyleValue(feature,"stroke","#8b2020")),
-            weight:geoJsonNumber(feature,["stroke-width","strokeWidth","weight"],2,0.5,20),
-            opacity:geoJsonNumber(feature,["stroke-opacity","strokeOpacity","opacity"],1,0,1),
-            fillColor:String(geoJsonStyleValue(feature,"fill","#c09d57")),
-            fillOpacity:geoJsonNumber(feature,["fill-opacity","fillOpacity"],.8,0,1)
-        }),
-        onEachFeature:(feature,child)=>{
-            /*
-             * FONTOS: az L.geoJSON() létrehozása közben az importedGroup
-             * változó még nincs inicializálva. Ezért itt nem hivatkozunk rá.
-             * A _lfeGroup kapcsolatot közvetlenül az L.geoJSON létrejötte
-             * után, az eachLayer ciklusban állítjuk be.
-             */
-            child.feature=feature;
-            const props=feature?.properties;
-            if(props && typeof props==="object"){
-                const html=Object.entries(props)
-                    .map(([k,v])=>`<b>${popupEsc(k)}</b>: ${popupEsc(v)}`)
-                    .join("<br>");
-                if(html) child.bindPopup(`<div style="font:11px Arial,sans-serif;max-height:260px;overflow:auto">${html}</div>`);
+    const importedGroup=L.layerGroup();
+    const featureLayers=[];
+
+    const register=(layer,feature)=>{
+        if(!layer) return;
+        layer.feature=feature;
+        layer._lfeGroup=importedGroup;
+        featureLayers.push(layer);
+        importedGroup.addLayer(layer);
+    };
+
+    const coordsToLatLngs=coords=>{
+        if(!Array.isArray(coords)) return [];
+        return coords.map(c=>Array.isArray(c)&&c.length>=2 ? [Number(c[1]),Number(c[0])] : null).filter(c=>c && Number.isFinite(c[0]) && Number.isFinite(c[1]));
+    };
+    const addGeometry=(geometry,feature)=>{
+        if(!geometry) return;
+        const st=featureStyle(feature);
+        switch(geometry.type){
+            case "Point":{
+                const c=coordsToLatLngs([geometry.coordinates])[0];
+                if(c) register(L.circleMarker(c,pointStyle(feature)),feature);
+                break;
             }
+            case "MultiPoint":
+                coordsToLatLngs(geometry.coordinates).forEach(c=>register(L.circleMarker(c,pointStyle(feature)),feature));
+                break;
+            case "LineString":{
+                const ll=coordsToLatLngs(geometry.coordinates);
+                if(ll.length>=2) register(L.polyline(ll,st),feature);
+                break;
+            }
+            case "MultiLineString":
+                geometry.coordinates.forEach(line=>{
+                    const ll=coordsToLatLngs(line);
+                    if(ll.length>=2) register(L.polyline(ll,st),feature);
+                });
+                break;
+            case "Polygon":{
+                const rings=geometry.coordinates.map(coordsToLatLngs).filter(r=>r.length>=3);
+                if(rings.length) register(L.polygon(rings,st),feature);
+                break;
+            }
+            case "MultiPolygon":
+                geometry.coordinates.forEach(poly=>{
+                    const rings=poly.map(coordsToLatLngs).filter(r=>r.length>=3);
+                    if(rings.length) register(L.polygon(rings,st),feature);
+                });
+                break;
+            case "GeometryCollection":
+                (geometry.geometries||[]).forEach(g=>addGeometry(g,feature));
+                break;
+        }
+    };
+
+    payload.features.forEach(feature=>addGeometry(feature.geometry,feature));
+    if(!featureLayers.length) throw new Error("A GeoJSON geometriai objektumai nem tartalmaznak megjeleníthető koordinátákat.");
+
+    featureLayers.forEach(child=>{
+        const props=child.feature?.properties;
+        if(props && typeof props==="object"){
+            const html=Object.entries(props).map(([k,v])=>`<b>${popupEsc(k)}</b>: ${popupEsc(v)}`).join("<br>");
+            if(html) child.bindPopup(`<div style="font:11px Arial,sans-serif;max-height:260px;overflow:auto">${html}</div>`);
         }
     });
 
-    /*
-     * Az L.geoJSON layer saját gyermekei maradnak benne.
-     * Így a térképre ténylegesen ugyanaz a GeoJSON layer kerül,
-     * amelyet a Leaflet létrehozott.
-     */
-    const featureLayers=[];
-    importedGroup.eachLayer(child=>{
-        if(!child || typeof child.toGeoJSON!=="function") return;
-        child._lfeGroup=importedGroup;
-        featureLayers.push(child);
-    });
     importedGroup._lfeRegistry=featureLayers;
     importedGroup._atlasImportedGeoJSON=true;
     importedGroup._atlasSourceName=sourceName;
     importedGroup._atlasLayerName=layerName;
-    const firstImported=featureLayers[0];
-    importedGroup._atlasStyle={
-        color:firstImported?.options?.color || "#8b2020",
-        fillColor:firstImported?.options?.fillColor || "#c09d57",
-        weight:Math.max(.5,Math.min(20,Number(firstImported?.options?.weight)||3))
-    };
+    const first=featureLayers[0];
+    importedGroup._atlasStyle={color:first?.options?.color||"#312E81",fillColor:first?.options?.fillColor||"#c09d57",weight:Math.max(.5,Math.min(20,Number(first?.options?.weight)||3))};
     importedGroup._atlasVisible=true;
     importedGroup._atlasOpacity=1;
     layerOpacityState.set(importedGroup,1);
 
-    importedVectorRegistry.push({
-        key:`imported:${importedVectorNumber}`,
-        name:layerName,
-        group:importedGroup,
-        sourceName,
-        imported:true
-    });
-
+    const entry={key:`imported:${importedVectorNumber}`,name:layerName,group:importedGroup,sourceName,imported:true};
+    importedVectorRegistry.push(entry);
     importedVectorLayers.addLayer(importedGroup);
-
-    /* EZ A FONTOS RÉSZ: a teljes GeoJSON réteg közvetlenül a térképre kerül. */
     importedGroup.addTo(map);
+    if(layerControl && typeof layerControl.addOverlay==="function") layerControl.addOverlay(importedGroup,layerName);
 
-    if(layerControl && typeof layerControl.addOverlay==="function"){
-        layerControl.addOverlay(importedGroup,layerName);
-    }
-
-    if(typeof refreshLayerOpacityControl==="function") refreshGeoJSONOpacityControl();
-
-    const bounds=importedGroup.getBounds?.();
-    if(bounds && bounds.isValid()){
-        map.fitBounds(bounds,{padding:[35,35],maxZoom:16});
-    }
-
-    /*
-     * Alapértelmezésben mindig látható legyen az újonnan importált réteg.
-     * A böngésző localStorage korábbi állapota csak akkor alkalmazható,
-     * ha ugyanaz a réteg már létezett és nem friss import.
-     */
     featureLayers.forEach((child,index)=>{
         const m=lfeMeta(child,index);
         m.visible=true;
-        if(!m.color) m.color=importedGroup._atlasStyle.color;
-        if(!m.fillColor) m.fillColor=importedGroup._atlasStyle.fillColor;
-        if(!Number.isFinite(Number(m.weight)) || Number(m.weight)<=0) m.weight=importedGroup._atlasStyle.weight;
+        if(!m.color)m.color=importedGroup._atlasStyle.color;
+        if(!m.fillColor)m.fillColor=importedGroup._atlasStyle.fillColor;
+        if(!Number.isFinite(Number(m.weight)) || Number(m.weight)<=0)m.weight=importedGroup._atlasStyle.weight;
         lfeApplyStyle(child);
     });
-    /* A betöltött GeoJSON tényleges stílusának végleges alkalmazása. */
-    lfeApplyImportedGroupStyle(importedGroup);
+    if(typeof lfeApplyImportedGroupStyle==="function") lfeApplyImportedGroupStyle(importedGroup);
     applyGeoJSONLayerOpacity(importedGroup,1);
     refreshGeoJSONOpacityControl();
 
-    lfeState.layerKey=`imported:${importedVectorNumber}`;
+    const bounds=importedGroup.getBounds?.();
+    if(bounds && bounds.isValid()) map.fitBounds(bounds,{padding:[30,30],maxZoom:16,animate:false});
+
+    lfeState.layerKey=entry.key;
     lfeState.selectedIndex=0;
     lfeState.search="";
-
     if(openEditor && typeof lfeOpenEditor==="function") lfeOpenEditor();
-
-    /* A tartós rétegmanifestből csak a már elmentett rétegek állapotát töltsük vissza. */
-    if(typeof lfeLoadPersistentForCurrentLayer==="function"){
-        lfeLoadPersistentForCurrentLayer(lfeState.layerKey);
-    }
 }
 
 async function importKMLFile(file){
