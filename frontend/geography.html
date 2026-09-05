@@ -5174,6 +5174,8 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON",openEditor=tru
         if(!Number.isFinite(Number(m.weight)) || Number(m.weight)<=0) m.weight=importedGroup._atlasStyle.weight;
         lfeApplyStyle(child);
     });
+    /* A betöltött GeoJSON tényleges stílusának végleges alkalmazása. */
+    lfeApplyImportedGroupStyle(importedGroup);
     applyGeoJSONLayerOpacity(importedGroup,1);
     refreshGeoJSONOpacityControl();
 
@@ -7244,8 +7246,20 @@ function lfeMeta(layer,index){
     const rawMeta=layer?.feature?.properties?.__atlasEditor;
     const saved=rawMeta && typeof rawMeta==="object" ? rawMeta : {};
     const geometry=lfeFeatureGeometryType(layer);
-    const color=layer.options?.color || (geometry==="Polygon"?"#8b2020":"#17374d");
-    const fill=layer.options?.fillColor || (geometry==="Point"?"#d8b86a":"#c09d57");
+    /*
+     * GeoJSON saját stílusának elsőbbsége.
+     * A feltöltött GeoJSON szabványos Leaflet-kompatibilis mezőket használ:
+     * stroke, stroke-opacity, stroke-width, fill, fill-opacity.
+     */
+    const propStyle={
+        color:props.stroke ?? props.color,
+        fillColor:props.fill ?? props.fillColor,
+        weight:props["stroke-width"] ?? props.strokeWidth ?? props.weight,
+        opacity:props["stroke-opacity"] ?? props.strokeOpacity ?? props.opacity,
+        fillOpacity:props["fill-opacity"] ?? props.fillOpacity
+    };
+    const color=propStyle.color || layer.options?.color || (geometry==="Polygon"?"#8b2020":"#17374d");
+    const fill=propStyle.fillColor || layer.options?.fillColor || (geometry==="Point"?"#d8b86a":"#c09d57");
     const field=lfeGuessLabelField(props);
     const savedStyle=saved.style&&typeof saved.style==="object"?saved.style:{};
     const savedLabel=saved.label&&typeof saved.label==="object"?saved.label:{};
@@ -7253,9 +7267,9 @@ function lfeMeta(layer,index){
         visible:saved.visible!==undefined ? !!saved.visible : true,
         color:savedStyle.color || color,
         fillColor:savedStyle.fillColor || fill,
-        weight:Number(savedStyle.weight ?? layer.options?.weight ?? 2),
-        opacity:Number(savedStyle.opacity ?? layer.options?.opacity ?? 1),
-        fillOpacity:Number(savedStyle.fillOpacity ?? layer.options?.fillOpacity ?? (geometry==="Point"?.9:.25)),
+        weight:Number(savedStyle.weight ?? propStyle.weight ?? layer.options?.weight ?? 2),
+        opacity:Number(savedStyle.opacity ?? propStyle.opacity ?? layer.options?.opacity ?? 1),
+        fillOpacity:Number(savedStyle.fillOpacity ?? propStyle.fillOpacity ?? layer.options?.fillOpacity ?? (geometry==="Point"?.9:.25)),
         radius:Number(savedStyle.radius ?? layer.options?.radius ?? 6),
         labelVisible:savedLabel.visible!==undefined ? !!savedLabel.visible : !!field,
         labelField:savedLabel.field || field || "",
@@ -7326,6 +7340,28 @@ function lfeApplyPointStyle(layer){
         fillOpacity:clampOpacity(m.fillOpacity)*groupOpacity,
         radius:r
     });
+}
+
+function lfeApplyImportedFeatureStyle(layer,group){
+    if(!layer || !layer.setStyle) return;
+    const m=lfeMeta(layer,0);
+    const groupStyle=group?._atlasStyle || {};
+    const color=m.color || groupStyle.color || "#8b2020";
+    const fillColor=m.fillColor || groupStyle.fillColor || "#c09d57";
+    const weight=Math.max(0.5,Math.min(20,Number(m.weight ?? groupStyle.weight ?? 3)||3));
+    const groupOpacity=getLayerOpacity(group);
+    layer.setStyle({
+        color,
+        fillColor,
+        weight,
+        opacity:clampOpacity(m.opacity)*groupOpacity,
+        fillOpacity:clampOpacity(m.fillOpacity)*groupOpacity
+    });
+}
+
+function lfeApplyImportedGroupStyle(group){
+    if(!group || !group._atlasImportedGeoJSON) return;
+    lfeChildren(group).forEach(layer=>lfeApplyImportedFeatureStyle(layer,group));
 }
 
 function lfeApplyStyle(layer){
