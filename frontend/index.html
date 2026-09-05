@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Kárpátalja digitális földrajzi és történeti atlasza. Interaktív térképek, történelmi rétegek, települések és források egy rendszerben.">
+<meta name="theme-color" content="#102638">
+<title>Kárpátalja Földrajzi és Történeti Atlasza</title>
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/map.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<div class="site-shell">
+<header class="site-header">
+  <div class="container header-main">
+    <a class="brand" href="index.html" aria-label="Kárpátalja Atlasz főoldal">
+      <span class="brand-mark" aria-hidden="true">KA</span>
+      <span><strong>Kárpátalja</strong><small>Földrajzi és Történeti Atlasza</small></span>
+    </a>
+    <div class="header-meta">
+      <span>Digitális atlasz</span>
+      <div class="language"><span class="current">HU</span><a href="index-ua.html">UA</a><a href="#" data-lang="en">EN</a></div>
+    </div>
+  </div>
+</header>
+<nav class="main-nav" id="mainNav" aria-label="Fő navigáció">
+  <div class="container nav-inner">
+    <a class="nav-link active" href="index.html">Főoldal</a>
+    <div class="dropdown">
+      <button class="dropbtn" type="button" aria-expanded="false">🌍 Földrajzi atlasz <span>⌄</span></button>
+      <div class="dropdown-content">
+        <a href="#geography">Földrajzi áttekintés</a>
+        <a href="geography.html">🗺️ Interaktív földrajzi térkép</a>
+        <a href="#nature">🌿 Természetföldrajz</a>
+        <a href="#settlements">🏘️ Települések</a>
+        <a href="#administration">🏛️ Közigazgatás</a>
+      </div>
+    </div>
+    <div class="dropdown">
+      <button class="dropbtn" type="button" aria-expanded="false">📜 Történeti atlasz <span>⌄</span></button>
+      <div class="dropdown-content">
+        <a href="#history">Történelmi áttekintés</a>
+        <a href="history.html">🗺️ Interaktív történelmi térkép</a>
+        <a href="#counties">🏛️ Egykori vármegyék</a>
+        <a href="#periods">⏳ Történelmi korszakok</a>
+        <a href="#events">⚔️ Történelmi események</a>
+        <a href="#people">👑 Történelmi személyiségek</a>
+        <a href="#oldmaps">🗺️ Történelmi térképek</a>
+      </div>
+    </div>
+    <a class="nav-link" href="gallery.html">📷 Galéria</a>
+    <a class="nav-link" href="sources.html">📚 Források</a>
+    <a class="nav-link admin" href="../admin/index.html">🔐 Admin</a>
+    <button class="mobile-toggle" id="mobileToggle" type="button" aria-expanded="false" aria-controls="mainNav">☰</button>
+  </div>
+</nav>
+<main>
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-kicker">Digitális földrajzi és történeti atlasz</div>
+    <h1>Kárpátalja</h1>
+    <div class="hero-rule"></div>
+    <p>Fedezd fel Kárpátalja földrajzát, történelmét, egykori vármegyéit, településeit és történelmi örökségét egyetlen interaktív atlaszban.</p>
+    <div class="hero-actions"><a class="btn btn-primary" href="geography.html">🌍 Földrajzi térkép</a><a class="btn btn-outline" href="history.html">📜 Történelmi térkép</a></div>
+  </div>
+</section>
+<section class="atlas-section">
+  <div class="container">
+    <div class="section-head"><span class="eyebrow">Kárpátalja öröksége</span><h2>Egy táj története térképeken keresztül</h2><p>Az atlasz földrajzi és történeti nézőpontból kapcsolja össze a térképeket, adatokat és történeti információkat.</p></div>
+    <div class="atlas-grid">
+      <article class="atlas-card"><div class="icon">🌍</div><h3>Földrajzi atlasz</h3><p>Kárpátalja természetföldrajzi és társadalomföldrajzi sajátosságai tematikus térképeken.</p><a class="card-action" href="geography.html">Interaktív térkép megnyitása →</a></article>
+      <article class="atlas-card"><div class="icon">📜</div><h3>Történeti atlasz</h3><p>Korszakok, események, történelmi települések, vármegyék és változó határok interaktív térképen.</p><a class="card-action" href="history.html">Interaktív térkép megnyitása →</a></article>
+    </div>
+  </div>
+</section>
+<section class="content-section geography" id="geography">
+  <div class="container"><div class="section-head"><span class="eyebrow">🌍 Földrajz</span><h2>Földrajzi atlasz</h2><p>Kárpátalja természetföldrajzi és társadalomföldrajzi viszonyainak tematikus bemutatása.</p></div>
+    <div class="cards">
+      <article class="card" id="nature"><span class="card-no">01</span><h3>🌿 Természetföldrajz</h3><p>Domborzat, földtan, vízrajz, éghajlat, talaj, növényzet, állatvilág, tájak, természetvédelem és természeti veszélyek.</p></article>
+      <article class="card" id="settlements"><span class="card-no">02</span><h3>🏘️ Települések</h3><p>Városok, falvak és a településhálózat földrajzi bemutatása.</p></article>
+      <article class="card" id="administration"><span class="card-no">03</span><h3>🏛️ Közigazgatás</h3><p>Közigazgatási egységek, területi struktúrák és határok.</p></article>
+      <article class="card card-wide"><span class="card-no">04</span><h3>🗺️ Interaktív földrajzi térkép</h3><p>A földrajzi atlasz önálló interaktív térinformatikai rendszere.</p><a href="geography.html">Földrajzi térkép megnyitása →</a></article>
+    </div>
+  </div>
+</section>
+<section class="content-section history" id="history">
+  <div class="container"><div class="section-head"><span class="eyebrow">📜 Történelem</span><h2>Történeti atlasz</h2><p>Kárpátalja történelmének bemutatása történelmi korszakokon, eseményeken, településeken, személyiségeken, vármegyéken és térképeken keresztül.</p></div>
+    <div class="cards">
+      <article class="card" id="periods"><span class="card-no">01</span><h3>⏳ Történelmi korszakok</h3><p>A térség története az ókortól napjainkig.</p></article>
+      <article class="card" id="events"><span class="card-no">02</span><h3>⚔️ Történelmi események</h3><p>A térség történetének fontos eseményei és fordulópontjai.</p></article>
+      <article class="card" id="people"><span class="card-no">03</span><h3>👑 Történelmi személyiségek</h3><p>Kárpátaljához kapcsolódó jelentős történelmi személyek.</p></article>
+      <article class="card" id="oldmaps"><span class="card-no">04</span><h3>🗺️ Történelmi térképek</h3><p>Történelmi térképek és a területi változások kartográfiai bemutatása.</p></article>
+      <article class="card card-wide"><span class="card-no">05</span><h3>🗺️ Interaktív történelmi térkép</h3><p>Egykori vármegyék, történelmi települések, események és határok interaktív térképen.</p><a href="history.html">Történelmi térkép megnyitása →</a></article>
+    </div>
+  </div>
+</section>
+<section class="content-section counties" id="counties">
+  <div class="container"><div class="section-head"><span class="eyebrow">🏛️ Történelmi közigazgatás</span><h2>Egykori vármegyék</h2><p>A mai Kárpátalja területéhez történetileg kapcsolódó egykori vármegyék.</p></div>
+    <div class="county-grid">
+      <article class="county"><strong>01</strong><h3>Ung vármegye</h3><p>Története, területe, közigazgatása és települései.</p></article>
+      <article class="county"><strong>02</strong><h3>Bereg vármegye</h3><p>Története, területe, közigazgatása és települései.</p></article>
+      <article class="county"><strong>03</strong><h3>Ugocsa vármegye</h3><p>Története, területe, közigazgatása és települései.</p></article>
+      <article class="county"><strong>04</strong><h3>Máramaros vármegye</h3><p>Története, területe, közigazgatása és települései.</p></article>
+    </div>
+  </div>
+</section>
+<section class="sources" id="sources">
+  <div class="container"><div class="section-head light"><span class="eyebrow">📚 Dokumentáció</span><h2>Források</h2><p>Az atlaszban felhasznált térképek, szakirodalom és adatforrások.</p></div>
+    <div class="cards source-cards"><article class="card"><h3>📖 Történeti források</h3><p>Könyvek, tanulmányok, levéltári és történeti források.</p></article><article class="card"><h3>🗺️ Térképészeti források</h3><p>Történelmi és modern térképek, atlaszok és térinformatikai adatok.</p></article><article class="card"><h3>📑 Szakirodalom</h3><p>A kutatáshoz felhasznált és ajánlott szakirodalom.</p></article></div>
+    <a class="source-button" href="sources.html">Összes forrás megnyitása →</a>
+  </div>
+</section>
+</main>
+<footer class="site-footer"><div class="container footer-grid"><div><strong>Kárpátalja Földrajzi és Történeti Atlasza</strong><span>Digitális földrajzi és történeti atlasz</span></div><div class="footer-links"><a href="index.html">Főoldal</a><a href="geography.html">Földrajz</a><a href="history.html">Történelem</a><a href="gallery.html">Galéria</a><a href="sources.html">Források</a><a href="../admin/index.html">Admin</a></div></div><div class="container footer-bottom"><span>© 2026 Kárpátalja Atlasz</span><span>HU · UA · EN</span></div></footer>
+</div>
+<script src="js/app.js"></script><script src="js/navigation.js"></script><script src="js/maps.js"></script><script src="js/layers.js"></script><script src="js/search.js"></script><script src="js/language.js"></script>
+</body>
+</html>

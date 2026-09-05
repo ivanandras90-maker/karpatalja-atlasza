@@ -1,0 +1,1 @@
+/* Admin page keeps its original embedded logic. Shared additions can be placed here. */

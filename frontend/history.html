@@ -1,0 +1,2596 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Kárpátalja – Történelmi interaktív térkép</title>
+
+<link rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css">
+
+<style>
+*{box-sizing:border-box}
+
+html,body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+}
+
+body{
+    font-family:Georgia,"Times New Roman",serif;
+    background:#f3f0e7;
+    color:#17374d;
+}
+
+header{
+    background:#102638;
+    color:#fff;
+    padding:18px 30px;
+    border-bottom:1px solid #c09d57;
+}
+
+header h1{
+    margin:0;
+    font-size:27px;
+}
+
+header p{
+    margin:5px 0 0;
+    color:#c9ad6c;
+    font-size:13px;
+}
+
+.language-switch{
+    margin-top:10px;
+    font:13px Arial,sans-serif;
+}
+
+.language-switch a{
+    color:#fff;
+    text-decoration:none;
+    margin-left:14px;
+}
+
+.current-language{
+    color:#d8b86a;
+    font-weight:bold;
+}
+
+nav{
+    background:#17374d;
+    padding:0 25px;
+    white-space:nowrap;
+    overflow-x:auto;
+}
+
+nav a{
+    display:inline-block;
+    padding:14px 12px;
+    color:#fff;
+    text-decoration:none;
+    font:bold 13px Arial,sans-serif;
+}
+
+nav a:hover,
+nav a.active{
+    background:#c09d57;
+    color:#102638;
+}
+
+.map-header{
+    padding:16px 30px;
+    background:#f3f0e7;
+    border-bottom:1px solid #d5cebf;
+}
+
+.map-header h2{
+    margin:0 0 5px;
+    font-size:25px;
+}
+
+.map-header p{
+    margin:0;
+    color:#66727a;
+    font:13px Arial,sans-serif;
+}
+
+#map{
+    width:100%;
+    height:calc(100vh - 174px);
+    min-height:520px;
+}
+
+.leaflet-control-layers{
+    font-family:Arial,sans-serif;
+    font-size:12px;
+}
+
+.leaflet-popup-content-wrapper{
+    border-radius:9px;
+}
+
+.leaflet-popup-content{
+    margin:12px;
+}
+
+.history-popup{
+    min-width:250px;
+    max-width:330px;
+    font-family:Arial,sans-serif;
+}
+
+.history-popup img{
+    width:100%;
+    max-height:175px;
+    object-fit:cover;
+    border-radius:7px;
+    display:block;
+    margin-bottom:10px;
+}
+
+.history-popup h3{
+    margin:0 0 8px;
+    color:#17374d;
+    font:700 18px Georgia,serif;
+}
+
+.history-popup p{
+    line-height:1.5;
+    font-size:12px;
+    margin:8px 0;
+}
+
+.history-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+    margin:7px 0;
+}
+
+.history-badge{
+    background:#f0eadb;
+    color:#17374d;
+    border-radius:20px;
+    padding:4px 7px;
+    font:bold 10px Arial,sans-serif;
+}
+
+.history-source{
+    margin-top:8px;
+    font-size:11px;
+    color:#66727a;
+}
+
+.history-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-top:10px;
+}
+
+.history-actions a{
+    background:#102638;
+    color:#fff;
+    text-decoration:none;
+    padding:7px 9px;
+    border-radius:5px;
+    font:bold 10px Arial,sans-serif;
+}
+
+.history-actions a.gold{
+    background:#c09d57;
+    color:#102638;
+}
+
+.historical-place-marker{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#17374d;
+    border:2px solid #d8b86a;
+    box-shadow:0 3px 10px rgba(0,0,0,.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-size:17px;
+}
+
+.historical-event-marker{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background:#f5e6b3;
+    border:2px solid #8b6f2f;
+    box-shadow:0 3px 10px rgba(0,0,0,.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+}
+
+.historical-people-marker{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#6e5230;
+    border:2px solid #d8b86a;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.map-panel{
+    position:absolute;
+    top:205px;
+    left:15px;
+    z-index:900;
+    width:285px;
+    max-height:calc(100vh - 225px);
+    overflow:auto;
+    background:rgba(255,255,255,.96);
+    border:1px solid #c09d57;
+    border-radius:9px;
+    box-shadow:0 7px 25px rgba(0,0,0,.22);
+    font-family:Arial,sans-serif;
+}
+
+.panel-header{
+    padding:12px 14px;
+    background:#102638;
+    color:#fff;
+    border-radius:8px 8px 0 0;
+}
+
+.panel-header strong{
+    color:#d8b86a;
+    display:block;
+    font-size:13px;
+}
+
+.panel-header span{
+    font-size:10px;
+    color:#cbd4d9;
+}
+
+.panel-body{
+    padding:12px;
+}
+
+.panel-body label{
+    display:block;
+    margin-bottom:5px;
+    color:#526573;
+    font:bold 10px Arial,sans-serif;
+    text-transform:uppercase;
+}
+
+.panel-body select,
+.panel-body input{
+    width:100%;
+    padding:8px;
+    border:1px solid #c8c2b5;
+    border-radius:5px;
+    background:#fff;
+    color:#17374d;
+    margin-bottom:10px;
+}
+
+.panel-stat{
+    padding:9px;
+    background:#f3f0e7;
+    border-radius:6px;
+    margin-top:7px;
+    font-size:11px;
+    line-height:1.5;
+}
+
+.panel-stat strong{
+    color:#17374d;
+}
+
+.panel-button{
+    width:100%;
+    border:0;
+    padding:9px;
+    border-radius:5px;
+    background:#102638;
+    color:#fff;
+    cursor:pointer;
+    font:bold 11px Arial,sans-serif;
+    margin-top:5px;
+}
+
+.panel-button.gold{
+    background:#c09d57;
+    color:#102638;
+}
+
+.coordinate-display{
+    background:rgba(16,38,56,.94);
+    color:#fff;
+    padding:7px 10px;
+    border-radius:5px;
+    font:10px Arial,sans-serif;
+}
+
+.info-control{
+    background:#fff;
+    border-radius:5px;
+    box-shadow:0 2px 10px rgba(0,0,0,.25);
+    overflow:hidden;
+}
+
+.info-control button{
+    display:block;
+    width:170px;
+    border:0;
+    border-bottom:1px solid #eee;
+    background:#fff;
+    color:#17374d;
+    text-align:left;
+    padding:8px 10px;
+    cursor:pointer;
+    font:bold 10px Arial,sans-serif;
+}
+
+.info-control button:hover{
+    background:#f0eadb;
+}
+
+.loading-overlay{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(16,38,56,.92);
+    color:#fff;
+    font:700 15px Arial,sans-serif;
+}
+
+.loading-overlay.hidden{
+    display:none;
+}
+
+.loading-box{
+    text-align:center;
+    padding:30px;
+}
+
+.loading-box div:first-child{
+    color:#d8b86a;
+    font:28px Georgia,serif;
+    margin-bottom:8px;
+}
+
+@media(max-width:800px){
+
+    header{
+        padding:14px 15px;
+    }
+
+    header h1{
+        font-size:20px;
+    }
+
+    nav{
+        padding:0 6px;
+    }
+
+    nav a{
+        padding:11px 7px;
+        font-size:10px;
+    }
+
+    .map-header{
+        padding:12px 15px;
+    }
+
+    .map-header h2{
+        font-size:21px;
+    }
+
+    #map{
+        height:calc(100vh - 151px);
+        min-height:450px;
+    }
+
+    .map-panel{
+        top:auto;
+        bottom:10px;
+        left:10px;
+        width:250px;
+        max-height:45vh;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-box">
+        <div>Kárpátalja Atlasza</div>
+        <span>Történelmi adatok betöltése…</span>
+    </div>
+</div>
+
+<header>
+
+    <h1>Kárpátalja Földrajzi és Történeti Atlasza</h1>
+
+    <p>
+        Történelmi korszakok • helyszínek • események • vármegyék • források
+    </p>
+
+    <div class="language-switch">
+
+        <span class="current-language">
+            🇭🇺 MAGYAR
+        </span>
+
+        <a href="tortenelmi-terkep-ua.html">
+            🇺🇦 УКРАЇНСЬКА
+        </a>
+
+    </div>
+
+</header>
+
+<nav>
+
+    <a href="index.html">
+        FŐOLDAL
+    </a>
+
+    <a href="geography.html">
+        🌍 FÖLDRAJZI TÉRKÉP
+    </a>
+
+    <a href="history.html" class="active">
+        📜 TÖRTÉNELMI TÉRKÉP
+    </a>
+
+    <a href="gallery.html">
+        📷 GALÉRIA
+    </a>
+
+    <a href="../admin/index.html">
+        🔐 ADMIN
+    </a>
+
+</nav>
+
+<section class="map-header">
+
+    <h2>📜 Interaktív történelmi térkép</h2>
+
+    <p>
+        Kárpátalja történelmi helyszíneinek, eseményeinek,
+        korszakainak és egykori vármegyéinek térképi megjelenítése.
+    </p>
+
+</section>
+
+<div id="map"></div>
+
+<div class="map-panel">
+
+    <div class="panel-header">
+
+        <strong>📜 TÖRTÉNELMI ATLASZ</strong>
+
+        <span>
+            Dinamikus adatvezérelt térképi nézet
+        </span>
+
+    </div>
+
+    <div class="panel-body">
+
+        <label for="periodFilter">
+            Történelmi korszak
+        </label>
+
+        <select id="periodFilter">
+            <option value="all">
+                Összes korszak
+            </option>
+        </select>
+
+        <label for="typeFilter">
+            Objektumtípus
+        </label>
+
+        <select id="typeFilter">
+
+            <option value="all">
+                Minden történelmi objektum
+            </option>
+
+            <option value="place">
+                📜 Helyszínek
+            </option>
+
+            <option value="event">
+                ⚔️ Események
+            </option>
+
+            <option value="gallery">
+                📷 Galéria
+            </option>
+
+            <option value="county">
+                🏛️ Vármegyék
+            </option>
+
+        </select>
+
+        <input
+            id="historySearch"
+            type="search"
+            placeholder="Keresés cím vagy leírás alapján…"
+        >
+
+        <button
+            id="showAllButton"
+            class="panel-button gold"
+        >
+            🗺️ Összes objektum megjelenítése
+        </button>
+
+        <button
+            id="fitKarpataljaButton"
+            class="panel-button"
+        >
+            ⌖ Kárpátalja teljes nézete
+        </button>
+
+        <div
+            id="historyStats"
+            class="panel-stat"
+        >
+            Adatok betöltése…
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+
+<script>
+
+/* =====================================================
+   ALAP
+===================================================== */
+
+const map =
+    L.map("map",{
+        preferCanvas:true,
+        zoomControl:true
+    })
+    .setView(
+        [48.45,22.75],
+        8
+    );
+
+
+/* =====================================================
+   TÉRKÉPRÉTEGEK
+===================================================== */
+
+const osm =
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom:19,
+            attribution:
+                "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(map);
+
+
+const satellite =
+    L.tileLayer(
+        "https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+        {
+            maxZoom:20,
+            subdomains:["mt0","mt1","mt2","mt3"],
+            attribution:"Google Satellite"
+        }
+    );
+
+
+/* =====================================================
+   TÖRTÉNELMI RÉTEGEK
+===================================================== */
+
+const historicalPlacesLayer =
+    L.layerGroup();
+
+const historicalEventsLayer =
+    L.layerGroup();
+
+const historicalCountiesLayer =
+    L.layerGroup();
+
+const historicalGalleryLayer =
+    L.layerGroup();
+
+
+/* =====================================================
+   ADATÁLLAPOT
+===================================================== */
+
+let atlasData = null;
+
+let historicalPlaces = [];
+
+let historicalEvents = [];
+
+let historicalCounties = [];
+
+let historicalGallery = [];
+
+let historicalPeriods = [];
+
+let historicalPeople = [];
+
+let activePeriod = "all";
+
+let activeType = "all";
+
+let activeSearch = "";
+
+
+/* =====================================================
+   RÉTEGVEZÉRLŐ
+===================================================== */
+
+const overlays = {
+
+    "📜 Történelmi helyszínek":
+        historicalPlacesLayer,
+
+    "⚔️ Történelmi események":
+        historicalEventsLayer,
+
+    "🏛️ Egykori vármegyék":
+        historicalCountiesLayer,
+
+    "📷 Történelmi galéria":
+        historicalGalleryLayer
+
+};
+
+
+L.control.layers(
+
+    {
+        "OpenStreetMap":
+            osm,
+
+        "Műhold":
+            satellite
+    },
+
+    overlays,
+
+    {
+        collapsed:false
+    }
+
+).addTo(map);
+
+
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeHTML(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+   KOORDINÁTA ELLENŐRZÉS
+===================================================== */
+
+function validCoordinates(item){
+
+    const lat =
+        Number(item?.latitude);
+
+    const lng =
+        Number(item?.longitude);
+
+    return (
+        Number.isFinite(lat) &&
+        Number.isFinite(lng) &&
+        lat >= -90 &&
+        lat <= 90 &&
+        lng >= -180 &&
+        lng <= 180
+    );
+
+}
+
+
+/* =====================================================
+   KORSZAK CÍM
+===================================================== */
+
+function getPeriodTitle(
+    periodId
+){
+
+    const period =
+        historicalPeriods.find(
+            item =>
+                String(item?.id) ===
+                String(periodId)
+        );
+
+    return (
+        period?.title ||
+        periodId ||
+        ""
+    );
+
+}
+
+
+/* =====================================================
+   FORRÁS HTML
+===================================================== */
+
+function buildSourceHTML(
+    item
+){
+
+    if(!item?.source){
+        return "";
+    }
+
+    const description =
+        item.sourceDescription
+            ?
+            `<br>
+             <span>
+                ${escapeHTML(
+                    item.sourceDescription
+                )}
+             </span>`
+            :
+            "";
+
+    const link =
+        item.sourceUrl
+            ?
+            `<div style="margin-top:6px;">
+                <a
+                    href="${escapeHTML(item.sourceUrl)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    Forrás megnyitása ↗
+                </a>
+             </div>`
+            :
+            "";
+
+    return `
+        <div class="history-source">
+            <strong>Forrás:</strong>
+            ${escapeHTML(item.source)}
+            ${description}
+            ${link}
+        </div>
+    `;
+
+}
+
+
+/* =====================================================
+   TÖRTÉNELMI HELYSZÍN POPUP
+===================================================== */
+
+function buildPlacePopup(
+    item
+){
+
+    const period =
+        getPeriodTitle(
+            item.period
+        );
+
+    const image =
+        item.image
+            ?
+            `<img
+                src="${escapeHTML(item.image)}"
+                alt="${escapeHTML(item.title || "Történelmi helyszín")}"
+                loading="lazy"
+            >`
+            :
+            "";
+
+    const year =
+        item.year !== undefined &&
+        item.year !== null &&
+        item.year !== ""
+            ?
+            `<span class="history-badge">
+                Év: ${escapeHTML(item.year)}
+             </span>`
+            :
+            "";
+
+    const periodBadge =
+        period
+            ?
+            `<span class="history-badge">
+                ${escapeHTML(period)}
+             </span>`
+            :
+            "";
+
+    const mapLink =
+        validCoordinates(item)
+            ?
+            `<a
+                class="gold"
+                href="geography.html?historical=${encodeURIComponent(item.id || "")}&lat=${Number(item.latitude)}&lng=${Number(item.longitude)}"
+            >
+                Földrajzi térkép
+             </a>`
+            :
+            "";
+
+    return `
+        <div class="history-popup">
+
+            ${image}
+
+            <h3>
+                📜 ${escapeHTML(
+                    item.title ||
+                    "Történelmi helyszín"
+                )}
+            </h3>
+
+            <div class="history-meta">
+                ${periodBadge}
+                ${year}
+            </div>
+
+            <p>
+                ${escapeHTML(
+                    item.description ||
+                    ""
+                )}
+            </p>
+
+            ${buildSourceHTML(item)}
+
+            ${
+                validCoordinates(item)
+                    ?
+                    `<div class="history-source">
+                        Koordináta:
+                        ${Number(item.latitude).toFixed(5)},
+                        ${Number(item.longitude).toFixed(5)}
+                     </div>`
+                    :
+                    ""
+            }
+
+            <div class="history-actions">
+                ${mapLink}
+            </div>
+
+        </div>
+    `;
+
+}
+
+
+/* =====================================================
+   ESEMÉNY POPUP
+===================================================== */
+
+function buildEventPopup(
+    item
+){
+
+    const period =
+        getPeriodTitle(
+            item.period
+        );
+
+    const year =
+        item.year !== undefined &&
+        item.year !== null &&
+        item.year !== ""
+            ?
+            `<span class="history-badge">
+                ${escapeHTML(item.year)}
+             </span>`
+            :
+            "";
+
+    return `
+        <div class="history-popup">
+
+            <h3>
+                ⚔️ ${escapeHTML(
+                    item.title ||
+                    "Történelmi esemény"
+                )}
+            </h3>
+
+            <div class="history-meta">
+
+                ${
+                    period
+                        ?
+                        `<span class="history-badge">
+                            ${escapeHTML(period)}
+                         </span>`
+                        :
+                        ""
+                }
+
+                ${year}
+
+            </div>
+
+            <p>
+                ${escapeHTML(
+                    item.description ||
+                    ""
+                )}
+            </p>
+
+            ${buildSourceHTML(item)}
+
+            ${
+                validCoordinates(item)
+                    ?
+                    `<div class="history-source">
+                        Koordináta:
+                        ${Number(item.latitude).toFixed(5)},
+                        ${Number(item.longitude).toFixed(5)}
+                     </div>`
+                    :
+                    ""
+            }
+
+        </div>
+    `;
+
+}
+
+
+/* =====================================================
+   GALÉRIA POPUP
+===================================================== */
+
+function buildGalleryPopup(
+    item
+){
+
+    const image =
+        item.image
+            ?
+            `<img
+                src="${escapeHTML(item.image)}"
+                alt="${escapeHTML(item.title || "Galéria")}"
+                loading="lazy"
+            >`
+            :
+            "";
+
+    const period =
+        getPeriodTitle(
+            item.period
+        ) ||
+        item.period ||
+        "";
+
+    return `
+        <div class="history-popup">
+
+            ${image}
+
+            <h3>
+                📷 ${escapeHTML(
+                    item.title ||
+                    "Galéria"
+                )}
+            </h3>
+
+            <div class="history-meta">
+
+                ${
+                    item.category
+                        ?
+                        `<span class="history-badge">
+                            ${escapeHTML(item.category)}
+                         </span>`
+                        :
+                        ""
+                }
+
+                ${
+                    period
+                        ?
+                        `<span class="history-badge">
+                            ${escapeHTML(period)}
+                         </span>`
+                        :
+                        ""
+                }
+
+            </div>
+
+            <p>
+                ${escapeHTML(
+                    item.description ||
+                    ""
+                )}
+            </p>
+
+            ${buildSourceHTML(item)}
+
+            ${
+                validCoordinates(item)
+                    ?
+                    `<div class="history-source">
+                        Koordináta:
+                        ${Number(item.latitude).toFixed(5)},
+                        ${Number(item.longitude).toFixed(5)}
+                     </div>`
+                    :
+                    ""
+            }
+
+            <div class="history-actions">
+
+                <a
+                    class="gold"
+                    href="gallery.html?gallery=${encodeURIComponent(item.id || "")}"
+                >
+                    Galériában megnyitás
+                </a>
+
+            </div>
+
+        </div>
+    `;
+
+}
+
+
+/* =====================================================
+   TÖRTÉNELMI HELYSZÍN IKON
+===================================================== */
+
+const placeIcon =
+    L.divIcon({
+
+        className:"",
+
+        html:
+            `<div class="historical-place-marker">
+                📜
+             </div>`,
+
+        iconSize:
+            [34,34],
+
+        iconAnchor:
+            [17,17],
+
+        popupAnchor:
+            [0,-17]
+
+    });
+
+
+/* =====================================================
+   ESEMÉNY IKON
+===================================================== */
+
+const eventIcon =
+    L.divIcon({
+
+        className:"",
+
+        html:
+            `<div class="historical-event-marker">
+                ⚔️
+             </div>`,
+
+        iconSize:
+            [36,36],
+
+        iconAnchor:
+            [18,18],
+
+        popupAnchor:
+            [0,-18]
+
+    });
+
+
+/* =====================================================
+   GALÉRIA IKON
+===================================================== */
+
+const galleryIcon =
+    L.divIcon({
+
+        className:"",
+
+        html:
+            `<div class="historical-people-marker">
+                📷
+             </div>`,
+
+        iconSize:
+            [34,34],
+
+        iconAnchor:
+            [17,17],
+
+        popupAnchor:
+            [0,-17]
+
+    });
+
+
+/* =====================================================
+   RÉTEGEK ÚJRAÉPÍTÉSE
+===================================================== */
+
+function renderHistoricalLayers(){
+
+    historicalPlacesLayer.clearLayers();
+
+    historicalEventsLayer.clearLayers();
+
+    historicalCountiesLayer.clearLayers();
+
+    historicalGalleryLayer.clearLayers();
+
+
+    const matchesPeriod =
+        item =>
+            activePeriod === "all" ||
+            String(item?.period) ===
+            String(activePeriod);
+
+
+    const matchesSearch =
+        item => {
+
+            if(!activeSearch){
+                return true;
+            }
+
+            const text =
+                [
+                    item?.title,
+                    item?.description,
+                    item?.source,
+                    item?.year
+                ]
+                .join(" ")
+                .toLowerCase();
+
+            return text.includes(
+                activeSearch
+            );
+
+        };
+
+
+    if(
+        activeType === "all" ||
+        activeType === "place"
+    ){
+
+        historicalPlaces
+
+            .filter(
+                item =>
+                    item &&
+                    item.visible !== false &&
+                    item.mapVisible !== false &&
+                    validCoordinates(item) &&
+                    matchesPeriod(item) &&
+                    matchesSearch(item)
+            )
+
+            .sort(
+                (a,b) =>
+                    Number(a.order || 0) -
+                    Number(b.order || 0)
+            )
+
+            .forEach(
+                item => {
+
+                    const marker =
+                        L.marker(
+                            [
+                                Number(item.latitude),
+                                Number(item.longitude)
+                            ],
+                            {
+                                icon:placeIcon,
+                                title:
+                                    item.title ||
+                                    "Történelmi helyszín"
+                            }
+                        );
+
+                    marker.bindPopup(
+                        buildPlacePopup(item),
+                        {
+                            maxWidth:350
+                        }
+                    );
+
+                    marker.addTo(
+                        historicalPlacesLayer
+                    );
+
+                }
+            );
+
+    }
+
+
+    if(
+        activeType === "all" ||
+        activeType === "event"
+    ){
+
+        historicalEvents
+
+            .filter(
+                item =>
+                    item &&
+                    item.visible !== false &&
+                    item.mapVisible !== false &&
+                    validCoordinates(item) &&
+                    matchesPeriod(item) &&
+                    matchesSearch(item)
+            )
+
+            .sort(
+                (a,b) =>
+                    Number(a.order || 0) -
+                    Number(b.order || 0)
+            )
+
+            .forEach(
+                item => {
+
+                    const marker =
+                        L.marker(
+                            [
+                                Number(item.latitude),
+                                Number(item.longitude)
+                            ],
+                            {
+                                icon:eventIcon,
+                                title:
+                                    item.title ||
+                                    "Történelmi esemény"
+                            }
+                        );
+
+                    marker.bindPopup(
+                        buildEventPopup(item),
+                        {
+                            maxWidth:350
+                        }
+                    );
+
+                    marker.addTo(
+                        historicalEventsLayer
+                    );
+
+                }
+            );
+
+    }
+
+
+    if(
+        activeType === "all" ||
+        activeType === "county"
+    ){
+
+        historicalCounties
+
+            .filter(
+                item =>
+                    item &&
+                    item.visible !== false &&
+                    item.mapVisible !== false &&
+                    item.geojson &&
+                    matchesPeriod(item) &&
+                    matchesSearch(item)
+            )
+
+            .sort(
+                (a,b) =>
+                    Number(a.order || 0) -
+                    Number(b.order || 0)
+            )
+
+            .forEach(
+                item => {
+
+                    try{
+
+                        const geojson =
+                            typeof item.geojson === "string"
+                                ?
+                                JSON.parse(
+                                    item.geojson
+                                )
+                                :
+                                item.geojson;
+
+
+                        const layer =
+                            L.geoJSON(
+                                geojson,
+                                {
+
+                                    style:{
+                                        color:"#8b6f2f",
+                                        weight:2,
+                                        opacity:.9,
+                                        fillOpacity:.10
+                                    },
+
+                                    onEachFeature:
+                                        function(
+                                            feature,
+                                            featureLayer
+                                        ){
+
+                                            featureLayer.bindPopup(
+                                                `
+                                                <div class="history-popup">
+
+                                                    <h3>
+                                                        🏛️
+                                                        ${escapeHTML(
+                                                            item.title ||
+                                                            "Egykori vármegye"
+                                                        )}
+                                                    </h3>
+
+                                                    ${
+                                                        item.period
+                                                            ?
+                                                            `<div class="history-meta">
+                                                                <span class="history-badge">
+                                                                    ${escapeHTML(
+                                                                        getPeriodTitle(
+                                                                            item.period
+                                                                        )
+                                                                    )}
+                                                                </span>
+                                                             </div>`
+                                                            :
+                                                            ""
+                                                    }
+
+                                                    <p>
+                                                        ${escapeHTML(
+                                                            item.description ||
+                                                            ""
+                                                        )}
+                                                    </p>
+
+                                                    ${buildSourceHTML(item)}
+
+                                                </div>
+                                                `
+                                            );
+
+                                        }
+
+                                }
+                            );
+
+                        layer.addTo(
+                            historicalCountiesLayer
+                        );
+
+                    }
+                    catch(error){
+
+                        console.warn(
+                            "Hibás történelmi GeoJSON:",
+                            item.id,
+                            error
+                        );
+
+                    }
+
+                }
+            );
+
+    }
+
+
+    if(
+        activeType === "all" ||
+        activeType === "gallery"
+    ){
+
+        historicalGallery
+
+            .filter(
+                item =>
+                    item &&
+                    item.visible !== false &&
+                    item.mapVisible !== false &&
+                    validCoordinates(item) &&
+                    matchesPeriod(item) &&
+                    matchesSearch(item)
+            )
+
+            .sort(
+                (a,b) =>
+                    Number(a.order || 0) -
+                    Number(b.order || 0)
+            )
+
+            .forEach(
+                item => {
+
+                    const marker =
+                        L.marker(
+                            [
+                                Number(item.latitude),
+                                Number(item.longitude)
+                            ],
+                            {
+                                icon:galleryIcon,
+                                title:
+                                    item.title ||
+                                    "Galéria"
+                            }
+                        );
+
+                    marker.bindPopup(
+                        buildGalleryPopup(item),
+                        {
+                            maxWidth:350
+                        }
+                    );
+
+                    marker.addTo(
+                        historicalGalleryLayer
+                    );
+
+                }
+            );
+
+    }
+
+
+    updateStatistics();
+
+}
+
+
+/* =====================================================
+   STATISZTIKA
+===================================================== */
+
+function updateStatistics(){
+
+    const visiblePlaces =
+        historicalPlaces.filter(
+            item =>
+                item &&
+                item.visible !== false &&
+                item.mapVisible !== false &&
+                validCoordinates(item) &&
+                (
+                    activePeriod === "all" ||
+                    String(item.period) ===
+                    String(activePeriod)
+                )
+        ).length;
+
+
+    const visibleEvents =
+        historicalEvents.filter(
+            item =>
+                item &&
+                item.visible !== false &&
+                item.mapVisible !== false &&
+                validCoordinates(item) &&
+                (
+                    activePeriod === "all" ||
+                    String(item.period) ===
+                    String(activePeriod)
+                )
+        ).length;
+
+
+    const visibleGallery =
+        historicalGallery.filter(
+            item =>
+                item &&
+                item.visible !== false &&
+                item.mapVisible !== false &&
+                validCoordinates(item) &&
+                (
+                    activePeriod === "all" ||
+                    String(item.period) ===
+                    String(activePeriod)
+                )
+        ).length;
+
+
+    const visibleCounties =
+        historicalCounties.filter(
+            item =>
+                item &&
+                item.visible !== false &&
+                item.mapVisible !== false &&
+                item.geojson &&
+                (
+                    activePeriod === "all" ||
+                    String(item.period) ===
+                    String(activePeriod)
+                )
+        ).length;
+
+
+    document.getElementById(
+        "historyStats"
+    ).innerHTML =
+        `
+        <strong>Térképi objektumok</strong><br>
+        📜 Helyszínek: ${visiblePlaces}<br>
+        ⚔️ Események: ${visibleEvents}<br>
+        📷 Galériapontok: ${visibleGallery}<br>
+        🏛️ Vármegyék: ${visibleCounties}<br>
+        ⏳ Korszakok: ${historicalPeriods.length}
+        `;
+
+}
+
+
+/* =====================================================
+   KORSZAK SZŰRŐ
+===================================================== */
+
+function populatePeriods(){
+
+    const select =
+        document.getElementById(
+            "periodFilter"
+        );
+
+
+    select.innerHTML =
+        `<option value="all">
+            Összes korszak
+         </option>`;
+
+
+    historicalPeriods
+
+        .filter(
+            item =>
+                item &&
+                item.visible !== false
+        )
+
+        .sort(
+            (a,b) =>
+                Number(a.order || 0) -
+                Number(b.order || 0)
+        )
+
+        .forEach(
+            period => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    period.id || "";
+
+                option.textContent =
+                    period.title ||
+                    period.id ||
+                    "Korszak";
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   SZŰRŐ ESEMÉNYEK
+===================================================== */
+
+document.getElementById(
+    "periodFilter"
+).addEventListener(
+    "change",
+    function(){
+
+        activePeriod =
+            this.value;
+
+        renderHistoricalLayers();
+
+    }
+);
+
+
+document.getElementById(
+    "typeFilter"
+).addEventListener(
+    "change",
+    function(){
+
+        activeType =
+            this.value;
+
+        renderHistoricalLayers();
+
+    }
+);
+
+
+document.getElementById(
+    "historySearch"
+).addEventListener(
+    "input",
+    function(){
+
+        activeSearch =
+            this.value
+                .trim()
+                .toLowerCase();
+
+        renderHistoricalLayers();
+
+    }
+);
+
+
+/* =====================================================
+   ÖSSZES OBJEKTUM
+===================================================== */
+
+document.getElementById(
+    "showAllButton"
+).addEventListener(
+    "click",
+    function(){
+
+        activePeriod =
+            "all";
+
+        activeType =
+            "all";
+
+        activeSearch =
+            "";
+
+        document.getElementById(
+            "periodFilter"
+        ).value =
+            "all";
+
+        document.getElementById(
+            "typeFilter"
+        ).value =
+            "all";
+
+        document.getElementById(
+            "historySearch"
+        ).value =
+            "";
+
+        renderHistoricalLayers();
+
+    }
+);
+
+
+/* =====================================================
+   KÁRPÁTALJA NÉZET
+===================================================== */
+
+document.getElementById(
+    "fitKarpataljaButton"
+).addEventListener(
+    "click",
+    function(){
+
+        map.fitBounds(
+            [
+                [47.95,21.95],
+                [49.15,24.20]
+            ],
+            {
+                padding:
+                    [25,25],
+
+                maxZoom:
+                    9,
+
+                animate:true
+            }
+        );
+
+    }
+);
+
+
+/* =====================================================
+   TÖRTÉNELMI ADATOK BETÖLTÉSE
+===================================================== */
+
+async function loadHistoricalData(){
+
+    try{
+
+        const response =
+            await fetch(
+                "../data/atlasz.json",
+                {
+                    cache:"no-store"
+                }
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "Az atlasz.json nem tölthető be."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if(
+            !data ||
+            typeof data !== "object"
+        ){
+
+            throw new Error(
+                "Érvénytelen atlasz adatmodell."
+            );
+
+        }
+
+
+        atlasData =
+            data;
+
+
+        historicalPeriods =
+            Array.isArray(
+                data.historicalPeriods
+            )
+                ?
+                data.historicalPeriods
+                :
+                [];
+
+
+        historicalPlaces =
+            Array.isArray(
+                data.historicalPlaces
+            )
+                ?
+                data.historicalPlaces
+                :
+                [];
+
+
+        historicalEvents =
+            Array.isArray(
+                data.historicalEvents
+            )
+                ?
+                data.historicalEvents
+                :
+                [];
+
+
+        historicalCounties =
+            Array.isArray(
+                data.historicalCounties
+            )
+                ?
+                data.historicalCounties
+                :
+                [];
+
+
+        historicalGallery =
+            Array.isArray(
+                data.gallery
+            )
+                ?
+                data.gallery
+                :
+                [];
+
+
+        historicalPeople =
+            Array.isArray(
+                data.historicalPeople
+            )
+                ?
+                data.historicalPeople
+                :
+                [];
+
+
+        populatePeriods();
+
+        renderHistoricalLayers();
+
+
+        document
+            .getElementById(
+                "loadingOverlay"
+            )
+            .classList.add(
+                "hidden"
+            );
+
+
+        console.log(
+            "Kárpátalja történelmi atlasz betöltve.",
+            {
+                korszakok:
+                    historicalPeriods.length,
+
+                helyszínek:
+                    historicalPlaces.length,
+
+                események:
+                    historicalEvents.length,
+
+                személyiségek:
+                    historicalPeople.length,
+
+                vármegyék:
+                    historicalCounties.length,
+
+                galéria:
+                    historicalGallery.length
+            }
+        );
+
+
+        focusHistoricalFromUrl();
+
+
+    }
+    catch(error){
+
+        console.error(
+            error
+        );
+
+
+        document
+            .getElementById(
+                "loadingOverlay"
+            )
+            .querySelector("span")
+            .textContent =
+                "Hiba az atlasz.json betöltésekor.";
+
+
+        setTimeout(
+            function(){
+
+                document
+                    .getElementById(
+                        "loadingOverlay"
+                    )
+                    .classList.add(
+                        "hidden"
+                    );
+
+            },
+            1600
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   URL ALAPÚ KIEMELÉS
+===================================================== */
+
+function focusHistoricalFromUrl(){
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    const historicalId =
+        params.get(
+            "historical"
+        );
+
+
+    const eventId =
+        params.get(
+            "event"
+        );
+
+
+    const galleryId =
+        params.get(
+            "gallery"
+        );
+
+
+    const lat =
+        Number(
+            params.get("lat")
+        );
+
+
+    const lng =
+        Number(
+            params.get("lng")
+        );
+
+
+    let target =
+        null;
+
+    let layerGroup =
+        null;
+
+
+    if(historicalId){
+
+        target =
+            historicalPlaces.find(
+                item =>
+                    item &&
+                    String(item.id) ===
+                    String(historicalId)
+            );
+
+        layerGroup =
+            historicalPlacesLayer;
+
+    }
+
+
+    if(
+        !target &&
+        eventId
+    ){
+
+        target =
+            historicalEvents.find(
+                item =>
+                    item &&
+                    String(item.id) ===
+                    String(eventId)
+            );
+
+        layerGroup =
+            historicalEventsLayer;
+
+    }
+
+
+    if(
+        !target &&
+        galleryId
+    ){
+
+        target =
+            historicalGallery.find(
+                item =>
+                    item &&
+                    String(item.id) ===
+                    String(galleryId)
+            );
+
+        layerGroup =
+            historicalGalleryLayer;
+
+    }
+
+
+    if(
+        target &&
+        validCoordinates(target)
+    ){
+
+        const targetLat =
+            Number(target.latitude);
+
+        const targetLng =
+            Number(target.longitude);
+
+
+        if(target.period){
+
+            activePeriod =
+                String(target.period);
+
+            document.getElementById(
+                "periodFilter"
+            ).value =
+                String(target.period);
+
+            renderHistoricalLayers();
+
+        }
+
+
+        map.setView(
+            [
+                targetLat,
+                targetLng
+            ],
+            14,
+            {
+                animate:true
+            }
+        );
+
+
+        setTimeout(
+            function(){
+
+                layerGroup.eachLayer(
+                    layer => {
+
+                        if(
+                            layer.getLatLng &&
+                            Math.abs(
+                                layer.getLatLng().lat -
+                                targetLat
+                            ) < .00001 &&
+                            Math.abs(
+                                layer.getLatLng().lng -
+                                targetLng
+                            ) < .00001
+                        ){
+
+                            layer.openPopup();
+
+                        }
+
+                    }
+                );
+
+            },
+            450
+        );
+
+
+        return;
+
+    }
+
+
+    if(
+        Number.isFinite(lat) &&
+        Number.isFinite(lng)
+    ){
+
+        map.setView(
+            [
+                lat,
+                lng
+            ],
+            14,
+            {
+                animate:true
+            }
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   KOORDINÁTA VEZÉRLŐ
+===================================================== */
+
+const coordinateControl =
+    L.control({
+        position:"bottomleft"
+    });
+
+
+coordinateControl.onAdd =
+function(){
+
+    const div =
+        L.DomUtil.create(
+            "div",
+            "coordinate-display"
+        );
+
+    div.innerHTML =
+        "Koordináta: —";
+
+
+    map.on(
+        "mousemove",
+        function(event){
+
+            div.innerHTML =
+                "Koordináta: " +
+                event.latlng.lat.toFixed(5) +
+                ", " +
+                event.latlng.lng.toFixed(5);
+
+        }
+    );
+
+
+    L.DomEvent.disableClickPropagation(
+        div
+    );
+
+
+    return div;
+
+};
+
+
+coordinateControl.addTo(
+    map
+);
+
+
+/* =====================================================
+   GEOJSON RAJZOLÁS
+===================================================== */
+
+const drawnItems =
+    new L.FeatureGroup();
+
+
+map.addLayer(
+    drawnItems
+);
+
+
+const drawControl =
+    new L.Control.Draw({
+
+        position:"topleft",
+
+        edit:{
+            featureGroup:
+                drawnItems
+        },
+
+        draw:{
+
+            polygon:true,
+
+            polyline:true,
+
+            rectangle:true,
+
+            circle:true,
+
+            marker:true,
+
+            circlemarker:false
+
+        }
+
+    });
+
+
+map.addControl(
+    drawControl
+);
+
+
+map.on(
+    L.Draw.Event.CREATED,
+    function(event){
+
+        drawnItems.addLayer(
+            event.layer
+        );
+
+    }
+);
+
+
+/* =====================================================
+   GEOJSON EXPORT
+===================================================== */
+
+const exportControl =
+    L.control({
+        position:"topright"
+    });
+
+
+exportControl.onAdd =
+function(){
+
+    const container =
+        L.DomUtil.create(
+            "div",
+            "info-control"
+        );
+
+
+    const button =
+        L.DomUtil.create(
+            "button",
+            "",
+            container
+        );
+
+
+    button.innerHTML =
+        "📤 Rajzolt adatok exportálása";
+
+
+    button.onclick =
+    function(){
+
+        const geojson =
+            drawnItems.toGeoJSON();
+
+
+        const blob =
+            new Blob(
+                [
+                    JSON.stringify(
+                        geojson,
+                        null,
+                        2
+                    )
+                ],
+                {
+                    type:
+                        "application/geo+json"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.href =
+            url;
+
+
+        link.download =
+            "karpatalja-tortenelmi-rajz.geojson";
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+
+        link.remove();
+
+
+        URL.revokeObjectURL(
+            url
+        );
+
+    };
+
+
+    L.DomEvent.disableClickPropagation(
+        container
+    );
+
+
+    return container;
+
+};
+
+
+exportControl.addTo(
+    map
+);
+
+
+/* =====================================================
+   GALÉRIA TELJES NÉZET
+===================================================== */
+
+const galleryFitControl =
+    L.control({
+        position:"topright"
+    });
+
+
+galleryFitControl.onAdd =
+function(){
+
+    const container =
+        L.DomUtil.create(
+            "div",
+            "info-control"
+        );
+
+
+    const button =
+        L.DomUtil.create(
+            "button",
+            "",
+            container
+        );
+
+
+    button.innerHTML =
+        "📷 Galéria pontok nézete";
+
+
+    button.onclick =
+    function(){
+
+        const items =
+            historicalGallery.filter(
+                item =>
+                    item &&
+                    item.visible !== false &&
+                    item.mapVisible !== false &&
+                    validCoordinates(item)
+            );
+
+
+        if(!items.length){
+
+            return;
+
+        }
+
+
+        const bounds =
+            L.latLngBounds(
+                items.map(
+                    item =>
+                        [
+                            Number(item.latitude),
+                            Number(item.longitude)
+                        ]
+                )
+            );
+
+
+        if(
+            bounds.isValid()
+        ){
+
+            map.fitBounds(
+                bounds,
+                {
+                    padding:
+                        [40,40],
+
+                    maxZoom:
+                        12,
+
+                    animate:true
+                }
+            );
+
+        }
+
+    };
+
+
+    L.DomEvent.disableClickPropagation(
+        container
+    );
+
+
+    return container;
+
+};
+
+
+galleryFitControl.addTo(
+    map
+);
+
+
+/* =====================================================
+   TÖRTÉNELMI HELYSZÍNEK TELJES NÉZETE
+===================================================== */
+
+const historicalFitControl =
+    L.control({
+        position:"topright"
+    });
+
+
+historicalFitControl.onAdd =
+function(){
+
+    const container =
+        L.DomUtil.create(
+            "div",
+            "info-control"
+        );
+
+
+    const button =
+        L.DomUtil.create(
+            "button",
+            "",
+            container
+        );
+
+
+    button.innerHTML =
+        "📜 Történelmi objektumok nézete";
+
+
+    button.onclick =
+    function(){
+
+        const points =
+            [
+                ...historicalPlaces,
+                ...historicalEvents
+            ]
+            .filter(
+                item =>
+                    item &&
+                    item.visible !== false &&
+                    item.mapVisible !== false &&
+                    validCoordinates(item)
+            );
+
+
+        if(!points.length){
+
+            return;
+
+        }
+
+
+        const bounds =
+            L.latLngBounds(
+                points.map(
+                    item =>
+                        [
+                            Number(item.latitude),
+                            Number(item.longitude)
+                        ]
+                )
+            );
+
+
+        if(
+            bounds.isValid()
+        ){
+
+            map.fitBounds(
+                bounds,
+                {
+                    padding:
+                        [45,45],
+
+                    maxZoom:
+                        12,
+
+                    animate:true
+                }
+            );
+
+        }
+
+    };
+
+
+    L.DomEvent.disableClickPropagation(
+        container
+    );
+
+
+    return container;
+
+};
+
+
+historicalFitControl.addTo(
+    map
+);
+
+
+/* =====================================================
+   INDÍTÁS
+===================================================== */
+
+loadHistoricalData();
+
+</script>
+
+</body>
+</html>

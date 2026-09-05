@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Interaktív földrajzi térkép – Kárpátalja</title>
+
+
+<!-- =========================================
+     LEAFLET
+========================================= -->
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+
+<!-- =========================================
+     LEAFLET DRAW
+========================================= -->
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"
+/>
+
+
+<style>
+
+/* =========================================
+   ALAP
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    font-family: Georgia, "Times New Roman", serif;
+    background: #f3f0e7;
+}
+
+
+/* =========================================
+   FEJLÉC
+========================================= */
+
+header {
+    background: #102638;
+    color: white;
+
+    padding: 12px 35px;
+
+    border-bottom: 1px solid #c09d57;
+}
+
+header h1 {
+    margin: 0;
+
+    font-size: 27px;
+
+    line-height: 1.3;
+}
+
+header p {
+    margin: 5px 0 0;
+
+    color: #c9ad6c;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   NYELVVÁLTÓ
+========================================= */
+
+.language-switch {
+
+    margin-top: 10px;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 13px;
+}
+
+.language-switch a {
+
+    color: white;
+
+    text-decoration: none;
+
+    margin-right: 12px;
+}
+
+.language-switch a:hover {
+
+    color: #d8b86a;
+}
+
+.current-language {
+
+    color: #d8b86a;
+
+    font-weight: bold;
+}
+
+
+/* =========================================
+   NAVIGÁCIÓ
+========================================= */
+
+nav {
+
+    background: #17374d;
+
+    padding: 0 35px;
+
+    height: 34px;
+}
+
+nav a {
+
+    display: inline-block;
+
+    padding: 9px 15px;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+nav a:hover {
+
+    background: #c09d57;
+
+    color: #102638;
+}
+
+
+/* =========================================
+   TÉRKÉP FEJLÉC
+========================================= */
+
+.map-header {
+
+    background: #f3f0e7;
+
+    padding: 18px 25px;
+}
+
+.map-header h2 {
+
+    margin: 0 0 5px;
+
+    font-size: 28px;
+
+    color: #17374d;
+}
+
+.map-header p {
+
+    margin: 0;
+
+    color: #5d666c;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   TÉRKÉP
+========================================= */
+
+#map {
+
+    width: 100%;
+
+    height: calc(100vh - 176px);
+
+    min-height: 550px;
+}
+
+
+/* =========================================
+   EGYEDI GEOJSON VEZÉRLŐ
+========================================= */
+
+.geojson-control {
+
+    background: white;
+
+    border-radius: 4px;
+
+    box-shadow:
+        0 1px 5px rgba(0,0,0,.35);
+
+    overflow: hidden;
+}
+
+.geojson-control button {
+
+    display: block;
+
+    width: 150px;
+
+    padding: 8px 10px;
+
+    border: none;
+
+    border-bottom: 1px solid #ddd;
+
+    background: white;
+
+    color: #17374d;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.geojson-control button:last-child {
+
+    border-bottom: none;
+}
+
+.geojson-control button:hover {
+
+    background: #f0eadb;
+}
+
+.geojson-control .import-button {
+
+    color: #17374d;
+}
+
+.geojson-control .export-button {
+
+    color: #8b2020;
+}
+
+
+/* =========================================
+   EXPORT GOMB JOBB ALSÓ
+========================================= */
+
+.export-bottom {
+
+    background: #d62828;
+
+    color: white;
+
+    padding: 9px 13px;
+
+    border-radius: 4px;
+
+    box-shadow:
+        0 2px 7px rgba(0,0,0,.3);
+
+    cursor: pointer;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    text-decoration: none;
+
+    display: block;
+}
+
+.export-bottom:hover {
+
+    background: #a91f1f;
+}
+
+
+/* =========================================
+   KOORDINÁTÁK
+========================================= */
+
+.coordinates-info {
+
+    background: rgba(255,255,255,.95);
+
+    padding: 7px 14px;
+
+    border-radius: 4px;
+
+    box-shadow:
+        0 1px 5px rgba(0,0,0,.3);
+
+    font-family: Arial, sans-serif;
+
+    font-size: 12px;
+
+    color: #17374d;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   IMPORTÁLT GEOJSON
+========================================= */
+
+#geojsonFileInput {
+
+    display: none;
+}
+
+
+/* =========================================
+   LEAFLET RÉTEGEK
+========================================= */
+
+.leaflet-control-layers {
+
+    font-family: Arial, sans-serif;
+
+    font-size: 12px;
+}
+
+.leaflet-control-layers-expanded {
+
+    padding: 8px 10px;
+
+    background: rgba(255,255,255,.97);
+}
+
+
+/* =========================================
+   DRAW
+========================================= */
+
+.leaflet-draw-toolbar a {
+
+    background-color: white;
+}
+
+
+/* =========================================
+   MOBIL
+========================================= */
+
+@media (max-width: 700px) {
+
+    header {
+
+        padding: 12px 15px;
+    }
+
+    header h1 {
+
+        font-size: 20px;
+    }
+
+    nav {
+
+        padding: 0 8px;
+
+        overflow-x: auto;
+
+        white-space: nowrap;
+    }
+
+    nav a {
+
+        padding: 9px 7px;
+
+        font-size: 10px;
+    }
+
+    .map-header {
+
+        padding: 15px;
+    }
+
+    .map-header h2 {
+
+        font-size: 22px;
+    }
+
+    #map {
+
+        height: calc(100vh - 170px);
+
+        min-height: 450px;
+    }
+
+    .geojson-control button {
+
+        width: 135px;
+
+        font-size: 11px;
+    }
+
+    .coordinates-info {
+
+        font-size: 10px;
+
+        padding: 6px 8px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     FEJLÉC
+========================================= -->
+
+<header>
+
+    <h1>
+        Kárpátalja Földrajzi és Történeti Atlasza
+    </h1>
+
+    <p>
+        Földrajz • Történelem • Egykori vármegyék
+    </p>
+
+    <div class="language-switch">
+
+        <span class="current-language">
+            🇭🇺 MAGYAR
+        </span>
+
+        <a href="../../frontend/foldrajzi-terkep-ua.html">
+            🇺🇦 УКРАЇНСЬКА
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================
+     NAVIGÁCIÓ
+========================================= -->
+
+<nav>
+
+    <a href="../../frontend/index.html">
+        FŐOLDAL
+    </a>
+
+    <a href="../../frontend/geography.html">
+        🌍 FÖLDRAJZI TÉRKÉP
+    </a>
+
+    <a href="../../frontend/history.html">
+        📜 TÖRTÉNELMI TÉRKÉP
+    </a>
+
+</nav>
+
+
+<!-- =========================================
+     TÉRKÉP FEJLÉC
+========================================= -->
+
+<section class="map-header">
+
+    <h2>
+        🌍 Interaktív földrajzi térkép
+    </h2>
+
+    <p>
+        Kárpátalja földrajzi térképe
+        természetföldrajzi és földrajzi objektumokkal.
+    </p>
+
+</section>
+
+
+<!-- =========================================
+     TÉRKÉP
+========================================= -->
+
+<div id="map"></div>
+
+
+<!-- =========================================
+     GEOJSON INPUT
+========================================= -->
+
+<input
+    type="file"
+    id="geojsonFileInput"
+    accept=".geojson,.json,application/geo+json,application/json"
+/>
+
+
+<!-- =========================================
+     LEAFLET
+========================================= -->
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+<!-- =========================================
+     LEAFLET DRAW
+========================================= -->
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js">
+</script>
+
+
+<script>
+
+/* =====================================================
+   ALAPKÉP
+===================================================== */
+
+const map = L.map('map').setView(
+    [48.45, 22.75],
+    8
+);
+
+
+/* =====================================================
+   ALAPTÉRKÉPEK
+===================================================== */
+
+const osm = L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        maxZoom: 19,
+
+        attribution:
+            '&copy; OpenStreetMap contributors'
+    }
+);
+
+
+const satellite = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    {
+        maxZoom: 19,
+
+        attribution:
+            'Tiles &copy; Esri'
+    }
+);
+
+
+const terrain = L.tileLayer(
+    'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+    {
+        maxZoom: 17,
+
+        attribution:
+            'Map data &copy; OpenStreetMap contributors, SRTM | Map style &copy; OpenTopoMap'
+    }
+);
+
+
+const darkMap = L.tileLayer(
+    'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    {
+        maxZoom: 19,
+
+        attribution:
+            '&copy; OpenStreetMap contributors &copy; CARTO'
+    }
+);
+
+
+const lightMap = L.tileLayer(
+    'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+    {
+        maxZoom: 19,
+
+        attribution:
+            '&copy; OpenStreetMap contributors &copy; CARTO'
+    }
+);
+
+
+/* Alapértelmezett */
+
+osm.addTo(map);
+
+
+/* =====================================================
+   FÖLDRAJZI RÉTEGEK
+===================================================== */
+
+const relief =
+    L.layerGroup();
+
+const mountains =
+    L.layerGroup();
+
+const rivers =
+    L.layerGroup();
+
+const lakes =
+    L.layerGroup();
+
+const settlements =
+    L.layerGroup();
+
+const roads =
+    L.layerGroup();
+
+const administrativeBoundaries =
+    L.layerGroup();
+
+const geological =
+    L.layerGroup();
+
+const climate =
+    L.layerGroup();
+
+const soils =
+    L.layerGroup();
+
+const vegetation =
+    L.layerGroup();
+
+const landscapes =
+    L.layerGroup();
+
+const natureProtection =
+    L.layerGroup();
+
+const naturalResources =
+    L.layerGroup();
+
+const naturalHazards =
+    L.layerGroup();
+
+
+/* =====================================================
+   IMPORTÁLT GEOJSON RÉTEG
+===================================================== */
+
+const importedGeoJSON =
+    L.layerGroup();
+
+
+/* =====================================================
+   DRAWN ITEMS
+===================================================== */
+
+const drawnItems =
+    new L.FeatureGroup();
+
+map.addLayer(drawnItems);
+
+
+/* =====================================================
+   RÉTEGNEVEK
+===================================================== */
+
+const overlays = {
+
+
+    "🏔️ Domborzat":
+        relief,
+
+
+    "⛰️ Hegységek":
+        mountains,
+
+
+    "🌊 Folyók":
+        rivers,
+
+
+    "💧 Tavak":
+        lakes,
+
+
+    "🏘️ Települések":
+        settlements,
+
+
+    "🛣️ Utak":
+        roads,
+
+
+    "🏛️ Közigazgatási határok":
+        administrativeBoundaries,
+
+
+    "🪨 Földtan":
+        geological,
+
+
+    "🌡️ Éghajlat":
+        climate,
+
+
+    "🌱 Talaj":
+        soils,
+
+
+    "🌲 Növényzet":
+        vegetation,
+
+
+    "🗺️ Tájak":
+        landscapes,
+
+
+    "🌿 Természetvédelem":
+        natureProtection,
+
+
+    "⛏️ Természeti erőforrások":
+        naturalResources,
+
+
+    "⚠️ Természeti veszélyek":
+        naturalHazards,
+
+
+    "📍 Importált GeoJSON":
+        importedGeoJSON,
+
+
+    "✏️ Saját rajzok":
+        drawnItems
+
+};
+
+
+/* =====================================================
+   RÉTEGVÁLASZTÓ
+   JOBB FELSŐ SAROK
+===================================================== */
+
+const baseLayers = {
+
+    "OpenStreetMap":
+        osm,
+
+    "🛰️ Műhold":
+        satellite,
+
+    "⛰️ Topográfiai":
+        terrain,
+
+    "🌑 Sötét térkép":
+        darkMap,
+
+    "☀️ Világos térkép":
+        lightMap
+
+};
+
+
+L.control.layers(
+    baseLayers,
+    overlays,
+    {
+        collapsed: false,
+        position: 'topright'
+    }
+).addTo(map);
+
+
+/* =====================================================
+   KOORDINÁTÁK
+   ALSÓ KÖZÉP
+===================================================== */
+
+const coordinatesControl =
+    L.control({
+        position: 'bottomleft'
+    });
+
+
+coordinatesControl.onAdd =
+function(map) {
+
+    this._div =
+        L.DomUtil.create(
+            'div',
+            'coordinates-info'
+        );
+
+    this.update();
+
+    return this._div;
+};
+
+
+coordinatesControl.update =
+function(latlng) {
+
+    if (latlng) {
+
+        this._div.innerHTML =
+            '<strong>Szélesség:</strong> ' +
+            latlng.lat.toFixed(6) +
+
+            ' &nbsp;&nbsp; ' +
+
+            '<strong>Hosszúság:</strong> ' +
+            latlng.lng.toFixed(6);
+
+    } else {
+
+        this._div.innerHTML =
+            'Mozgassa az egeret a térképen';
+
+    }
+
+};
+
+
+coordinatesControl.addTo(map);
+
+
+map.on(
+    'mousemove',
+    function(e) {
+
+        coordinatesControl.update(
+            e.latlng
+        );
+
+    }
+);
+
+
+/* =====================================================
+   SKÁLA
+===================================================== */
+
+L.control.scale({
+
+    position: 'bottomleft',
+
+    metric: true,
+
+    imperial: false,
+
+    maxWidth: 200
+
+}).addTo(map);
+
+
+/* =====================================================
+   DRAW MENÜ
+   BAL FELSŐ
+===================================================== */
+
+const drawControl =
+    new L.Control.Draw({
+
+        position: 'topleft',
+
+        edit: {
+
+            featureGroup:
+                drawnItems,
+
+            poly: {
+
+                allowIntersection:
+                    false
+
+            }
+
+        },
+
+        draw: {
+
+            polygon: {
+
+                allowIntersection:
+                    false,
+
+                showArea:
+                    true,
+
+                shapeOptions: {
+
+                    color:
+                        '#b22222',
+
+                    weight:
+                        3,
+
+                    fillOpacity:
+                        0.25
+
+                }
+
+            },
+
+            polyline: {
+
+                shapeOptions: {
+
+                    color:
+                        '#17374d',
+
+                    weight:
+                        4
+
+                }
+
+            },
+
+            rectangle: {
+
+                shapeOptions: {
+
+                    color:
+                        '#8b6914',
+
+                    weight:
+                        3,
+
+                    fillOpacity:
+                        0.2
+
+                }
+
+            },
+
+            marker: true,
+
+            circle: false,
+
+            circlemarker: false
+
+        }
+
+    });
+
+
+map.addControl(
+    drawControl
+);
+
+
+/* =====================================================
+   KEREKÍTÉS
+===================================================== */
+
+function roundNumber(
+    num,
+    decimals
+) {
+
+    return Math.round(
+        num *
+        Math.pow(10, decimals)
+    )
+    /
+    Math.pow(10, decimals);
+
+}
+
+
+/* =====================================================
+   KOORDINÁTA FORMÁZÁS
+===================================================== */
+
+function formatLatLng(
+    latlng
+) {
+
+    return '(' +
+
+        roundNumber(
+            latlng.lat,
+            6
+        ) +
+
+        ', ' +
+
+        roundNumber(
+            latlng.lng,
+            6
+        ) +
+
+        ')';
+
+}
+
+
+/* =====================================================
+   DRAW POPUP
+===================================================== */
+
+function getPopupContent(
+    layer
+) {
+
+
+    /* MARKER */
+
+    if (
+        layer instanceof L.Marker ||
+        layer instanceof L.CircleMarker
+    ) {
+
+        return (
+
+            '<strong>Koordináták</strong><br>' +
+
+            'Szélesség: ' +
+
+            roundNumber(
+                layer.getLatLng().lat,
+                6
+            ) +
+
+            '<br>' +
+
+            'Hosszúság: ' +
+
+            roundNumber(
+                layer.getLatLng().lng,
+                6
+            )
+
+        );
+
+    }
+
+
+    /* POLYGON */
+
+    if (
+        layer instanceof L.Polygon
+    ) {
+
+        return 'Poligon<br>' +
+               'Geometria létrehozva.';
+
+    }
+
+
+    /* POLYLINE */
+
+    if (
+        layer instanceof L.Polyline
+    ) {
+
+        const latlngs =
+            layer.getLatLngs();
+
+        let distance = 0;
+
+
+        if (
+            latlngs.length > 1
+        ) {
+
+            for (
+                let i = 0;
+                i < latlngs.length - 1;
+                i++
+            ) {
+
+                distance +=
+                    latlngs[i]
+                    .distanceTo(
+                        latlngs[i + 1]
+                    );
+
+            }
+
+        }
+
+
+        if (
+            distance > 1000
+        ) {
+
+            return (
+
+                'Vonal<br>' +
+
+                'Hosszúság: ' +
+
+                roundNumber(
+                    distance / 1000,
+                    2
+                ) +
+
+                ' km'
+
+            );
+
+        }
+
+
+        return (
+
+            'Vonal<br>' +
+
+            'Hosszúság: ' +
+
+            roundNumber(
+                distance,
+                2
+            ) +
+
+            ' m'
+
+        );
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =====================================================
+   DRAW LÉTREHOZÁS
+===================================================== */
+
+map.on(
+    L.Draw.Event.CREATED,
+    function(event) {
+
+        const layer =
+            event.layer;
+
+
+        const content =
+            getPopupContent(
+                layer
+            );
+
+
+        if (
+            content !== null
+        ) {
+
+            layer.bindPopup(
+                content
+            );
+
+        }
+
+
+        layer.feature =
+            layer.feature ||
+            {
+
+                type:
+                    'Feature',
+
+                properties:
+                    {}
+
+            };
+
+
+        layer.feature.properties =
+            layer.feature.properties ||
+            {};
+
+
+        layer.feature.properties.info =
+            content;
+
+
+        drawnItems.addLayer(
+            layer
+        );
+
+    }
+);
+
+
+/* =====================================================
+   DRAW SZERKESZTÉS
+===================================================== */
+
+map.on(
+    L.Draw.Event.EDITED,
+    function(event) {
+
+        event.layers.eachLayer(
+            function(layer) {
+
+                const content =
+                    getPopupContent(
+                        layer
+                    );
+
+
+                if (
+                    content !== null
+                ) {
+
+                    layer.setPopupContent(
+                        content
+                    );
+
+                }
+
+
+                layer.feature =
+                    layer.feature ||
+                    {
+
+                        type:
+                            'Feature',
+
+                        properties:
+                            {}
+
+                    };
+
+
+                layer.feature.properties =
+                    layer.feature.properties ||
+                    {};
+
+
+                layer.feature.properties.info =
+                    content;
+
+            }
+        );
+
+    }
+);
+
+
+/* =====================================================
+   DRAW TÖRLÉS
+===================================================== */
+
+map.on(
+    L.Draw.Event.DELETED,
+    function() {
+
+        console.log(
+            'A kijelölt objektumok törölve.'
+        );
+
+    }
+);
+
+
+/* =====================================================
+   GEOJSON IMPORT
+===================================================== */
+
+const fileInput =
+    document.getElementById(
+        'geojsonFileInput'
+    );
+
+
+function importGeoJSON() {
+
+    fileInput.value = '';
+
+    fileInput.click();
+
+}
+
+
+fileInput.addEventListener(
+    'change',
+    function(event) {
+
+        const file =
+            event.target.files[0];
+
+
+        if (!file) {
+
+            return;
+
+        }
+
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload =
+        function(e) {
+
+            try {
+
+                const data =
+                    JSON.parse(
+                        e.target.result
+                    );
+
+
+                importedGeoJSON.clearLayers();
+
+
+                const layer =
+                    L.geoJSON(
+                        data,
+                        {
+
+                            style:
+                            function(feature) {
+
+                                return {
+
+                                    color:
+                                        '#8b2020',
+
+                                    weight:
+                                        3,
+
+                                    fillColor:
+                                        '#c09d57',
+
+                                    fillOpacity:
+                                        0.30
+
+                                };
+
+                            },
+
+
+                            pointToLayer:
+                            function(
+                                feature,
+                                latlng
+                            ) {
+
+                                return L.circleMarker(
+                                    latlng,
+                                    {
+
+                                        radius:
+                                            7,
+
+                                        color:
+                                            '#8b2020',
+
+                                        weight:
+                                            2,
+
+                                        fillColor:
+                                            '#c09d57',
+
+                                        fillOpacity:
+                                            0.85
+
+                                    }
+                                );
+
+                            },
+
+
+                            onEachFeature:
+                            function(
+                                feature,
+                                layer
+                            ) {
+
+                                if (
+                                    feature.properties
+                                ) {
+
+                                    let html =
+                                        '<strong>GeoJSON objektum</strong>';
+
+
+                                    Object.keys(
+                                        feature.properties
+                                    ).forEach(
+                                        function(key) {
+
+                                            html +=
+                                                '<br><strong>' +
+                                                key +
+                                                ':</strong> ' +
+                                                feature.properties[key];
+
+                                        }
+                                    );
+
+
+                                    layer.bindPopup(
+                                        html
+                                    );
+
+                                }
+
+                            }
+
+                        }
+                    );
+
+
+                importedGeoJSON.addLayer(
+                    layer
+                );
+
+
+                map.fitBounds(
+                    layer.getBounds(),
+                    {
+                        padding:
+                            [30, 30]
+                    }
+                );
+
+
+                alert(
+                    'A GeoJSON fájl sikeresen betöltve.'
+                );
+
+
+            }
+
+            catch(error) {
+
+                console.error(
+                    error
+                );
+
+
+                alert(
+                    'Hiba a GeoJSON fájl beolvasásakor.'
+                );
+
+            }
+
+        };
+
+
+        reader.readAsText(
+            file
+        );
+
+    }
+);
+
+
+/* =====================================================
+   ÖSSZES GEOJSON EXPORT
+===================================================== */
+
+function geojsonExport() {
+
+
+    const drawn =
+        drawnItems.toGeoJSON();
+
+
+    const imported =
+        importedGeoJSON.toGeoJSON();
+
+
+    const allFeatures = [];
+
+
+    if (
+        drawn &&
+        drawn.features
+    ) {
+
+        drawn.features.forEach(
+            function(feature) {
+
+                allFeatures.push(
+                    feature
+                );
+
+            }
+        );
+
+    }
+
+
+    if (
+        imported &&
+        imported.features
+    ) {
+
+        imported.features.forEach(
+            function(feature) {
+
+                allFeatures.push(
+                    feature
+                );
+
+            }
+        );
+
+    }
+
+
+    const finalGeoJSON = {
+
+        type:
+            'FeatureCollection',
+
+        features:
+            allFeatures
+
+    };
+
+
+    if (
+        finalGeoJSON.features.length === 0
+    ) {
+
+        alert(
+            'Nincs exportálható objektum a térképen.'
+        );
+
+        return;
+
+    }
+
+
+    const json =
+        JSON.stringify(
+            finalGeoJSON,
+            null,
+            2
+        );
+
+
+    const blob =
+        new Blob(
+            [json],
+            {
+                type:
+                    'application/geo+json'
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            'a'
+        );
+
+
+    const date =
+        new Date();
+
+
+    const dateString =
+        date.getFullYear() +
+        '-' +
+        String(
+            date.getMonth() + 1
+        ).padStart(2, '0') +
+        '-' +
+        String(
+            date.getDate()
+        ).padStart(2, '0');
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        'karpatalja-atlasz-' +
+        dateString +
+        '.geojson';
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    document.body.removeChild(
+        link
+    );
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+/* =====================================================
+   BAL FELSŐ GEOJSON VEZÉRLŐ
+===================================================== */
+
+const geojsonControl =
+    L.control({
+        position:
+            'topleft'
+    });
+
+
+geojsonControl.onAdd =
+function() {
+
+    const container =
+        L.DomUtil.create(
+            'div',
+            'geojson-control'
+        );
+
+
+    const importButton =
+        L.DomUtil.create(
+            'button',
+            'import-button',
+            container
+        );
+
+
+    importButton.innerHTML =
+        '📥 Import GeoJSON';
+
+
+    importButton.type =
+        'button';
+
+
+    importButton.onclick =
+        function() {
+
+            importGeoJSON();
+
+        };
+
+
+    const exportButton =
+        L.DomUtil.create(
+            'button',
+            'export-button',
+            container
+        );
+
+
+    exportButton.innerHTML =
+        '📤 Export GeoJSON';
+
+
+    exportButton.type =
+        'button';
+
+
+    exportButton.onclick =
+        function() {
+
+            geojsonExport();
+
+        };
+
+
+    L.DomEvent.disableClickPropagation(
+        container
+    );
+
+
+    return container;
+
+};
+
+
+geojsonControl.addTo(
+    map
+);
+
+
+/* =====================================================
+   KÉSZ
+===================================================== */
+
+console.log(
+    'Kárpátalja interaktív földrajzi atlasz betöltve.'
+);
+
+</script>
+
+
+</body>
+
+</html>

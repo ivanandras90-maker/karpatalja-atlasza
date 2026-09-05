@@ -1,0 +1,2 @@
+/* Shared map-page safety defaults. Map pages keep their original embedded map styling. */
+.leaflet-container{font-family:Arial,Helvetica,sans-serif}.map-shell{min-height:100vh}.hidden{display:none!important}
