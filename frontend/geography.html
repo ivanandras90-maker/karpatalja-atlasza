@@ -1381,6 +1381,11 @@ document.addEventListener("click",function(event){
 .feature-editor-close{
     width:28px;height:28px;border:1px solid #c09d57;border-radius:5px;background:transparent;color:#fff;cursor:pointer;font-size:16px
 }
+.feature-editor-settings .fe-atlas-button,.feature-editor-settings .fe-atlas-save,.feature-editor-settings .fe-atlas-delete{border:1px solid #b8954d;border-radius:5px;padding:5px 7px;cursor:pointer;font:700 9px Arial,sans-serif}
+.feature-editor-settings .fe-atlas-button{background:#17374d;color:#fff}
+.feature-editor-settings .fe-atlas-save{background:#2d7b4d;color:#fff}
+.feature-editor-settings .fe-atlas-delete{background:#7b2525;color:#fff}
+.feature-editor-settings .fe-atlas-button:hover,.feature-editor-settings .fe-atlas-save:hover,.feature-editor-settings .fe-atlas-delete:hover{filter:brightness(1.08)}
 .feature-editor-grid{
     display:grid;
     grid-template-columns:1.35fr 1fr;
@@ -4203,7 +4208,7 @@ featureEditorPanel.onAdd=function(){
     const div=L.DomUtil.create("div","feature-editor-panel");
     div.id="featureEditorPanel";
     div.hidden=true;
-    div.innerHTML=`<div class="feature-editor-titlebar"><div class="feature-editor-titlebar-main"><strong>✏️ DRAW FEATURE EDITOR</strong><br><small>Rajzolt objektumok teljes beállítása · attribútumok · koordináták · mérés · terepi metaadat · Excel Join</small><div class="feature-editor-settings"><span class="fe-setting-label">⚙ Beállítások:</span><label>Vonal <input id="featureDraftColor" type="color" value="#17374d" title="Rajzolási szín"></label><label>Kitöltés <input id="featureDraftFill" type="color" value="#c09d57" title="Kitöltési szín"></label><label>Vastagság <input id="featureDraftWeight" type="number" min="1" max="20" step="1" value="4"></label><label>Stílus <select id="featureDraftDash"><option value="">Folytonos</option><option value="8 6">Szaggatott</option><option value="2 6">Pontozott</option></select></label><label>Hossz <select id="featureLengthUnit"><option value="cm">cm</option><option value="m" selected>m</option><option value="km">km</option><option value="mi">mérföld</option></select></label><label>Terület <select id="featureAreaUnit"><option value="cm2">cm²</option><option value="m2" selected>m²</option><option value="are">ár</option><option value="ha">hektár</option><option value="km2">km²</option></select></label><button type="button" class="fe-column-button" id="featureAddColumn">＋ Oszlop</button><button type="button" class="fe-join-button" id="featureJoinExcel">🔗 Join Excel</button><input type="file" id="featureEditorJoinFileInput" accept=".xlsx,.xls,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"></div><div id="featureJoinStatus" class="feature-editor-join-status"></div></div><div class="feature-editor-titlebar-actions"><button type="button" class="feature-editor-collapse" id="featureEditorCollapse" title="Draw Feature Editor összecsukása">▾</button><button type="button" class="feature-editor-close" id="featureEditorClose">×</button></div></div><div class="feature-editor-grid"><div class="feature-editor-list" id="featureEditorList"></div><div class="feature-editor-detail" id="featureEditorDetail"><div class="feature-editor-empty">Kattints egy objektum sorára a részletes adatok megnyitásához.</div></div></div>`;
+    div.innerHTML=`<div class="feature-editor-titlebar"><div class="feature-editor-titlebar-main"><strong>✏️ DRAW FEATURE EDITOR</strong><br><small>Rajzolt objektumok teljes beállítása · attribútumok · koordináták · mérés · terepi metaadat · Excel Join</small><div class="feature-editor-settings"><span class="fe-setting-label">⚙ Beállítások:</span><label>Vonal <input id="featureDraftColor" type="color" value="#17374d" title="Rajzolási szín"></label><label>Kitöltés <input id="featureDraftFill" type="color" value="#c09d57" title="Kitöltési szín"></label><label>Vastagság <input id="featureDraftWeight" type="number" min="1" max="20" step="1" value="4"></label><label>Stílus <select id="featureDraftDash"><option value="">Folytonos</option><option value="8 6">Szaggatott</option><option value="2 6">Pontozott</option></select></label><label>Hossz <select id="featureLengthUnit"><option value="cm">cm</option><option value="m" selected>m</option><option value="km">km</option><option value="mi">mérföld</option></select></label><label>Terület <select id="featureAreaUnit"><option value="cm2">cm²</option><option value="m2" selected>m²</option><option value="are">ár</option><option value="ha">hektár</option><option value="km2">km²</option></select></label><button type="button" class="fe-column-button" id="featureAddColumn">＋ Oszlop</button><button type="button" class="fe-join-button" id="featureJoinExcel">🔗 Join Excel</button><button type="button" class="fe-atlas-button" id="drawChooseAtlasFolder">📁 Atlasz mappa</button><button type="button" class="fe-atlas-save" id="drawSaveAtlas">💾 Mentés az Atlaszba</button><button type="button" class="fe-atlas-delete" id="drawDeleteAtlas">🗑️ Réteg törlése</button><input type="file" id="featureEditorJoinFileInput" accept=".xlsx,.xls,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"></div><div id="featureJoinStatus" class="feature-editor-join-status"></div></div><div class="feature-editor-titlebar-actions"><button type="button" class="feature-editor-collapse" id="featureEditorCollapse" title="Draw Feature Editor összecsukása">▾</button><button type="button" class="feature-editor-close" id="featureEditorClose">×</button></div></div><div class="feature-editor-grid"><div class="feature-editor-list" id="featureEditorList"></div><div class="feature-editor-detail" id="featureEditorDetail"><div class="feature-editor-empty">Kattints egy objektum sorára a részletes adatok megnyitásához.</div></div></div>`;
     setTimeout(()=>{
         const close=div.querySelector("#featureEditorClose");
         if(close) close.onclick=()=>div.hidden=true;
@@ -4217,6 +4222,14 @@ featureEditorPanel.onAdd=function(){
 };
 featureEditorPanel.addTo(map);
 bindFeatureEditorSettings();
+setTimeout(()=>{
+    const choose=document.getElementById("drawChooseAtlasFolder");
+    const save=document.getElementById("drawSaveAtlas");
+    const del=document.getElementById("drawDeleteAtlas");
+    if(choose) choose.onclick=()=>lfeChooseAtlasFolder();
+    if(save) save.onclick=()=>saveDrawToAtlas();
+    if(del) del.onclick=()=>deleteDrawFromAtlas();
+},0);
 
 const headerResearchMenuButton=document.getElementById("headerResearchMenuButton");
 const headerResearchMenu=document.getElementById("headerResearchMenu");
@@ -4817,60 +4830,129 @@ function openSaveExportDialog(){
     };
 }
 
-async function addImportedGeoJSON(data,label="Importált GeoJSON", openEditor=true, preferredName=null){
-    const payload=Array.isArray(data)?{type:"FeatureCollection",features:data.flatMap(d=>d.features||[])}:data;
+async function addImportedGeoJSON(data,label="Importált GeoJSON",openEditor=true,preferredName=null){
+    /*
+     * ROBUSZTUS GEOJSON IMPORT
+     * A GeoJSON réteg közvetlenül egy Leaflet GeoJSON layer lesz.
+     * Nem másoljuk át egy másik LayerGroup-ba, mert az korábbi verzióban
+     * bizonyos Feature / MultiGeometry eseteknél láthatatlan réteget okozhatott.
+     */
+    let payload=data;
+
+    if(Array.isArray(payload)){
+        const features=[];
+        payload.forEach(item=>{
+            if(!item) return;
+            if(item.type==="FeatureCollection" && Array.isArray(item.features)) features.push(...item.features);
+            else if(item.type==="Feature") features.push(item);
+        });
+        payload={type:"FeatureCollection",features};
+    }
+
+    if(!payload || typeof payload!=="object") throw new Error("A GeoJSON tartalma nem érvényes JSON objektum.");
+    if(payload.type==="Feature") payload={type:"FeatureCollection",features:[payload]};
+
+    if(payload.type!=="FeatureCollection" && !payload.type?.includes("Geometry")){
+        throw new Error("A fájl nem érvényes GeoJSON Feature vagy FeatureCollection.");
+    }
+
     const sourceName=String(label||"Importált GeoJSON");
-    const importedGroup=L.layerGroup();
-    importedGroup._lfeRegistry=[];
-    const layer=L.geoJSON(payload,{
-        style:feature=>({color:feature?.properties?.stroke||"#8b2020",weight:Number(feature?.properties?.['stroke-width']||3),opacity:Number(feature?.properties?.['stroke-opacity']??1),fillColor:feature?.properties?.fill||"#c09d57",fillOpacity:Number(feature?.properties?.['fill-opacity']??.25)}),
-        pointToLayer:(feature,latlng)=>L.circleMarker(latlng,{radius:6,color:feature?.properties?.stroke||"#8b2020",weight:2,fillColor:feature?.properties?.fill||"#c09d57",fillOpacity:Number(feature?.properties?.['fill-opacity']??.8)}),
+    importedVectorNumber++;
+
+    const layerName=preferredName || (
+        importedVectorNumber===1 && sourceName==="GeoJSON"
+            ? `📥 ${sourceName}`
+            : `📥 ${sourceName} ${importedVectorNumber}`
+    );
+
+    const importedGroup=L.geoJSON(payload,{
+        style:feature=>({
+            color:feature?.properties?.stroke || "#8b2020",
+            weight:Math.max(0.01,Number(feature?.properties?.["stroke-width"] ?? 3) || 3),
+            opacity:Number(feature?.properties?.["stroke-opacity"] ?? 1),
+            fillColor:feature?.properties?.fill || "#c09d57",
+            fillOpacity:Number(feature?.properties?.["fill-opacity"] ?? .25)
+        }),
+        pointToLayer:(feature,latlng)=>L.circleMarker(latlng,{
+            radius:6,
+            color:feature?.properties?.stroke || "#8b2020",
+            weight:2,
+            fillColor:feature?.properties?.fill || "#c09d57",
+            fillOpacity:Number(feature?.properties?.["fill-opacity"] ?? .8)
+        }),
         onEachFeature:(feature,child)=>{
-            if(feature.properties){
-                const html=Object.entries(feature.properties).map(([k,v])=>`<b>${popupEsc(k)}</b>: ${popupEsc(v)}`).join("<br>");
-                if(html) child.bindPopup(`<div style="font:11px Arial,sans-serif">${html}</div>`);
+            child._lfeGroup=importedGroup;
+            child.feature=feature;
+            const props=feature?.properties;
+            if(props && typeof props==="object"){
+                const html=Object.entries(props)
+                    .map(([k,v])=>`<b>${popupEsc(k)}</b>: ${popupEsc(v)}`)
+                    .join("<br>");
+                if(html) child.bindPopup(`<div style="font:11px Arial,sans-serif;max-height:260px;overflow:auto">${html}</div>`);
             }
         }
     });
-    importedVectorNumber++;
-    const layerName = preferredName || (importedVectorNumber===1 && sourceName==="GeoJSON"
-        ? `📥 ${sourceName}`
-        : `📥 ${sourceName} ${importedVectorNumber}`);
 
     /*
-     * FONTOS: az L.geoJSON() eredménye egy FeatureGroup.
-     * Ha magát ezt a csoportot tesszük a Feature Editor registry-be,
-     * akkor az editor csak egyetlen "FeatureCollection" objektumot lát,
-     * ezért a GeoJSON feature-ek attribútumai nem jelennek meg.
-     *
-     * A tényleges child layereket regisztráljuk külön-külön, és az
-     * importedGroup közvetlen gyermekévé tesszük őket. Így minden
-     * GeoJSON Feature saját sor, saját geometry és saját properties lesz.
+     * Az L.geoJSON layer saját gyermekei maradnak benne.
+     * Így a térképre ténylegesen ugyanaz a GeoJSON layer kerül,
+     * amelyet a Leaflet létrehozott.
      */
     const featureLayers=[];
-    layer.eachLayer(child=>{
+    importedGroup.eachLayer(child=>{
         if(!child || typeof child.toGeoJSON!=="function") return;
         child._lfeGroup=importedGroup;
         featureLayers.push(child);
-        importedGroup.addLayer(child);
     });
     importedGroup._lfeRegistry=featureLayers;
-    importedVectorRegistry.push({key:`imported:${importedVectorNumber}`,name:layerName,group:importedGroup,sourceName});
-    importedVectorLayers.addLayer(importedGroup);
-    importedGroup.addTo(map);
-    layerControl.addOverlay(importedGroup,layerName);
-    if(typeof refreshLayerOpacityControl==="function") refreshLayerOpacityControl();
-    const bounds=layer.getBounds&&layer.getBounds();
-    if(bounds&&bounds.isValid()) map.fitBounds(bounds,{padding:[35,35]});
+    importedGroup._atlasImportedGeoJSON=true;
+    importedGroup._atlasSourceName=sourceName;
 
-    // Az újonnan megnyitott GeoJSON automatikusan a Layer Feature Editorba kerül.
-    // Először visszatöltjük a korábban mentett objektum- és feliratbeállításokat,
-    // majd az aktuálisan importált réteget választjuk ki.
+    importedVectorRegistry.push({
+        key:`imported:${importedVectorNumber}`,
+        name:layerName,
+        group:importedGroup,
+        sourceName,
+        imported:true
+    });
+
+    importedVectorLayers.addLayer(importedGroup);
+
+    /* EZ A FONTOS RÉSZ: a teljes GeoJSON réteg közvetlenül a térképre kerül. */
+    importedGroup.addTo(map);
+
+    if(layerControl && typeof layerControl.addOverlay==="function"){
+        layerControl.addOverlay(importedGroup,layerName);
+    }
+
+    if(typeof refreshLayerOpacityControl==="function") refreshLayerOpacityControl();
+
+    const bounds=importedGroup.getBounds?.();
+    if(bounds && bounds.isValid()){
+        map.fitBounds(bounds,{padding:[35,35],maxZoom:16});
+    }
+
+    /*
+     * Alapértelmezésben mindig látható legyen az újonnan importált réteg.
+     * A böngésző localStorage korábbi állapota csak akkor alkalmazható,
+     * ha ugyanaz a réteg már létezett és nem friss import.
+     */
+    featureLayers.forEach((child,index)=>{
+        const m=lfeMeta(child,index);
+        m.visible=true;
+        lfeApplyStyle(child);
+    });
+
     lfeState.layerKey=`imported:${importedVectorNumber}`;
     lfeState.selectedIndex=0;
     lfeState.search="";
-    if(typeof lfeLoadPersistent==="function") lfeLoadPersistent();
+
     if(openEditor && typeof lfeOpenEditor==="function") lfeOpenEditor();
+
+    /* A tartós rétegmanifestből csak a már elmentett rétegek állapotát töltsük vissza. */
+    if(typeof lfeLoadPersistentForCurrentLayer==="function"){
+        lfeLoadPersistentForCurrentLayer(lfeState.layerKey);
+    }
 }
 
 async function importKMLFile(file){
@@ -6966,10 +7048,16 @@ function lfeGuessLabelField(props){
 function lfeSetVisible(layer,visible){
     const m=lfeMeta(layer,0);
     m.visible=!!visible;
-    const group=layer._lfeGroup;
+    const group=layer?._lfeGroup;
     if(visible){
-        if(group && map.hasLayer(group) && !group.hasLayer(layer)) group.addLayer(layer);
-        else if(!group && !map.hasLayer(layer) && layer.addTo) layer.addTo(map);
+        // A GeoJSON importált rétege akkor is kerüljön vissza a térképre,
+        // ha a Leaflet Layer Control korábban levette a térképről.
+        if(group){
+            if(!map.hasLayer(group)) map.addLayer(group);
+            if(!group.hasLayer(layer)) group.addLayer(layer);
+        }else if(!map.hasLayer(layer) && layer.addTo){
+            layer.addTo(map);
+        }
     }else{
         if(group && group.hasLayer(layer)) group.removeLayer(layer);
         else if(!group && map.hasLayer(layer)) map.removeLayer(layer);
@@ -7261,6 +7349,7 @@ function lfeRenderDetail(){
             <div class="lfe-field"><label class="lfe-check"><input id="lfeDLabelVisible" type="checkbox" ${m.labelVisible?"checked":""}> Felirat látható</label></div>
         </div>
         <div class="lfe-actions">
+            <button type="button" id="lfeShowLayer">👁 Térképen</button>
             <button type="button" id="lfeZoomObject">🎯 Nézet</button>
             <button type="button" id="lfeSaveState">💾 Rétegállapot mentése</button>
             <button type="button" id="lfeExportLayer">📤 Réteg GeoJSON</button>
@@ -7297,9 +7386,22 @@ function lfeRenderDetail(){
     }
     root.querySelectorAll("input,select").forEach(el=>el.addEventListener("change",sync));
     root.querySelectorAll("input[type=color],input[type=number]").forEach(el=>el.addEventListener("input",sync));
+    root.querySelector("#lfeShowLayer").onclick=()=>{
+        lfeSetVisible(layer,true);
+        const group=layer._lfeGroup;
+        if(group && !map.hasLayer(group)) map.addLayer(group);
+        if(layer.bringToFront) layer.bringToFront();
+        if(layer instanceof L.Marker || layer instanceof L.CircleMarker){
+            map.setView(layer.getLatLng(),Math.max(map.getZoom(),12));
+        }else if(layer.getBounds?.().isValid()){
+            map.fitBounds(layer.getBounds(),{padding:[40,40],maxZoom:16});
+        }
+        lfeShowStatus("✅ A kiválasztott GeoJSON objektum megjelent a térképen.","success");
+    };
     root.querySelector("#lfeZoomObject").onclick=()=>{
-        if(layer instanceof L.Marker) map.setView(layer.getLatLng(),Math.max(map.getZoom(),12));
-        else if(layer.getBounds?.().isValid()) map.fitBounds(layer.getBounds(),{padding:[40,40]});
+        lfeSetVisible(layer,true);
+        if(layer instanceof L.Marker || layer instanceof L.CircleMarker) map.setView(layer.getLatLng(),Math.max(map.getZoom(),12));
+        else if(layer.getBounds?.().isValid()) map.fitBounds(layer.getBounds(),{padding:[40,40],maxZoom:16});
     };
     root.querySelector("#lfeSaveState").onclick=()=>lfeSavePersistent();
     root.querySelector("#lfeExportLayer").onclick=()=>lfeExportCurrentLayer();
@@ -7448,6 +7550,114 @@ async function lfeWriteAtlasManifest(data){
     atlasSavedLayerManifest=data;
 }
 
+async function saveDrawToAtlas(){
+    const objects=[...drawState.objects.values()];
+    if(!objects.length){
+        alert("Nincs menthető Draw objektum. Először rajzolj legalább egy pontot, vonalat vagy poligont.");
+        return;
+    }
+    if(!atlasProjectDirectoryHandle){
+        const ok=await lfeChooseAtlasFolder();
+        if(!ok) return;
+    }
+    try{
+        const filename="karpatalja-draw-objektumok.geojson";
+        const fc=buildFeatureCollection(objects);
+        // A Draw objektumok saját kutatási metaadatait is megőrizzük.
+        fc.name="Karpatalja_Draw_Kutatasi_Objektumok";
+        fc.features=objects.map(obj=>{
+            const feature=layerToFeature(obj.layer,obj);
+            feature.properties={
+                ...(feature.properties||{}),
+                __atlasDraw:{
+                    id:obj.id, type:obj.type, name:obj.name, category:obj.category||"",
+                    note:obj.note||"", operator:obj.operator||"", date:obj.date||"",
+                    accuracy:obj.accuracy||"", source:obj.source||"",
+                    style:obj.style||{}, customFields:obj.customFields||{}
+                }
+            };
+            return feature;
+        });
+        const file=await atlasProjectDirectoryHandle.getFileHandle(filename,{create:true});
+        const writable=await file.createWritable();
+        await writable.write(JSON.stringify(fc,null,2));
+        await writable.close();
+
+        const manifest=await lfeReadAtlasManifest();
+        const id=`draw:${filename}`;
+        const record={
+            id, name:"🔬 Draw kutatási objektumok", file:filename, path:filename,
+            type:"DrawGeoJSON", kind:"draw", source:"Draw Feature Editor", enabled:true,
+            description:"Tartósan az Atlasz projekt gyökerében tárolt rajzolt kutatási objektumok.",
+            updatedAt:new Date().toISOString()
+        };
+        const index=manifest.mapLayers.findIndex(x=>x?.id===id || x?.file===filename);
+        if(index>=0) manifest.mapLayers[index]=record;
+        else manifest.mapLayers.push(record);
+        await lfeWriteAtlasManifest(manifest);
+        atlasSavedLayerKeys.add(id);
+        lfeShowStatus(`✅ Draw objektumok mentve: ${filename} + data/atlasz.json`,"success");
+    }catch(e){
+        console.error(e);
+        lfeShowStatus(`❌ Draw Atlasz mentési hiba: ${e.message||e}`,"error");
+        alert(`A Draw objektumok Atlaszba mentése nem sikerült.\n\n${e.message||e}`);
+    }
+}
+
+async function deleteDrawFromAtlas(){
+    if(!atlasProjectDirectoryHandle){
+        const ok=await lfeChooseAtlasFolder();
+        if(!ok) return;
+    }
+    const filename="karpatalja-draw-objektumok.geojson";
+    if(!confirm(`Biztosan törlöd az Atlaszból a Draw kutatási réteget?\n\n${filename}\n\nA GeoJSON fájl és az atlasz.json bejegyzése is törlődik.`)) return;
+    try{
+        try{await atlasProjectDirectoryHandle.removeEntry(filename);}catch(e){if(e?.name!=="NotFoundError") throw e;}
+        const manifest=await lfeReadAtlasManifest();
+        manifest.mapLayers=(manifest.mapLayers||[]).filter(x=>x?.id!==`draw:${filename}` && x?.file!==filename);
+        await lfeWriteAtlasManifest(manifest);
+        atlasSavedLayerKeys.delete(`draw:${filename}`);
+        lfeShowStatus("✅ A tartós Draw réteg törölve az Atlaszból.","success");
+    }catch(e){
+        console.error(e);
+        lfeShowStatus(`❌ Draw törlési hiba: ${e.message||e}`,"error");
+        alert(`A Draw réteg törlése nem sikerült.\n\n${e.message||e}`);
+    }
+}
+
+async function loadAtlasSavedDrawLayer(){
+    try{
+        const manifest=await lfeReadAtlasManifest();
+        const item=(manifest.mapLayers||[]).find(x=>x?.kind==="draw" || x?.type==="DrawGeoJSON");
+        if(!item?.file) return;
+        const response=await fetch(`../${encodeURI(item.file)}`,{cache:"no-store"});
+        if(!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data=await response.json();
+        const features=Array.isArray(data?.features)?data.features:[];
+        features.forEach(feature=>{
+            const gj=L.geoJSON(feature);
+            gj.eachLayer(layer=>{
+                const meta=feature?.properties?.__atlasDraw||{};
+                const obj=ensureObjectMetadata(layer,meta.id||undefined);
+                Object.assign(obj,{
+                    name:meta.name||feature?.properties?.name||obj.name,
+                    category:meta.category||"", note:meta.note||"", operator:meta.operator||"",
+                    date:meta.date||"", accuracy:meta.accuracy||"", source:meta.source||"",
+                    style:meta.style||obj.style, customFields:meta.customFields||{}
+                });
+                setLayerStyle(layer,obj.style);
+                if(!drawnItems.hasLayer(layer)) drawnItems.addLayer(layer);
+                refreshLayerPopup(obj);
+            });
+        });
+        renderDrawResearchControl();
+        renderDrawFeatureEditor();
+        if(features.length) lfeShowStatus(`✅ Tartós Draw réteg betöltve: ${features.length} objektum.` ,"success");
+    }catch(e){
+        console.warn("Tartós Draw réteg nem tölthető be",e);
+    }
+}
+
 async function lfeSaveSelectedLayerToAtlas(){
     const entry=lfeSelectedImportedEntry();
     if(!entry){
@@ -7530,6 +7740,7 @@ async function loadAtlasSavedLayers(){
         const manifest=await lfeReadAtlasManifest();
         for(const item of manifest.mapLayers||[]){
             if(!item?.file) continue;
+            if(item.kind==="draw" || item.type==="DrawGeoJSON") continue;
             const id=String(item.id||`geojson:${item.file}`);
             if(atlasSavedLayerKeys.has(`loaded:${id}`)) continue;
             try{
@@ -7692,6 +7903,7 @@ if(typeof headerFeatureEditorButton!=="undefined" && headerFeatureEditorButton){
 
 /* A statikus rétegek betöltése után az állapot visszaállítható. */
 setTimeout(loadAtlasSavedLayers,900);
+setTimeout(loadAtlasSavedDrawLayer,1200);
 setTimeout(lfeLoadPersistent,1600);
 setTimeout(lfeLoadPersistent,3200);
 setTimeout(lfeLoadPersistent,6200);
