@@ -1523,6 +1523,12 @@ document.addEventListener("click",function(event){
     background:#fff;color:#26343d;font:11px Arial,sans-serif;
 }
 .lfe-toolbar input[type=search]{min-width:220px}
+.lfe-geojson-style-group{display:flex;align-items:center;gap:5px;padding:3px 6px;border:1px solid #d6c9ae;border-radius:6px;background:#f7f2e6}
+.lfe-geojson-style-group label{display:flex;align-items:center;gap:4px;white-space:nowrap}
+.lfe-geojson-style-group input[type=color]{width:27px;height:27px;padding:2px;border:1px solid #526b7a;border-radius:5px;background:#fff;cursor:pointer}
+.lfe-geojson-style-group input[type=number]{width:62px;padding:6px;border:1px solid #aaa;border-radius:5px;background:#fff;color:#26343d;font:11px Arial,sans-serif}
+.lfe-geojson-style-apply{background:#17374d!important;color:#fff!important}
+.lfe-geojson-style-apply:disabled{opacity:.45;cursor:not-allowed}
 .lfe-toolbar .lfe-count{margin-left:auto;color:#68747b;font:700 10px Arial,sans-serif}
 .lfe-toolbar .lfe-excel{background:#176b3a;border-color:#176b3a}
 .lfe-toolbar .lfe-export{background:#102638}
@@ -1627,6 +1633,56 @@ document.addEventListener("click",function(event){
     .lfe-toolbar .lfe-count{margin-left:0}
 }
 
+
+/* =====================================================
+   GEOJSON ÁTLÁTSZÓSÁG A TÉRKÉP FEJLÉCÉBEN
+===================================================== */
+.geojson-opacity-header-control{
+    display:inline-block;
+    width:min(720px,100%);
+    margin:8px 0 0;
+    background:#102638;
+    border:1px solid rgba(192,157,87,.72);
+    border-radius:7px;
+    color:#fff;
+    font:10px Arial,sans-serif;
+    vertical-align:top;
+}
+.geojson-opacity-header-control .atlas-opacity-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:7px 9px;
+    background:#102638;
+    border-bottom:1px solid rgba(216,184,106,.28);
+}
+.geojson-opacity-header-control .atlas-opacity-head strong{color:#d8b86a;font-size:11px}
+.geojson-opacity-header-control .atlas-opacity-body{
+    display:block;
+    max-height:220px;
+    overflow:auto;
+    padding:5px 9px;
+}
+.geojson-opacity-header-control:not(.has-layers) .atlas-opacity-body{padding:6px 9px;color:#b8c0c5}
+.geojson-opacity-header-control .atlas-opacity-empty{padding:2px 0}
+.geojson-opacity-header-control .atlas-opacity-row{
+    display:grid;
+    grid-template-columns:28px minmax(150px,1fr) minmax(130px,2fr) 48px;
+    align-items:center;
+    gap:8px;
+    padding:5px 0;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+.geojson-opacity-header-control .atlas-opacity-row:last-child{border-bottom:0}
+.geojson-opacity-header-control .atlas-opacity-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e4e9eb}
+.geojson-opacity-header-control .atlas-opacity-slider{width:100%;accent-color:#d8b86a;cursor:pointer}
+.geojson-opacity-header-control .atlas-opacity-value{color:#d8b86a;text-align:right;font-weight:800;font-size:10px}
+.geojson-opacity-header-control .atlas-layer-eye{width:27px;height:27px;border:1px solid rgba(255,255,255,.18);border-radius:5px;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;padding:0}
+.geojson-opacity-header-control .atlas-layer-eye:hover{background:rgba(216,184,106,.22);border-color:rgba(216,184,106,.65)}
+@media(max-width:700px){
+    .geojson-opacity-header-control .atlas-opacity-row{grid-template-columns:28px minmax(100px,1fr) minmax(90px,1.5fr) 45px}
+}
 </style>
 
 </head>
@@ -1730,6 +1786,13 @@ document.addEventListener("click",function(event){
         <button type="button" class="atlas-command-button feature-editor-header-button" id="headerLayerFeatureEditorButton" title="Betöltött GeoJSON és egyéb térképrétegek attribútumainak és megjelenésének szerkesztése">
             ⚙️ Réteg Feature Editor
         </button>
+    </div>
+    <div id="geojsonOpacityControl" class="geojson-opacity-header-control" aria-label="GeoJSON rétegek átlátszósága">
+        <div class="atlas-opacity-head">
+            <strong>◐ GeoJSON rétegek átlátszósága</strong>
+            <button type="button" class="atlas-opacity-toggle" id="geojsonOpacityToggle" title="GeoJSON átlátszóság panel">▾</button>
+        </div>
+        <div class="atlas-opacity-body"></div>
     </div>
     <p>
         Kárpátalja tematikus földrajzi atlasza a természetföldrajzi, társadalomföldrajzi, gazdaságföldrajzi és kutatási rétegek integrált rendszerével.
@@ -2051,85 +2114,104 @@ const layerControl = L.control.layers(
 ).addTo(map);
 
 /* =====================================================
-   ATLASZOSÍTÁS / RÉTEG ÁTLÁTSZÓSÁG
-   Base map + GeoJSON + vektoros és raszteres rétegek
+   GEOJSON RÉTEG ÁTLÁTSZÓSÁG — CSAK A BETÖLTÖTT GEOJSON RÉTEGEKHEZ
+   A vezérlő a térkép fejlécében jelenik meg. Az OSM, OpenTopoMap és
+   a beépített tematikus rétegek átlátszóságát ez a vezérlő NEM módosítja.
 ===================================================== */
 const layerOpacityState = new WeakMap();
 
-function setLayerOpacityRecursive(layer,opacity){
-    const value=Math.max(0,Math.min(1,Number(opacity)||0));
-    if(!layer) return;
-    if(layer.setOpacity){
-        try{layer.setOpacity(value);}catch(e){}
-    }
-    if(layer.setStyle){
-        try{
-            const style={opacity:value};
-            if(layer.options && layer.options.fillOpacity!=null) style.fillOpacity=value;
-            layer.setStyle(style);
-        }catch(e){}
-    }
-    if(layer.eachLayer) layer.eachLayer(child=>setLayerOpacityRecursive(child,value));
-    if(layer._layers){
-        Object.values(layer._layers).forEach(child=>{
-            if(child && child!==layer) setLayerOpacityRecursive(child,value);
-        });
-    }
+function clampOpacity(value){
+    const n=Number(value);
+    return Number.isFinite(n)?Math.max(0,Math.min(1,n)):1;
 }
 
 function getLayerOpacity(layer){
     if(layerOpacityState.has(layer)) return layerOpacityState.get(layer);
-    const value=Number(layer?.options?.opacity);
-    return Number.isFinite(value)?value:1;
-}
-
-function layerOpacityTarget(layer){
-    if(layer?.eachLayer) return layer;
-    return layer;
-}
-
-let layerOpacityControl=null;
-
-function layerOpacityEntries(){
-    const result=[];
-    Object.entries(baseMaps).forEach(([name,layer])=>result.push({key:`base:${name}`,name,layer,kind:"base"}));
-    Object.entries(overlays).forEach(([name,layer])=>result.push({key:`overlay:${name}`,name,layer,kind:"overlay"}));
-    if(typeof importedVectorRegistry!=="undefined") importedVectorRegistry.forEach(item=>result.push({key:item.key,name:item.name,layer:item.group,kind:"geojson"}));
-    if(typeof importedRasterLayers!=="undefined" && importedRasterLayers) result.push({key:"raster:imported",name:"🛰️ Importált raszterrétegek",layer:importedRasterLayers,kind:"raster"});
+    const value=Number(layer?._atlasOpacity);
+    const result=Number.isFinite(value)?clampOpacity(value):1;
+    if(layer) layerOpacityState.set(layer,result);
     return result;
 }
 
+function applyGeoJSONLayerOpacity(group,opacity){
+    if(!group) return;
+    const value=clampOpacity(opacity);
+    group._atlasOpacity=value;
+    layerOpacityState.set(group,value);
+
+    const children=Array.isArray(group._lfeRegistry)
+        ? group._lfeRegistry
+        : (group.eachLayer ? (()=>{const a=[];group.eachLayer(x=>a.push(x));return a;})() : []);
+
+    children.forEach((layer,index)=>{
+        if(!layer) return;
+        const m=(typeof lfeMeta==="function") ? lfeMeta(layer,index) : null;
+        const baseOpacity=clampOpacity(m?.opacity ?? layer.options?.opacity ?? 1);
+        const baseFillOpacity=clampOpacity(m?.fillOpacity ?? layer.options?.fillOpacity ?? .25);
+        if(layer.setStyle){
+            try{
+                layer.setStyle({
+                    opacity:baseOpacity*value,
+                    fillOpacity:baseFillOpacity*value
+                });
+            }catch(e){}
+        }
+        if(layer instanceof L.Marker && layer.options){
+            layer.options.opacity=baseOpacity*value;
+        }
+    });
+}
+
+function layerOpacityEntries(){
+    if(typeof importedVectorRegistry==="undefined") return [];
+    return importedVectorRegistry
+        .filter(item=>item?.group)
+        .map(item=>({
+            key:item.key,
+            name:item.name,
+            layer:item.group,
+            group:item.group,
+            kind:"geojson"
+        }));
+}
+
 function refreshLayerOpacityControl(){
-    if(!layerOpacityControl) return;
-    const root=layerOpacityControl.getContainer();
+    const root=document.getElementById("geojsonOpacityControl");
     if(!root) return;
     const body=root.querySelector(".atlas-opacity-body");
     if(!body) return;
-    body.innerHTML=layerOpacityEntries().map((entry,i)=>{
-        const value=Math.round(getLayerOpacity(entry.layer)*100);
-        const isGeoJSON = entry.kind === "geojson";
-        const visible = isGeoJSON ? (entry.layer._atlasVisible !== false && map.hasLayer(entry.layer)) : true;
-        const eye = isGeoJSON ? `<button type="button" class="atlas-layer-eye ${visible ? "is-on" : "is-off"}" data-visibility-index="${i}" title="${visible ? "Réteg elrejtése" : "Réteg megjelenítése"}" aria-label="${visible ? "Réteg elrejtése" : "Réteg megjelenítése"}">${visible ? "👁️" : "🚫"}</button>` : "";
-        return `<div class="atlas-opacity-row ${isGeoJSON ? "is-geojson" : ""}" data-opacity-key="${popupEsc(entry.key)}">
-            ${eye}
+
+    const entries=layerOpacityEntries();
+    if(!entries.length){
+        body.innerHTML=`<div class="atlas-opacity-empty">Nincs betöltött GeoJSON réteg.</div>`;
+        root.classList.remove("has-layers");
+        return;
+    }
+
+    root.classList.add("has-layers");
+    body.innerHTML=entries.map((entry,i)=>{
+        const value=Math.round(getLayerOpacity(entry.group)*100);
+        const visible=entry.group._atlasVisible!==false && map.hasLayer(entry.group);
+        return `<div class="atlas-opacity-row is-geojson">
+            <button type="button" class="atlas-layer-eye ${visible?"is-on":"is-off"}" data-visibility-index="${i}" title="${visible?"Réteg elrejtése":"Réteg megjelenítése"}" aria-label="${visible?"Réteg elrejtése":"Réteg megjelenítése"}">${visible?"👁️":"🚫"}</button>
             <div class="atlas-opacity-name" title="${popupEsc(entry.name)}">${popupEsc(entry.name)}</div>
-            <input class="atlas-opacity-slider" type="range" min="0" max="100" step="1" value="${value}" data-opacity-index="${i}" aria-label="Réteg átlátszósága">
+            <input class="atlas-opacity-slider" type="range" min="0" max="100" step="1" value="${value}" data-opacity-index="${i}" aria-label="${popupEsc(entry.name)} GeoJSON átlátszósága">
             <output class="atlas-opacity-value">${value}%</output>
         </div>`;
     }).join("");
+
     body.querySelectorAll(".atlas-layer-eye").forEach(button=>{
         button.onclick=()=>{
             const entry=layerOpacityEntries()[Number(button.dataset.visibilityIndex)];
-            if(!entry || entry.kind!=="geojson") return;
-            const visible = entry.layer._atlasVisible !== false && map.hasLayer(entry.layer);
-            entry.layer._atlasVisible = !visible;
-            if(entry.layer._atlasVisible){
-                entry.layer.addTo(map);
+            if(!entry) return;
+            const visible=entry.group._atlasVisible!==false && map.hasLayer(entry.group);
+            entry.group._atlasVisible=!visible;
+            if(entry.group._atlasVisible){
+                if(!map.hasLayer(entry.group)) entry.group.addTo(map);
             }else{
-                map.removeLayer(entry.layer);
+                if(map.hasLayer(entry.group)) map.removeLayer(entry.group);
             }
-            refreshLayerOpacityControl();
-            if(typeof lfeSavePersistent === "function") lfeSavePersistent();
+            refreshGeoJSONOpacityControl();
         };
     });
 
@@ -2138,35 +2220,32 @@ function refreshLayerOpacityControl(){
             const entry=layerOpacityEntries()[Number(input.dataset.opacityIndex)];
             if(!entry) return;
             const value=Number(input.value)/100;
-            layerOpacityState.set(entry.layer,value);
-            setLayerOpacityRecursive(entry.layer,value);
-            if(entry.kind==="geojson"){
-                entry._atlasOpacity=value;
-                entry.group._atlasOpacity=value;
-            }
+            applyGeoJSONLayerOpacity(entry.group,value);
+            entry.group._atlasOpacity=value;
             const out=input.parentElement.querySelector(".atlas-opacity-value");
             if(out) out.textContent=`${input.value}%`;
+        };
+        input.onchange=()=>{
+            /* A csúszka módosítása önmagában nem nyitja meg az Atlasz mappa-választót.
+               A végleges fájlba írás a "Mentés az Atlaszba" gombbal történik. */
         };
     });
 }
 
-layerOpacityControl=L.control({position:"topright"});
-layerOpacityControl.onAdd=function(){
-    const div=L.DomUtil.create("div","atlas-opacity-control");
-    div.innerHTML=`<div class="atlas-opacity-head"><strong>◐ Réteg átlátszóság</strong><button type="button" class="atlas-opacity-toggle" title="Réteg átlátszóság panel">▾</button></div><div class="atlas-opacity-body"></div>`;
-    const body=div.querySelector(".atlas-opacity-body");
-    const toggle=div.querySelector(".atlas-opacity-toggle");
-    toggle.onclick=()=>{
-        const hidden=body.style.display==="none";
-        body.style.display=hidden?"block":"none";
-        toggle.textContent=hidden?"▾":"▸";
+function refreshGeoJSONOpacityControl(){
+    refreshLayerOpacityControl();
+}
+
+const geojsonOpacityToggle=document.getElementById("geojsonOpacityToggle");
+const geojsonOpacityBody=document.querySelector("#geojsonOpacityControl .atlas-opacity-body");
+if(geojsonOpacityToggle && geojsonOpacityBody){
+    geojsonOpacityToggle.onclick=()=>{
+        const hidden=geojsonOpacityBody.style.display==="none";
+        geojsonOpacityBody.style.display=hidden?"block":"none";
+        geojsonOpacityToggle.textContent=hidden?"▾":"▸";
     };
-    L.DomEvent.disableClickPropagation(div);
-    setTimeout(refreshLayerOpacityControl,0);
-    return div;
-};
-layerOpacityControl.addTo(map);
-if(layerOpacityControl.getContainer?.()) layerOpacityControl.getContainer().style.display="block";
+}
+setTimeout(refreshGeoJSONOpacityControl,0);
 
 /* =====================================================
    KATEGORIZÁLT FÖLDRAJZI KUTATÁSI RÉTEGKEZELŐ
@@ -4934,20 +5013,35 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON",openEditor=tru
             : `📥 ${sourceName} ${importedVectorNumber}`
     );
 
+    const geoJsonStyleValue=(feature,key,fallback)=>{
+        const p=feature?.properties||{};
+        const v=p[key];
+        return v==null || v==="" || String(v).toLowerCase()==="none" ? fallback : v;
+    };
+    const geoJsonNumber=(feature,keys,fallback,min,max)=>{
+        const p=feature?.properties||{};
+        for(const key of keys){
+            const n=Number(p[key]);
+            if(Number.isFinite(n)) return Math.max(min,Math.min(max,n));
+        }
+        return fallback;
+    };
+
     const importedGroup=L.geoJSON(payload,{
         style:feature=>({
-            color:feature?.properties?.stroke || "#8b2020",
-            weight:Math.max(0.01,Number(feature?.properties?.["stroke-width"] ?? 3) || 3),
-            opacity:Number(feature?.properties?.["stroke-opacity"] ?? 1),
-            fillColor:feature?.properties?.fill || "#c09d57",
-            fillOpacity:Number(feature?.properties?.["fill-opacity"] ?? .25)
+            color:String(geoJsonStyleValue(feature,"stroke","#8b2020")),
+            weight:geoJsonNumber(feature,["stroke-width","strokeWidth","weight"],3,0.5,20),
+            opacity:geoJsonNumber(feature,["stroke-opacity","strokeOpacity","opacity"],1,0,1),
+            fillColor:String(geoJsonStyleValue(feature,"fill","#c09d57")),
+            fillOpacity:geoJsonNumber(feature,["fill-opacity","fillOpacity"],.25,0,1)
         }),
         pointToLayer:(feature,latlng)=>L.circleMarker(latlng,{
-            radius:6,
-            color:feature?.properties?.stroke || "#8b2020",
-            weight:2,
-            fillColor:feature?.properties?.fill || "#c09d57",
-            fillOpacity:Number(feature?.properties?.["fill-opacity"] ?? .8)
+            radius:geoJsonNumber(feature,["radius","point-radius"],6,0.01,40),
+            color:String(geoJsonStyleValue(feature,"stroke","#8b2020")),
+            weight:geoJsonNumber(feature,["stroke-width","strokeWidth","weight"],2,0.5,20),
+            opacity:geoJsonNumber(feature,["stroke-opacity","strokeOpacity","opacity"],1,0,1),
+            fillColor:String(geoJsonStyleValue(feature,"fill","#c09d57")),
+            fillOpacity:geoJsonNumber(feature,["fill-opacity","fillOpacity"],.8,0,1)
         }),
         onEachFeature:(feature,child)=>{
             /*
@@ -4983,7 +5077,8 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON",openEditor=tru
     importedGroup._atlasSourceName=sourceName;
     importedGroup._atlasLayerName=layerName;
     importedGroup._atlasVisible=true;
-    importedGroup._atlasOpacity=getLayerOpacity(importedGroup);
+    importedGroup._atlasOpacity=1;
+    layerOpacityState.set(importedGroup,1);
 
     importedVectorRegistry.push({
         key:`imported:${importedVectorNumber}`,
@@ -5002,7 +5097,7 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON",openEditor=tru
         layerControl.addOverlay(importedGroup,layerName);
     }
 
-    if(typeof refreshLayerOpacityControl==="function") refreshLayerOpacityControl();
+    if(typeof refreshLayerOpacityControl==="function") refreshGeoJSONOpacityControl();
 
     const bounds=importedGroup.getBounds?.();
     if(bounds && bounds.isValid()){
@@ -5019,6 +5114,8 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON",openEditor=tru
         m.visible=true;
         lfeApplyStyle(child);
     });
+    applyGeoJSONLayerOpacity(importedGroup,1);
+    refreshGeoJSONOpacityControl();
 
     lfeState.layerKey=`imported:${importedVectorNumber}`;
     lfeState.selectedIndex=0;
@@ -7160,12 +7257,13 @@ function lfeApplyPointStyle(layer){
     if(!(layer instanceof L.CircleMarker)) return;
     const m=lfeMeta(layer,0);
     const r=lfePointRadius(layer);
+    const groupOpacity=layer?._lfeGroup ? getLayerOpacity(layer._lfeGroup) : 1;
     layer.setStyle({
         color:m.color,
         fillColor:m.fillColor,
-        weight:m.weight,
-        opacity:m.opacity,
-        fillOpacity:m.fillOpacity,
+        weight:Math.max(0.5,Number(m.weight)||0.5),
+        opacity:clampOpacity(m.opacity)*groupOpacity,
+        fillOpacity:clampOpacity(m.fillOpacity)*groupOpacity,
         radius:r
     });
 }
@@ -7191,12 +7289,13 @@ function lfeApplyStyle(layer){
         return;
     }
     if(layer.setStyle){
+        const groupOpacity=layer?._lfeGroup ? getLayerOpacity(layer._lfeGroup) : 1;
         layer.setStyle({
             color:m.color,
             fillColor:m.fillColor,
-            weight:m.weight,
-            opacity:m.opacity,
-            fillOpacity:m.fillOpacity
+            weight:Math.max(0.5,Number(m.weight)||0.5),
+            opacity:clampOpacity(m.opacity)*groupOpacity,
+            fillOpacity:clampOpacity(m.fillOpacity)*groupOpacity
         });
     }
 }
@@ -7484,6 +7583,49 @@ function lfeRenderDetail(){
     root.querySelector("#lfeExportLayer").onclick=()=>lfeExportCurrentLayer();
 }
 
+function lfeIsImportedEntry(entry){
+    return !!entry && String(entry.key||"").startsWith("imported:") && !!entry.group;
+}
+
+function lfeSyncGeoJSONStyleToolbar(){
+    const modal=document.getElementById("layerFeatureEditorModal");
+    if(!modal) return;
+    const entry=lfeGetEntry();
+    const enabled=lfeIsImportedEntry(entry);
+    const color=modal.querySelector("#lfeLayerStrokeColor");
+    const fill=modal.querySelector("#lfeLayerFillColor");
+    const weight=modal.querySelector("#lfeLayerStrokeWeight");
+    const apply=modal.querySelector("#lfeApplyLayerStyle");
+    [color,fill,weight,apply].forEach(el=>{if(el) el.disabled=!enabled;});
+    if(!enabled) return;
+    const first=lfeChildren(entry.group)[0];
+    if(!first) return;
+    const m=lfeMeta(first,0);
+    if(color) color.value=m.color || "#8b2020";
+    if(fill) fill.value=m.fillColor || "#c09d57";
+    if(weight) weight.value=Math.max(.5,Math.min(20,Number(m.weight)||3));
+}
+
+function lfeApplyGeoJSONLayerStyleToAll(){
+    const entry=lfeGetEntry();
+    if(!lfeIsImportedEntry(entry)) return;
+    const modal=document.getElementById("layerFeatureEditorModal");
+    if(!modal) return;
+    const color=modal.querySelector("#lfeLayerStrokeColor")?.value || "#8b2020";
+    const fill=modal.querySelector("#lfeLayerFillColor")?.value || "#c09d57";
+    const weight=Math.max(.5,Math.min(20,Number(modal.querySelector("#lfeLayerStrokeWeight")?.value)||3));
+    lfeChildren(entry.group).forEach((layer,index)=>{
+        const m=lfeMeta(layer,index);
+        m.color=color;
+        m.fillColor=fill;
+        m.weight=weight;
+        lfeApplyStyle(layer);
+    });
+    applyGeoJSONLayerOpacity(entry.group,getLayerOpacity(entry.group));
+    lfeRender();
+    lfeShowStatus(`✅ GeoJSON stílus alkalmazva: ${color}, ${weight}px körvonal.`,"success");
+}
+
 function lfeOpenEditor(){
     let modal=document.getElementById("layerFeatureEditorModal");
     if(!modal){
@@ -7509,6 +7651,13 @@ function lfeOpenEditor(){
                 <label for="lfeLayerName">Atlasz réteg neve:</label>
                 <input id="lfeLayerName" type="text" maxlength="120" placeholder="Saját rétegnév…" aria-label="Atlasz réteg neve">
                 <button type="button" id="lfeRenameLayer">✏️ Név mentése</button>
+                <div class="lfe-geojson-style-group" title="Csak a betöltött GeoJSON réteg összes objektumára vonatkozik.">
+                    <strong style="font:700 10px Arial,sans-serif;color:#526573">GeoJSON stílus:</strong>
+                    <label>Vonal <input id="lfeLayerStrokeColor" type="color" value="#8b2020" aria-label="GeoJSON körvonal színe"></label>
+                    <label>Kitöltés <input id="lfeLayerFillColor" type="color" value="#c09d57" aria-label="GeoJSON kitöltés színe"></label>
+                    <label>Vastagság <input id="lfeLayerStrokeWeight" type="number" min="0.5" max="20" step="0.1" value="3" aria-label="GeoJSON körvonal vastagsága"></label>
+                    <button type="button" id="lfeApplyLayerStyle" class="lfe-geojson-style-apply">🎨 Alkalmazás minden objektumra</button>
+                </div>
                 <input id="lfeSearch" type="search" placeholder="Objektum / mező keresése…">
                 <span id="lfeCount" class="lfe-count"></span>
             </div>
@@ -7530,8 +7679,10 @@ function lfeOpenEditor(){
                 nameInput.value=entry?.name || "";
                 nameInput.disabled=!String(entry?.key||"").startsWith("imported:");
             }
+            lfeSyncGeoJSONStyleToolbar();
         };
         modal.querySelector("#lfeRenameLayer").onclick=()=>lfeRenameSelectedLayer();
+        modal.querySelector("#lfeApplyLayerStyle").onclick=()=>lfeApplyGeoJSONLayerStyleToAll();
         modal.querySelector("#lfeSearch").oninput=e=>{lfeState.search=e.target.value;lfeRender();};
         modal.querySelector("#lfeExcelButton").onclick=()=>lfeOpenExcelModal();
         modal.querySelector("#lfeChooseAtlasFolder").onclick=()=>lfeChooseAtlasFolder();
@@ -7550,6 +7701,7 @@ function lfeOpenEditor(){
         nameInput.value=currentEntry?.name || "";
         nameInput.disabled=!String(currentEntry?.key||"").startsWith("imported:");
     }
+    lfeSyncGeoJSONStyleToolbar();
     modal.style.display="flex";
     lfeRender();
 }
@@ -7626,7 +7778,7 @@ function lfeRenameSelectedLayer(){
     try{ layerControl.removeLayer(entry.group); }catch(e){}
     try{ layerControl.addOverlay(entry.group,name); }catch(e){}
 
-    refreshLayerOpacityControl();
+    refreshGeoJSONOpacityControl();
     lfeRender();
     input.value=name;
     lfeShowStatus(`✅ Rétegnév frissítve: ${name}`,"success");
@@ -7826,6 +7978,7 @@ async function lfeSaveSelectedLayerToAtlas(){
         entry.group._atlasVisible=visible;
         await lfeWriteAtlasManifest(manifest);
         atlasSavedLayerKeys.add(id);
+        refreshGeoJSONOpacityControl();
         lfeShowStatus(`✅ Mentve az Atlaszba: ${filename} + data/atlasz.json`,"success");
     }catch(e){
         console.error(e);
@@ -7884,10 +8037,11 @@ async function loadAtlasSavedLayers(){
                 if(loadedEntry && loadedEntry.group){
                     loadedEntry._atlasFile=item.file;
                     loadedEntry._atlasOpacity=Math.max(0,Math.min(1,Number(item.opacity ?? 1)));
+                    layerOpacityState.set(loadedEntry.group,loadedEntry._atlasOpacity);
                     loadedEntry.group._atlasLayerName=item.name||item.file;
                     loadedEntry.group._atlasVisible=item.visible!==undefined ? !!item.visible : (item.enabled!==false);
-                    layerOpacityState.set(loadedEntry.group,loadedEntry._atlasOpacity);
-                    setLayerOpacityRecursive(loadedEntry.group,loadedEntry._atlasOpacity);
+                    applyGeoJSONLayerOpacity(loadedEntry.group,loadedEntry._atlasOpacity);
+                    refreshGeoJSONOpacityControl();
                     if(loadedEntry.group._atlasVisible){
                         if(!map.hasLayer(loadedEntry.group)) loadedEntry.group.addTo(map);
                     }else if(map.hasLayer(loadedEntry.group)){
