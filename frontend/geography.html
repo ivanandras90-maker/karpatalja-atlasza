@@ -4745,19 +4745,18 @@ function openSaveExportDialog(){
 
 async function addImportedGeoJSON(data,label="Importált GeoJSON"){
     /*
-     * ROBUSZTUS GEOJSON IMPORT
-     * - Feature / FeatureCollection / Geometry támogatás
-     * - MultiLineString és MultiPolygon teljes kezelése
-     * - Leaflet clipping kikapcsolva (noClip), hogy a határvonal ne tűnjön el
-     *   a renderer vágása miatt
-     * - GeoJSON saját stroke/stroke-width/stroke-opacity értékeinek megtartása
-     * - biztonságos numerikus értékek és alapértelmezett stílusok
+     * STABIL LEAFLET GEOJSON IMPORT
+     * Egyetlen L.geoJSON réteg marad a térképen.
+     * A feature-eket nem mozgatjuk át másik LayerGroup-ba.
+     * Saját SVG renderer: zoomoláskor a Leaflet újrapozicionálja a teljes
+     * SVG réteget, ezért a geometria együtt mozog a térképpel.
      */
     if(!data || typeof data!=="object") throw new Error("A GeoJSON tartalma üres vagy érvénytelen.");
 
     let payload=data;
-    if(payload.type==="Feature") payload={type:"FeatureCollection",features:[payload]};
-    else if(payload.type && payload.type!=="FeatureCollection" && payload.coordinates){
+    if(payload.type==="Feature"){
+        payload={type:"FeatureCollection",features:[payload]};
+    }else if(payload.type && payload.type!=="FeatureCollection" && payload.coordinates){
         payload={type:"FeatureCollection",features:[{type:"Feature",properties:{},geometry:payload}]};
     }else if(Array.isArray(data)){
         const features=[];
@@ -4781,12 +4780,6 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
     payload={...payload,features:validFeatures};
 
     const sourceName=String(label||"Importált GeoJSON");
-    // A GeoJSON saját FeatureGroup-ként legyen a tényleges térképi réteg.
-    // Nem hozunk létre külön L.geoJSON réteget, majd nem mozgatjuk ki belőle
-    // a child layereket egy másik LayerGroup-ba, mert ez zoom/renderelési
-    // anomáliát okozhat. A Leaflet saját rendererét használjuk.
-    let importedGroup=null;
-
     const safeNumber=(value,fallback)=>{
         const n=Number(value);
         return Number.isFinite(n)?n:fallback;
@@ -4795,39 +4788,44 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
         const v=String(value??"").trim();
         return v||fallback;
     };
+
+    /*
+     * Fontos: a renderer itt jön létre, és az L.geoJSON teljes életciklusa
+     * alatt ugyanaz marad. Nem használunk vector-effectet, és nem mozgatjuk
+     * a létrehozott SVG pathokat másik LayerGroup-ba.
+     */
+    const importedRenderer=L.svg({padding:0.5});
     const styleForFeature=(feature)=>{
         const p=feature?.properties||{};
         return {
             color:safeColor(p.stroke,"#312E81"),
-            weight:Math.max(0.01,safeNumber(p["stroke-width"],2)),
+            weight:Math.max(0.1,safeNumber(p["stroke-width"],1)),
             opacity:Math.max(0,Math.min(1,safeNumber(p["stroke-opacity"],1))),
             fillColor:safeColor(p.fill,"#312E81"),
             fillOpacity:Math.max(0,Math.min(1,safeNumber(p["fill-opacity"],0.20))),
-            lineCap:"butt",
+            lineCap:"round",
             lineJoin:"round",
             smoothFactor:0,
-            noClip:true,
-            className:"atlas-imported-geojson"
+            renderer:importedRenderer
         };
     };
 
-    // A Leaflet alapértelmezett rendererét használjuk.
-    // Ez biztosítja, hogy a GeoJSON minden zoomnál együtt mozogjon a térképpel.
-    importedGroup=L.geoJSON(payload,{
+    const importedGroup=L.geoJSON(payload,{
+        renderer:importedRenderer,
         style:styleForFeature,
         pointToLayer:(feature,latlng)=>{
             const p=feature?.properties||{};
             return L.circleMarker(latlng,{
+                renderer:importedRenderer,
                 radius:Math.max(0.1,safeNumber(p["point-radius"],6)),
                 color:safeColor(p.stroke,"#312E81"),
-                weight:Math.max(0.01,safeNumber(p["stroke-width"],2)),
+                weight:Math.max(0.1,safeNumber(p["stroke-width"],1)),
                 opacity:Math.max(0,Math.min(1,safeNumber(p["stroke-opacity"],1))),
                 fillColor:safeColor(p.fill,"#312E81"),
                 fillOpacity:Math.max(0,Math.min(1,safeNumber(p["fill-opacity"],0.8)))
             });
         },
         onEachFeature:(feature,child)=>{
-            child.options.noClip=true;
             if(feature.properties){
                 const html=Object.entries(feature.properties)
                     .map(([k,v])=>`<b>${popupEsc(k)}</b>: ${popupEsc(v)}`)
@@ -4848,7 +4846,6 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
         child._lfeGroup=importedGroup;
         featureLayers.push(child);
     });
-
     if(!featureLayers.length) throw new Error("A GeoJSON geometriái nem rajzolhatók ki.");
 
     importedGroup._lfeRegistry=featureLayers;
@@ -4859,18 +4856,25 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
         sourceName,
         featureCount:featureLayers.length
     });
+
     importedVectorLayers.addLayer(importedGroup);
     importedGroup.addTo(map);
     layerControl.addOverlay(importedGroup,layerName);
     if(typeof refreshLayerOpacityControl==="function") refreshLayerOpacityControl();
 
+    /*
+     * Kényszerített redraw csak a zoom végén. Ez nem hoz létre új geometriát,
+     * csak a Leaflet saját SVG pathjait rajzolja újra az aktuális map view-ra.
+     */
+    importedGroup.on("zoomend",()=>{
+        importedGroup.eachLayer(child=>{
+            if(child && typeof child.redraw==="function") child.redraw();
+        });
+    });
+
     const bounds=importedGroup.getBounds&&importedGroup.getBounds();
     if(bounds&&bounds.isValid()){
-        map.fitBounds(bounds,{padding:[45,45],maxZoom:11});
-        setTimeout(()=>{
-            if(map&&bounds.isValid()) map.fitBounds(bounds,{padding:[45,45],maxZoom:11});
-            if(map&&typeof map.invalidateSize==="function") map.invalidateSize({pan:false});
-        },120);
+        map.fitBounds(bounds,{padding:[35,35],maxZoom:11});
     }
 
     lfeState.layerKey=`imported:${importedVectorNumber}`;
@@ -4879,7 +4883,6 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
     if(typeof lfeLoadPersistent==="function") lfeLoadPersistent();
     if(typeof lfeOpenEditor==="function") lfeOpenEditor();
 }
-
 async function importKMLFile(file){
     if(!window.toGeoJSON){throw new Error("A KML importáló motor nem töltődött be.");}
     const text=await file.text();
