@@ -4781,8 +4781,11 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
     payload={...payload,features:validFeatures};
 
     const sourceName=String(label||"Importált GeoJSON");
-    const importedGroup=L.layerGroup();
-    importedGroup._lfeRegistry=[];
+    // A GeoJSON saját FeatureGroup-ként legyen a tényleges térképi réteg.
+    // Nem hozunk létre külön L.geoJSON réteget, majd nem mozgatjuk ki belőle
+    // a child layereket egy másik LayerGroup-ba, mert ez zoom/renderelési
+    // anomáliát okozhat. A Leaflet saját rendererét használjuk.
+    let importedGroup=null;
 
     const safeNumber=(value,fallback)=>{
         const n=Number(value);
@@ -4800,7 +4803,7 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
             opacity:Math.max(0,Math.min(1,safeNumber(p["stroke-opacity"],1))),
             fillColor:safeColor(p.fill,"#312E81"),
             fillOpacity:Math.max(0,Math.min(1,safeNumber(p["fill-opacity"],0.20))),
-            lineCap:"round",
+            lineCap:"butt",
             lineJoin:"round",
             smoothFactor:0,
             noClip:true,
@@ -4808,8 +4811,9 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
         };
     };
 
-    const layer=L.geoJSON(payload,{
-        renderer:L.svg({padding:1}),
+    // A Leaflet alapértelmezett rendererét használjuk.
+    // Ez biztosítja, hogy a GeoJSON minden zoomnál együtt mozogjon a térképpel.
+    importedGroup=L.geoJSON(payload,{
         style:styleForFeature,
         pointToLayer:(feature,latlng)=>{
             const p=feature?.properties||{};
@@ -4839,11 +4843,10 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
         : `📥 ${sourceName} ${importedVectorNumber}`;
 
     const featureLayers=[];
-    layer.eachLayer(child=>{
+    importedGroup.eachLayer(child=>{
         if(!child || typeof child.toGeoJSON!=="function") return;
         child._lfeGroup=importedGroup;
         featureLayers.push(child);
-        importedGroup.addLayer(child);
     });
 
     if(!featureLayers.length) throw new Error("A GeoJSON geometriái nem rajzolhatók ki.");
@@ -4861,7 +4864,7 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
     layerControl.addOverlay(importedGroup,layerName);
     if(typeof refreshLayerOpacityControl==="function") refreshLayerOpacityControl();
 
-    const bounds=layer.getBounds&&layer.getBounds();
+    const bounds=importedGroup.getBounds&&importedGroup.getBounds();
     if(bounds&&bounds.isValid()){
         map.fitBounds(bounds,{padding:[45,45],maxZoom:11});
         setTimeout(()=>{
@@ -7601,4 +7604,4 @@ setTimeout(lfeLoadPersistent,6000);
 </html>
 
 <style id="atlas-final-ui-overrides">.draw-draft-style-control{display:none!important}</style>
-<style id="atlas-final-ui-overrides">.draw-draft-style-control{display:none!important}.atlas-imported-geojson{vector-effect:non-scaling-stroke}</style>
+<style id="atlas-final-ui-overrides">.draw-draft-style-control{display:none!important}</style>
