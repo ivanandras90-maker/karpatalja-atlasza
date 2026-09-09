@@ -1,0 +1,15 @@
+{
+  "version": "17.0",
+  "controlLayout": {
+    "headerHeight": 58,
+    "layers": "top-right",
+    "search": "top-right",
+    "zoom": "left-below-header",
+    "draw": "left-below-zoom"
+  },
+  "legacyControlsRemoved": [
+    "atlasLayerToggle",
+    "atlasLayerFlyout"
+  ],
+  "layerOpacity": true
+}

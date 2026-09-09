@@ -1,0 +1,2 @@
+KÁRPÁTALJA ATLASZ V36
+Raster Export: full-map rectangle selection mode.

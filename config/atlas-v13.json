@@ -1,0 +1,16 @@
+{
+  "version": "13.0",
+  "map": {
+    "continuousViewport": true,
+    "height": "100vh",
+    "whiteBottomStrip": false
+  },
+  "legacyMapReturnControl": "removed",
+  "legend": {
+    "dynamic": true,
+    "position": "bottom-right",
+    "tracksLeafletEvents": true,
+    "baseMapLabel": true
+  },
+  "header": "floats-above-map"
+}

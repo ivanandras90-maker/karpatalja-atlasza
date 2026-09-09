@@ -212,7 +212,7 @@ document.addEventListener("click",function(event){
    PREZI GOMB
 ===================================================== */
 
-.prezi-button {
+ .prezi-button {display:none!important;
     background: #c09d57 !important;
     color: #102638 !important;
     font-weight: bold !important;
@@ -1621,116 +1621,63 @@ document.addEventListener("click",function(event){
 
 </style>
 
+<link rel="stylesheet" href="css/v12-design.css">
+<link rel="stylesheet" href="css/atlas-ai.css">
+<link rel="stylesheet" href="css/v13-map.css">
+<link rel="stylesheet" href="css/v14-ui.css">
+<link rel="stylesheet" href="css/v15-map-ux.css">
+<link rel="stylesheet" href="css/v16-map-position.css">
+<link rel="stylesheet" href="css/v17-map-controls.css">
+<link rel="stylesheet" href="css/v18-clean-layers.css">
+<link rel="stylesheet" href="css/v20-layer-feature-editor.css">
+<link rel="stylesheet" href="css/v21-reliable-controls.css">
+<link rel="stylesheet" href="css/v21-final-legend.css">
+<link rel="stylesheet" href="css/v23-layer-feature-editor.css">
+<link rel="stylesheet" href="css/v24-label-positions.css">
+<link rel="stylesheet" href="css/v27-draw-lfe-extension.css">
+<link rel="stylesheet" href="css/raster-export.css">
+<link rel="stylesheet" href="css/georeferencing.css">
+<link rel="stylesheet" href="css/premium-unified.css">
+<link rel="stylesheet" href="css/layer-workspace-premium.css">
 </head>
 
 
 <body>
+<nav class="atlas-map-header" aria-label="Atlasz térkép navigáció">
+  <div class="atlas-header-left">
+    <a href="index.html">FŐOLDAL</a><a href="geography.html">FÖLDRAJZI</a><a href="history.html">TÖRTÉNETI</a><a href="gallery.html">GALÉRIA</a>
+  </div>
+  <div class="atlas-header-center">
+    <button id="headerGeoreferencingButton" class="atlas-header-btn atlas-header-georef" type="button">⌖ GEOREFERÁLÁS</button>
+    <button id="headerRasterExportButton" class="atlas-header-btn atlas-header-raster" type="button">▦ RASTER EXPORT</button>
+    <button id="headerDrawEditorButton" class="atlas-header-btn atlas-header-draw">✏️ DRAW EDITOR</button>
+    <button id="headerPresentationButton" class="atlas-header-btn">🎬 PREZI MÓD</button>
+    <button id="headerAtlasAIButton" class="atlas-header-btn atlas-header-ai">🤖 ATLAS AI</button>
+    <button id="headerLayerWorkspaceButton" class="atlas-header-btn atlas-gis-link">🧭 RÉTEG MUNKATÉR</button>
+  </div>
+  <div class="atlas-header-right"><a href="../admin/index.html">🔐 ADMIN</a></div>
+</nav>
 
 
 <!-- =====================================================
      FEJLÉC
 ===================================================== -->
 
-<header>
 
-    <h1>
-        Kárpátalja Földrajzi és Történeti Atlasza
-    </h1>
-
-    <p>
-        Földrajz • Történelem • Egykori vármegyék
-    </p>
-
-    <div class="language-switch">
-
-        <span class="current-language">
-            🇭🇺 MAGYAR
-        </span>
-
-        <a href="foldrajzi-terkep-ua.html">
-            🇺🇦 УКРАЇНСЬКА
-        </a>
-
-    </div>
-
-</header>
 
 
 <!-- =====================================================
      NAV
 ===================================================== -->
 
-<nav>
 
-    <a href="index.html">
-        FŐOLDAL
-    </a>
-
-    <a href="geography.html">
-        🌍 FÖLDRAJZI TÉRKÉP
-    </a>
-
-    <a href="history.html">
-        📜 TÖRTÉNELMI TÉRKÉP
-    </a>
-
-    <a href="gallery.html">
-        📷 GALÉRIA
-    </a>
-
-    <a href="../admin/index.html">
-        🔐 ADMIN
-    </a>
-
-</nav>
 
 
 <!-- =====================================================
      TÉRKÉP FEJLÉC
 ===================================================== -->
 
-<section class="map-header">
 
-    <h2>
-        🌍 Interaktív földrajzi térkép
-    </h2>
-
-    <div class="map-header-meta">
-        <span>🌿 Természetföldrajz</span>
-        <span>🏘️ Társadalomföldrajz</span>
-        <span>💰 Gazdaságföldrajz</span>
-        <span>📷 Terepi dokumentáció</span>
-        <span>🔬 Kutatási rétegek</span>
-    </div>
-
-    <div class="map-header-research-dropdown" id="headerResearchDropdown">
-        <button type="button" class="map-header-research-trigger" id="headerResearchMenuButton" aria-expanded="false">🔬 Kutatási eszközök ▾</button>
-        <div class="map-header-research-menu" id="headerResearchMenu" hidden>
-            <button type="button" id="headerResearchObjectsButton">🔬 Kutatási objektumok</button>
-            <button type="button" id="headerResearchLayersButton">🌍 Földrajzi kutatási rétegek</button>
-            <button type="button" id="headerFeatureEditorButton">✏️ Draw Feature Editor</button>
-        </div>
-    </div>
-
-    <div class="atlas-command-bar" role="toolbar" aria-label="Atlasz főparancsok">
-        <button type="button" class="atlas-command-button" id="headerOpenDataButton" title="GeoJSON, KML, Shapefile ZIP vagy GeoTIFF megnyitása">
-            📂 Megnyitás
-        </button>
-        <button type="button" class="atlas-command-button atlas-command-success" id="headerExportDataButton" title="Adatok exportálása">
-            📤 Export
-        </button>
-        <button type="button" class="atlas-command-button" id="headerGalleryViewButton" title="Összes galériapont megjelenítése">
-            📷 Galéria nézet
-        </button>
-        <button type="button" class="atlas-command-button feature-editor-header-button" id="headerLayerFeatureEditorButton" title="Betöltött GeoJSON és egyéb térképrétegek attribútumainak és megjelenésének szerkesztése">
-            ⚙️ Réteg Feature Editor
-        </button>
-    </div>
-    <p>
-        Kárpátalja tematikus földrajzi atlasza a természetföldrajzi, társadalomföldrajzi, gazdaságföldrajzi és kutatási rétegek integrált rendszerével.
-    </p>
-
-</section>
 
 
 <!-- =====================================================
@@ -1784,6 +1731,8 @@ document.addEventListener("click",function(event){
     src="https://unpkg.com/georaster-layer-for-leaflet@4.1.2/dist/georaster-layer-for-leaflet.min.js">
 </script>
 
+
+<script src="js/outdoors-basemap.js"></script>
 
 <script>
 
@@ -1890,6 +1839,15 @@ const googleHybrid =
             attribution:"Google"
         }
     );
+
+const outdoors =
+    KA_createOutdoorsLayer(L);
+
+outdoors.on("add",function(){
+    if(!KA_prepareOutdoorsLayer(outdoors,map)){
+        map.removeLayer(outdoors);
+    }
+});
 
 /* =====================================================
    ALAPÉRTELMEZETT TÉRKÉP
@@ -2033,8 +1991,11 @@ const baseMaps = {
     "🏙️ Google térkép": googleStreets,
     "🛰️ Google műhold": googleSatellite,
     "🏔️ Google domborzat": googleTerrain,
-    "🌐 Google Hybrid": googleHybrid
+    "🌐 Google Hybrid": googleHybrid,
+    "🥾 Outdoors": outdoors
 };
+
+window.KA_RASTER_EXPORT_BASEMAPS = baseMaps;
 
 const layerControl = L.control.layers(
     baseMaps,
@@ -3704,6 +3665,7 @@ function ensureObjectMetadata(layer,forcedId=null){
         accuracy:"",
         source:"",
         customFields:{},
+        label:{visible:false,field:"name",color:"#17374d",fontSize:14,fontFamily:"Georgia",fontWeight:"700"},
         layer,
         style:initialStyle
     };
@@ -3725,6 +3687,117 @@ function updateObjectProperties(id,values){
 function popupEsc(value){
     if(typeof escapeHTML === "function") return escapeHTML(String(value ?? ""));
     return String(value ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));
+}
+
+
+function drawLabelValue(obj){
+    const field=obj?.label?.field||"name";
+    if(field==="id") return obj.id;
+    if(field==="name") return obj.name;
+    if(field==="category") return obj.category;
+    if(field==="operator") return obj.operator;
+    if(field==="date") return obj.date;
+    if(field==="source") return obj.source;
+    if(field==="note") return obj.note;
+    return obj.customFields?.[field] ?? "";
+}
+
+function clearDrawLabel(obj){
+    if(!obj?.layer) return;
+    const old=obj.layer._atlasDrawLabel;
+    if(old){
+        try{
+            if(old._svg && typeof old.remove==="function") old.remove();
+            else if(old.remove) old.remove();
+        }catch(e){}
+        delete obj.layer._atlasDrawLabel;
+    }
+    try{obj.layer.unbindTooltip?.();}catch(e){}
+}
+
+function applyDrawLabel(obj){
+    if(!obj?.layer) return;
+    clearDrawLabel(obj);
+    const cfg=obj.label||{};
+    if(!cfg.visible) return;
+    const text=drawLabelValue(obj);
+    if(text==null || String(text).trim()==="") return;
+
+    const layer=obj.layer;
+    const style=`color:${popupEsc(cfg.color||"#17374d")};font-size:${Number(cfg.fontSize)||14}px;font-family:${popupEsc(cfg.fontFamily||"Georgia")};font-weight:${popupEsc(cfg.fontWeight||"700")};background:rgba(255,255,255,.88);padding:2px 5px;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.18);white-space:nowrap;`;
+
+    if(obj.type==="Point"){
+        layer.bindTooltip(`<span style="${style}">${popupEsc(text)}</span>`,{
+            permanent:true,direction:"right",offset:[10,0],
+            className:"draw-feature-label draw-feature-label-point",
+            interactive:false,opacity:1
+        });
+        layer.openTooltip?.();
+        layer._atlasDrawLabel=layer.getTooltip?.();
+        return;
+    }
+
+    if(obj.type==="Polygon"){
+        const b=layer.getBounds?.();
+        if(!b || !b.isValid()) return;
+        const tt=L.tooltip({
+            permanent:true,direction:"center",offset:[0,0],
+            className:"draw-feature-label draw-feature-label-polygon",
+            interactive:false,opacity:1
+        }).setLatLng(b.getCenter())
+          .setContent(`<span style="${style}">${popupEsc(text)}</span>`)
+          .addTo(map);
+        layer._atlasDrawLabel=tt;
+        return;
+    }
+
+    if(obj.type==="Polyline" && layer._path){
+        const path=layer._path,svg=path.ownerSVGElement;
+        if(!svg) return;
+        const id="draw-textpath-"+Math.random().toString(36).slice(2,10);
+        const guide=document.createElementNS("http://www.w3.org/2000/svg","path");
+        guide.setAttribute("id",id);
+        guide.setAttribute("d",path.getAttribute("d")||"");
+        guide.setAttribute("fill","none"); guide.setAttribute("stroke","none");
+
+        const textEl=document.createElementNS("http://www.w3.org/2000/svg","text");
+        textEl.setAttribute("class","draw-svg-line-label");
+        textEl.setAttribute("fill",cfg.color||"#17374d");
+        textEl.setAttribute("font-size",String(Number(cfg.fontSize)||14));
+        textEl.setAttribute("font-family",cfg.fontFamily||"Georgia");
+        textEl.setAttribute("font-weight",cfg.fontWeight||"700");
+        textEl.setAttribute("paint-order","stroke");
+        textEl.setAttribute("stroke","rgba(255,255,255,.9)");
+        textEl.setAttribute("stroke-width","4");
+        textEl.setAttribute("text-anchor","middle");
+        textEl.setAttribute("pointer-events","none");
+
+        const tp=document.createElementNS("http://www.w3.org/2000/svg","textPath");
+        tp.setAttribute("href","#"+id);
+        tp.setAttributeNS("http://www.w3.org/1999/xlink","xlink:href","#"+id);
+        tp.setAttribute("startOffset","50%");
+        tp.textContent=String(text);
+        textEl.appendChild(tp);
+        svg.appendChild(guide); svg.appendChild(textEl);
+
+        layer._atlasDrawLabel={
+            _svg:true,
+            remove(){try{guide.remove()}catch(e){} try{textEl.remove()}catch(e){}}
+        };
+    }
+}
+
+function drawLabelFields(obj){
+    return [
+        ["id","ID"],
+        ["name","Objektum neve"],
+        ["category","Kategória"],
+        ["operator","Felmérő"],
+        ["date","Dátum"],
+        ["source","Adatforrás"],
+        ["note","Megjegyzés"],
+        ...(drawState.customColumns||[]).map(c=>[c,c])
+    ];
 }
 
 function buildDrawPopup(obj){
@@ -3778,6 +3851,7 @@ function syncObjectAfterEdit(obj){
     drawState.styles.set(obj.id,style);
     setLayerStyle(obj.layer,style);
     refreshLayerPopup(obj);
+    applyDrawLabel(obj);
     renderDrawResearchControl();
 }
 
@@ -3966,7 +4040,7 @@ function exportResearchGeoJSON(){
         const feature=obj.layer.toGeoJSON();
         feature.properties={
             objectId:obj.id,name:obj.name,objectType:obj.type,category:obj.category,note:obj.note,operator:obj.operator,date:obj.date,accuracy:obj.accuracy,source:obj.source,crs:"WGS84 / EPSG:4326",
-            style:obj.style,
+            style:obj.style,label:obj.label||{visible:false,field:"name"},
             customFields:obj.customFields||{},
             lengthMeters:obj.type!=="Point"?calculatePolylineMeters(obj.layer):null,
             perimeterMeters:obj.type==="Polygon"?calculatePolygonPerimeterMeters(obj.layer):null,
@@ -3981,7 +4055,7 @@ function exportResearchGeoJSON(){
 
 function saveDrawLocal(){
     try{
-        const data=[...drawState.objects.values()].map(obj=>({id:obj.id,type:obj.type,name:obj.name,category:obj.category,note:obj.note,operator:obj.operator,date:obj.date,accuracy:obj.accuracy,source:obj.source,style:obj.style,customFields:obj.customFields||{},geojson:obj.layer.toGeoJSON()}));
+        const data=[...drawState.objects.values()].map(obj=>({id:obj.id,type:obj.type,name:obj.name,category:obj.category,note:obj.note,operator:obj.operator,date:obj.date,accuracy:obj.accuracy,source:obj.source,style:obj.style,customFields:obj.customFields||{},label:obj.label||{visible:false,field:"name"},geojson:obj.layer.toGeoJSON()}));
         localStorage.setItem("karpataljaAtlasDrawObjects",JSON.stringify({version:2,customColumns:drawState.customColumns||[],objects:data}));
     }catch(e){console.warn("Draw mentés sikertelen",e);}
 }
@@ -4005,8 +4079,10 @@ function loadDrawLocal(){
                 const obj=ensureObjectMetadata(layer,item.id);
                 Object.assign(obj,{name:item.name||obj.name,category:item.category||obj.category,note:item.note||"",operator:item.operator||"",date:item.date||"",accuracy:item.accuracy||"",source:item.source||"",style:item.style||obj.style,customFields:item.customFields||{}});
                 setLayerStyle(layer,obj.style);
+                obj.label=item.label||obj.label||{visible:false,field:"name",color:"#17374d",fontSize:14,fontFamily:"Georgia",fontWeight:"700"};
                 drawnItems.addLayer(layer);
                 refreshLayerPopup(obj);
+                applyDrawLabel(obj);
             });
         });
         renderDrawResearchControl();
@@ -4578,10 +4654,43 @@ function openFeatureEditorDetail(id){
     const avgSegment=(obj.type==="Polyline"||obj.type==="Polygon")?calculateAverageSegmentMeters(obj.layer):0;
     const customFields=obj.customFields||{};
     const customRows=(drawState.customColumns||[]).map(col=>`<tr><td>${popupEsc(col)}</td><td contenteditable="true" data-custom-edit="${popupEsc(col)}">${popupEsc(customFields[col]??"")}</td></tr>`).join("");
-    detail.innerHTML=`<h3>${popupEsc(obj.name)}</h3><div class="feature-editor-badges"><span class="feature-editor-badge">${popupEsc(obj.type)}</span><span class="feature-editor-badge">${popupEsc(obj.id)}</span><span class="feature-editor-badge"><span class="feature-editor-swatch" style="background:${popupEsc(obj.style?.color||"#17374d")}"></span> ${popupEsc(obj.style?.color||"#17374d")}</span></div><div class="feature-editor-metrics"><div class="feature-editor-metric"><strong>${coords.length}</strong><span>Koordinátapont</span></div><div class="feature-editor-metric"><strong>${popupEsc(distanceValue)}</strong><span>Hossz / kerület</span></div><div class="feature-editor-metric"><strong>${popupEsc(areaValue)}</strong><span>Terület</span></div></div><div class="feature-editor-meta"><div><b>WGS84:</b> EPSG:4326</div><div><b>Szín:</b> ${popupEsc(obj.style?.color||"#17374d")}</div><div><b>Átlagos szakasz:</b> ${obj.type==="Point"?"—":`${fmt(avgSegment)} m`}</div><div><b>Centroid:</b> ${centroid?`${centroid.lat.toFixed(8)}, ${centroid.lng.toFixed(8)}`:"—"}</div><div><b>Kiterjedés:</b> ${popupEsc(boundsText)}</div><div><b>Pontosság:</b> ${popupEsc(obj.accuracy||"—")}</div><div><b>Felmérő:</b> ${popupEsc(obj.operator||"—")}</div><div><b>Dátum:</b> ${popupEsc(obj.date||"—")}</div></div>${(drawState.customColumns||[]).length?`<div class="feature-editor-custom-wrap"><table class="feature-editor-custom-table"><thead><tr><th>Oszlop</th><th>Érték</th></tr></thead><tbody>${customRows}</tbody></table></div>`:`<div class="feature-editor-custom-empty">Nincs egyedi oszlop. A felső sávban a ＋ Oszlop gombbal adhatsz hozzá.</div>`}<div class="feature-editor-coords"><table><thead><tr><th>#</th><th>Lat</th><th>Lng</th></tr></thead><tbody>${coordRows}</tbody></table></div><div class="feature-editor-actions"><button type="button" id="featureEditData">✏️ Adatok</button><button type="button" id="featureEditStyle">🎨 Szín / stílus</button><button type="button" id="featureZoom">🎯 Nézet</button><button type="button" id="featureAnalysis">📊 Elemzés</button></div>`;
+    const drawLabelOptions=drawLabelFields(obj).map(([value,label])=>`<option value="${popupEsc(value)}" ${String(obj.label?.field||"name")===String(value)?"selected":""}>${popupEsc(label)}</option>`).join("");
+    detail.innerHTML=`<h3>${popupEsc(obj.name)}</h3><div class="feature-editor-badges"><span class="feature-editor-badge">${popupEsc(obj.type)}</span><span class="feature-editor-badge">${popupEsc(obj.id)}</span><span class="feature-editor-badge"><span class="feature-editor-swatch" style="background:${popupEsc(obj.style?.color||"#17374d")}"></span> ${popupEsc(obj.style?.color||"#17374d")}</span></div><div class="feature-editor-metrics"><div class="feature-editor-metric"><strong>${coords.length}</strong><span>Koordinátapont</span></div><div class="feature-editor-metric"><strong>${popupEsc(distanceValue)}</strong><span>Hossz / kerület</span></div><div class="feature-editor-metric"><strong>${popupEsc(areaValue)}</strong><span>Terület</span></div></div><div class="feature-editor-meta"><div><b>WGS84:</b> EPSG:4326</div><div><b>Szín:</b> ${popupEsc(obj.style?.color||"#17374d")}</div><div><b>Átlagos szakasz:</b> ${obj.type==="Point"?"—":`${fmt(avgSegment)} m`}</div><div><b>Centroid:</b> ${centroid?`${centroid.lat.toFixed(8)}, ${centroid.lng.toFixed(8)}`:"—"}</div><div><b>Kiterjedés:</b> ${popupEsc(boundsText)}</div><div><b>Pontosság:</b> ${popupEsc(obj.accuracy||"—")}</div><div><b>Felmérő:</b> ${popupEsc(obj.operator||"—")}</div><div><b>Dátum:</b> ${popupEsc(obj.date||"—")}</div></div>${(drawState.customColumns||[]).length?`<div class="feature-editor-custom-wrap"><table class="feature-editor-custom-table"><thead><tr><th>Oszlop</th><th>Érték</th></tr></thead><tbody>${customRows}</tbody></table></div>`:`<div class="feature-editor-custom-empty">Nincs egyedi oszlop. A felső sávban a ＋ Oszlop gombbal adhatsz hozzá.</div>`}<div class="feature-editor-coords"><table><thead><tr><th>#</th><th>Lat</th><th>Lng</th></tr></thead><tbody>${coordRows}</tbody></table></div>
+        <section class="draw-lfe-extension">
+            <div class="draw-lfe-extension-head">
+                <strong>🏷️ OSZLOPFELIRAT / LAYER FEATURE FUNKCIÓK</strong>
+                <small>Attribútummező kiválasztása és alkalmazása a Draw objektumra.</small>
+            </div>
+            <div class="draw-lfe-grid">
+                <label>Felirat / oszlop
+                    <select id="drawLabelField"><option value="">— nincs felirat —</option>${drawLabelOptions}</select>
+                </label>
+                <label class="draw-lfe-check"><input id="drawLabelVisible" type="checkbox" ${obj.label?.visible?"checked":""}> Felirat látható</label>
+                <label>Felirat színe <input id="drawLabelColor" type="color" value="${popupEsc(obj.label?.color||"#17374d")}"></label>
+                <label>Betűméret <input id="drawLabelSize" type="number" min="6" max="72" value="${Number(obj.label?.fontSize)||14}"></label>
+                <button type="button" id="drawLabelApply">✓ ALKALMAZÁS</button>
+            </div>
+        </section>
+        <div class="feature-editor-actions"><button type="button" id="featureEditData">✏️ Adatok</button><button type="button" id="featureEditStyle">🎨 Szín / stílus</button><button type="button" id="featureZoom">🎯 Nézet</button><button type="button" id="featureAnalysis">📊 Elemzés</button></div>`;
 
     detail.querySelector("#featureEditData").onclick=()=>openDrawPropertyEditor(id);
     detail.querySelector("#featureEditStyle").onclick=()=>openDrawStyleEditor(id);
+
+    const drawLabelApply=detail.querySelector("#drawLabelApply");
+    if(drawLabelApply){
+        drawLabelApply.onclick=()=>{
+            obj.label=obj.label||{};
+            obj.label.field=detail.querySelector("#drawLabelField").value || "name";
+            obj.label.visible=detail.querySelector("#drawLabelVisible").checked && !!detail.querySelector("#drawLabelField").value;
+            obj.label.color=detail.querySelector("#drawLabelColor").value;
+            obj.label.fontSize=Number(detail.querySelector("#drawLabelSize").value)||14;
+            obj.label.fontFamily=obj.label.fontFamily||"Georgia";
+            obj.label.fontWeight=obj.label.fontWeight||"700";
+            applyDrawLabel(obj);
+            saveDrawLocal();
+            renderDrawFeatureEditor();
+        };
+    }
     detail.querySelector("#featureZoom").onclick=()=>zoomToDrawObject(id);
     detail.querySelector("#featureAnalysis").onclick=()=>openDrawAnalysis(id);
     detail.querySelectorAll("[data-custom-edit]").forEach(cell=>{
@@ -4884,7 +4993,9 @@ function openSaveExportDialog(){
 async function addImportedGeoJSON(data,label="Importált GeoJSON"){
     const payload=Array.isArray(data)?{type:"FeatureCollection",features:data.flatMap(d=>d.features||[])}:data;
     const sourceName=String(label||"Importált GeoJSON");
+    const displaySourceName=sourceName.replace(/\\.(geojson|json)$/i,"");
     const importedGroup=L.layerGroup();
+    importedGroup._atlasOpacity=1;
     importedGroup._lfeRegistry=[];
     const layer=L.geoJSON(payload,{
         style:feature=>({color:feature?.properties?.stroke||"#8b2020",weight:Number(feature?.properties?.['stroke-width']||3),opacity:Number(feature?.properties?.['stroke-opacity']??1),fillColor:feature?.properties?.fill||"#c09d57",fillOpacity:Number(feature?.properties?.['fill-opacity']??.25)}),
@@ -4897,9 +5008,8 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
         }
     });
     importedVectorNumber++;
-    const layerName = importedVectorNumber===1 && sourceName==="GeoJSON"
-        ? `📥 ${sourceName}`
-        : `📥 ${sourceName} ${importedVectorNumber}`;
+    /* A fájl eredeti neve megmarad; a felületen csak a kiterjesztést rejtjük el. */
+    const layerName = displaySourceName;
 
     /*
      * FONTOS: az L.geoJSON() eredménye egy FeatureGroup.
@@ -4919,7 +5029,14 @@ async function addImportedGeoJSON(data,label="Importált GeoJSON"){
         importedGroup.addLayer(child);
     });
     importedGroup._lfeRegistry=featureLayers;
-    importedVectorRegistry.push({key:`imported:${importedVectorNumber}`,name:layerName,group:importedGroup,sourceName});
+    importedVectorRegistry.push({
+        key:`imported:${importedVectorNumber}`,
+        name:displaySourceName,
+        fileName:sourceName,
+        originalFileName:sourceName,
+        group:importedGroup,
+        sourceName:sourceName
+    });
     importedVectorLayers.addLayer(importedGroup);
     importedGroup.addTo(map);
     layerControl.addOverlay(importedGroup,layerName);
@@ -4985,7 +5102,7 @@ function openDataFile(){
             if(name.endsWith(".tif")||name.endsWith(".tiff")){await importGeoTIFFFile(file);alert("✅ GeoTIFF sikeresen megnyitva a térképen.");return;}
             if(name.endsWith(".geojson")||name.endsWith(".json")||file.type.includes("geo+json")||file.type.includes("json")){
                 const data=JSON.parse(await file.text());
-                await addImportedGeoJSON(data,"GeoJSON");
+                await addImportedGeoJSON(data,file.name);
                 alert("✅ GeoJSON sikeresen megnyitva a térképen.");
                 return;
             }
@@ -6790,62 +6907,7 @@ function(event){
 };
 
 
-/* =====================================================
-   TÉRKÉP VISSZA
-===================================================== */
 
-const backControl =
-    L.control({
-        position:
-            "bottomright"
-    });
-
-
-backControl.onAdd =
-function(){
-
-    const container =
-        L.DomUtil.create(
-            "div",
-            "geojson-control"
-        );
-
-
-    const button =
-        L.DomUtil.create(
-            "button",
-            "",
-            container
-        );
-
-
-    button.innerHTML =
-        "🗺️ Térkép";
-
-
-    button.onclick =
-    function(){
-
-        preziEditor.classList.remove(
-            "active"
-        );
-
-    };
-
-
-    L.DomEvent.disableClickPropagation(
-        container
-    );
-
-
-    return container;
-
-};
-
-
-backControl.addTo(
-    map
-);
 
 
 /* =====================================================
@@ -6912,6 +6974,8 @@ function lfeLayerEntries(){
     const seen=new Set();
 
     Object.entries(overlays).forEach(([name,group])=>{
+        const hidden=["domborzat","hegységek","folyók","tavak","városok","falvak","utak","közigazgatási határok","földtan","éghajlat","talaj","növényzet","tájak","természetvédelem","természeti erőforrások","természeti veszélyek","galéria"];
+        if(hidden.includes(String(name).trim().toLowerCase())) return;
         if(!group || seen.has(group)) return;
         seen.add(group);
         entries.push({key:"overlay:"+name,name:name,group:group});
@@ -6922,6 +6986,8 @@ function lfeLayerEntries(){
         importedVectorRegistry.forEach(item=>{
             if(item?.group && !seen.has(item.group)){
                 seen.add(item.group);
+                item.fileName=item.fileName||item.originalFileName||item.sourceFileName||item.sourceName||item.name;
+                if(item.fileName) item.name=String(item.fileName).replace(/\.(geojson|json)$/i,"");
                 entries.push(item);
             }
         });
@@ -7001,7 +7067,7 @@ function lfeMeta(layer,index){
         opacity:Number(savedStyle.opacity ?? layer.options?.opacity ?? 1),
         fillOpacity:Number(savedStyle.fillOpacity ?? layer.options?.fillOpacity ?? (geometry==="Point"?.9:.25)),
         radius:Number(savedStyle.radius ?? layer.options?.radius ?? 6),
-        labelVisible:savedLabel.visible!==undefined ? !!savedLabel.visible : !!field,
+        labelVisible:savedLabel.v27===true ? !!savedLabel.visible : false,
         labelField:savedLabel.field || field || "",
         minZoom:Number(savedLabel.minZoom ?? 0),
         maxZoom:Number(savedLabel.maxZoom ?? 24),
@@ -7059,8 +7125,8 @@ function lfeApplyPointStyle(layer){
         color:m.color,
         fillColor:m.fillColor,
         weight:m.weight,
-        opacity:m.opacity,
-        fillOpacity:m.fillOpacity,
+        opacity:m.opacity*Number(layer._lfeGroup?._atlasOpacity??1),
+        fillOpacity:m.fillOpacity*Number(layer._lfeGroup?._atlasOpacity??1),
         radius:r
     });
 }
@@ -7078,7 +7144,7 @@ function lfeApplyStyle(layer){
         layer.options.opacity=m.opacity;
         layer.setIcon(L.divIcon({
             className:"draw-point-icon",
-            html:`<span style="display:block;width:${Math.max(6,m.radius*2)}px;height:${Math.max(6,m.radius*2)}px;border-radius:50%;background:${popupEsc(m.fillColor)};border:${Math.max(1,Math.min(6,m.weight))}px solid ${popupEsc(m.color)};opacity:${m.opacity};box-shadow:0 1px 6px rgba(0,0,0,.3)"></span>`,
+            html:`<span style="display:block;width:${Math.max(6,m.radius*2)}px;height:${Math.max(6,m.radius*2)}px;border-radius:50%;background:${popupEsc(m.fillColor)};border:${Math.max(1,Math.min(6,m.weight))}px solid ${popupEsc(m.color)};opacity:${m.opacity*Number(layer._lfeGroup?._atlasOpacity??1)};box-shadow:0 1px 6px rgba(0,0,0,.3)"></span>`,
             iconSize:[Math.max(18,m.radius*2+10),Math.max(18,m.radius*2+10)],
             iconAnchor:[Math.max(9,m.radius+5),Math.max(9,m.radius+5)],
             popupAnchor:[0,-Math.max(10,m.radius)]
@@ -7090,8 +7156,8 @@ function lfeApplyStyle(layer){
             color:m.color,
             fillColor:m.fillColor,
             weight:m.weight,
-            opacity:m.opacity,
-            fillOpacity:m.fillOpacity
+            opacity:m.opacity*Number(layer._lfeGroup?._atlasOpacity??1),
+            fillOpacity:m.fillOpacity*Number(layer._lfeGroup?._atlasOpacity??1)
         });
     }
 }
@@ -7110,14 +7176,20 @@ function lfeLabelPoint(layer){
 
 function lfeUpdateLabel(layer){
     /*
-     * PROFESSZIONÁLIS FELIRATKEZELÉS
-     * A felirat nem külön térképi Marker többé. A GeoJSON objektumhoz
-     * kötött Leaflet Tooltipként működik, ezért a felirat mindig ugyanahhoz
-     * a földrajzi objektumhoz tartozik, és zoom/pan közben nem tud elúszni.
+     * V24 PROFESSZIONÁLIS GEOMETRIA-ALAPÚ FELIRATPOZÍCIÓ:
+     * Polygon / MultiPolygon  -> objektum geometriai középpontja
+     * LineString / MultiLineString -> a vonal mentén, az SVG path irányát követve
+     * Point / Marker -> 3 óránál, az objektumtól jobbra
+     *
+     * A felirat minden esetben a GeoJSON objektumhoz kötött, ezért pan/zoom
+     * közben együtt mozog a geometriával.
      */
     const old=lfeState.labelMarkers.get(layer);
     if(old){
-        try{ map.removeLayer(old); }catch(e){}
+        try{
+            if(old._lfeSvg && typeof old.remove==="function") old.remove();
+            else map.removeLayer(old);
+        }catch(e){}
         lfeState.labelMarkers.delete(layer);
     }
     if(layer && layer.getTooltip){
@@ -7133,23 +7205,125 @@ function lfeUpdateLabel(layer){
 
     if(!layer || !m.visible || !m.labelVisible || !m.labelField || !hasText || !inZoom) return;
 
-    const html=`<span class="lfe-feature-label-text" style="color:${popupEsc(m.labelColor)};font-size:${Number(m.fontSize)||14}px;font-family:${popupEsc(m.fontFamily||"Arial")};font-weight:${popupEsc(m.fontWeight||"700")};font-style:${popupEsc(m.fontStyle||"normal")};background:${popupEsc(m.labelBackground||"rgba(255,255,255,.88)")};">${popupEsc(text)}</span>`;
+    const geom=lfeFeatureGeometryType(layer);
+    const safeText=popupEsc(String(text));
+    const commonStyle=`color:${popupEsc(m.labelColor)};font-size:${Number(m.fontSize)||14}px;font-family:${popupEsc(m.fontFamily||"Arial")};font-weight:${popupEsc(m.fontWeight||"700")};font-style:${popupEsc(m.fontStyle||"normal")};background:${popupEsc(m.labelBackground||"rgba(255,255,255,.88)")};`;
 
-    if(typeof layer.bindTooltip!=="function") return;
-
-    const tooltip=layer.bindTooltip(html,{
-        permanent:true,
-        direction:"center",
-        className:"lfe-feature-label",
-        opacity:1,
-        interactive:false,
-        sticky:false
-    }).getTooltip();
-
-    lfeState.labelMarkers.set(layer,tooltip);
-    if(map.hasLayer(layer._lfeGroup) || map.hasLayer(layer)){
-        try{ layer.openTooltip(); }catch(e){}
+    /* POINT: 3 óránál, az objektumtól jobbra. */
+    if(layer instanceof L.Marker || layer instanceof L.CircleMarker || geom==="Point" || geom==="MultiPoint"){
+        try{
+            layer.bindTooltip(
+                `<span class="lfe-feature-label-text lfe-label-point" style="${commonStyle}">${safeText}</span>`,
+                {
+                    permanent:true,
+                    direction:"right",
+                    offset:[10,0],
+                    className:"lfe-feature-label lfe-feature-label-point",
+                    opacity:1,
+                    interactive:false,
+                    sticky:false
+                }
+            );
+            lfeState.labelMarkers.set(layer,layer.getTooltip());
+            if(map.hasLayer(layer._lfeGroup) || map.hasLayer(layer)) layer.openTooltip?.();
+        }catch(e){}
+        return;
     }
+
+    /* POLYGON / MULTIPOLYGON: Leaflet center = a látható objektum középpontja. */
+    if(geom==="Polygon" || geom==="MultiPolygon"){
+        try{
+            const b=layer.getBounds?.();
+            if(!b || !b.isValid()) return;
+            const center=b.getCenter();
+            const tt=L.tooltip({
+                permanent:true,
+                direction:"center",
+                offset:[0,0],
+                className:"lfe-feature-label lfe-feature-label-polygon",
+                opacity:1,
+                interactive:false,
+                sticky:false
+            })
+            .setLatLng(center)
+            .setContent(`<span class="lfe-feature-label-text" style="${commonStyle}">${safeText}</span>`)
+            .addTo(map);
+            lfeState.labelMarkers.set(layer,tt);
+            return;
+        }catch(e){}
+    }
+
+    /* LINE: SVG textPath a tényleges Leaflet SVG path mentén. */
+    if(geom==="LineString" || geom==="MultiLineString"){
+        try{
+            if(!(layer instanceof L.Path) || !layer._path) return;
+
+            const path=layer._path;
+            const svg=path.ownerSVGElement;
+            if(!svg) return;
+
+            const id="lfe-textpath-"+Math.random().toString(36).slice(2,11);
+
+            /* A path tényleges SVG d attribútuma szolgál alapként. */
+            const textEl=document.createElementNS("http://www.w3.org/2000/svg","text");
+            textEl.setAttribute("class","lfe-svg-line-label");
+            textEl.setAttribute("fill",m.labelColor||"#17374d");
+            textEl.setAttribute("font-size",String(Number(m.fontSize)||14));
+            textEl.setAttribute("font-family",m.fontFamily||"Arial");
+            textEl.setAttribute("font-weight",m.fontWeight||"700");
+            textEl.setAttribute("paint-order","stroke");
+            textEl.setAttribute("stroke",m.labelBackground||"rgba(255,255,255,.88)");
+            textEl.setAttribute("stroke-width","4");
+            textEl.setAttribute("stroke-linejoin","round");
+            textEl.setAttribute("text-anchor","middle");
+            textEl.setAttribute("pointer-events","none");
+
+            const textPath=document.createElementNS("http://www.w3.org/2000/svg","textPath");
+            textPath.setAttribute("href","#"+id);
+            textPath.setAttributeNS("http://www.w3.org/1999/xlink","xlink:href","#"+id);
+            textPath.setAttribute("startOffset","50%");
+            textPath.textContent=String(text);
+            textEl.appendChild(textPath);
+
+            /* A láthatatlan segédút ugyanabban az SVG-ben követi a vonalat. */
+            const guide=document.createElementNS("http://www.w3.org/2000/svg","path");
+            guide.setAttribute("id",id);
+            guide.setAttribute("d",path.getAttribute("d")||"");
+            guide.setAttribute("fill","none");
+            guide.setAttribute("stroke","none");
+            guide.setAttribute("pointer-events","none");
+
+            svg.appendChild(guide);
+            svg.appendChild(textEl);
+
+            const record={
+                remove(){
+                    try{guide.remove()}catch(e){}
+                    try{textEl.remove()}catch(e){}
+                },
+                _lfeSvg:true
+            };
+            lfeState.labelMarkers.set(layer,record);
+            return;
+        }catch(e){
+            console.warn("V24 vonalfelirat hiba",e);
+        }
+    }
+
+    /* Fallback egyéb geometria esetén. */
+    try{
+        const p=lfeLabelPoint(layer);
+        if(!p) return;
+        const tt=L.tooltip({
+            permanent:true,
+            direction:"center",
+            className:"lfe-feature-label",
+            opacity:1,
+            interactive:false,
+            sticky:false
+        }).setLatLng(p).setContent(`<span class="lfe-feature-label-text" style="${commonStyle}">${safeText}</span>`).addTo(map);
+        lfeState.labelMarkers.set(layer,tt);
+    }catch(e){}
 }
 
 function lfeRefreshLabels(){
@@ -7172,7 +7346,13 @@ map.on("layerremove",e=>{
     const layer=e.layer;
     if(!layer) return;
     const old=lfeState.labelMarkers.get(layer);
-    if(old){ try{map.removeLayer(old);}catch(err){} lfeState.labelMarkers.delete(layer); }
+    if(old){
+        try{
+            if(old._lfeSvg && typeof old.remove==="function") old.remove();
+            else map.removeLayer(old);
+        }catch(err){}
+        lfeState.labelMarkers.delete(layer);
+    }
 });
 
 function lfeAllPropertyKeys(layers){
@@ -7290,6 +7470,21 @@ function lfeRender(){
     lfeRenderDetail();
 }
 
+
+function lfeApplyBatchStyle(entry,color,fillColor){
+    if(!entry?.group) return 0;
+    const all=lfeChildren(entry.group);
+    all.forEach((layer,index)=>{
+        const m=lfeMeta(layer,index);
+        m.color=color;
+        m.fillColor=fillColor;
+        lfeApplyStyle(layer);
+        lfeUpdateLabel(layer);
+    });
+    lfeSavePersistent();
+    return all.length;
+}
+
 function lfeRenderDetail(){
     const root=document.getElementById("lfeDetail");
     const entry=lfeGetEntry();
@@ -7308,7 +7503,7 @@ function lfeRenderDetail(){
             <div class="lfe-field"><label>Kitöltési szín</label><input id="lfeDFill" type="color" value="${popupEsc(m.fillColor)}"></div>
             <div class="lfe-field"><label>Vastagság</label><input id="lfeDWeight" type="number" min="0.01" max="20" step="0.01" value="${m.weight}"></div>
             <div class="lfe-field"><label>Pont méret</label><input id="lfeDRadius" type="number" min="0.01" max="40" step="0.01" value="${m.radius}"></div>
-            <div class="lfe-field"><label>Felirat mező</label><select id="lfeDLabelField"><option value="">— nincs felirat —</option>${options}</select></div>
+            <div class="lfe-field"><label>Felirat / oszlop</label><select id="lfeDLabelField"><option value="">— nincs felirat —</option>${options}</select></div>
             <div class="lfe-field"><label>Felirat színe</label><input id="lfeDLabelColor" type="color" value="${popupEsc(m.labelColor)}"></div>
             <div class="lfe-field"><label>Betűméret</label><input id="lfeDFontSize" type="number" min="6" max="72" value="${m.fontSize}"></div>
             <div class="lfe-field"><label>Betűtípus</label><select id="lfeDFontFamily">
@@ -7319,7 +7514,26 @@ function lfeRenderDetail(){
             <div class="lfe-field"><label>Max. zoom</label><input id="lfeDMaxZoom" type="number" min="0" max="22" step=".1" value="${m.maxZoom}"></div>
             <div class="lfe-field"><label class="lfe-check"><input id="lfeDVisible" type="checkbox" ${m.visible?"checked":""}> Objektum látható</label></div>
             <div class="lfe-field"><label class="lfe-check"><input id="lfeDLabelVisible" type="checkbox" ${m.labelVisible?"checked":""}> Felirat látható</label></div>
+            <div class="lfe-apply-row">
+                <div><strong>🏷️ OSZLOPFELIRAT</strong><small>A kiválasztott attribútum feliratként csak alkalmazás után jelenik meg.</small></div>
+                <button type="button" id="lfeApplySettings">✓ ALKALMAZÁS</button>
+            </div>
         </div>
+        <section class="lfe-batch-style">
+            <div class="lfe-batch-head">
+                <div><strong>🎨 ÖSSZES OBJEKTUM STÍLUSA</strong>
+                <small>Egyszerre alkalmazható a teljes kiválasztott rétegre</small></div>
+            </div>
+            <div class="lfe-batch-grid">
+                <label>Vonal / szimbólum színe
+                    <input id="lfeBatchColor" type="color" value="${popupEsc(m.color)}">
+                </label>
+                <label>Kitöltési szín
+                    <input id="lfeBatchFill" type="color" value="${popupEsc(m.fillColor)}">
+                </label>
+                <button type="button" id="lfeBatchApply">✓ Alkalmazás minden objektumra</button>
+            </div>
+        </section>
         <div class="lfe-actions">
             <button type="button" id="lfeZoomObject">🎯 Nézet</button>
             <button type="button" id="lfeSaveState">💾 Rétegállapot mentése</button>
@@ -7332,8 +7546,6 @@ function lfeRenderDetail(){
         m.weight=Math.max(0.01,Math.min(20,Number(document.getElementById("lfeDWeight").value)||0.01));
         m.radius=Math.max(0.01,Math.min(40,Number(document.getElementById("lfeDRadius").value)||0.01));
         m.labelField=document.getElementById("lfeDLabelField").value;
-        // Ha a felhasználó kiválaszt egy mezőt, a felirat automatikusan legyen látható.
-        if(m.labelField) m.labelVisible=true;
         m.labelColor=document.getElementById("lfeDLabelColor").value;
         m.fontSize=Number(document.getElementById("lfeDFontSize").value)||14;
         m.fontFamily=document.getElementById("lfeDFontFamily").value;
@@ -7349,10 +7561,8 @@ function lfeRenderDetail(){
     const labelFieldSelect=root.querySelector("#lfeDLabelField");
     if(labelFieldSelect){
         labelFieldSelect.addEventListener("change",()=>{
-            m.labelField=labelFieldSelect.value;
-            m.labelVisible=!!m.labelField;
-            lfeUpdateLabel(layer);
-            lfeSavePersistent();
+            const toggle=root.querySelector("#lfeDLabelVisible");
+            if(toggle && labelFieldSelect.value) toggle.checked=true;
         });
     }
     root.querySelectorAll("input,select").forEach(el=>el.addEventListener("change",sync));
@@ -7363,6 +7573,41 @@ function lfeRenderDetail(){
     };
     root.querySelector("#lfeSaveState").onclick=()=>lfeSavePersistent();
     root.querySelector("#lfeExportLayer").onclick=()=>lfeExportCurrentLayer();
+
+    const applySettings=root.querySelector("#lfeApplySettings");
+    if(applySettings){
+        applySettings.onclick=()=>{
+            m.color=root.querySelector("#lfeDColor").value;
+            m.fillColor=root.querySelector("#lfeDFill").value;
+            m.weight=Math.max(0.01,Math.min(20,Number(root.querySelector("#lfeDWeight").value)||0.01));
+            m.radius=Math.max(0.01,Math.min(40,Number(root.querySelector("#lfeDRadius").value)||0.01));
+            m.labelField=root.querySelector("#lfeDLabelField").value;
+            m.labelColor=root.querySelector("#lfeDLabelColor").value;
+            m.fontSize=Number(root.querySelector("#lfeDFontSize").value)||14;
+            m.fontFamily=root.querySelector("#lfeDFontFamily").value;
+            m.fontWeight=root.querySelector("#lfeDFontWeight").value;
+            m.minZoom=Number(root.querySelector("#lfeDMinZoom").value)||0;
+            m.maxZoom=Number(root.querySelector("#lfeDMaxZoom").value)||24;
+            m.visible=root.querySelector("#lfeDVisible").checked;
+            m.labelVisible=!!m.labelField && root.querySelector("#lfeDLabelVisible").checked;
+            lfeApplyStyle(layer);
+            lfeSetVisible(layer,m.visible);
+            lfeUpdateLabel(layer);
+            lfeSavePersistent();
+            lfeShowStatus("✓ A beállítások alkalmazva.","success");
+        };
+    }
+
+    const batchApply=root.querySelector("#lfeBatchApply");
+    if(batchApply){
+        batchApply.onclick=()=>{
+            const c=root.querySelector("#lfeBatchColor").value;
+            const f=root.querySelector("#lfeBatchFill").value;
+            const n=lfeApplyBatchStyle(entry,c,f);
+            lfeShowStatus(`✅ ${n} objektum stílusa frissítve.`,"success");
+            lfeRender();
+        };
+    }
 }
 
 function lfeOpenEditor(){
@@ -7425,7 +7670,7 @@ function lfeFeatureCollection(entry){
             props.__atlasEditor={
                 visible:m.visible,
                 style:{color:m.color,fillColor:m.fillColor,weight:m.weight,opacity:m.opacity,fillOpacity:m.fillOpacity,radius:m.radius},
-                label:{visible:m.labelVisible,field:m.labelField,minZoom:m.minZoom,maxZoom:m.maxZoom,color:m.labelColor,fontSize:m.fontSize,fontFamily:m.fontFamily,fontWeight:m.fontWeight}
+                label:{v27:true,visible:m.labelVisible,field:m.labelField,minZoom:m.minZoom,maxZoom:m.maxZoom,color:m.labelColor,fontSize:m.fontSize,fontFamily:m.fontFamily,fontWeight:m.fontWeight}
             };
             Object.assign(props,m.joined||{});
             gj.properties=props;
@@ -7454,7 +7699,7 @@ function lfeSavePersistent(){
             state.push({layerKey:entry.key,index,visible:m.visible,color:m.color,fillColor:m.fillColor,weight:m.weight,opacity:m.opacity,fillOpacity:m.fillOpacity,radius:m.radius,labelVisible:m.labelVisible,labelField:m.labelField,minZoom:m.minZoom,maxZoom:m.maxZoom,labelColor:m.labelColor,fontSize:m.fontSize,fontFamily:m.fontFamily,fontWeight:m.fontWeight,joined:m.joined||{},properties:lfeProperties(layer)});
         });
     });
-    try{localStorage.setItem("karpataljaLayerFeatureEditor",JSON.stringify({version:1,state,excelJoins:lfeState.excelJoins}));}
+    try{localStorage.setItem("karpataljaLayerFeatureEditor",JSON.stringify({version:2,state,excelJoins:lfeState.excelJoins}));}
     catch(e){console.warn("Réteg Feature Editor mentése sikertelen",e);}
     lfeShowStatus("✅ A réteg- és objektumbeállítások elmentve ebben a böngészőben.","success");
 }
@@ -7596,7 +7841,84 @@ setTimeout(lfeLoadPersistent,6000);
 
 </script>
 
+<script src="js/v12-layer-workspace.js"></script>
+
+<script>
+/* V12 HEADER CONTROLLER */
+(function(){
+"use strict";
+function wire(){
+ const draw=document.getElementById("headerDrawEditorButton");
+ const prezi=document.getElementById("headerPresentationButton");
+ const ai=document.getElementById("headerAtlasAIButton");
+ const ws=document.getElementById("headerLayerWorkspaceButton");
+ if(draw) draw.onclick=()=>{
+   const p=document.getElementById("featureEditorPanel");
+   if(!p){alert("A Draw Feature Editor még nem töltődött be.");return}
+   const open=!p.hidden && p.style.display!=="none";
+   p.hidden=open;p.style.display=open?"none":"block";
+   if(!open) window.renderDrawFeatureEditor?.();
+ };
+ if(prezi) prezi.onclick=()=>{if(typeof openPreziEditor==="function")openPreziEditor();else alert("A Prezi modul nem töltődött be.")};
+ if(ai) ai.onclick=()=>window.AtlasAI?.open?.() || alert("Az Atlas AI modul a backend beállítása után használható.");
+ if(ws) ws.onclick=()=>window.AtlasLayerWorkspace?.open?.();
+ const lfe=document.getElementById("headerLayerFeatureEditorButton");
+ if(lfe) lfe.onclick=()=>{
+   if(typeof lfeOpenEditor==="function") lfeOpenEditor();
+   else alert("A Layer Feature Editor még nem töltődött be.");
+ };
+}
+document.addEventListener("DOMContentLoaded",()=>setTimeout(wire,500));
+})();
+</script><script src="js/atlas-ai.js"></script>
+
+
+<script src="js/v14-opacity.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+ const wireOpacity=()=>{
+   const input=document.getElementById("awOpacity"),out=document.getElementById("awOpacityOut");
+   if(!input||input.dataset.wired)return;input.dataset.wired="1";
+   input.oninput=()=>{
+     out.textContent=Math.round(+input.value*100)+"%";
+     try{
+       document.querySelectorAll(".atlas-layer-row,.aw-layer-row").forEach(()=>{});
+       if(typeof importedVectorRegistry!=="undefined") importedVectorRegistry.forEach(x=>x.group?.eachLayer?.(l=>l.setStyle?.({opacity:+input.value,fillOpacity:+input.value*.35})));
+       if(typeof overlays!=="undefined") Object.values(overlays).forEach(g=>g?.eachLayer?.(l=>l.setStyle?.({opacity:+input.value,fillOpacity:+input.value*.35})));
+     }catch(e){}
+   };
+ };
+ setInterval(wireOpacity,500);
+});
+</script>
+
+
+<script>
+window.addEventListener("resize",()=>window.AtlasMapUX?.invalidate?.());
+window.addEventListener("orientationchange",()=>setTimeout(()=>window.AtlasMapUX?.invalidate?.(),250));
+</script>
+
+
+
+
+
+<script src="js/v18-geojson-filename.js"></script>
+<script src="js/v19-display-name.js"></script>
+
+
+
+
+
+<script src="js/v21-reliable-controls.js"></script>
+
+<script src="js/v21-final-legend.js"></script>
+<script src="js/v23-lfe-opacity.js"></script>
+<script src="js/georeferencing.js"></script>
+<script src="js/raster-export.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){var g=document.getElementById("headerGeoreferencingButton"),b=document.getElementById("headerRasterExportButton");if(g)g.addEventListener("click",function(){window.KA_openGeoreferencing&&window.KA_openGeoreferencing();});if(b)b.addEventListener("click",function(){window.KA_openRasterExport&&window.KA_openRasterExport();});});</script>
 </body>
 </html>
 
 <style id="atlas-final-ui-overrides">.draw-draft-style-control{display:none!important}</style>
+

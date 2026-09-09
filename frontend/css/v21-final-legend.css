@@ -1,0 +1,66 @@
+
+/* V21 FINAL — geographic map live legend, fixed bottom-right */
+#atlasV21FinalLegend{
+  position:fixed!important;
+  right:16px!important;
+  bottom:16px!important;
+  left:auto!important;
+  top:auto!important;
+  z-index:40000!important;
+  width:320px!important;
+  max-width:calc(100vw - 32px)!important;
+  background:rgba(255,255,255,.97)!important;
+  color:#173f55!important;
+  border:1px solid rgba(11,38,54,.14)!important;
+  border-radius:14px!important;
+  box-shadow:0 14px 42px rgba(11,38,54,.24)!important;
+  overflow:hidden!important;
+  font-family:Arial,sans-serif!important;
+  display:block!important;
+}
+#atlasV21FinalLegend .v21-legend-head{
+  min-height:42px;
+  padding:0 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid #e4e9e6;
+}
+#atlasV21FinalLegend .v21-legend-title{
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.7px;
+}
+#atlasV21FinalLegend .v21-legend-close{
+  border:0;background:transparent;color:#68777e;
+  font-size:18px;line-height:1;cursor:pointer;padding:3px 5px;
+}
+#atlasV21FinalLegend .v21-legend-body{
+  max-height:230px;
+  overflow:auto;
+  padding:7px 11px 9px;
+}
+#atlasV21FinalLegend .v21-legend-row{
+  min-height:28px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border-bottom:1px solid #f0f2f1;
+  font-size:10px;
+}
+#atlasV21FinalLegend .v21-swatch{
+  width:28px;height:12px;flex:0 0 auto;
+  border-radius:3px;border:1px solid rgba(0,0,0,.18);
+}
+#atlasV21FinalLegend .v21-empty{
+  padding:10px 2px 8px;color:#718087;font-size:9px;
+}
+#atlasV21FinalLegend.v21-collapsed .v21-legend-body{display:none}
+@media(max-width:680px){
+  #atlasV21FinalLegend{
+    right:8px!important;
+    bottom:8px!important;
+    width:300px!important;
+    max-width:calc(100vw - 16px)!important;
+  }
+}

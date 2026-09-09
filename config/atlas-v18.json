@@ -1,0 +1,16 @@
+{
+  "version": "18.0",
+  "layerPanel": {
+    "showBaseMaps": true,
+    "showUploadedGeoJSONOnly": true,
+    "showPredefinedThematicCatalogue": false,
+    "showAtlasLayerCategory": false,
+    "showOpacity": true,
+    "displayName": "exact-uploaded-filename"
+  },
+  "legend": {
+    "showActiveBaseMap": true,
+    "showActiveUploadedGeoJSON": true,
+    "displayName": "exact-uploaded-filename"
+  }
+}

@@ -1,0 +1,35 @@
+KÁRPÁTALJA ATLAS — V37
+RASTER EXPORT / LICENSING-SAFE ARCHITECTURE
+
+Cél
+----
+A raster export modul csak olyan forrásból enged GeoTIFF exportot, amelynek a felhasználó igazoltan rendelkezik az export/offline felhasználási jogával, vagy a szolgáltató kifejezetten engedélyezi ezt.
+
+Beépített külső térképrétegek
+------------------------------
+- OpenStreetMap: csak megjelenítés. GeoTIFF bulk/prefetch export tiltva.
+- Google műhold: csak megjelenítés. Export/scraping tiltva.
+- Outdoors / Mapbox: csak megjelenítés ebben a böngészős XYZ export modulban. Mapbox offline/redistribution feltételeit külön SDK/licenc alapján kell kezelni.
+
+Engedélyezett források
+----------------------
+A felhasználó hozzáadhat saját vagy kifejezetten export/offline használatra licencelt XYZ forrást.
+A forrásnál megadható:
+- név
+- XYZ URL sablon
+- export/offline jogalap
+- licenc neve
+- licenc URL
+- kötelező attribution
+
+Technikai feltétel
+------------------
+Az engedélyezett XYZ forrásnak böngészőből CORS-kompatibilisen kell elérhetőnek lennie. A modul nem kerül meg CORS-védelmet, nem használ szolgáltatói kulcsot más szolgáltatásból, és nem proxyzza megkerülő módon a szolgáltató tiltását.
+
+Jogi megjegyzés
+---------------
+Ez a modul technikai megfelelési mechanizmus, nem jogi tanácsadás és nem garantálja egy külső szolgáltató szerződéses feltételeinek való megfelelést. Éles használat előtt az adott forrás aktuális licencét és Terms of Service dokumentumát ellenőrizni kell.
+
+GeoTIFF
+-------
+A kijelölt téglalap alapján a rendszer tile mosaic + georeferált GeoTIFF exportot készít. A mentés modern Chromium-alapú böngészőben natív Save dialogot használ, a Documents kezdőhely megadásának kérésével.

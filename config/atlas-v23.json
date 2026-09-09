@@ -1,0 +1,16 @@
+{
+  "version": "23.0",
+  "geojson": {
+    "originalUploadedFilenameStored": true,
+    "displayFilenameWithoutExtension": true,
+    "legendUsesUploadedFilename": true
+  },
+  "layerFeatureEditor": {
+    "layerOpacitySlider": "reliable-group-level",
+    "batchStyle": {
+      "lineSymbolColor": true,
+      "fillColor": true,
+      "applyToAllObjects": true
+    }
+  }
+}

@@ -180,81 +180,60 @@ nav a:hover {
 
 }
 
+
+.atlas-opacity-control{display:flex;align-items:center;gap:8px;margin-left:8px;padding:5px 7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:7px;color:#d8e0e3;font:800 8px Arial,sans-serif}
+.atlas-opacity-control label{display:flex;align-items:center;gap:5px;white-space:nowrap}.atlas-opacity-control input{width:80px}
+.atlas-opacity-control output{color:#f0dfb7}
+
 </style>
 
+<link rel="stylesheet" href="css/v12-design.css">
+<link rel="stylesheet" href="css/atlas-ai.css">
+<link rel="stylesheet" href="css/v13-map.css">
+<link rel="stylesheet" href="css/v14-ui.css">
+<link rel="stylesheet" href="css/v15-map-ux.css">
+<link rel="stylesheet" href="css/v16-map-position.css">
+<link rel="stylesheet" href="css/v17-map-controls.css">
+<link rel="stylesheet" href="css/v18-clean-layers.css">
+<link rel="stylesheet" href="css/v20-layer-feature-editor.css">
+<link rel="stylesheet" href="css/v21-final-legend.css">
+<link rel="stylesheet" href="css/premium-unified.css">
+<link rel="stylesheet" href="css/layer-workspace-premium.css">
 </head>
 
 
 <body>
+<nav class="atlas-map-header" aria-label="Навігація">
+  <div class="atlas-header-left"><a href="index-ua.html">ГОЛОВНА</a><a href="foldrajzi-terkep-ua.html">ГЕОГРАФІЧНА</a><a href="tortenelmi-terkep-ua.html">ІСТОРИЧНА</a><a href="gallery-ua.html">ГАЛЕРЕЯ</a></div>
+  <div class="atlas-header-center">
+    <button id="headerDrawEditorButton" class="atlas-header-btn atlas-header-draw">✏️ DRAW EDITOR</button>
+    <button id="headerPresentationButton" class="atlas-header-btn">🎬 PREZI</button>
+    <button id="headerAtlasAIButton" class="atlas-header-btn atlas-header-ai">🤖 ATLAS AI</button>
+    <button id="headerLayerWorkspaceButton" class="atlas-header-btn atlas-gis-link">🧭 РОБОЧИЙ ПРОСТІР ШАРІВ</button>
+  </div>
+  <div class="atlas-header-right"><a href="../admin/index.html">🔐 ADMIN</a></div>
+</nav>
 
 
 <!-- =========================================
      HEADER
 ========================================= -->
 
-<header>
 
-    <h1>
-        Географічний та історичний атлас Закарпаття
-    </h1>
-
-    <p>
-        Географія • Історія • Колишні комітати
-    </p>
-
-
-    <div class="language-switch">
-
-        <a href="geography.html">
-            🇭🇺 MAGYAR
-        </a>
-
-        <span class="current-language">
-            🇺🇦 УКРАЇНСЬКА
-        </span>
-
-    </div>
-
-</header>
 
 
 <!-- =========================================
      NAVIGATION
 ========================================= -->
 
-<nav>
 
-    <a href="index-ua.html">
-        ГОЛОВНА
-    </a>
-
-    <a href="foldrajzi-terkep-ua.html">
-        🌍 ГЕОГРАФІЧНА КАРТА
-    </a>
-
-    <a href="tortenelmi-terkep-ua.html">
-        📜 ІСТОРИЧНА КАРТА
-    </a>
-
-</nav>
 
 
 <!-- =========================================
      MAP HEADER
 ========================================= -->
 
-<section class="map-header">
 
-    <h2>
-        🌍 Інтерактивна географічна карта
-    </h2>
-
-    <p>
-        Географічна карта Закарпаття
-        з природними та географічними об'єктами.
-    </p>
-
-</section>
 
 
 <!-- =========================================
@@ -400,6 +379,72 @@ L.control.layers(
 </script>
 
 
+<script src="js/v12-layer-workspace.js"></script>
+
+<script>
+/* V12 HEADER CONTROLLER */
+(function(){
+"use strict";
+function wire(){
+ const draw=document.getElementById("headerDrawEditorButton");
+ const prezi=document.getElementById("headerPresentationButton");
+ const ai=document.getElementById("headerAtlasAIButton");
+ const ws=document.getElementById("headerLayerWorkspaceButton");
+ if(draw) draw.onclick=()=>{
+   const p=document.getElementById("featureEditorPanel");
+   if(!p){alert("A Draw Feature Editor még nem töltődött be.");return}
+   const open=!p.hidden && p.style.display!=="none";
+   p.hidden=open;p.style.display=open?"none":"block";
+   if(!open) window.renderDrawFeatureEditor?.();
+ };
+ if(prezi) prezi.onclick=()=>{if(typeof openPreziEditor==="function")openPreziEditor();else alert("A Prezi modul nem töltődött be.")};
+ if(ai) ai.onclick=()=>window.AtlasAI?.open?.() || alert("Az Atlas AI modul a backend beállítása után használható.");
+ if(ws) ws.onclick=()=>window.AtlasLayerWorkspace?.open?.();
+}
+document.addEventListener("DOMContentLoaded",()=>setTimeout(wire,500));
+})();
+</script><script src="js/atlas-ai.js"></script>
+
+
+<script src="js/v14-opacity.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+ const wireOpacity=()=>{
+   const input=document.getElementById("awOpacity"),out=document.getElementById("awOpacityOut");
+   if(!input||input.dataset.wired)return;input.dataset.wired="1";
+   input.oninput=()=>{
+     out.textContent=Math.round(+input.value*100)+"%";
+     try{
+       document.querySelectorAll(".atlas-layer-row,.aw-layer-row").forEach(()=>{});
+       if(typeof importedVectorRegistry!=="undefined") importedVectorRegistry.forEach(x=>x.group?.eachLayer?.(l=>l.setStyle?.({opacity:+input.value,fillOpacity:+input.value*.35})));
+       if(typeof overlays!=="undefined") Object.values(overlays).forEach(g=>g?.eachLayer?.(l=>l.setStyle?.({opacity:+input.value,fillOpacity:+input.value*.35})));
+     }catch(e){}
+   };
+ };
+ setInterval(wireOpacity,500);
+});
+</script>
+
+
+<script>
+window.addEventListener("resize",()=>window.AtlasMapUX?.invalidate?.());
+window.addEventListener("orientationchange",()=>setTimeout(()=>window.AtlasMapUX?.invalidate?.(),250));
+</script>
+
+
+
+
+
+<script src="js/v18-geojson-filename.js"></script>
+<script src="js/v19-display-name.js"></script>
+
+
+<script src="js/v20-clean-layer-workspace.js"></script>
+<script src="js/v20-clean-legend.js"></script>
+<script src="js/v20-feature-editor-opacity.js"></script>
+<script src="js/v21-final-legend.js"></script>
 </body>
 
 </html>
+

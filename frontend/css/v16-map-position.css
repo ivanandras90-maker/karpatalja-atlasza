@@ -1,0 +1,54 @@
+
+/* ==========================================================
+ V16 — MAP UI FINAL POSITIONING
+========================================================== */
+.atlas-map-rail{
+ position:fixed!important;
+ left:14px!important;
+ top:74px!important;
+ z-index:9000!important;
+ display:flex!important;
+ flex-direction:column!important;
+ gap:8px!important;
+}
+#atlasLayerTool,#atlasSearchTool{
+ position:fixed!important;
+ left:auto!important;
+ top:auto!important;
+}
+#atlasLayerTool{
+ right:14px!important;
+ top:74px!important;
+}
+#atlasSearchTool{
+ right:14px!important;
+ top:126px!important;
+}
+#atlasHomeTool,#atlasLocateTool{
+ position:relative!important;
+ left:auto!important;
+ right:auto!important;
+ top:auto!important;
+}
+#atlasLayerDrawer{
+ left:auto!important;
+ right:68px!important;
+ top:74px!important;
+}
+.atlas-map-search{
+ left:auto!important;
+ right:68px!important;
+ top:74px!important;
+}
+.atlas-map-help{display:none!important}
+
+/* Make the upper-right utility buttons visually consistent. */
+#atlasLayerTool,#atlasSearchTool{
+ width:44px!important;height:44px!important;
+}
+@media(max-width:680px){
+ #atlasLayerTool{right:8px!important;top:62px!important}
+ #atlasSearchTool{right:8px!important;top:114px!important}
+ #atlasLayerDrawer{left:auto!important;right:58px!important;top:62px!important;width:calc(100vw - 66px)!important}
+ .atlas-map-search{left:auto!important;right:58px!important;top:62px!important;width:calc(100vw - 66px)!important}
+}

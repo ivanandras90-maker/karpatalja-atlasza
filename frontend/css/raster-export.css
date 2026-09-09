@@ -1,0 +1,28 @@
+/* KÁRPÁTALJA ATLASZ — RASTER EXPORT */
+.ka-raster-modal{position:fixed;inset:0;z-index:10050;background:rgba(7,15,22,.58);display:none;align-items:flex-start;justify-content:center;padding:82px 20px 24px;backdrop-filter:blur(4px)}
+.ka-raster-modal.is-open{display:flex}
+.ka-raster-dialog{width:min(980px,96vw);max-height:calc(100vh - 106px);overflow:auto;background:#fff;border:1px solid rgba(17,48,67,.16);border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.28);color:#17374d;font-family:inherit}
+.ka-raster-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:#f8fafb;border-bottom:1px solid #e3e9ed}.ka-raster-head>div>div{font-size:15px;font-weight:800;letter-spacing:.08em}.ka-raster-head small{display:block;margin-top:3px;color:#6c7c86;font-size:11px}.ka-raster-head button{width:34px;height:34px;border:1px solid #d7e0e5;background:#fff;border-radius:9px;font-size:22px;line-height:1;cursor:pointer;color:#38515f}
+.ka-raster-body{padding:18px}.ka-raster-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.ka-raster-section{border:1px solid #e1e8ec;border-radius:12px;padding:15px;background:#fbfcfd}.ka-raster-section h4{margin:0 0 12px;font-size:11px;letter-spacing:.1em;color:#6a7d89}.ka-raster-choice{display:flex;gap:8px}.ka-raster-choice button,.ka-raster-actions button{border:1px solid #ccd8de;background:#fff;color:#274553;border-radius:8px;padding:9px 12px;font-weight:700;cursor:pointer}.ka-raster-primary{background:#17374d!important;color:#fff!important;border-color:#17374d!important}.ka-raster-status,.ka-raster-note{margin-top:10px;padding:9px 10px;background:#f1f5f7;border-radius:8px;color:#60717b;font-size:12px;line-height:1.4}.ka-raster-coords{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.ka-raster-field,.ka-raster-coords label{display:flex;flex-direction:column;gap:5px;font-size:11px;font-weight:700;color:#536874}.ka-raster-field select,.ka-raster-coords input{width:100%;box-sizing:border-box;border:1px solid #cfdbe1;border-radius:7px;background:#fff;padding:8px;color:#17374d;font:inherit}.ka-raster-preview{margin-top:14px}.ka-raster-summary{font-size:12px;color:#526873;padding:10px 0}.ka-raster-progress{height:5px;background:#e8eef1;border-radius:99px;overflow:hidden}.ka-raster-progress span{display:block;width:0;height:100%;background:#17374d;transition:width .15s}.ka-raster-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:13px}.ka-raster-message{margin-top:10px;min-height:18px;font-size:12px;color:#47636f}.ka-raster-message.error{color:#a33d3d;font-weight:700}@media(max-width:760px){.ka-raster-grid{grid-template-columns:1fr}.ka-raster-modal{padding:70px 8px 10px}.ka-raster-dialog{max-height:calc(100vh - 80px)}.ka-raster-body{padding:10px}}
+
+/* Full-map rectangle selection mode: hide the export surface while drawing. */
+.ka-raster-selection-guide{position:fixed;top:74px;left:50%;transform:translateX(-50%);z-index:10060;display:none;pointer-events:none}
+.ka-raster-selection-guide.is-visible{display:block}
+.ka-raster-selection-guide>div{display:flex;align-items:center;gap:12px;max-width:min(760px,calc(100vw - 24px));padding:10px 13px;border:1px solid rgba(23,55,77,.18);border-radius:10px;background:rgba(255,255,255,.96);box-shadow:0 8px 26px rgba(0,0,0,.18);color:#17374d;font-family:inherit;pointer-events:auto}
+.ka-raster-selection-guide strong{font-size:11px;letter-spacing:.08em;white-space:nowrap}.ka-raster-selection-guide span{font-size:12px;color:#5b6f7a}.ka-raster-selection-guide button{margin-left:auto;border:1px solid #ccd8de;background:#fff;color:#274553;border-radius:7px;padding:7px 10px;font-weight:700;cursor:pointer;white-space:nowrap}
+body.ka-raster-selecting .leaflet-container{cursor:crosshair}
+@media(max-width:760px){.ka-raster-selection-guide{top:68px}.ka-raster-selection-guide>div{gap:7px;padding:9px;flex-wrap:wrap}.ka-raster-selection-guide span{flex:1 1 100%}.ka-raster-selection-guide button{margin-left:0}}
+
+/* V37 — licensing-safe raster export */
+.ka-raster-policy{margin:8px 0 10px;border-radius:10px;font-size:12px;line-height:1.35}
+.ka-raster-policy>div{padding:10px 12px;border:1px solid #d8dee5;background:#f7f9fb}
+.ka-raster-policy strong{display:block;letter-spacing:.04em;margin-bottom:3px}
+.ka-raster-policy span,.ka-raster-policy small{display:block;color:#61707c}
+.ka-raster-policy a{display:inline-block;margin-top:5px;color:#1c5574;text-decoration:underline}
+.ka-policy-ok{border-color:#b9d9c3!important;background:#f2faf4!important}
+.ka-policy-ok strong{color:#21663a}
+.ka-policy-blocked{border-color:#e2c5c5!important;background:#fff7f7!important}
+.ka-policy-blocked strong{color:#8d3030}
+.ka-raster-source-actions{margin:4px 0 8px}
+.ka-raster-source-actions button{font-size:12px;padding:7px 9px;border:1px solid #cfd8df;border-radius:7px;background:#fff;cursor:pointer}
+.ka-raster-source-actions button:hover{background:#f4f7f9}

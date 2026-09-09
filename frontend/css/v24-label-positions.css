@@ -1,0 +1,28 @@
+
+/* V24 — geometry-aware label placement */
+.lfe-feature-label-point{
+  margin-left:0!important;
+}
+.lfe-feature-label-point .lfe-feature-label-text{
+  white-space:nowrap;
+}
+.lfe-feature-label-polygon{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+.lfe-feature-label-polygon:before{
+  display:none!important;
+}
+.lfe-feature-label .lfe-feature-label-text{
+  display:inline-block;
+  white-space:nowrap;
+  padding:2px 5px;
+  border-radius:3px;
+  line-height:1.15;
+  box-shadow:0 1px 3px rgba(0,0,0,.16);
+}
+.lfe-svg-line-label{
+  dominant-baseline:middle;
+  letter-spacing:.1px;
+}

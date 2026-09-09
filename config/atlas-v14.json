@@ -1,0 +1,25 @@
+{
+  "version": "14.0",
+  "map": "continuous-fullscreen",
+  "layerIcon": {
+    "enabled": true,
+    "position": "under-zoom",
+    "opens": "layer-list"
+  },
+  "layerList": [
+    "basemaps",
+    "atlas-layers",
+    "custom-geojson",
+    "visibility",
+    "zoom"
+  ],
+  "opacity": {
+    "drawEditor": true,
+    "layerEditor": true,
+    "layerWorkspace": true
+  },
+  "header": {
+    "responsive": "horizontal-scroll",
+    "gisAfterAI": true
+  }
+}

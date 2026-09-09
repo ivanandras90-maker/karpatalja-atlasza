@@ -1,0 +1,37 @@
+KÁRPÁTALJA ATLASZ — V39
+GLOBAL MAPPER INSPIRED GEOREFERENCING
+
+A földrajzi térkép GEOREFERÁLÁS modulja kétablakos munkafolyamatot használ.
+
+BAL OLDAL — FORRÁS RASZTER
+- helyi JPG / JPEG / PNG / TIFF
+- OPEN MAPPA és egyedi kép megnyitása
+- kép nagyítása görgetéssel
+- kép mozgatása húzással
+- pixelpozíció kijelzése
+
+JOBB OLDAL — REFERENCIA TÉRKÉP
+- a Kárpátalja Atlaszban elérhető base map rétegek választhatók
+- importált GeoJSON rétegek is választhatók, ha elérhetők
+- Leaflet zoom/pan
+- egérmozgatás közbeni WGS84 koordináta-kijelzés
+- kattintással referencia-koordináta rögzíthető
+- a referencia térkép csak illesztési referencia, a kimenetbe nem tölt le külső adatot
+
+GCP WORKFLOW
+1. ÚJ KONTROLLPONT
+2. kattintás a bal oldali forrásképen
+3. kattintás a jobb oldali referencia-térképen
+4. a pixel + WGS84 koordináta páros automatikusan bekerül
+5. 3+ pont esetén affin transzformáció számítható
+6. 4–6 jól elosztott pont ajánlott
+
+KIMENET
+- EPSG:4326 WGS 84 vagy EPSG:3857 Web Mercator
+- GeoTIFF georeferenciával
+- modern Chromium alapú böngészőben Mentés másként párbeszéd, alapértelmezett Documents helyzettel
+
+LICENC / BIZTONSÁG
+A modul nem használja a külső térképrétegeket raster-export forrásként.
+A georeferálandó kép helyi felhasználói fájl. A referencia-térkép kizárólag vizuális illesztési segítség.
+A külső szolgáltatók felhasználási feltételeit az Atlasz nem írja felül és nem kerüli meg.

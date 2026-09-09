@@ -1,0 +1,51 @@
+
+/* V28 — Historical map uses the same professional map shell as Geography. */
+html,body{height:100%;margin:0;overflow:hidden}
+#map{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;z-index:1!important}
+.leaflet-container{font-family:Arial,sans-serif}
+.atlas-map-header{
+ position:fixed;left:0;right:0;top:0;height:62px;z-index:5000;
+ display:flex;align-items:center;gap:8px;padding:0 12px;
+ background:rgba(10,35,49,.97);box-shadow:0 2px 12px rgba(0,0,0,.22)
+}
+.atlas-map-header .brand{margin-right:auto;color:#fff;font-weight:800;letter-spacing:.2px}
+.atlas-map-header button{
+ height:38px;border:1px solid rgba(255,255,255,.16);border-radius:8px;
+ background:#102f41;color:#fff;padding:0 13px;font-weight:800;cursor:pointer
+}
+.atlas-map-header button:hover{background:#c5a35b;color:#102638}
+.atlas-map-tools{
+ position:fixed;right:14px;top:76px;z-index:4500;display:flex;flex-direction:column;gap:9px
+}
+.atlas-map-tools button{
+ width:48px;height:48px;border:0;border-radius:12px;background:rgba(255,255,255,.96);
+ box-shadow:0 3px 12px rgba(0,0,0,.2);font-size:22px;cursor:pointer
+}
+.atlas-map-tools button:hover{transform:translateY(-1px)}
+.atlas-legend{
+ position:fixed;right:14px;bottom:14px;z-index:4500;width:300px;max-width:calc(100vw - 28px);
+ max-height:42vh;overflow:auto;background:rgba(255,255,255,.96);
+ border-radius:15px;box-shadow:0 8px 30px rgba(0,0,0,.22)
+}
+.atlas-legend-header{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid #ddd}
+.atlas-legend-header strong{color:#17374d;font-size:12px}
+.atlas-legend-body{padding:10px 14px}
+.atlas-layer-panel{
+ position:fixed;right:14px;top:76px;z-index:4400;width:min(360px,calc(100vw - 28px));
+ max-height:72vh;overflow:auto;display:none;background:rgba(255,255,255,.97);
+ border-radius:15px;box-shadow:0 8px 30px rgba(0,0,0,.25)
+}
+.atlas-layer-panel.open{display:block}
+.atlas-layer-panel .head{padding:13px 15px;border-bottom:1px solid #ddd;font-weight:900;color:#17374d}
+.atlas-layer-row{padding:10px 14px;border-bottom:1px solid #eee;display:flex;align-items:center;gap:8px}
+.atlas-layer-row .name{flex:1;font-weight:700}
+.atlas-search{
+ position:fixed;right:72px;top:76px;z-index:4500;width:300px;display:none
+}
+.atlas-search.open{display:block}
+.atlas-search input{width:100%;box-sizing:border-box;height:46px;border:0;border-radius:12px;padding:0 14px;box-shadow:0 4px 18px rgba(0,0,0,.2)}
+@media(max-width:700px){
+ .atlas-map-header{height:54px}.atlas-map-header .brand{display:none}
+ .atlas-map-tools{top:66px;right:9px}
+ .atlas-legend{right:9px;bottom:9px;width:270px}
+}

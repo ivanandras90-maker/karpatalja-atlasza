@@ -1,0 +1,21 @@
+{
+  "version": "15.0",
+  "target": "geography",
+  "ux": [
+    "layer-drawer",
+    "layer-search",
+    "map-search",
+    "home-view",
+    "geolocation",
+    "layer-opacity",
+    "continuous-map"
+  ],
+  "layers": {
+    "nativeLeafletControl": "replaced-by-custom-panel"
+  },
+  "legend": "dynamic-bottom-right",
+  "map": {
+    "invalidateSizeOnLoad": true,
+    "invalidateSizeOnResize": true
+  }
+}

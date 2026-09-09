@@ -1,0 +1,95 @@
+
+/* ==========================================================
+ V17 — MAP CONTROL POSITIONING
+ Header = 58px. All map controls start below it.
+ Layer + Search = upper right.
+ Zoom + Draw = left, below header, with safe spacing.
+========================================================== */
+html,body,#map{width:100%!important;height:100%!important}
+#map{position:fixed!important;inset:0!important;height:100dvh!important}
+
+/* All Leaflet top controls must clear the fixed atlas header. */
+.leaflet-top{
+ top:70px!important;
+}
+.leaflet-top.leaflet-left{
+ left:10px!important;
+}
+.leaflet-top.leaflet-right{
+ right:10px!important;
+}
+
+/* Explicitly move zoom lower and make its box stable. */
+.leaflet-control-zoom{
+ margin-top:0!important;
+ margin-left:0!important;
+ width:44px!important;
+ border-radius:9px!important;
+ overflow:hidden!important;
+}
+.leaflet-control-zoom a{
+ width:44px!important;height:40px!important;line-height:40px!important;
+}
+
+/* Draw toolbar is below zoom with a deliberate gap. */
+.leaflet-control-container .leaflet-top.leaflet-left .leaflet-draw{
+ margin-top:58px!important;
+}
+.leaflet-draw-toolbar{
+ margin-top:0!important;
+}
+
+/* Dedicated upper-right layer/search controls. */
+#atlasMapRail{
+ position:fixed!important;
+ left:auto!important;
+ right:12px!important;
+ top:70px!important;
+ z-index:10000!important;
+ width:44px!important;
+ display:flex!important;
+ flex-direction:column!important;
+ gap:8px!important;
+}
+#atlasLayerTool,#atlasSearchTool{
+ position:relative!important;
+ inset:auto!important;
+ width:44px!important;height:44px!important;
+ flex:none!important;
+}
+#atlasLayerTool{order:1!important}
+#atlasSearchTool{order:2!important}
+
+/* Layer drawer opens immediately left of the upper-right controls. */
+#atlasLayerDrawer{
+ left:auto!important;
+ right:66px!important;
+ top:70px!important;
+ z-index:9999!important;
+}
+
+/* Search opens in the same upper-right work zone. */
+.atlas-map-search{
+ left:auto!important;
+ right:66px!important;
+ top:70px!important;
+ z-index:9998!important;
+}
+
+/* Existing V14 layer icon must not create a duplicate left-side layer button. */
+#atlasLayerToggle{display:none!important}
+#atlasLayerFlyout{display:none!important}
+
+/* Left quick tools are intentionally lower than the header. */
+#atlasHomeTool,#atlasLocateTool{
+ position:relative!important;
+}
+
+/* Mobile: preserve the same visual hierarchy. */
+@media(max-width:680px){
+ .leaflet-top{top:62px!important}
+ .leaflet-top.leaflet-left{left:7px!important}
+ .atlas-map-rail{right:8px!important;top:62px!important}
+ #atlasLayerDrawer{right:58px!important;top:62px!important;width:calc(100vw - 66px)!important}
+ .atlas-map-search{right:58px!important;top:62px!important;width:calc(100vw - 66px)!important}
+}

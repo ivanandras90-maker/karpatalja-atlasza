@@ -1,0 +1,19 @@
+{
+  "version": "20.0",
+  "layerManager": {
+    "predefinedThematicItemsRemoved": true,
+    "uploadedGeoJSONOnly": true,
+    "displayOriginalFilenameWithoutExtension": true,
+    "opacity": true
+  },
+  "featureEditor": {
+    "layerOpacitySlider": true
+  },
+  "legend": {
+    "uploadedFileDisplayName": "original filename without .geojson/.json"
+  },
+  "ui": {
+    "layerIcon": "upper-right",
+    "search": "under-layer-icon"
+  }
+}

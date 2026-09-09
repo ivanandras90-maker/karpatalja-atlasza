@@ -413,10 +413,3266 @@ nav a.active{
     }
 
 }
+
+.atlas-opacity-control{display:flex;align-items:center;gap:8px;margin-left:8px;padding:5px 7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:7px;color:#d8e0e3;font:800 8px Arial,sans-serif}
+.atlas-opacity-control label{display:flex;align-items:center;gap:5px;white-space:nowrap}.atlas-opacity-control input{width:80px}
+.atlas-opacity-control output{color:#f0dfb7}
+
 </style>
+
+
+
+
+<style>
+
+
+/* =====================================================
+   ALAP
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: Georgia, "Times New Roman", serif;
+    background: #f3f0e7;
+}
+
+
+/* =====================================================
+   FEJLÉC
+===================================================== */
+
+header {
+    background: #102638;
+    color: white;
+    padding: 20px 35px;
+    border-bottom: 1px solid #c09d57;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 27px;
+}
+
+header p {
+    margin: 6px 0 0;
+    color: #c9ad6c;
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   NYELV
+===================================================== */
+
+.language-switch {
+    margin-top: 12px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+.language-switch span,
+.language-switch a {
+    margin-right: 12px;
+}
+
+.language-switch a {
+    color: white;
+    text-decoration: none;
+}
+
+.current-language {
+    color: #d8b86a;
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   NAV
+===================================================== */
+
+nav {
+    background: #17374d;
+    padding: 0 35px;
+}
+
+nav a {
+    display: inline-block;
+    padding: 15px;
+    color: white;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    background: #c09d57;
+    color: #102638;
+}
+
+
+/* =====================================================
+   TÉRKÉP FEJLÉC
+===================================================== */
+
+.map-header {
+    background: #f3f0e7;
+    padding: 20px 35px;
+}
+
+.map-header h2 {
+    margin: 0 0 8px;
+    color: #17374d;
+    font-size: 28px;
+}
+
+.map-header p {
+    margin: 0;
+    color: #5d666c;
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   TÉRKÉP
+===================================================== */
+
+#map {
+    width: 100%;
+    height: calc(100vh - 205px);
+    min-height: 550px;
+}
+
+
+document.addEventListener("click",function(event){
+    const edit=event.target.closest("[data-draw-edit]");
+    const coords=event.target.closest("[data-draw-coords]");
+    if(edit){event.preventDefault();openDrawPropertyEditor(edit.dataset.drawEdit);}
+    if(coords){event.preventDefault();openDrawAnalysis(coords.dataset.drawCoords);}
+});
+
+/* =====================================================
+   KOORDINÁTA
+===================================================== */
+
+.coordinate-display {
+    background: rgba(16,38,56,.95);
+    color: white;
+    padding: 7px 10px;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   GEOJSON VEZÉRLŐ
+===================================================== */
+
+.geojson-control {
+    background: white;
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0 1px 5px rgba(0,0,0,.35);
+    margin-bottom: 5px;
+}
+
+.geojson-control button {
+    display: block;
+    width: 165px;
+    border: 0;
+    background: white;
+    color: #17374d;
+    padding: 8px 10px;
+    text-align: left;
+    cursor: pointer;
+    font: bold 11px Arial,sans-serif;
+    border-bottom: 1px solid #eee;
+}
+
+.geojson-control button:last-child {
+    border-bottom: 0;
+}
+
+.geojson-control button:hover {
+    background: #f0eadb;
+}
+
+
+/* =====================================================
+   PREZI GOMB
+===================================================== */
+
+ .prezi-button {display:none!important;
+    background: #c09d57 !important;
+    color: #102638 !important;
+    font-weight: bold !important;
+}
+
+
+/* =====================================================
+   PREZI SZERKESZTŐ
+===================================================== */
+
+#preziEditor {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    background: #e9e5da;
+}
+
+#preziEditor.active {
+    display: flex;
+}
+
+
+/* BAL OLDALI ESZKÖZTÁR */
+
+.prezi-toolbar {
+    width: 190px;
+    background: #102638;
+    color: white;
+    padding: 15px;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.prezi-brand {
+    padding-bottom: 15px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #526573;
+}
+
+.prezi-brand-title {
+    color: #d8b86a;
+    font: bold 19px Georgia,serif;
+}
+
+.prezi-brand-subtitle {
+    color: #cbd4d9;
+    font: 9px Arial,sans-serif;
+    letter-spacing: 1px;
+    margin-top: 3px;
+}
+
+.prezi-toolbar button {
+    width: 100%;
+    padding: 9px 8px;
+    margin-bottom: 6px;
+    border: 0;
+    border-radius: 4px;
+    background: #17374d;
+    color: white;
+    cursor: pointer;
+    text-align: left;
+    font: bold 11px Arial,sans-serif;
+}
+
+.prezi-toolbar button:hover {
+    background: #28566d;
+}
+
+.prezi-toolbar .gold {
+    background: #c09d57;
+    color: #102638;
+}
+
+
+/* PREZI MUNKATERÜLET */
+
+.prezi-workspace {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+
+#preziMap {
+    position: absolute;
+    inset: 0;
+}
+
+
+/* JOBB OLDALI DIÁK */
+
+.prezi-frames {
+    width: 230px;
+    background: #f7f5ef;
+    border-left: 1px solid #c8c2b5;
+    padding: 12px;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.prezi-frames-title {
+    color: #17374d;
+    font: bold 11px Arial,sans-serif;
+    letter-spacing: 1px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.prezi-frame {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 11px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.prezi-frame:hover {
+    border-color: #c09d57;
+}
+
+.prezi-frame.active {
+    border-color: #c09d57;
+    box-shadow: 0 0 0 2px rgba(192,157,87,.25);
+}
+
+.prezi-frame-number {
+    color: #c09d57;
+    font: bold 10px Arial,sans-serif;
+}
+
+.prezi-frame-title {
+    color: #17374d;
+    font: bold 12px Arial,sans-serif;
+    margin-top: 4px;
+}
+
+.prezi-frame-text {
+    color: #777;
+    font: 10px Arial,sans-serif;
+    line-height: 1.4;
+    margin-top: 5px;
+}
+
+
+/* =====================================================
+   PREZI SZÖVEGOBJEKTUMOK
+===================================================== */
+
+.prezi-object {
+    position: absolute;
+    z-index: 2000;
+    cursor: move;
+    user-select: none;
+    transform-origin: center center;
+}
+
+.prezi-text-object {
+    padding: 8px 12px;
+    background: rgba(255,255,255,.9);
+    border-radius: 5px;
+    color: #17374d;
+    box-shadow: 0 2px 10px rgba(0,0,0,.18);
+    white-space: pre-wrap;
+}
+
+.prezi-object.selected {
+    outline: 2px solid #c09d57;
+    outline-offset: 4px;
+}
+
+
+/* =====================================================
+   PREZI FRAME SZERKESZTŐ
+===================================================== */
+
+.prezi-frame-editor {
+    position: absolute;
+    top: 60px;
+    right: 15px;
+    width: 285px;
+    background: rgba(255,255,255,.98);
+    border: 1px solid #c09d57;
+    border-radius: 6px;
+    padding: 12px;
+    z-index: 4000;
+    box-shadow: 0 5px 20px rgba(0,0,0,.3);
+}
+
+.prezi-frame-editor h3 {
+    margin: 0 0 10px;
+    color: #17374d;
+    font-size: 14px;
+}
+
+.prezi-frame-editor label,
+.prezi-text-editor label {
+    display: block;
+    margin: 8px 0 4px;
+    color: #526573;
+    font: bold 10px Arial,sans-serif;
+}
+
+.prezi-frame-editor input,
+.prezi-frame-editor textarea,
+.prezi-text-editor input,
+.prezi-text-editor textarea,
+.prezi-text-editor select {
+    width: 100%;
+    padding: 7px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    font: 11px Arial,sans-serif;
+}
+
+.prezi-frame-editor textarea {
+    min-height: 70px;
+    resize: vertical;
+}
+
+
+/* =====================================================
+   SZÖVEG SZERKESZTŐ
+===================================================== */
+
+.prezi-text-editor {
+    position: absolute;
+    bottom: 20px;
+    right: 15px;
+    width: 285px;
+    background: rgba(255,255,255,.98);
+    border: 1px solid #c09d57;
+    border-radius: 6px;
+    padding: 12px;
+    z-index: 4500;
+    box-shadow: 0 5px 20px rgba(0,0,0,.3);
+    display: none;
+}
+
+.prezi-text-editor.active {
+    display: block;
+}
+
+.prezi-text-editor h3 {
+    margin: 0 0 10px;
+    color: #17374d;
+    font-size: 14px;
+}
+
+.prezi-text-editor textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+
+/* =====================================================
+   PREZENTÁCIÓ
+===================================================== */
+
+#presentationOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 9000;
+    display: none;
+    pointer-events: none;
+}
+
+#presentationOverlay.active {
+    display: block;
+}
+
+.presentation-caption {
+    position: absolute;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    width: min(780px,calc(100% - 50px));
+    padding: 18px 22px;
+    background: rgba(16,38,56,.95);
+    color: white;
+    border: 1px solid #c09d57;
+    border-radius: 8px;
+    text-align: center;
+    pointer-events: auto;
+    box-shadow: 0 8px 30px rgba(0,0,0,.4);
+}
+
+.presentation-counter {
+    color: #d8b86a;
+    font: bold 10px Arial,sans-serif;
+}
+
+.presentation-caption h1 {
+    margin: 5px 0;
+    font: 29px Georgia,serif;
+}
+
+.presentation-caption p {
+    margin: 0;
+    color: #e2e6e8;
+    font: 13px Arial,sans-serif;
+    line-height: 1.5;
+}
+
+.presentation-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.presentation-buttons button {
+    border: 0;
+    border-radius: 4px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   PROFESSZIONÁLIS GALÉRIA MARKEREK
+===================================================== */
+.gallery-marker-wrap{
+    background:transparent;
+    border:0;
+}
+.gallery-marker{
+    width:38px;
+    height:38px;
+    border-radius:50% 50% 50% 0;
+    transform:rotate(-45deg);
+    background:#102638;
+    border:2px solid #d8b86a;
+    box-shadow:0 4px 14px rgba(0,0,0,.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.gallery-marker span{
+    transform:rotate(45deg);
+    font-size:17px;
+}
+.gallery-marker:hover{
+    transform:rotate(-45deg) scale(1.08);
+}
+.gallery-popup{
+    min-width:250px;
+    max-width:310px;
+    font-family:Arial,sans-serif;
+    color:#26343d;
+}
+.gallery-popup img{
+    display:block;
+    width:100%;
+    max-height:175px;
+    object-fit:cover;
+    border-radius:8px;
+    margin:0 0 10px;
+}
+.gallery-popup h3{
+    margin:0 0 7px;
+    color:#17374d;
+    font:700 17px Georgia,serif;
+}
+.gallery-popup .meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+    margin:7px 0;
+}
+.gallery-popup .badge{
+    display:inline-block;
+    padding:4px 7px;
+    border-radius:999px;
+    background:#f0eadb;
+    color:#17374d;
+    font-size:10px;
+    font-weight:700;
+}
+.gallery-popup .description{
+    line-height:1.5;
+    font-size:12px;
+    margin:8px 0;
+}
+.gallery-popup .coords{
+    color:#69747b;
+    font-size:10px;
+    margin-top:8px;
+}
+.gallery-popup .popup-actions{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-top:10px;
+}
+.gallery-popup .popup-actions a{
+    display:inline-block;
+    padding:7px 9px;
+    border-radius:5px;
+    background:#102638;
+    color:#fff;
+    text-decoration:none;
+    font-size:10px;
+    font-weight:700;
+}
+.gallery-popup .popup-actions a.gold{
+    background:#c09d57;
+    color:#102638;
+}
+.map-status{
+    display:none !important;
+}
+
+/* PROFESSZIONÁLIS TÉRKÉPI LÉPTÉKMÉRŐ */
+.leaflet-control-scale{
+    margin:0 0 14px 14px !important;
+}
+.leaflet-control-scale-line{
+    background:rgba(245,245,245,.88);
+    border:0 !important;
+    border-bottom:4px solid #1683f7 !important;
+    color:#111 !important;
+    font:14px/1.1 Arial,sans-serif !important;
+    font-weight:400 !important;
+    text-align:center !important;
+    box-sizing:border-box !important;
+    padding:2px 4px 3px !important;
+    min-width:80px;
+    box-shadow:none !important;
+}
+
+
+
+/* =====================================================
+   MODERN FÖLDRAJZI KUTATÁSI FELÜLET
+===================================================== */
+
+.map-header{
+    padding:18px 35px 15px;
+    background:linear-gradient(180deg,#f8f5ec 0%,#eee9dc 100%);
+    border-bottom:1px solid #d6c49a;
+}
+.map-header h2{
+    font-size:30px;
+    letter-spacing:.2px;
+}
+.map-header-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin:10px 0 10px;
+}
+.map-header-research-dropdown{position:relative;display:inline-block;margin:11px 0 9px;z-index:1200}.map-header-research-trigger{border:1px solid #b8954d;border-radius:6px;padding:8px 12px;background:#17374d;color:#fff;cursor:pointer;font:700 11px Arial,sans-serif;box-shadow:0 1px 3px rgba(0,0,0,.12)}.map-header-research-trigger:hover{background:#c09d57;color:#102638}.map-header-research-menu{position:absolute;top:calc(100% + 5px);left:0;min-width:235px;background:#fffdf8;border:1px solid #c09d57;border-radius:7px;box-shadow:0 8px 24px rgba(0,0,0,.22);padding:5px;z-index:1300}.map-header-research-menu button{display:block;width:100%;border:0;border-radius:5px;padding:9px 11px;background:transparent;color:#17374d;text-align:left;cursor:pointer;font:700 11px Arial,sans-serif}.map-header-research-menu button:hover{background:#f0eadb;color:#102638}.map-header-research-menu[hidden]{display:none!important}
+.map-header-statistics-trigger{
+    display:inline-block;
+    margin:11px 0 9px 7px;
+    border:1px solid #b8954d;
+    border-radius:6px;
+    padding:8px 12px;
+    background:#17374d;
+    color:#fff;
+    cursor:pointer;
+    font:700 11px Arial,sans-serif;
+    box-shadow:0 1px 3px rgba(0,0,0,.12);
+}
+.map-header-statistics-trigger:hover{
+    background:#c09d57;
+    color:#102638;
+}
+.map-header-meta span{
+    padding:6px 10px;
+    border:1px solid #d2bc86;
+    border-radius:999px;
+    background:#fffdf8;
+    color:#17374d;
+    font:700 11px Arial,sans-serif;
+}
+.atlas-command-bar{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:7px;
+    margin:11px 0 9px;
+}
+.atlas-command-button{
+    border:1px solid #b8954d;
+    border-radius:6px;
+    padding:8px 12px;
+    background:#17374d;
+    color:#fff;
+    cursor:pointer;
+    font:700 11px Arial,sans-serif;
+    box-shadow:0 1px 3px rgba(0,0,0,.12);
+}
+.atlas-command-button:hover{
+    background:#c09d57;
+    color:#102638;
+}
+.atlas-command-button.atlas-command-success{
+    background:#176b3a;
+    border-color:#8aa36c;
+}
+.atlas-command-button.atlas-command-success:hover{
+    background:#d8b86a;
+    color:#102638;
+}
+
+.geo-research-control{
+    width:285px;
+    max-height:calc(100vh - 145px);
+    overflow:auto;
+    background:rgba(16,38,56,.97);
+    color:#f5f1e6;
+    border:1px solid rgba(216,184,106,.72);
+    border-radius:9px;
+    box-shadow:0 5px 22px rgba(0,0,0,.32);
+    font-family:Arial,sans-serif;
+}
+.geo-research-head-row{display:flex;align-items:center;gap:8px}.geo-research-head-row>div:first-child{min-width:0;flex:1}.geo-research-head-actions{display:flex;align-items:center;gap:5px;flex:0 0 auto}.geo-research-collapse,.geo-research-close{width:28px;height:28px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#d8b86a;cursor:pointer;font:700 13px Arial,sans-serif}.geo-research-collapse:hover,.geo-research-close:hover{background:#c09d57;color:#102638}.geo-research-close{font-size:18px;line-height:1}
+.geo-research-head{
+    padding:13px 14px 10px;
+    border-bottom:1px solid rgba(216,184,106,.35);
+    position:sticky;
+    top:0;
+    background:#102638;
+    z-index:2;
+}
+.geo-research-title{font-weight:800;color:#d8b86a;font-size:14px;letter-spacing:.4px}
+.geo-research-subtitle{font-size:10px;color:#bdc8ce;margin-top:3px;line-height:1.35}
+.geo-research-search{
+    width:100%;
+    margin-top:9px;
+    padding:8px 9px;
+    border-radius:6px;
+    border:1px solid #486273;
+    background:#0c2030;
+    color:#fff;
+    outline:none;
+    font-size:11px;
+}
+.geo-research-search:focus{border-color:#d8b86a}
+.geo-category{border-bottom:1px solid rgba(255,255,255,.09)}
+.geo-category:last-child{border-bottom:0}
+.geo-category-header{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:11px 12px;
+    border:0;
+    background:transparent;
+    color:#fff;
+    cursor:pointer;
+    text-align:left;
+    font-weight:800;
+    font-size:12px;
+}
+.geo-category-header:hover{background:rgba(255,255,255,.06)}
+.geo-category-count{margin-left:auto;color:#9eabb2;font-size:10px}
+.geo-category-arrow{color:#d8b86a;width:12px}
+.geo-category-body{padding:0 10px 10px 31px}
+.geo-layer-row{display:flex;align-items:center;gap:7px;padding:5px 0;font-size:11px;color:#e2e7e9;cursor:pointer}
+.geo-layer-row input{accent-color:#d8b86a}
+.geo-layer-row:hover{color:#fff}
+.geo-layer-row.is-active{color:#d8b86a;font-weight:700}
+.geo-research-footer{padding:9px 12px;border-top:1px solid rgba(216,184,106,.25);font-size:10px;color:#aebbc1;position:sticky;bottom:0;background:#102638}
+.geo-research-actions{display:flex;gap:6px;margin-top:7px}
+.geo-research-actions button{
+    flex:1;border:1px solid #526b7a;border-radius:5px;padding:6px 7px;background:#17374d;color:#fff;cursor:pointer;font-size:10px;font-weight:700
+}
+.geo-research-actions button:hover{background:#c09d57;color:#102638}
+.geo-stats-control{
+    background:rgba(16,38,56,.95);color:#fff;border:1px solid rgba(216,184,106,.55);border-radius:7px;padding:9px 11px;box-shadow:0 2px 12px rgba(0,0,0,.25);font:10px Arial,sans-serif;line-height:1.55;min-width:165px
+}
+.geo-stats-control strong{color:#d8b86a;font-size:11px}
+.geo-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;margin-top:4px}
+.geo-stats-grid span:nth-child(even){text-align:right;color:#d8b86a;font-weight:700}
+
+.settlement-marker-wrap{
+    background:transparent;
+    border:0;
+}
+.settlement-marker{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:2px solid #fff;
+    box-shadow:0 3px 12px rgba(0,0,0,.35);
+    font-size:14px;
+}
+.city-marker{
+    background:#8b5e34;
+}
+.village-marker{
+    background:#5f7f62;
+}
+.settlement-popup{
+    font-family:Arial,sans-serif;
+    min-width:245px;
+    color:#263238;
+}
+.settlement-popup h3{
+    margin:0 0 6px;
+    color:#102638;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:19px;
+}
+.settlement-popup .settlement-badge{
+    display:inline-block;
+    padding:4px 7px;
+    border-radius:999px;
+    background:#102638;
+    color:#d8b86a;
+    font-size:10px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+.settlement-popup .settlement-id{
+    font-size:10px;
+    color:#68747b;
+    border-top:1px solid #e1e5e7;
+    padding-top:7px;
+    margin-top:8px;
+}
+.settlement-popup .settlement-actions{
+    display:flex;
+    gap:7px;
+    margin-top:10px;
+}
+.settlement-popup button{
+    border:1px solid #b8954d;
+    border-radius:6px;
+    padding:7px 9px;
+    background:#102638;
+    color:#fff;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:800;
+}
+.settlement-popup button:hover{
+    background:#d8b86a;
+    color:#102638;
+}
+.settlement-stats-modal{
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    background:rgba(4,15,24,.78);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+.settlement-stats-window{
+    width:min(1120px,96vw);
+    max-height:92vh;
+    overflow:auto;
+    background:#f3f0e7;
+    color:#263238;
+    border:1px solid #c09d57;
+    border-radius:12px;
+    box-shadow:0 20px 70px rgba(0,0,0,.45);
+}
+.settlement-stats-head{
+    position:sticky;
+    top:0;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    padding:16px 20px;
+    background:#102638;
+    color:#fff;
+    border-bottom:1px solid #c09d57;
+}
+.settlement-stats-head h2{
+    margin:0;
+    font:700 22px Georgia,"Times New Roman",serif;
+    color:#fff;
+}
+.settlement-stats-head small{
+    color:#d8b86a;
+    display:block;
+    margin-top:3px;
+}
+.settlement-stats-close{
+    border:1px solid #c09d57;
+    background:transparent;
+    color:#fff;
+    border-radius:6px;
+    width:36px;
+    height:36px;
+    cursor:pointer;
+    font-size:18px;
+}
+.settlement-stats-body{
+    padding:18px;
+}
+.settlement-stats-summary{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+    margin-bottom:16px;
+}
+.settlement-stat-card{
+    background:#fff;
+    border:1px solid #d8d0c0;
+    border-radius:8px;
+    padding:11px;
+}
+.settlement-stat-card strong{
+    display:block;
+    color:#102638;
+    font-size:18px;
+}
+.settlement-stat-card span{
+    color:#68747b;
+    font-size:10px;
+}
+.settlement-table-wrap{
+    overflow:auto;
+    background:#fff;
+    border:1px solid #d8d0c0;
+    border-radius:8px;
+    margin-bottom:18px;
+}
+.settlement-data-table{
+    width:100%;
+    border-collapse:collapse;
+    font:12px Arial,sans-serif;
+}
+.settlement-data-table th{
+    background:#102638;
+    color:#d8b86a;
+    padding:9px;
+    text-align:left;
+    white-space:nowrap;
+}
+.settlement-data-table td{
+    padding:8px 9px;
+    border-bottom:1px solid #e5e7e8;
+    white-space:nowrap;
+}
+.settlement-data-table tr:hover td{
+    background:#f7f2e6;
+}
+.settlement-charts{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+}
+.settlement-chart-card{
+    background:#fff;
+    border:1px solid #d8d0c0;
+    border-radius:8px;
+    padding:12px;
+    min-height:300px;
+}
+.settlement-chart-card h3{
+    margin:0 0 8px;
+    color:#102638;
+    font:700 15px Georgia,"Times New Roman",serif;
+}
+.settlement-chart-card canvas{
+    width:100%!important;
+    height:245px!important;
+}
+.settlement-no-data{
+    padding:22px;
+    background:#fff;
+    border:1px dashed #c09d57;
+    border-radius:8px;
+    line-height:1.55;
+}
+.settlement-no-data strong{
+    color:#102638;
+}
+.settlement-schema{
+    margin-top:10px;
+    padding:10px;
+    background:#f7f2e6;
+    border-radius:6px;
+    font:11px/1.5 Consolas,monospace;
+    white-space:pre-wrap;
+}
+.settlement-stats-control{
+    background:rgba(16,38,56,.96);
+    border:1px solid rgba(216,184,106,.6);
+    border-radius:7px;
+    box-shadow:0 3px 15px rgba(0,0,0,.3);
+    padding:8px;
+}
+.settlement-stats-control button{
+    border:1px solid #526b7a;
+    background:#17374d;
+    color:#fff;
+    border-radius:5px;
+    padding:7px 9px;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:800;
+}
+.settlement-stats-control button:hover{
+    background:#d8b86a;
+    color:#102638;
+}
+
+/* =====================================================
+   RÉTEG ATLASZOSSÁG / OPACITY SLIDER
+===================================================== */
+.atlas-opacity-row.is-geojson{grid-template-columns:28px minmax(0,1fr) 92px 44px}.atlas-layer-eye{width:27px;height:27px;border:1px solid rgba(255,255,255,.18);border-radius:6px;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;padding:0}.atlas-layer-eye:hover{background:rgba(216,184,106,.22);border-color:rgba(216,184,106,.65)}.atlas-layer-eye.is-off{opacity:.72}.atlas-opacity-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.atlas-opacity-control{width:285px;max-width:calc(100vw - 24px);background:rgba(16,38,56,.97);border:1px solid rgba(216,184,106,.72);border-radius:8px;box-shadow:0 5px 22px rgba(0,0,0,.32);color:#fff;font:10px Arial,sans-serif;margin-top:6px}
+.atlas-opacity-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;background:#102638;border-bottom:1px solid rgba(216,184,106,.35)}
+.atlas-opacity-head strong{color:#d8b86a;font-size:11px}
+.atlas-opacity-toggle{width:25px;height:23px;border:1px solid #526b7a;border-radius:4px;background:#17374d;color:#d8b86a;cursor:pointer;font-weight:800}
+.atlas-opacity-toggle:hover{background:#c09d57;color:#102638}
+.atlas-opacity-body{max-height:360px;overflow:auto;padding:7px 9px}
+.atlas-opacity-row{display:grid;grid-template-columns:minmax(90px,1.35fr) minmax(75px,1fr) 38px;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.atlas-opacity-row:last-child{border-bottom:0}
+.atlas-opacity-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e4e9eb}
+.atlas-opacity-slider{width:100%;accent-color:#d8b86a;cursor:pointer}
+.atlas-opacity-value{color:#d8b86a;text-align:right;font-weight:800;font-size:9px}
+/* =====================================================
+   FEATURE EDITOR – BEÁLLÍTÁSOK / EGYEDI OSZLOPOK / JOIN
+===================================================== */
+.feature-editor-titlebar-main{min-width:0;flex:1}
+.feature-editor-settings{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:7px}
+.feature-editor-settings label{display:flex;align-items:center;gap:4px;color:#dbe2e5;font:700 9px Arial,sans-serif}
+.feature-editor-settings select,.feature-editor-settings input[type="color"],.feature-editor-settings input[type="number"]{height:27px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#fff;padding:4px 6px;font:10px Arial,sans-serif}
+.feature-editor-settings input[type="color"]{width:38px;padding:2px;cursor:pointer}
+.feature-editor-settings input[type="number"]{width:58px}
+.feature-editor-settings .fe-setting-label{color:#d8b86a;font-weight:800}
+.feature-editor-settings button{height:27px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#fff;padding:4px 8px;cursor:pointer;font:700 9px Arial,sans-serif}
+.feature-editor-settings button:hover{background:#c09d57;color:#102638}
+.feature-editor-settings .fe-join-button{border-color:#8aa36c}
+.feature-editor-settings .fe-column-button{border-color:#8b7a4a}
+.feature-editor-custom-wrap{margin-top:10px;overflow:auto;background:#fff;border:1px solid #d8d0c0;border-radius:7px}
+.feature-editor-custom-table{width:100%;border-collapse:collapse;font-size:9px}
+.feature-editor-custom-table th{background:#17374d;color:#d8b86a;padding:6px;text-align:left;white-space:nowrap;position:sticky;top:0}
+.feature-editor-custom-table td{padding:6px;border-bottom:1px solid #ece8de;white-space:nowrap}
+.feature-editor-custom-table td[contenteditable="true"]{cursor:text;background:#fffdf8;outline:none}
+.feature-editor-custom-table td[contenteditable="true"]:focus{box-shadow:inset 0 0 0 1px #c09d57}
+.feature-editor-custom-empty{padding:8px;color:#68747b;font-size:9px}
+.feature-editor-join-status{margin-top:6px;padding:6px 8px;border-radius:5px;background:#f7f2e6;color:#526573;font:9px/1.45 Arial,sans-serif;display:none}
+.feature-editor-join-status.active{display:block}
+.feature-editor-join-status.success{border-left:3px solid #176b3a}
+.feature-editor-join-status.error{border-left:3px solid #8b2020}
+.feature-editor-column-modal,.feature-editor-join-modal{position:fixed;inset:0;z-index:100000;background:rgba(4,15,24,.78);display:flex;align-items:center;justify-content:center;padding:18px}
+.feature-editor-column-window,.feature-editor-join-window{width:min(500px,95vw);background:#f3f0e7;border:1px solid #c09d57;border-radius:10px;box-shadow:0 20px 70px rgba(0,0,0,.45);overflow:hidden}
+.feature-editor-dialog-head{display:flex;align-items:center;justify-content:space-between;background:#102638;color:#fff;padding:12px 15px}
+.feature-editor-dialog-head h3{margin:0;font:700 17px Georgia,serif}
+.feature-editor-dialog-body{padding:14px}
+.feature-editor-dialog-body label{display:block;margin:8px 0 4px;color:#526573;font:700 10px Arial,sans-serif}
+.feature-editor-dialog-body input,.feature-editor-dialog-body select,.feature-editor-dialog-body textarea{width:100%;padding:8px;border:1px solid #aaa;border-radius:5px;background:#fff;font:11px Arial,sans-serif}
+.feature-editor-dialog-help{font:10px/1.5 Arial,sans-serif;color:#68747b;margin-top:8px}
+.feature-editor-dialog-actions{display:flex;justify-content:flex-end;gap:7px;margin-top:12px}
+.feature-editor-dialog-actions button{border:1px solid #b8954d;border-radius:5px;padding:8px 11px;cursor:pointer;font-weight:800}
+.feature-editor-dialog-actions .primary{background:#102638;color:#fff}
+.feature-editor-dialog-actions .secondary{background:#ddd;color:#333}
+#featureEditorJoinFileInput{display:none}
+.draw-draft-style-control{display:none!important}
+
+/* =====================================================
+   MEGNYITÁS / MENTÉS-EXPORT
+===================================================== */
+.data-io-control{
+    background:rgba(255,255,255,.98);
+    border-radius:6px;
+    box-shadow:0 2px 12px rgba(0,0,0,.32);
+    overflow:hidden;
+    border:1px solid #c9b98f;
+}
+.data-io-control button{
+    display:block;
+    width:168px;
+    border:0;
+    border-bottom:1px solid #e2ddd2;
+    background:#fff;
+    color:#17374d;
+    padding:9px 11px;
+    text-align:left;
+    cursor:pointer;
+    font:700 11px Arial,sans-serif;
+}
+.data-io-control button:last-child{border-bottom:0}
+.data-io-control button:hover{background:#f0eadb}
+.data-io-control .save-button{color:#176b3a}
+.data-io-control .open-button{color:#17374d}
+.data-io-modal{
+    position:fixed;inset:0;z-index:100001;
+    background:rgba(4,15,24,.78);
+    display:flex;align-items:center;justify-content:center;
+    padding:18px;
+}
+.data-io-window{
+    width:min(760px,96vw);max-height:90vh;overflow:auto;
+    background:#f3f0e7;border:1px solid #c09d57;
+    border-radius:12px;box-shadow:0 20px 70px rgba(0,0,0,.45);
+}
+.data-io-head{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:14px 17px;background:#102638;color:#fff;
+    border-bottom:1px solid #c09d57;
+}
+.data-io-head h3{margin:0;font:700 19px Georgia,serif}
+.data-io-close{
+    width:34px;height:34px;border:1px solid #c09d57;
+    border-radius:6px;background:transparent;color:#fff;
+    cursor:pointer;font-size:18px;
+}
+.data-io-body{padding:16px}
+.data-io-section{
+    background:#fff;border:1px solid #d7d0c0;border-radius:8px;
+    padding:12px;margin-bottom:12px;
+}
+.data-io-section h4{margin:0 0 9px;color:#102638;font:700 14px Georgia,serif}
+.data-io-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.data-io-field label{display:block;margin-bottom:4px;color:#526573;font:700 10px Arial,sans-serif}
+.data-io-field select,.data-io-field input{
+    width:100%;padding:8px;border:1px solid #aaa;border-radius:5px;
+    background:#fff;color:#26343d;font:11px Arial,sans-serif;
+}
+.data-io-object-list{
+    max-height:220px;overflow:auto;border:1px solid #d7d0c0;border-radius:6px;
+}
+.data-io-object-row{
+    display:grid;grid-template-columns:24px 1fr auto;gap:8px;
+    align-items:center;padding:8px;border-bottom:1px solid #e7e3da;
+    font:10px Arial,sans-serif;
+}
+.data-io-object-row:last-child{border-bottom:0}
+.data-io-object-row:hover{background:#fbf8ef}
+.data-io-object-type{color:#68747b;font-weight:700}
+.data-io-swatch{width:15px;height:15px;border-radius:3px;border:1px solid #777}
+.data-io-actions{display:flex;justify-content:flex-end;gap:7px;flex-wrap:wrap;margin-top:11px}
+.data-io-actions button{
+    border:1px solid #b8954d;border-radius:5px;padding:8px 11px;
+    cursor:pointer;font:700 10px Arial,sans-serif;
+}
+.data-io-primary{background:#102638;color:#fff}
+.data-io-success{background:#176b3a;color:#fff}
+.data-io-secondary{background:#ddd;color:#333}
+.data-io-help{margin-top:8px;color:#68747b;font:10px/1.45 Arial,sans-serif}
+.data-io-status{margin-top:8px;padding:8px;border-radius:6px;background:#f7f2e6;color:#526573;font:10px/1.45 Arial,sans-serif;display:none}
+.data-io-status.show{display:block}
+.data-io-status.error{border-left:3px solid #8b2020}
+.data-io-status.success{border-left:3px solid #176b3a}
+@media(max-width:800px){
+    .data-io-control button{width:145px;font-size:10px}
+    .data-io-row{grid-template-columns:1fr}
+}
+@media(max-width:800px){
+    .geo-research-control{width:min(310px,calc(100vw - 20px));max-height:55vh}
+    .map-header{padding:13px 15px}
+    .map-header h2{font-size:23px}
+    .map-header-meta{gap:5px}
+    .map-header-meta span{font-size:9px;padding:5px 7px}
+    .map-header-statistics-trigger{margin-left:0;margin-right:6px;font-size:10px;padding:7px 10px}
+}
+
+/* =====================================================
+   MOBIL
+===================================================== */
+
+@media(max-width:800px) {
+
+    header {
+        padding: 15px;
+    }
+
+    header h1 {
+        font-size: 21px;
+    }
+
+    nav {
+        padding: 0 8px;
+    }
+
+    nav a {
+        padding: 12px 8px;
+        font-size: 11px;
+    }
+
+    .map-header {
+        padding: 15px;
+    }
+
+    #map {
+        height: calc(100vh - 185px);
+    }
+
+    .prezi-toolbar {
+        width: 145px;
+    }
+
+    .prezi-frames {
+        width: 175px;
+    }
+
+}
+
+
+
+/* =====================================================
+   PROFESSIONÁLIS KUTATÁSI / DRAW RENDSZER
+===================================================== */
+.draw-research-control{
+    width:380px;
+    max-width:calc(100vw - 24px);
+    max-height:calc(100vh - 150px);
+    overflow:auto;
+    background:rgba(16,38,56,.98);
+    color:#fff;
+    border:1px solid rgba(216,184,106,.72);
+    border-radius:9px;
+    box-shadow:0 6px 25px rgba(0,0,0,.38);
+    font-family:Arial,sans-serif;
+}
+.draw-research-head-row{display:flex;align-items:center;gap:8px}.draw-research-head-row>div:first-child{min-width:0;flex:1}.draw-research-head-actions{display:flex;align-items:center;gap:5px;flex:0 0 auto}.draw-research-collapse,.draw-research-close{width:28px;height:28px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#d8b86a;cursor:pointer;font:700 13px Arial,sans-serif}.draw-research-collapse:hover,.draw-research-close:hover{background:#c09d57;color:#102638}.draw-research-close{font-size:18px;line-height:1}
+.draw-research-head{
+    position:sticky;
+    top:0;
+    z-index:3;
+    padding:12px;
+    background:#102638;
+    border-bottom:1px solid rgba(216,184,106,.35);
+}
+.draw-research-title{color:#d8b86a;font-size:14px;font-weight:800;letter-spacing:.3px}
+.draw-research-subtitle{margin-top:3px;color:#c2ccd1;font-size:10px;line-height:1.4}
+.draw-research-toolbar{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+.draw-research-toolbar select,.draw-research-toolbar button{
+    border:1px solid #526b7a;
+    border-radius:5px;
+    background:#17374d;
+    color:#fff;
+    padding:6px 7px;
+    font-size:10px;
+    cursor:pointer;
+}
+.draw-research-toolbar select{flex:1;min-width:115px}
+.draw-research-toolbar button:hover{background:#c09d57;color:#102638}
+.draw-object-list{padding:8px}
+.draw-empty{padding:14px;color:#aebbc1;font-size:10px;line-height:1.5;border:1px dashed #526b7a;border-radius:6px}
+.draw-object-card{
+    background:#f8f5ec;
+    color:#26343d;
+    border:1px solid #c8b47c;
+    border-radius:7px;
+    margin-bottom:7px;
+    overflow:hidden;
+}
+.draw-object-card-head{display:flex;align-items:center;gap:7px;padding:8px 9px;background:#fffdf8;border-bottom:1px solid #ded7c8}
+.draw-color-swatch{width:18px;height:18px;border-radius:4px;border:2px solid #fff;box-shadow:0 0 0 1px #7c7c7c;flex:none}
+.draw-object-title{font-weight:800;font-size:11px;color:#102638;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.draw-object-type{margin-left:auto;color:#6b7378;font-size:9px;font-weight:800}
+.draw-object-meta{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;padding:7px 9px;font-size:9px}
+.draw-object-meta span:nth-child(odd){color:#68747b}
+.draw-object-meta span:nth-child(even){text-align:right;font-weight:800;color:#17374d}
+.draw-object-actions{display:flex;gap:5px;padding:7px 9px;border-top:1px solid #ded7c8;flex-wrap:wrap}
+.draw-object-actions button{border:1px solid #b9a36b;background:#fff;color:#17374d;border-radius:5px;padding:5px 7px;font-size:9px;font-weight:800;cursor:pointer}
+.draw-object-actions button:hover{background:#d8b86a}
+.draw-object-actions .danger{color:#8b2020}
+.draw-coordinate-table-wrap{padding:0 9px 8px;overflow:auto;max-height:210px}
+.draw-coordinate-table{width:100%;border-collapse:collapse;font:9px Arial,sans-serif;background:#fff}
+.draw-coordinate-table th{background:#17374d;color:#d8b86a;padding:5px;text-align:right;position:sticky;top:0}
+.draw-coordinate-table th:first-child,.draw-coordinate-table td:first-child{text-align:center}
+.draw-coordinate-table td{padding:4px 5px;border-bottom:1px solid #e6e6e6;text-align:right;white-space:nowrap}
+.draw-analysis-modal{position:fixed;inset:0;z-index:99998;background:rgba(4,15,24,.78);display:flex;align-items:center;justify-content:center;padding:18px}
+.draw-analysis-window{width:min(1250px,97vw);max-height:93vh;overflow:auto;background:#f3f0e7;border:1px solid #c09d57;border-radius:12px;box-shadow:0 20px 70px rgba(0,0,0,.45)}
+.draw-analysis-head{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:#102638;color:#fff;border-bottom:1px solid #c09d57}
+.draw-analysis-head h2{margin:0;font:700 21px Georgia,serif}
+.draw-analysis-head small{display:block;color:#d8b86a;margin-top:3px;font:10px Arial,sans-serif}
+.draw-analysis-close{width:35px;height:35px;border:1px solid #c09d57;border-radius:6px;background:transparent;color:#fff;cursor:pointer;font-size:18px}
+.draw-analysis-body{padding:16px}
+.draw-summary-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin-bottom:14px}
+.draw-summary-card{background:#fff;border:1px solid #d7d0c0;border-radius:8px;padding:10px}
+.draw-summary-card strong{display:block;font-size:18px;color:#102638}
+.draw-summary-card span{display:block;margin-top:3px;font-size:9px;color:#68747b}
+.draw-analysis-section{background:#fff;border:1px solid #d7d0c0;border-radius:8px;margin-bottom:13px;overflow:auto}
+.draw-analysis-section h3{margin:0;padding:10px 12px;background:#102638;color:#d8b86a;font:700 14px Georgia,serif}
+.draw-analysis-table{width:100%;border-collapse:collapse;font:10px Arial,sans-serif}
+.draw-analysis-table th{background:#17374d;color:#d8b86a;padding:7px;text-align:left;white-space:nowrap}
+.draw-analysis-table td{padding:6px 7px;border-bottom:1px solid #e4e5e6;white-space:nowrap}
+.draw-analysis-table tr:hover td{background:#f7f2e6}
+.draw-style-modal{position:fixed;inset:0;z-index:99999;background:rgba(4,15,24,.78);display:flex;align-items:center;justify-content:center;padding:18px}
+.draw-style-window{width:min(440px,95vw);background:#f3f0e7;border:1px solid #c09d57;border-radius:10px;box-shadow:0 20px 70px rgba(0,0,0,.45);overflow:hidden}
+.draw-style-head{display:flex;justify-content:space-between;align-items:center;background:#102638;color:#fff;padding:12px 15px}
+.draw-style-head h3{margin:0;font:700 17px Georgia,serif}
+.draw-style-body{padding:14px}
+.draw-style-row{display:grid;grid-template-columns:125px 1fr;align-items:center;gap:10px;margin-bottom:10px;font:11px Arial,sans-serif;color:#526573}
+.draw-style-row input[type=color]{width:100%;height:35px;padding:2px;border:1px solid #aaa;border-radius:5px;background:#fff}
+.draw-style-row input[type=number],.draw-style-row select{width:100%;padding:7px;border:1px solid #aaa;border-radius:5px;background:#fff}
+.draw-style-actions{display:flex;gap:7px;justify-content:flex-end;margin-top:13px}
+.draw-style-actions button{border:1px solid #b8954d;border-radius:5px;padding:8px 11px;cursor:pointer;font-weight:800}
+.draw-style-save{background:#102638;color:#fff}.draw-style-cancel{background:#ddd;color:#333}
+.draw-property-modal{position:fixed;inset:0;z-index:99999;background:rgba(4,15,24,.78);display:flex;align-items:center;justify-content:center;padding:18px}
+.draw-property-window{width:min(520px,95vw);background:#f3f0e7;border:1px solid #c09d57;border-radius:10px;box-shadow:0 20px 70px rgba(0,0,0,.45);overflow:hidden}
+.draw-property-head{display:flex;justify-content:space-between;align-items:center;background:#102638;color:#fff;padding:12px 15px}
+.draw-property-head h3{margin:0;font:700 17px Georgia,serif}
+.draw-property-body{padding:14px}
+.draw-property-field.full{grid-column:1/-1}
+
+/* =====================================================
+   DRAW / FEATURE EDITOR – ALSÓ SZERKESZTŐ
+===================================================== */
+.feature-editor-bar{
+    position:absolute;
+    left:50%;
+    bottom:6px;
+    transform:translateX(-50%);
+    margin:0 !important;
+    background:rgba(16,38,56,.97);
+    border:1px solid rgba(216,184,106,.75);
+    border-radius:8px;
+    box-shadow:0 3px 16px rgba(0,0,0,.35);
+    padding:6px;
+    font-family:Arial,sans-serif;
+}
+.feature-editor-bar button{
+    border:1px solid #526b7a;
+    background:#17374d;
+    color:#fff;
+    border-radius:5px;
+    padding:7px 12px;
+    cursor:pointer;
+    font-size:11px;
+    font-weight:800;
+    min-width:170px;
+}
+.feature-editor-bar button:hover{background:#c09d57;color:#102638}
+.feature-editor-panel{
+    position:absolute;
+    left:50%;
+    bottom:48px;
+    transform:translateX(-50%);
+    width:min(1080px,calc(100vw - 26px));
+    max-height:min(58vh,560px);
+    overflow:hidden;
+    background:#f3f0e7;
+    border:1px solid #c09d57;
+    border-radius:10px;
+    box-shadow:0 8px 30px rgba(0,0,0,.42);
+    color:#26343d;
+    font-family:Arial,sans-serif;
+    z-index:5000;
+}
+.feature-editor-panel[hidden]{display:none}
+.feature-editor-titlebar-actions{display:flex;align-items:center;gap:5px;flex:0 0 auto}.feature-editor-collapse{width:28px;height:28px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#d8b86a;cursor:pointer;font:700 13px Arial,sans-serif}.feature-editor-collapse:hover{background:#c09d57;color:#102638}
+.feature-editor-titlebar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:9px 12px;
+    background:#102638;
+    color:#fff;
+    border-bottom:1px solid #c09d57;
+}
+.feature-editor-titlebar strong{color:#d8b86a;font-size:12px;letter-spacing:.35px}
+.feature-editor-titlebar small{color:#c6d0d5;font-size:9px}
+.feature-editor-close{
+    width:28px;height:28px;border:1px solid #c09d57;border-radius:5px;background:transparent;color:#fff;cursor:pointer;font-size:16px
+}
+.feature-editor-grid{
+    display:grid;
+    grid-template-columns:1.35fr 1fr;
+    min-height:280px;
+}
+.feature-editor-list{
+    overflow:auto;
+    border-right:1px solid #d8d0c0;
+    background:#fffdf8;
+}
+.feature-editor-table{width:100%;border-collapse:collapse;font-size:10px}
+.feature-editor-table th{position:sticky;top:0;background:#17374d;color:#d8b86a;padding:7px;text-align:left;white-space:nowrap;z-index:2}
+.feature-editor-table td{padding:7px;border-bottom:1px solid #e5e1d8;white-space:nowrap}
+.feature-editor-table tr{cursor:pointer}
+.feature-editor-table tr:hover td{background:#f4eee0}
+.feature-editor-table tr.active td{background:#e8dfca}
+.feature-editor-swatch{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid #777;vertical-align:middle}
+.feature-editor-detail{overflow:auto;background:#f8f5ec;padding:12px}
+.feature-editor-detail h3{margin:0 0 7px;color:#102638;font:700 17px Georgia,serif}
+.feature-editor-badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
+.feature-editor-badge{padding:4px 7px;border-radius:999px;background:#e9e0cb;color:#17374d;font-size:9px;font-weight:800}
+.feature-editor-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:10px}
+.feature-editor-metric{background:#fff;border:1px solid #d8d0c0;border-radius:6px;padding:7px}
+.feature-editor-metric strong{display:block;color:#102638;font-size:13px}
+.feature-editor-metric span{display:block;margin-top:2px;color:#6e777d;font-size:8px}
+.feature-editor-meta{display:grid;grid-template-columns:1fr 1fr;gap:5px 12px;margin-bottom:10px;font-size:9px}
+.feature-editor-meta div{padding:5px 6px;background:#fff;border:1px solid #e0dbcf;border-radius:5px}
+.feature-editor-meta b{color:#526573}
+.feature-editor-coords{overflow:auto;background:#fff;border:1px solid #d8d0c0;border-radius:7px}
+.feature-editor-coords table{width:100%;border-collapse:collapse;font-size:9px}
+.feature-editor-coords th{position:sticky;top:0;background:#17374d;color:#d8b86a;padding:6px;text-align:right}
+.feature-editor-coords th:first-child,.feature-editor-coords td:first-child{text-align:center}
+.feature-editor-coords td{padding:5px;border-bottom:1px solid #ece8de;text-align:right;white-space:nowrap}
+.feature-editor-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.feature-editor-actions button{border:1px solid #b8954d;background:#fff;color:#17374d;border-radius:5px;padding:6px 8px;cursor:pointer;font-size:9px;font-weight:800}
+.feature-editor-actions button:hover{background:#d8b86a}
+.feature-editor-empty{padding:18px;color:#68747b;font-size:10px}
+
+/* =====================================================
+   VISSZALÉPÉS / RAJZOLÁSI STÍLUS
+===================================================== */
+.draw-undo-control,.draw-draft-style-control{
+    background:rgba(16,38,56,.97);
+    border:1px solid rgba(216,184,106,.72);
+    border-radius:7px;
+    box-shadow:0 3px 14px rgba(0,0,0,.30);
+    padding:6px;
+    font:10px Arial,sans-serif;
+}
+.draw-undo-control button,.draw-draft-style-control button{
+    border:1px solid #526b7a;
+    background:#17374d;
+    color:#fff;
+    border-radius:5px;
+    padding:6px 8px;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:800;
+}
+.draw-undo-control button:hover,.draw-draft-style-control button:hover{background:#c09d57;color:#102638}
+.draw-undo-control button:disabled{opacity:.45;cursor:not-allowed}
+.draw-draft-style-control{min-width:210px}
+.draw-draft-style-control .title{color:#d8b86a;font-weight:800;margin-bottom:5px}
+.draw-draft-style-control .row{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:5px}
+.draw-draft-style-control label{display:flex;align-items:center;gap:4px;color:#dbe2e5;font-size:9px}
+.draw-draft-style-control input[type=color]{width:32px;height:23px;padding:1px;border:1px solid #87949a;border-radius:4px;background:#fff;cursor:pointer}
+.draw-draft-style-control input[type=number],.draw-draft-style-control input[type=range]{width:100%}
+.draw-draft-style-control .value{color:#d8b86a;font-weight:800;text-align:right;font-size:9px}
+
+@media(max-width:800px){
+    .feature-editor-grid{grid-template-columns:1fr}
+    .feature-editor-list{max-height:190px;border-right:0;border-bottom:1px solid #d8d0c0}
+    .feature-editor-panel{bottom:46px;max-height:72vh}
+    .feature-editor-metrics{grid-template-columns:1fr 1fr}
+}
+.draw-property-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.draw-property-field label{display:block;margin-bottom:4px;color:#526573;font:bold 10px Arial,sans-serif}
+.draw-property-field input,.draw-property-field textarea,.draw-property-field select{width:100%;padding:7px;border:1px solid #aaa;border-radius:5px;background:#fff;font:11px Arial,sans-serif}
+.draw-property-field textarea{min-height:75px;resize:vertical}
+.draw-property-field.full{grid-column:1/-1}
+.draw-property-actions{display:flex;gap:7px;justify-content:flex-end;margin-top:13px}
+.draw-property-actions button{border:1px solid #b8954d;border-radius:5px;padding:8px 11px;cursor:pointer;font-weight:800}
+.draw-property-save{background:#102638;color:#fff}.draw-property-cancel{background:#ddd;color:#333}
+.draw-point-icon{background:transparent!important;border:0!important}
+@media(max-width:800px){
+ .draw-research-control{width:min(330px,calc(100vw - 20px));max-height:55vh}
+ .draw-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .draw-property-grid{grid-template-columns:1fr}
+ .draw-property-field.full{grid-column:auto}
+}
+
+
+
+/* =====================================================
+   RÉTEG FEATURE EDITOR – ÚJ ADATKEZELŐ FELÜLET
+===================================================== */
+.layer-feature-editor-modal{
+    position:fixed;inset:0;z-index:120000;
+    background:rgba(4,15,24,.82);
+    display:flex;align-items:center;justify-content:center;
+    padding:18px;
+}
+.layer-feature-editor-window{
+    width:min(1500px,98vw);height:min(92vh,980px);
+    background:#f3f0e7;border:1px solid #c09d57;border-radius:12px;
+    box-shadow:0 25px 90px rgba(0,0,0,.55);
+    overflow:hidden;display:flex;flex-direction:column;
+}
+.lfe-head{
+    display:flex;align-items:center;gap:12px;padding:12px 16px;
+    background:#102638;color:#fff;border-bottom:1px solid #c09d57;
+    flex:0 0 auto;
+}
+.lfe-head-title{min-width:0;flex:1}
+.lfe-head-title strong{display:block;color:#d8b86a;font:700 18px Georgia,serif}
+.lfe-head-title small{display:block;color:#c6d0d5;font:10px Arial,sans-serif;margin-top:3px}
+.lfe-head-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.lfe-head-actions button,.lfe-toolbar button{
+    border:1px solid #526b7a;border-radius:6px;background:#17374d;color:#fff;
+    padding:7px 10px;cursor:pointer;font:700 10px Arial,sans-serif;
+}
+.lfe-head-actions button:hover,.lfe-toolbar button:hover{background:#c09d57;color:#102638}
+.lfe-head-actions .lfe-close{font-size:18px;width:34px;height:34px;padding:0}
+.lfe-toolbar{
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    padding:9px 12px;background:#fffdf8;border-bottom:1px solid #d8d0c0;
+    flex:0 0 auto;
+}
+.lfe-toolbar label{font:700 10px Arial,sans-serif;color:#526573}
+.lfe-toolbar select,.lfe-toolbar input[type=search]{
+    min-width:190px;padding:8px;border:1px solid #aaa;border-radius:6px;
+    background:#fff;color:#26343d;font:11px Arial,sans-serif;
+}
+.lfe-toolbar input[type=search]{min-width:220px}
+.lfe-toolbar .lfe-count{margin-left:auto;color:#68747b;font:700 10px Arial,sans-serif}
+.lfe-toolbar .lfe-excel{background:#176b3a;border-color:#176b3a}
+.lfe-toolbar .lfe-export{background:#102638}
+.lfe-status{padding:7px 12px;background:#f7f2e6;color:#526573;font:10px Arial,sans-serif;border-bottom:1px solid #ddd5c5;display:none}
+.lfe-status.show{display:block}
+.lfe-body{display:flex;min-height:0;flex:1}
+.lfe-table-wrap{flex:1;min-width:0;overflow:auto;background:#fff}
+.lfe-table{border-collapse:separate;border-spacing:0;min-width:100%;font:10px Arial,sans-serif}
+.lfe-table th{
+    position:sticky;top:0;z-index:5;background:#17374d;color:#d8b86a;
+    padding:8px 7px;text-align:left;white-space:nowrap;border-right:1px solid #426174;
+}
+.lfe-table td{
+    padding:5px 6px;border-bottom:1px solid #e7e2d8;border-right:1px solid #eeeae1;
+    white-space:nowrap;background:#fff;
+}
+.lfe-table tr:hover td{background:#f7f2e6}
+.lfe-table tr.lfe-selected td{background:#e9e0cb}
+.lfe-table td[contenteditable="true"]{cursor:text;min-width:85px}
+.lfe-table td[contenteditable="true"]:focus{outline:2px solid #c09d57;outline-offset:-2px;background:#fffdf8}
+.lfe-table .lfe-system{background:#f3f0e7;color:#526573}
+.lfe-eye{
+    width:30px;height:26px;border:1px solid #aaa;border-radius:5px;
+    cursor:pointer;font-size:14px;background:#176b3a;color:#fff;
+}
+.lfe-eye.off{background:#8b2020}
+.lfe-color{
+    width:32px;height:25px;padding:2px;border:1px solid #aaa;border-radius:5px;cursor:pointer;
+}
+.lfe-detail{
+    width:330px;flex:0 0 330px;border-left:1px solid #d8d0c0;background:#f8f5ec;
+    overflow:auto;padding:13px;
+}
+.lfe-detail h3{margin:0 0 8px;color:#102638;font:700 18px Georgia,serif}
+.lfe-detail .lfe-sub{color:#68747b;font:10px/1.45 Arial,sans-serif;margin-bottom:10px}
+.lfe-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lfe-field{background:#fff;border:1px solid #ddd5c5;border-radius:6px;padding:7px}
+.lfe-field.full{grid-column:1/-1}
+.lfe-field label{display:block;color:#526573;font:700 9px Arial,sans-serif;margin-bottom:4px}
+.lfe-field input,.lfe-field select{
+    width:100%;padding:7px;border:1px solid #aaa;border-radius:5px;
+    background:#fff;font:10px Arial,sans-serif;
+}
+.lfe-field input[type=color]{height:31px;padding:2px}
+.lfe-check{display:flex!important;align-items:center;gap:7px}
+.lfe-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.lfe-actions button{
+    border:1px solid #b8954d;background:#fff;color:#17374d;border-radius:5px;
+    padding:7px 9px;cursor:pointer;font:700 9px Arial,sans-serif;
+}
+.lfe-actions button:hover{background:#d8b86a}
+.lfe-excel-modal{
+    position:fixed;inset:0;z-index:130000;background:rgba(4,15,24,.82);
+    display:flex;align-items:center;justify-content:center;padding:18px;
+}
+.lfe-excel-window{
+    width:min(760px,96vw);max-height:90vh;overflow:auto;background:#f3f0e7;
+    border:1px solid #c09d57;border-radius:11px;box-shadow:0 20px 70px rgba(0,0,0,.5)
+}
+.lfe-excel-head{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:#102638;color:#fff;border-bottom:1px solid #c09d57}
+.lfe-excel-head h3{margin:0;font:700 18px Georgia,serif}
+.lfe-excel-body{padding:15px}
+.lfe-excel-section{background:#fff;border:1px solid #d8d0c0;border-radius:7px;padding:11px;margin-bottom:10px}
+.lfe-excel-section h4{margin:0 0 8px;color:#102638;font:700 13px Georgia,serif}
+.lfe-excel-section input[type=file]{width:100%;font:10px Arial,sans-serif}
+.lfe-excel-section select{width:100%;padding:8px;border:1px solid #aaa;border-radius:5px;font:10px Arial,sans-serif}
+.lfe-excel-file-list{margin-top:8px;display:grid;gap:5px}
+.lfe-excel-file{display:flex;justify-content:space-between;align-items:center;padding:7px;background:#f7f2e6;border-radius:5px;font:10px Arial,sans-serif}
+.lfe-excel-file button{border:0;background:transparent;color:#8b2020;cursor:pointer;font-weight:800}
+.lfe-excel-help{font:10px/1.5 Arial,sans-serif;color:#68747b;margin-top:7px}
+.lfe-excel-actions{display:flex;justify-content:flex-end;gap:7px;margin-top:10px}
+.lfe-excel-actions button{border:1px solid #b8954d;border-radius:5px;padding:8px 11px;cursor:pointer;font-weight:800}
+.lfe-excel-primary{background:#176b3a;color:#fff}
+.lfe-excel-secondary{background:#ddd;color:#333}
+.lfe-feature-label{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;}
+.lfe-feature-label::before{display:none!important;}
+.lfe-feature-label .lfe-feature-label-text{white-space:nowrap;display:inline-block;pointer-events:none;transform:translate(-50%,-50%);padding:1px 4px;border-radius:3px;background:rgba(255,255,255,.88);box-shadow:0 1px 4px rgba(0,0,0,.18);line-height:1.15;}
+.lfe-label-marker{display:none!important}
+.lfe-feature-label{
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+    padding:0!important;
+}
+.lfe-feature-label::before{display:none!important}
+.lfe-feature-label-text{
+    display:inline-block;
+    white-space:nowrap;
+    pointer-events:none;
+    padding:2px 5px;
+    border-radius:4px;
+    box-shadow:0 1px 5px rgba(0,0,0,.20);
+    line-height:1.15;
+    transform:translate(-50%,-50%);
+    transform-origin:center center;
+}
+@media(max-width:900px){
+    .layer-feature-editor-window{height:94vh}
+    .lfe-body{display:block;overflow:auto}
+    .lfe-table-wrap{height:58%}
+    .lfe-detail{width:100%;height:42%;border-left:0;border-top:1px solid #d8d0c0}
+    .lfe-toolbar .lfe-count{margin-left:0}
+}
+
+
+</style>
+
+<style id="v29-history-clean-ui">
+/* The historical map uses the same clean map canvas as Geography. */
+.map-panel{display:none!important}
+.loading-overlay{z-index:6000!important}
+#map{position:fixed!important;inset:0!important;width:100%!important;height:100%!important}
+</style>
+<style id="v29-geography-header-parity">
+
+
+/* =====================================================
+   ALAP
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: Georgia, "Times New Roman", serif;
+    background: #f3f0e7;
+}
+
+
+/* =====================================================
+   FEJLÉC
+===================================================== */
+
+header {
+    background: #102638;
+    color: white;
+    padding: 20px 35px;
+    border-bottom: 1px solid #c09d57;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 27px;
+}
+
+header p {
+    margin: 6px 0 0;
+    color: #c9ad6c;
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   NYELV
+===================================================== */
+
+.language-switch {
+    margin-top: 12px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+}
+
+.language-switch span,
+.language-switch a {
+    margin-right: 12px;
+}
+
+.language-switch a {
+    color: white;
+    text-decoration: none;
+}
+
+.current-language {
+    color: #d8b86a;
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   NAV
+===================================================== */
+
+nav {
+    background: #17374d;
+    padding: 0 35px;
+}
+
+nav a {
+    display: inline-block;
+    padding: 15px;
+    color: white;
+    text-decoration: none;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    background: #c09d57;
+    color: #102638;
+}
+
+
+/* =====================================================
+   TÉRKÉP FEJLÉC
+===================================================== */
+
+.map-header {
+    background: #f3f0e7;
+    padding: 20px 35px;
+}
+
+.map-header h2 {
+    margin: 0 0 8px;
+    color: #17374d;
+    font-size: 28px;
+}
+
+.map-header p {
+    margin: 0;
+    color: #5d666c;
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   TÉRKÉP
+===================================================== */
+
+#map {
+    width: 100%;
+    height: calc(100vh - 205px);
+    min-height: 550px;
+}
+
+
+document.addEventListener("click",function(event){
+    const edit=event.target.closest("[data-draw-edit]");
+    const coords=event.target.closest("[data-draw-coords]");
+    if(edit){event.preventDefault();openDrawPropertyEditor(edit.dataset.drawEdit);}
+    if(coords){event.preventDefault();openDrawAnalysis(coords.dataset.drawCoords);}
+});
+
+/* =====================================================
+   KOORDINÁTA
+===================================================== */
+
+.coordinate-display {
+    background: rgba(16,38,56,.95);
+    color: white;
+    padding: 7px 10px;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+}
+
+
+/* =====================================================
+   GEOJSON VEZÉRLŐ
+===================================================== */
+
+.geojson-control {
+    background: white;
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0 1px 5px rgba(0,0,0,.35);
+    margin-bottom: 5px;
+}
+
+.geojson-control button {
+    display: block;
+    width: 165px;
+    border: 0;
+    background: white;
+    color: #17374d;
+    padding: 8px 10px;
+    text-align: left;
+    cursor: pointer;
+    font: bold 11px Arial,sans-serif;
+    border-bottom: 1px solid #eee;
+}
+
+.geojson-control button:last-child {
+    border-bottom: 0;
+}
+
+.geojson-control button:hover {
+    background: #f0eadb;
+}
+
+
+/* =====================================================
+   PREZI GOMB
+===================================================== */
+
+ .prezi-button {display:none!important;
+    background: #c09d57 !important;
+    color: #102638 !important;
+    font-weight: bold !important;
+}
+
+
+/* =====================================================
+   PREZI SZERKESZTŐ
+===================================================== */
+
+#preziEditor {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    background: #e9e5da;
+}
+
+#preziEditor.active {
+    display: flex;
+}
+
+
+/* BAL OLDALI ESZKÖZTÁR */
+
+.prezi-toolbar {
+    width: 190px;
+    background: #102638;
+    color: white;
+    padding: 15px;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.prezi-brand {
+    padding-bottom: 15px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #526573;
+}
+
+.prezi-brand-title {
+    color: #d8b86a;
+    font: bold 19px Georgia,serif;
+}
+
+.prezi-brand-subtitle {
+    color: #cbd4d9;
+    font: 9px Arial,sans-serif;
+    letter-spacing: 1px;
+    margin-top: 3px;
+}
+
+.prezi-toolbar button {
+    width: 100%;
+    padding: 9px 8px;
+    margin-bottom: 6px;
+    border: 0;
+    border-radius: 4px;
+    background: #17374d;
+    color: white;
+    cursor: pointer;
+    text-align: left;
+    font: bold 11px Arial,sans-serif;
+}
+
+.prezi-toolbar button:hover {
+    background: #28566d;
+}
+
+.prezi-toolbar .gold {
+    background: #c09d57;
+    color: #102638;
+}
+
+
+/* PREZI MUNKATERÜLET */
+
+.prezi-workspace {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+
+#preziMap {
+    position: absolute;
+    inset: 0;
+}
+
+
+/* JOBB OLDALI DIÁK */
+
+.prezi-frames {
+    width: 230px;
+    background: #f7f5ef;
+    border-left: 1px solid #c8c2b5;
+    padding: 12px;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.prezi-frames-title {
+    color: #17374d;
+    font: bold 11px Arial,sans-serif;
+    letter-spacing: 1px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.prezi-frame {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 11px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.prezi-frame:hover {
+    border-color: #c09d57;
+}
+
+.prezi-frame.active {
+    border-color: #c09d57;
+    box-shadow: 0 0 0 2px rgba(192,157,87,.25);
+}
+
+.prezi-frame-number {
+    color: #c09d57;
+    font: bold 10px Arial,sans-serif;
+}
+
+.prezi-frame-title {
+    color: #17374d;
+    font: bold 12px Arial,sans-serif;
+    margin-top: 4px;
+}
+
+.prezi-frame-text {
+    color: #777;
+    font: 10px Arial,sans-serif;
+    line-height: 1.4;
+    margin-top: 5px;
+}
+
+
+/* =====================================================
+   PREZI SZÖVEGOBJEKTUMOK
+===================================================== */
+
+.prezi-object {
+    position: absolute;
+    z-index: 2000;
+    cursor: move;
+    user-select: none;
+    transform-origin: center center;
+}
+
+.prezi-text-object {
+    padding: 8px 12px;
+    background: rgba(255,255,255,.9);
+    border-radius: 5px;
+    color: #17374d;
+    box-shadow: 0 2px 10px rgba(0,0,0,.18);
+    white-space: pre-wrap;
+}
+
+.prezi-object.selected {
+    outline: 2px solid #c09d57;
+    outline-offset: 4px;
+}
+
+
+/* =====================================================
+   PREZI FRAME SZERKESZTŐ
+===================================================== */
+
+.prezi-frame-editor {
+    position: absolute;
+    top: 60px;
+    right: 15px;
+    width: 285px;
+    background: rgba(255,255,255,.98);
+    border: 1px solid #c09d57;
+    border-radius: 6px;
+    padding: 12px;
+    z-index: 4000;
+    box-shadow: 0 5px 20px rgba(0,0,0,.3);
+}
+
+.prezi-frame-editor h3 {
+    margin: 0 0 10px;
+    color: #17374d;
+    font-size: 14px;
+}
+
+.prezi-frame-editor label,
+.prezi-text-editor label {
+    display: block;
+    margin: 8px 0 4px;
+    color: #526573;
+    font: bold 10px Arial,sans-serif;
+}
+
+.prezi-frame-editor input,
+.prezi-frame-editor textarea,
+.prezi-text-editor input,
+.prezi-text-editor textarea,
+.prezi-text-editor select {
+    width: 100%;
+    padding: 7px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    font: 11px Arial,sans-serif;
+}
+
+.prezi-frame-editor textarea {
+    min-height: 70px;
+    resize: vertical;
+}
+
+
+/* =====================================================
+   SZÖVEG SZERKESZTŐ
+===================================================== */
+
+.prezi-text-editor {
+    position: absolute;
+    bottom: 20px;
+    right: 15px;
+    width: 285px;
+    background: rgba(255,255,255,.98);
+    border: 1px solid #c09d57;
+    border-radius: 6px;
+    padding: 12px;
+    z-index: 4500;
+    box-shadow: 0 5px 20px rgba(0,0,0,.3);
+    display: none;
+}
+
+.prezi-text-editor.active {
+    display: block;
+}
+
+.prezi-text-editor h3 {
+    margin: 0 0 10px;
+    color: #17374d;
+    font-size: 14px;
+}
+
+.prezi-text-editor textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+
+/* =====================================================
+   PREZENTÁCIÓ
+===================================================== */
+
+#presentationOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 9000;
+    display: none;
+    pointer-events: none;
+}
+
+#presentationOverlay.active {
+    display: block;
+}
+
+.presentation-caption {
+    position: absolute;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    width: min(780px,calc(100% - 50px));
+    padding: 18px 22px;
+    background: rgba(16,38,56,.95);
+    color: white;
+    border: 1px solid #c09d57;
+    border-radius: 8px;
+    text-align: center;
+    pointer-events: auto;
+    box-shadow: 0 8px 30px rgba(0,0,0,.4);
+}
+
+.presentation-counter {
+    color: #d8b86a;
+    font: bold 10px Arial,sans-serif;
+}
+
+.presentation-caption h1 {
+    margin: 5px 0;
+    font: 29px Georgia,serif;
+}
+
+.presentation-caption p {
+    margin: 0;
+    color: #e2e6e8;
+    font: 13px Arial,sans-serif;
+    line-height: 1.5;
+}
+
+.presentation-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.presentation-buttons button {
+    border: 0;
+    border-radius: 4px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+/* =====================================================
+   PROFESSZIONÁLIS GALÉRIA MARKEREK
+===================================================== */
+.gallery-marker-wrap{
+    background:transparent;
+    border:0;
+}
+.gallery-marker{
+    width:38px;
+    height:38px;
+    border-radius:50% 50% 50% 0;
+    transform:rotate(-45deg);
+    background:#102638;
+    border:2px solid #d8b86a;
+    box-shadow:0 4px 14px rgba(0,0,0,.35);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.gallery-marker span{
+    transform:rotate(45deg);
+    font-size:17px;
+}
+.gallery-marker:hover{
+    transform:rotate(-45deg) scale(1.08);
+}
+.gallery-popup{
+    min-width:250px;
+    max-width:310px;
+    font-family:Arial,sans-serif;
+    color:#26343d;
+}
+.gallery-popup img{
+    display:block;
+    width:100%;
+    max-height:175px;
+    object-fit:cover;
+    border-radius:8px;
+    margin:0 0 10px;
+}
+.gallery-popup h3{
+    margin:0 0 7px;
+    color:#17374d;
+    font:700 17px Georgia,serif;
+}
+.gallery-popup .meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+    margin:7px 0;
+}
+.gallery-popup .badge{
+    display:inline-block;
+    padding:4px 7px;
+    border-radius:999px;
+    background:#f0eadb;
+    color:#17374d;
+    font-size:10px;
+    font-weight:700;
+}
+.gallery-popup .description{
+    line-height:1.5;
+    font-size:12px;
+    margin:8px 0;
+}
+.gallery-popup .coords{
+    color:#69747b;
+    font-size:10px;
+    margin-top:8px;
+}
+.gallery-popup .popup-actions{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-top:10px;
+}
+.gallery-popup .popup-actions a{
+    display:inline-block;
+    padding:7px 9px;
+    border-radius:5px;
+    background:#102638;
+    color:#fff;
+    text-decoration:none;
+    font-size:10px;
+    font-weight:700;
+}
+.gallery-popup .popup-actions a.gold{
+    background:#c09d57;
+    color:#102638;
+}
+.map-status{
+    display:none !important;
+}
+
+/* PROFESSZIONÁLIS TÉRKÉPI LÉPTÉKMÉRŐ */
+.leaflet-control-scale{
+    margin:0 0 14px 14px !important;
+}
+.leaflet-control-scale-line{
+    background:rgba(245,245,245,.88);
+    border:0 !important;
+    border-bottom:4px solid #1683f7 !important;
+    color:#111 !important;
+    font:14px/1.1 Arial,sans-serif !important;
+    font-weight:400 !important;
+    text-align:center !important;
+    box-sizing:border-box !important;
+    padding:2px 4px 3px !important;
+    min-width:80px;
+    box-shadow:none !important;
+}
+
+
+
+/* =====================================================
+   MODERN FÖLDRAJZI KUTATÁSI FELÜLET
+===================================================== */
+
+.map-header{
+    padding:18px 35px 15px;
+    background:linear-gradient(180deg,#f8f5ec 0%,#eee9dc 100%);
+    border-bottom:1px solid #d6c49a;
+}
+.map-header h2{
+    font-size:30px;
+    letter-spacing:.2px;
+}
+.map-header-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin:10px 0 10px;
+}
+.map-header-research-dropdown{position:relative;display:inline-block;margin:11px 0 9px;z-index:1200}.map-header-research-trigger{border:1px solid #b8954d;border-radius:6px;padding:8px 12px;background:#17374d;color:#fff;cursor:pointer;font:700 11px Arial,sans-serif;box-shadow:0 1px 3px rgba(0,0,0,.12)}.map-header-research-trigger:hover{background:#c09d57;color:#102638}.map-header-research-menu{position:absolute;top:calc(100% + 5px);left:0;min-width:235px;background:#fffdf8;border:1px solid #c09d57;border-radius:7px;box-shadow:0 8px 24px rgba(0,0,0,.22);padding:5px;z-index:1300}.map-header-research-menu button{display:block;width:100%;border:0;border-radius:5px;padding:9px 11px;background:transparent;color:#17374d;text-align:left;cursor:pointer;font:700 11px Arial,sans-serif}.map-header-research-menu button:hover{background:#f0eadb;color:#102638}.map-header-research-menu[hidden]{display:none!important}
+.map-header-statistics-trigger{
+    display:inline-block;
+    margin:11px 0 9px 7px;
+    border:1px solid #b8954d;
+    border-radius:6px;
+    padding:8px 12px;
+    background:#17374d;
+    color:#fff;
+    cursor:pointer;
+    font:700 11px Arial,sans-serif;
+    box-shadow:0 1px 3px rgba(0,0,0,.12);
+}
+.map-header-statistics-trigger:hover{
+    background:#c09d57;
+    color:#102638;
+}
+.map-header-meta span{
+    padding:6px 10px;
+    border:1px solid #d2bc86;
+    border-radius:999px;
+    background:#fffdf8;
+    color:#17374d;
+    font:700 11px Arial,sans-serif;
+}
+.atlas-command-bar{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:7px;
+    margin:11px 0 9px;
+}
+.atlas-command-button{
+    border:1px solid #b8954d;
+    border-radius:6px;
+    padding:8px 12px;
+    background:#17374d;
+    color:#fff;
+    cursor:pointer;
+    font:700 11px Arial,sans-serif;
+    box-shadow:0 1px 3px rgba(0,0,0,.12);
+}
+.atlas-command-button:hover{
+    background:#c09d57;
+    color:#102638;
+}
+.atlas-command-button.atlas-command-success{
+    background:#176b3a;
+    border-color:#8aa36c;
+}
+.atlas-command-button.atlas-command-success:hover{
+    background:#d8b86a;
+    color:#102638;
+}
+
+.geo-research-control{
+    width:285px;
+    max-height:calc(100vh - 145px);
+    overflow:auto;
+    background:rgba(16,38,56,.97);
+    color:#f5f1e6;
+    border:1px solid rgba(216,184,106,.72);
+    border-radius:9px;
+    box-shadow:0 5px 22px rgba(0,0,0,.32);
+    font-family:Arial,sans-serif;
+}
+.geo-research-head-row{display:flex;align-items:center;gap:8px}.geo-research-head-row>div:first-child{min-width:0;flex:1}.geo-research-head-actions{display:flex;align-items:center;gap:5px;flex:0 0 auto}.geo-research-collapse,.geo-research-close{width:28px;height:28px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#d8b86a;cursor:pointer;font:700 13px Arial,sans-serif}.geo-research-collapse:hover,.geo-research-close:hover{background:#c09d57;color:#102638}.geo-research-close{font-size:18px;line-height:1}
+.geo-research-head{
+    padding:13px 14px 10px;
+    border-bottom:1px solid rgba(216,184,106,.35);
+    position:sticky;
+    top:0;
+    background:#102638;
+    z-index:2;
+}
+.geo-research-title{font-weight:800;color:#d8b86a;font-size:14px;letter-spacing:.4px}
+.geo-research-subtitle{font-size:10px;color:#bdc8ce;margin-top:3px;line-height:1.35}
+.geo-research-search{
+    width:100%;
+    margin-top:9px;
+    padding:8px 9px;
+    border-radius:6px;
+    border:1px solid #486273;
+    background:#0c2030;
+    color:#fff;
+    outline:none;
+    font-size:11px;
+}
+.geo-research-search:focus{border-color:#d8b86a}
+.geo-category{border-bottom:1px solid rgba(255,255,255,.09)}
+.geo-category:last-child{border-bottom:0}
+.geo-category-header{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:11px 12px;
+    border:0;
+    background:transparent;
+    color:#fff;
+    cursor:pointer;
+    text-align:left;
+    font-weight:800;
+    font-size:12px;
+}
+.geo-category-header:hover{background:rgba(255,255,255,.06)}
+.geo-category-count{margin-left:auto;color:#9eabb2;font-size:10px}
+.geo-category-arrow{color:#d8b86a;width:12px}
+.geo-category-body{padding:0 10px 10px 31px}
+.geo-layer-row{display:flex;align-items:center;gap:7px;padding:5px 0;font-size:11px;color:#e2e7e9;cursor:pointer}
+.geo-layer-row input{accent-color:#d8b86a}
+.geo-layer-row:hover{color:#fff}
+.geo-layer-row.is-active{color:#d8b86a;font-weight:700}
+.geo-research-footer{padding:9px 12px;border-top:1px solid rgba(216,184,106,.25);font-size:10px;color:#aebbc1;position:sticky;bottom:0;background:#102638}
+.geo-research-actions{display:flex;gap:6px;margin-top:7px}
+.geo-research-actions button{
+    flex:1;border:1px solid #526b7a;border-radius:5px;padding:6px 7px;background:#17374d;color:#fff;cursor:pointer;font-size:10px;font-weight:700
+}
+.geo-research-actions button:hover{background:#c09d57;color:#102638}
+.geo-stats-control{
+    background:rgba(16,38,56,.95);color:#fff;border:1px solid rgba(216,184,106,.55);border-radius:7px;padding:9px 11px;box-shadow:0 2px 12px rgba(0,0,0,.25);font:10px Arial,sans-serif;line-height:1.55;min-width:165px
+}
+.geo-stats-control strong{color:#d8b86a;font-size:11px}
+.geo-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;margin-top:4px}
+.geo-stats-grid span:nth-child(even){text-align:right;color:#d8b86a;font-weight:700}
+
+.settlement-marker-wrap{
+    background:transparent;
+    border:0;
+}
+.settlement-marker{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:2px solid #fff;
+    box-shadow:0 3px 12px rgba(0,0,0,.35);
+    font-size:14px;
+}
+.city-marker{
+    background:#8b5e34;
+}
+.village-marker{
+    background:#5f7f62;
+}
+.settlement-popup{
+    font-family:Arial,sans-serif;
+    min-width:245px;
+    color:#263238;
+}
+.settlement-popup h3{
+    margin:0 0 6px;
+    color:#102638;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:19px;
+}
+.settlement-popup .settlement-badge{
+    display:inline-block;
+    padding:4px 7px;
+    border-radius:999px;
+    background:#102638;
+    color:#d8b86a;
+    font-size:10px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+.settlement-popup .settlement-id{
+    font-size:10px;
+    color:#68747b;
+    border-top:1px solid #e1e5e7;
+    padding-top:7px;
+    margin-top:8px;
+}
+.settlement-popup .settlement-actions{
+    display:flex;
+    gap:7px;
+    margin-top:10px;
+}
+.settlement-popup button{
+    border:1px solid #b8954d;
+    border-radius:6px;
+    padding:7px 9px;
+    background:#102638;
+    color:#fff;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:800;
+}
+.settlement-popup button:hover{
+    background:#d8b86a;
+    color:#102638;
+}
+.settlement-stats-modal{
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    background:rgba(4,15,24,.78);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+.settlement-stats-window{
+    width:min(1120px,96vw);
+    max-height:92vh;
+    overflow:auto;
+    background:#f3f0e7;
+    color:#263238;
+    border:1px solid #c09d57;
+    border-radius:12px;
+    box-shadow:0 20px 70px rgba(0,0,0,.45);
+}
+.settlement-stats-head{
+    position:sticky;
+    top:0;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    padding:16px 20px;
+    background:#102638;
+    color:#fff;
+    border-bottom:1px solid #c09d57;
+}
+.settlement-stats-head h2{
+    margin:0;
+    font:700 22px Georgia,"Times New Roman",serif;
+    color:#fff;
+}
+.settlement-stats-head small{
+    color:#d8b86a;
+    display:block;
+    margin-top:3px;
+}
+.settlement-stats-close{
+    border:1px solid #c09d57;
+    background:transparent;
+    color:#fff;
+    border-radius:6px;
+    width:36px;
+    height:36px;
+    cursor:pointer;
+    font-size:18px;
+}
+.settlement-stats-body{
+    padding:18px;
+}
+.settlement-stats-summary{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+    margin-bottom:16px;
+}
+.settlement-stat-card{
+    background:#fff;
+    border:1px solid #d8d0c0;
+    border-radius:8px;
+    padding:11px;
+}
+.settlement-stat-card strong{
+    display:block;
+    color:#102638;
+    font-size:18px;
+}
+.settlement-stat-card span{
+    color:#68747b;
+    font-size:10px;
+}
+.settlement-table-wrap{
+    overflow:auto;
+    background:#fff;
+    border:1px solid #d8d0c0;
+    border-radius:8px;
+    margin-bottom:18px;
+}
+.settlement-data-table{
+    width:100%;
+    border-collapse:collapse;
+    font:12px Arial,sans-serif;
+}
+.settlement-data-table th{
+    background:#102638;
+    color:#d8b86a;
+    padding:9px;
+    text-align:left;
+    white-space:nowrap;
+}
+.settlement-data-table td{
+    padding:8px 9px;
+    border-bottom:1px solid #e5e7e8;
+    white-space:nowrap;
+}
+.settlement-data-table tr:hover td{
+    background:#f7f2e6;
+}
+.settlement-charts{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+}
+.settlement-chart-card{
+    background:#fff;
+    border:1px solid #d8d0c0;
+    border-radius:8px;
+    padding:12px;
+    min-height:300px;
+}
+.settlement-chart-card h3{
+    margin:0 0 8px;
+    color:#102638;
+    font:700 15px Georgia,"Times New Roman",serif;
+}
+.settlement-chart-card canvas{
+    width:100%!important;
+    height:245px!important;
+}
+.settlement-no-data{
+    padding:22px;
+    background:#fff;
+    border:1px dashed #c09d57;
+    border-radius:8px;
+    line-height:1.55;
+}
+.settlement-no-data strong{
+    color:#102638;
+}
+.settlement-schema{
+    margin-top:10px;
+    padding:10px;
+    background:#f7f2e6;
+    border-radius:6px;
+    font:11px/1.5 Consolas,monospace;
+    white-space:pre-wrap;
+}
+.settlement-stats-control{
+    background:rgba(16,38,56,.96);
+    border:1px solid rgba(216,184,106,.6);
+    border-radius:7px;
+    box-shadow:0 3px 15px rgba(0,0,0,.3);
+    padding:8px;
+}
+.settlement-stats-control button{
+    border:1px solid #526b7a;
+    background:#17374d;
+    color:#fff;
+    border-radius:5px;
+    padding:7px 9px;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:800;
+}
+.settlement-stats-control button:hover{
+    background:#d8b86a;
+    color:#102638;
+}
+
+/* =====================================================
+   RÉTEG ATLASZOSSÁG / OPACITY SLIDER
+===================================================== */
+.atlas-opacity-row.is-geojson{grid-template-columns:28px minmax(0,1fr) 92px 44px}.atlas-layer-eye{width:27px;height:27px;border:1px solid rgba(255,255,255,.18);border-radius:6px;background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;padding:0}.atlas-layer-eye:hover{background:rgba(216,184,106,.22);border-color:rgba(216,184,106,.65)}.atlas-layer-eye.is-off{opacity:.72}.atlas-opacity-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.atlas-opacity-control{width:285px;max-width:calc(100vw - 24px);background:rgba(16,38,56,.97);border:1px solid rgba(216,184,106,.72);border-radius:8px;box-shadow:0 5px 22px rgba(0,0,0,.32);color:#fff;font:10px Arial,sans-serif;margin-top:6px}
+.atlas-opacity-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px;background:#102638;border-bottom:1px solid rgba(216,184,106,.35)}
+.atlas-opacity-head strong{color:#d8b86a;font-size:11px}
+.atlas-opacity-toggle{width:25px;height:23px;border:1px solid #526b7a;border-radius:4px;background:#17374d;color:#d8b86a;cursor:pointer;font-weight:800}
+.atlas-opacity-toggle:hover{background:#c09d57;color:#102638}
+.atlas-opacity-body{max-height:360px;overflow:auto;padding:7px 9px}
+.atlas-opacity-row{display:grid;grid-template-columns:minmax(90px,1.35fr) minmax(75px,1fr) 38px;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.atlas-opacity-row:last-child{border-bottom:0}
+.atlas-opacity-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e4e9eb}
+.atlas-opacity-slider{width:100%;accent-color:#d8b86a;cursor:pointer}
+.atlas-opacity-value{color:#d8b86a;text-align:right;font-weight:800;font-size:9px}
+/* =====================================================
+   FEATURE EDITOR – BEÁLLÍTÁSOK / EGYEDI OSZLOPOK / JOIN
+===================================================== */
+.feature-editor-titlebar-main{min-width:0;flex:1}
+.feature-editor-settings{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:7px}
+.feature-editor-settings label{display:flex;align-items:center;gap:4px;color:#dbe2e5;font:700 9px Arial,sans-serif}
+.feature-editor-settings select,.feature-editor-settings input[type="color"],.feature-editor-settings input[type="number"]{height:27px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#fff;padding:4px 6px;font:10px Arial,sans-serif}
+.feature-editor-settings input[type="color"]{width:38px;padding:2px;cursor:pointer}
+.feature-editor-settings input[type="number"]{width:58px}
+.feature-editor-settings .fe-setting-label{color:#d8b86a;font-weight:800}
+.feature-editor-settings button{height:27px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#fff;padding:4px 8px;cursor:pointer;font:700 9px Arial,sans-serif}
+.feature-editor-settings button:hover{background:#c09d57;color:#102638}
+.feature-editor-settings .fe-join-button{border-color:#8aa36c}
+.feature-editor-settings .fe-column-button{border-color:#8b7a4a}
+.feature-editor-custom-wrap{margin-top:10px;overflow:auto;background:#fff;border:1px solid #d8d0c0;border-radius:7px}
+.feature-editor-custom-table{width:100%;border-collapse:collapse;font-size:9px}
+.feature-editor-custom-table th{background:#17374d;color:#d8b86a;padding:6px;text-align:left;white-space:nowrap;position:sticky;top:0}
+.feature-editor-custom-table td{padding:6px;border-bottom:1px solid #ece8de;white-space:nowrap}
+.feature-editor-custom-table td[contenteditable="true"]{cursor:text;background:#fffdf8;outline:none}
+.feature-editor-custom-table td[contenteditable="true"]:focus{box-shadow:inset 0 0 0 1px #c09d57}
+.feature-editor-custom-empty{padding:8px;color:#68747b;font-size:9px}
+.feature-editor-join-status{margin-top:6px;padding:6px 8px;border-radius:5px;background:#f7f2e6;color:#526573;font:9px/1.45 Arial,sans-serif;display:none}
+.feature-editor-join-status.active{display:block}
+.feature-editor-join-status.success{border-left:3px solid #176b3a}
+.feature-editor-join-status.error{border-left:3px solid #8b2020}
+.feature-editor-column-modal,.feature-editor-join-modal{position:fixed;inset:0;z-index:100000;background:rgba(4,15,24,.78);display:flex;align-items:center;justify-content:center;padding:18px}
+.feature-editor-column-window,.feature-editor-join-window{width:min(500px,95vw);background:#f3f0e7;border:1px solid #c09d57;border-radius:10px;box-shadow:0 20px 70px rgba(0,0,0,.45);overflow:hidden}
+.feature-editor-dialog-head{display:flex;align-items:center;justify-content:space-between;background:#102638;color:#fff;padding:12px 15px}
+.feature-editor-dialog-head h3{margin:0;font:700 17px Georgia,serif}
+.feature-editor-dialog-body{padding:14px}
+.feature-editor-dialog-body label{display:block;margin:8px 0 4px;color:#526573;font:700 10px Arial,sans-serif}
+.feature-editor-dialog-body input,.feature-editor-dialog-body select,.feature-editor-dialog-body textarea{width:100%;padding:8px;border:1px solid #aaa;border-radius:5px;background:#fff;font:11px Arial,sans-serif}
+.feature-editor-dialog-help{font:10px/1.5 Arial,sans-serif;color:#68747b;margin-top:8px}
+.feature-editor-dialog-actions{display:flex;justify-content:flex-end;gap:7px;margin-top:12px}
+.feature-editor-dialog-actions button{border:1px solid #b8954d;border-radius:5px;padding:8px 11px;cursor:pointer;font-weight:800}
+.feature-editor-dialog-actions .primary{background:#102638;color:#fff}
+.feature-editor-dialog-actions .secondary{background:#ddd;color:#333}
+#featureEditorJoinFileInput{display:none}
+.draw-draft-style-control{display:none!important}
+
+/* =====================================================
+   MEGNYITÁS / MENTÉS-EXPORT
+===================================================== */
+.data-io-control{
+    background:rgba(255,255,255,.98);
+    border-radius:6px;
+    box-shadow:0 2px 12px rgba(0,0,0,.32);
+    overflow:hidden;
+    border:1px solid #c9b98f;
+}
+.data-io-control button{
+    display:block;
+    width:168px;
+    border:0;
+    border-bottom:1px solid #e2ddd2;
+    background:#fff;
+    color:#17374d;
+    padding:9px 11px;
+    text-align:left;
+    cursor:pointer;
+    font:700 11px Arial,sans-serif;
+}
+.data-io-control button:last-child{border-bottom:0}
+.data-io-control button:hover{background:#f0eadb}
+.data-io-control .save-button{color:#176b3a}
+.data-io-control .open-button{color:#17374d}
+.data-io-modal{
+    position:fixed;inset:0;z-index:100001;
+    background:rgba(4,15,24,.78);
+    display:flex;align-items:center;justify-content:center;
+    padding:18px;
+}
+.data-io-window{
+    width:min(760px,96vw);max-height:90vh;overflow:auto;
+    background:#f3f0e7;border:1px solid #c09d57;
+    border-radius:12px;box-shadow:0 20px 70px rgba(0,0,0,.45);
+}
+.data-io-head{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:14px 17px;background:#102638;color:#fff;
+    border-bottom:1px solid #c09d57;
+}
+.data-io-head h3{margin:0;font:700 19px Georgia,serif}
+.data-io-close{
+    width:34px;height:34px;border:1px solid #c09d57;
+    border-radius:6px;background:transparent;color:#fff;
+    cursor:pointer;font-size:18px;
+}
+.data-io-body{padding:16px}
+.data-io-section{
+    background:#fff;border:1px solid #d7d0c0;border-radius:8px;
+    padding:12px;margin-bottom:12px;
+}
+.data-io-section h4{margin:0 0 9px;color:#102638;font:700 14px Georgia,serif}
+.data-io-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.data-io-field label{display:block;margin-bottom:4px;color:#526573;font:700 10px Arial,sans-serif}
+.data-io-field select,.data-io-field input{
+    width:100%;padding:8px;border:1px solid #aaa;border-radius:5px;
+    background:#fff;color:#26343d;font:11px Arial,sans-serif;
+}
+.data-io-object-list{
+    max-height:220px;overflow:auto;border:1px solid #d7d0c0;border-radius:6px;
+}
+.data-io-object-row{
+    display:grid;grid-template-columns:24px 1fr auto;gap:8px;
+    align-items:center;padding:8px;border-bottom:1px solid #e7e3da;
+    font:10px Arial,sans-serif;
+}
+.data-io-object-row:last-child{border-bottom:0}
+.data-io-object-row:hover{background:#fbf8ef}
+.data-io-object-type{color:#68747b;font-weight:700}
+.data-io-swatch{width:15px;height:15px;border-radius:3px;border:1px solid #777}
+.data-io-actions{display:flex;justify-content:flex-end;gap:7px;flex-wrap:wrap;margin-top:11px}
+.data-io-actions button{
+    border:1px solid #b8954d;border-radius:5px;padding:8px 11px;
+    cursor:pointer;font:700 10px Arial,sans-serif;
+}
+.data-io-primary{background:#102638;color:#fff}
+.data-io-success{background:#176b3a;color:#fff}
+.data-io-secondary{background:#ddd;color:#333}
+.data-io-help{margin-top:8px;color:#68747b;font:10px/1.45 Arial,sans-serif}
+.data-io-status{margin-top:8px;padding:8px;border-radius:6px;background:#f7f2e6;color:#526573;font:10px/1.45 Arial,sans-serif;display:none}
+.data-io-status.show{display:block}
+.data-io-status.error{border-left:3px solid #8b2020}
+.data-io-status.success{border-left:3px solid #176b3a}
+@media(max-width:800px){
+    .data-io-control button{width:145px;font-size:10px}
+    .data-io-row{grid-template-columns:1fr}
+}
+@media(max-width:800px){
+    .geo-research-control{width:min(310px,calc(100vw - 20px));max-height:55vh}
+    .map-header{padding:13px 15px}
+    .map-header h2{font-size:23px}
+    .map-header-meta{gap:5px}
+    .map-header-meta span{font-size:9px;padding:5px 7px}
+    .map-header-statistics-trigger{margin-left:0;margin-right:6px;font-size:10px;padding:7px 10px}
+}
+
+/* =====================================================
+   MOBIL
+===================================================== */
+
+@media(max-width:800px) {
+
+    header {
+        padding: 15px;
+    }
+
+    header h1 {
+        font-size: 21px;
+    }
+
+    nav {
+        padding: 0 8px;
+    }
+
+    nav a {
+        padding: 12px 8px;
+        font-size: 11px;
+    }
+
+    .map-header {
+        padding: 15px;
+    }
+
+    #map {
+        height: calc(100vh - 185px);
+    }
+
+    .prezi-toolbar {
+        width: 145px;
+    }
+
+    .prezi-frames {
+        width: 175px;
+    }
+
+}
+
+
+
+/* =====================================================
+   PROFESSIONÁLIS KUTATÁSI / DRAW RENDSZER
+===================================================== */
+.draw-research-control{
+    width:380px;
+    max-width:calc(100vw - 24px);
+    max-height:calc(100vh - 150px);
+    overflow:auto;
+    background:rgba(16,38,56,.98);
+    color:#fff;
+    border:1px solid rgba(216,184,106,.72);
+    border-radius:9px;
+    box-shadow:0 6px 25px rgba(0,0,0,.38);
+    font-family:Arial,sans-serif;
+}
+.draw-research-head-row{display:flex;align-items:center;gap:8px}.draw-research-head-row>div:first-child{min-width:0;flex:1}.draw-research-head-actions{display:flex;align-items:center;gap:5px;flex:0 0 auto}.draw-research-collapse,.draw-research-close{width:28px;height:28px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#d8b86a;cursor:pointer;font:700 13px Arial,sans-serif}.draw-research-collapse:hover,.draw-research-close:hover{background:#c09d57;color:#102638}.draw-research-close{font-size:18px;line-height:1}
+.draw-research-head{
+    position:sticky;
+    top:0;
+    z-index:3;
+    padding:12px;
+    background:#102638;
+    border-bottom:1px solid rgba(216,184,106,.35);
+}
+.draw-research-title{color:#d8b86a;font-size:14px;font-weight:800;letter-spacing:.3px}
+.draw-research-subtitle{margin-top:3px;color:#c2ccd1;font-size:10px;line-height:1.4}
+.draw-research-toolbar{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+.draw-research-toolbar select,.draw-research-toolbar button{
+    border:1px solid #526b7a;
+    border-radius:5px;
+    background:#17374d;
+    color:#fff;
+    padding:6px 7px;
+    font-size:10px;
+    cursor:pointer;
+}
+.draw-research-toolbar select{flex:1;min-width:115px}
+.draw-research-toolbar button:hover{background:#c09d57;color:#102638}
+.draw-object-list{padding:8px}
+.draw-empty{padding:14px;color:#aebbc1;font-size:10px;line-height:1.5;border:1px dashed #526b7a;border-radius:6px}
+.draw-object-card{
+    background:#f8f5ec;
+    color:#26343d;
+    border:1px solid #c8b47c;
+    border-radius:7px;
+    margin-bottom:7px;
+    overflow:hidden;
+}
+.draw-object-card-head{display:flex;align-items:center;gap:7px;padding:8px 9px;background:#fffdf8;border-bottom:1px solid #ded7c8}
+.draw-color-swatch{width:18px;height:18px;border-radius:4px;border:2px solid #fff;box-shadow:0 0 0 1px #7c7c7c;flex:none}
+.draw-object-title{font-weight:800;font-size:11px;color:#102638;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.draw-object-type{margin-left:auto;color:#6b7378;font-size:9px;font-weight:800}
+.draw-object-meta{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;padding:7px 9px;font-size:9px}
+.draw-object-meta span:nth-child(odd){color:#68747b}
+.draw-object-meta span:nth-child(even){text-align:right;font-weight:800;color:#17374d}
+.draw-object-actions{display:flex;gap:5px;padding:7px 9px;border-top:1px solid #ded7c8;flex-wrap:wrap}
+.draw-object-actions button{border:1px solid #b9a36b;background:#fff;color:#17374d;border-radius:5px;padding:5px 7px;font-size:9px;font-weight:800;cursor:pointer}
+.draw-object-actions button:hover{background:#d8b86a}
+.draw-object-actions .danger{color:#8b2020}
+.draw-coordinate-table-wrap{padding:0 9px 8px;overflow:auto;max-height:210px}
+.draw-coordinate-table{width:100%;border-collapse:collapse;font:9px Arial,sans-serif;background:#fff}
+.draw-coordinate-table th{background:#17374d;color:#d8b86a;padding:5px;text-align:right;position:sticky;top:0}
+.draw-coordinate-table th:first-child,.draw-coordinate-table td:first-child{text-align:center}
+.draw-coordinate-table td{padding:4px 5px;border-bottom:1px solid #e6e6e6;text-align:right;white-space:nowrap}
+.draw-analysis-modal{position:fixed;inset:0;z-index:99998;background:rgba(4,15,24,.78);display:flex;align-items:center;justify-content:center;padding:18px}
+.draw-analysis-window{width:min(1250px,97vw);max-height:93vh;overflow:auto;background:#f3f0e7;border:1px solid #c09d57;border-radius:12px;box-shadow:0 20px 70px rgba(0,0,0,.45)}
+.draw-analysis-head{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:#102638;color:#fff;border-bottom:1px solid #c09d57}
+.draw-analysis-head h2{margin:0;font:700 21px Georgia,serif}
+.draw-analysis-head small{display:block;color:#d8b86a;margin-top:3px;font:10px Arial,sans-serif}
+.draw-analysis-close{width:35px;height:35px;border:1px solid #c09d57;border-radius:6px;background:transparent;color:#fff;cursor:pointer;font-size:18px}
+.draw-analysis-body{padding:16px}
+.draw-summary-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px;margin-bottom:14px}
+.draw-summary-card{background:#fff;border:1px solid #d7d0c0;border-radius:8px;padding:10px}
+.draw-summary-card strong{display:block;font-size:18px;color:#102638}
+.draw-summary-card span{display:block;margin-top:3px;font-size:9px;color:#68747b}
+.draw-analysis-section{background:#fff;border:1px solid #d7d0c0;border-radius:8px;margin-bottom:13px;overflow:auto}
+.draw-analysis-section h3{margin:0;padding:10px 12px;background:#102638;color:#d8b86a;font:700 14px Georgia,serif}
+.draw-analysis-table{width:100%;border-collapse:collapse;font:10px Arial,sans-serif}
+.draw-analysis-table th{background:#17374d;color:#d8b86a;padding:7px;text-align:left;white-space:nowrap}
+.draw-analysis-table td{padding:6px 7px;border-bottom:1px solid #e4e5e6;white-space:nowrap}
+.draw-analysis-table tr:hover td{background:#f7f2e6}
+.draw-style-modal{position:fixed;inset:0;z-index:99999;background:rgba(4,15,24,.78);display:flex;align-items:center;justify-content:center;padding:18px}
+.draw-style-window{width:min(440px,95vw);background:#f3f0e7;border:1px solid #c09d57;border-radius:10px;box-shadow:0 20px 70px rgba(0,0,0,.45);overflow:hidden}
+.draw-style-head{display:flex;justify-content:space-between;align-items:center;background:#102638;color:#fff;padding:12px 15px}
+.draw-style-head h3{margin:0;font:700 17px Georgia,serif}
+.draw-style-body{padding:14px}
+.draw-style-row{display:grid;grid-template-columns:125px 1fr;align-items:center;gap:10px;margin-bottom:10px;font:11px Arial,sans-serif;color:#526573}
+.draw-style-row input[type=color]{width:100%;height:35px;padding:2px;border:1px solid #aaa;border-radius:5px;background:#fff}
+.draw-style-row input[type=number],.draw-style-row select{width:100%;padding:7px;border:1px solid #aaa;border-radius:5px;background:#fff}
+.draw-style-actions{display:flex;gap:7px;justify-content:flex-end;margin-top:13px}
+.draw-style-actions button{border:1px solid #b8954d;border-radius:5px;padding:8px 11px;cursor:pointer;font-weight:800}
+.draw-style-save{background:#102638;color:#fff}.draw-style-cancel{background:#ddd;color:#333}
+.draw-property-modal{position:fixed;inset:0;z-index:99999;background:rgba(4,15,24,.78);display:flex;align-items:center;justify-content:center;padding:18px}
+.draw-property-window{width:min(520px,95vw);background:#f3f0e7;border:1px solid #c09d57;border-radius:10px;box-shadow:0 20px 70px rgba(0,0,0,.45);overflow:hidden}
+.draw-property-head{display:flex;justify-content:space-between;align-items:center;background:#102638;color:#fff;padding:12px 15px}
+.draw-property-head h3{margin:0;font:700 17px Georgia,serif}
+.draw-property-body{padding:14px}
+.draw-property-field.full{grid-column:1/-1}
+
+/* =====================================================
+   DRAW / FEATURE EDITOR – ALSÓ SZERKESZTŐ
+===================================================== */
+.feature-editor-bar{
+    position:absolute;
+    left:50%;
+    bottom:6px;
+    transform:translateX(-50%);
+    margin:0 !important;
+    background:rgba(16,38,56,.97);
+    border:1px solid rgba(216,184,106,.75);
+    border-radius:8px;
+    box-shadow:0 3px 16px rgba(0,0,0,.35);
+    padding:6px;
+    font-family:Arial,sans-serif;
+}
+.feature-editor-bar button{
+    border:1px solid #526b7a;
+    background:#17374d;
+    color:#fff;
+    border-radius:5px;
+    padding:7px 12px;
+    cursor:pointer;
+    font-size:11px;
+    font-weight:800;
+    min-width:170px;
+}
+.feature-editor-bar button:hover{background:#c09d57;color:#102638}
+.feature-editor-panel{
+    position:absolute;
+    left:50%;
+    bottom:48px;
+    transform:translateX(-50%);
+    width:min(1080px,calc(100vw - 26px));
+    max-height:min(58vh,560px);
+    overflow:hidden;
+    background:#f3f0e7;
+    border:1px solid #c09d57;
+    border-radius:10px;
+    box-shadow:0 8px 30px rgba(0,0,0,.42);
+    color:#26343d;
+    font-family:Arial,sans-serif;
+    z-index:5000;
+}
+.feature-editor-panel[hidden]{display:none}
+.feature-editor-titlebar-actions{display:flex;align-items:center;gap:5px;flex:0 0 auto}.feature-editor-collapse{width:28px;height:28px;border:1px solid #526b7a;border-radius:5px;background:#17374d;color:#d8b86a;cursor:pointer;font:700 13px Arial,sans-serif}.feature-editor-collapse:hover{background:#c09d57;color:#102638}
+.feature-editor-titlebar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:9px 12px;
+    background:#102638;
+    color:#fff;
+    border-bottom:1px solid #c09d57;
+}
+.feature-editor-titlebar strong{color:#d8b86a;font-size:12px;letter-spacing:.35px}
+.feature-editor-titlebar small{color:#c6d0d5;font-size:9px}
+.feature-editor-close{
+    width:28px;height:28px;border:1px solid #c09d57;border-radius:5px;background:transparent;color:#fff;cursor:pointer;font-size:16px
+}
+.feature-editor-grid{
+    display:grid;
+    grid-template-columns:1.35fr 1fr;
+    min-height:280px;
+}
+.feature-editor-list{
+    overflow:auto;
+    border-right:1px solid #d8d0c0;
+    background:#fffdf8;
+}
+.feature-editor-table{width:100%;border-collapse:collapse;font-size:10px}
+.feature-editor-table th{position:sticky;top:0;background:#17374d;color:#d8b86a;padding:7px;text-align:left;white-space:nowrap;z-index:2}
+.feature-editor-table td{padding:7px;border-bottom:1px solid #e5e1d8;white-space:nowrap}
+.feature-editor-table tr{cursor:pointer}
+.feature-editor-table tr:hover td{background:#f4eee0}
+.feature-editor-table tr.active td{background:#e8dfca}
+.feature-editor-swatch{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid #777;vertical-align:middle}
+.feature-editor-detail{overflow:auto;background:#f8f5ec;padding:12px}
+.feature-editor-detail h3{margin:0 0 7px;color:#102638;font:700 17px Georgia,serif}
+.feature-editor-badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px}
+.feature-editor-badge{padding:4px 7px;border-radius:999px;background:#e9e0cb;color:#17374d;font-size:9px;font-weight:800}
+.feature-editor-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:10px}
+.feature-editor-metric{background:#fff;border:1px solid #d8d0c0;border-radius:6px;padding:7px}
+.feature-editor-metric strong{display:block;color:#102638;font-size:13px}
+.feature-editor-metric span{display:block;margin-top:2px;color:#6e777d;font-size:8px}
+.feature-editor-meta{display:grid;grid-template-columns:1fr 1fr;gap:5px 12px;margin-bottom:10px;font-size:9px}
+.feature-editor-meta div{padding:5px 6px;background:#fff;border:1px solid #e0dbcf;border-radius:5px}
+.feature-editor-meta b{color:#526573}
+.feature-editor-coords{overflow:auto;background:#fff;border:1px solid #d8d0c0;border-radius:7px}
+.feature-editor-coords table{width:100%;border-collapse:collapse;font-size:9px}
+.feature-editor-coords th{position:sticky;top:0;background:#17374d;color:#d8b86a;padding:6px;text-align:right}
+.feature-editor-coords th:first-child,.feature-editor-coords td:first-child{text-align:center}
+.feature-editor-coords td{padding:5px;border-bottom:1px solid #ece8de;text-align:right;white-space:nowrap}
+.feature-editor-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.feature-editor-actions button{border:1px solid #b8954d;background:#fff;color:#17374d;border-radius:5px;padding:6px 8px;cursor:pointer;font-size:9px;font-weight:800}
+.feature-editor-actions button:hover{background:#d8b86a}
+.feature-editor-empty{padding:18px;color:#68747b;font-size:10px}
+
+/* =====================================================
+   VISSZALÉPÉS / RAJZOLÁSI STÍLUS
+===================================================== */
+.draw-undo-control,.draw-draft-style-control{
+    background:rgba(16,38,56,.97);
+    border:1px solid rgba(216,184,106,.72);
+    border-radius:7px;
+    box-shadow:0 3px 14px rgba(0,0,0,.30);
+    padding:6px;
+    font:10px Arial,sans-serif;
+}
+.draw-undo-control button,.draw-draft-style-control button{
+    border:1px solid #526b7a;
+    background:#17374d;
+    color:#fff;
+    border-radius:5px;
+    padding:6px 8px;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:800;
+}
+.draw-undo-control button:hover,.draw-draft-style-control button:hover{background:#c09d57;color:#102638}
+.draw-undo-control button:disabled{opacity:.45;cursor:not-allowed}
+.draw-draft-style-control{min-width:210px}
+.draw-draft-style-control .title{color:#d8b86a;font-weight:800;margin-bottom:5px}
+.draw-draft-style-control .row{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:5px}
+.draw-draft-style-control label{display:flex;align-items:center;gap:4px;color:#dbe2e5;font-size:9px}
+.draw-draft-style-control input[type=color]{width:32px;height:23px;padding:1px;border:1px solid #87949a;border-radius:4px;background:#fff;cursor:pointer}
+.draw-draft-style-control input[type=number],.draw-draft-style-control input[type=range]{width:100%}
+.draw-draft-style-control .value{color:#d8b86a;font-weight:800;text-align:right;font-size:9px}
+
+@media(max-width:800px){
+    .feature-editor-grid{grid-template-columns:1fr}
+    .feature-editor-list{max-height:190px;border-right:0;border-bottom:1px solid #d8d0c0}
+    .feature-editor-panel{bottom:46px;max-height:72vh}
+    .feature-editor-metrics{grid-template-columns:1fr 1fr}
+}
+.draw-property-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.draw-property-field label{display:block;margin-bottom:4px;color:#526573;font:bold 10px Arial,sans-serif}
+.draw-property-field input,.draw-property-field textarea,.draw-property-field select{width:100%;padding:7px;border:1px solid #aaa;border-radius:5px;background:#fff;font:11px Arial,sans-serif}
+.draw-property-field textarea{min-height:75px;resize:vertical}
+.draw-property-field.full{grid-column:1/-1}
+.draw-property-actions{display:flex;gap:7px;justify-content:flex-end;margin-top:13px}
+.draw-property-actions button{border:1px solid #b8954d;border-radius:5px;padding:8px 11px;cursor:pointer;font-weight:800}
+.draw-property-save{background:#102638;color:#fff}.draw-property-cancel{background:#ddd;color:#333}
+.draw-point-icon{background:transparent!important;border:0!important}
+@media(max-width:800px){
+ .draw-research-control{width:min(330px,calc(100vw - 20px));max-height:55vh}
+ .draw-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .draw-property-grid{grid-template-columns:1fr}
+ .draw-property-field.full{grid-column:auto}
+}
+
+
+
+/* =====================================================
+   RÉTEG FEATURE EDITOR – ÚJ ADATKEZELŐ FELÜLET
+===================================================== */
+.layer-feature-editor-modal{
+    position:fixed;inset:0;z-index:120000;
+    background:rgba(4,15,24,.82);
+    display:flex;align-items:center;justify-content:center;
+    padding:18px;
+}
+.layer-feature-editor-window{
+    width:min(1500px,98vw);height:min(92vh,980px);
+    background:#f3f0e7;border:1px solid #c09d57;border-radius:12px;
+    box-shadow:0 25px 90px rgba(0,0,0,.55);
+    overflow:hidden;display:flex;flex-direction:column;
+}
+.lfe-head{
+    display:flex;align-items:center;gap:12px;padding:12px 16px;
+    background:#102638;color:#fff;border-bottom:1px solid #c09d57;
+    flex:0 0 auto;
+}
+.lfe-head-title{min-width:0;flex:1}
+.lfe-head-title strong{display:block;color:#d8b86a;font:700 18px Georgia,serif}
+.lfe-head-title small{display:block;color:#c6d0d5;font:10px Arial,sans-serif;margin-top:3px}
+.lfe-head-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.lfe-head-actions button,.lfe-toolbar button{
+    border:1px solid #526b7a;border-radius:6px;background:#17374d;color:#fff;
+    padding:7px 10px;cursor:pointer;font:700 10px Arial,sans-serif;
+}
+.lfe-head-actions button:hover,.lfe-toolbar button:hover{background:#c09d57;color:#102638}
+.lfe-head-actions .lfe-close{font-size:18px;width:34px;height:34px;padding:0}
+.lfe-toolbar{
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+    padding:9px 12px;background:#fffdf8;border-bottom:1px solid #d8d0c0;
+    flex:0 0 auto;
+}
+.lfe-toolbar label{font:700 10px Arial,sans-serif;color:#526573}
+.lfe-toolbar select,.lfe-toolbar input[type=search]{
+    min-width:190px;padding:8px;border:1px solid #aaa;border-radius:6px;
+    background:#fff;color:#26343d;font:11px Arial,sans-serif;
+}
+.lfe-toolbar input[type=search]{min-width:220px}
+.lfe-toolbar .lfe-count{margin-left:auto;color:#68747b;font:700 10px Arial,sans-serif}
+.lfe-toolbar .lfe-excel{background:#176b3a;border-color:#176b3a}
+.lfe-toolbar .lfe-export{background:#102638}
+.lfe-status{padding:7px 12px;background:#f7f2e6;color:#526573;font:10px Arial,sans-serif;border-bottom:1px solid #ddd5c5;display:none}
+.lfe-status.show{display:block}
+.lfe-body{display:flex;min-height:0;flex:1}
+.lfe-table-wrap{flex:1;min-width:0;overflow:auto;background:#fff}
+.lfe-table{border-collapse:separate;border-spacing:0;min-width:100%;font:10px Arial,sans-serif}
+.lfe-table th{
+    position:sticky;top:0;z-index:5;background:#17374d;color:#d8b86a;
+    padding:8px 7px;text-align:left;white-space:nowrap;border-right:1px solid #426174;
+}
+.lfe-table td{
+    padding:5px 6px;border-bottom:1px solid #e7e2d8;border-right:1px solid #eeeae1;
+    white-space:nowrap;background:#fff;
+}
+.lfe-table tr:hover td{background:#f7f2e6}
+.lfe-table tr.lfe-selected td{background:#e9e0cb}
+.lfe-table td[contenteditable="true"]{cursor:text;min-width:85px}
+.lfe-table td[contenteditable="true"]:focus{outline:2px solid #c09d57;outline-offset:-2px;background:#fffdf8}
+.lfe-table .lfe-system{background:#f3f0e7;color:#526573}
+.lfe-eye{
+    width:30px;height:26px;border:1px solid #aaa;border-radius:5px;
+    cursor:pointer;font-size:14px;background:#176b3a;color:#fff;
+}
+.lfe-eye.off{background:#8b2020}
+.lfe-color{
+    width:32px;height:25px;padding:2px;border:1px solid #aaa;border-radius:5px;cursor:pointer;
+}
+.lfe-detail{
+    width:330px;flex:0 0 330px;border-left:1px solid #d8d0c0;background:#f8f5ec;
+    overflow:auto;padding:13px;
+}
+.lfe-detail h3{margin:0 0 8px;color:#102638;font:700 18px Georgia,serif}
+.lfe-detail .lfe-sub{color:#68747b;font:10px/1.45 Arial,sans-serif;margin-bottom:10px}
+.lfe-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lfe-field{background:#fff;border:1px solid #ddd5c5;border-radius:6px;padding:7px}
+.lfe-field.full{grid-column:1/-1}
+.lfe-field label{display:block;color:#526573;font:700 9px Arial,sans-serif;margin-bottom:4px}
+.lfe-field input,.lfe-field select{
+    width:100%;padding:7px;border:1px solid #aaa;border-radius:5px;
+    background:#fff;font:10px Arial,sans-serif;
+}
+.lfe-field input[type=color]{height:31px;padding:2px}
+.lfe-check{display:flex!important;align-items:center;gap:7px}
+.lfe-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.lfe-actions button{
+    border:1px solid #b8954d;background:#fff;color:#17374d;border-radius:5px;
+    padding:7px 9px;cursor:pointer;font:700 9px Arial,sans-serif;
+}
+.lfe-actions button:hover{background:#d8b86a}
+.lfe-excel-modal{
+    position:fixed;inset:0;z-index:130000;background:rgba(4,15,24,.82);
+    display:flex;align-items:center;justify-content:center;padding:18px;
+}
+.lfe-excel-window{
+    width:min(760px,96vw);max-height:90vh;overflow:auto;background:#f3f0e7;
+    border:1px solid #c09d57;border-radius:11px;box-shadow:0 20px 70px rgba(0,0,0,.5)
+}
+.lfe-excel-head{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:#102638;color:#fff;border-bottom:1px solid #c09d57}
+.lfe-excel-head h3{margin:0;font:700 18px Georgia,serif}
+.lfe-excel-body{padding:15px}
+.lfe-excel-section{background:#fff;border:1px solid #d8d0c0;border-radius:7px;padding:11px;margin-bottom:10px}
+.lfe-excel-section h4{margin:0 0 8px;color:#102638;font:700 13px Georgia,serif}
+.lfe-excel-section input[type=file]{width:100%;font:10px Arial,sans-serif}
+.lfe-excel-section select{width:100%;padding:8px;border:1px solid #aaa;border-radius:5px;font:10px Arial,sans-serif}
+.lfe-excel-file-list{margin-top:8px;display:grid;gap:5px}
+.lfe-excel-file{display:flex;justify-content:space-between;align-items:center;padding:7px;background:#f7f2e6;border-radius:5px;font:10px Arial,sans-serif}
+.lfe-excel-file button{border:0;background:transparent;color:#8b2020;cursor:pointer;font-weight:800}
+.lfe-excel-help{font:10px/1.5 Arial,sans-serif;color:#68747b;margin-top:7px}
+.lfe-excel-actions{display:flex;justify-content:flex-end;gap:7px;margin-top:10px}
+.lfe-excel-actions button{border:1px solid #b8954d;border-radius:5px;padding:8px 11px;cursor:pointer;font-weight:800}
+.lfe-excel-primary{background:#176b3a;color:#fff}
+.lfe-excel-secondary{background:#ddd;color:#333}
+.lfe-feature-label{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important;}
+.lfe-feature-label::before{display:none!important;}
+.lfe-feature-label .lfe-feature-label-text{white-space:nowrap;display:inline-block;pointer-events:none;transform:translate(-50%,-50%);padding:1px 4px;border-radius:3px;background:rgba(255,255,255,.88);box-shadow:0 1px 4px rgba(0,0,0,.18);line-height:1.15;}
+.lfe-label-marker{display:none!important}
+.lfe-feature-label{
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+    padding:0!important;
+}
+.lfe-feature-label::before{display:none!important}
+.lfe-feature-label-text{
+    display:inline-block;
+    white-space:nowrap;
+    pointer-events:none;
+    padding:2px 5px;
+    border-radius:4px;
+    box-shadow:0 1px 5px rgba(0,0,0,.20);
+    line-height:1.15;
+    transform:translate(-50%,-50%);
+    transform-origin:center center;
+}
+@media(max-width:900px){
+    .layer-feature-editor-window{height:94vh}
+    .lfe-body{display:block;overflow:auto}
+    .lfe-table-wrap{height:58%}
+    .lfe-detail{width:100%;height:42%;border-left:0;border-top:1px solid #d8d0c0}
+    .lfe-toolbar .lfe-count{margin-left:0}
+}
+
+
+</style>
+
+<style id="v30-unified-map-clean">
+html,body{height:100%!important;margin:0!important;padding:0!important;overflow:hidden!important}
+#map{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;z-index:1!important}
+.map-panel{display:none!important}
+</style>
+<link rel="stylesheet" href="css/v12-design.css">
+<link rel="stylesheet" href="css/atlas-ai.css">
+<link rel="stylesheet" href="css/v13-map.css">
+<link rel="stylesheet" href="css/v14-ui.css">
+<link rel="stylesheet" href="css/v15-map-ux.css">
+<link rel="stylesheet" href="css/v16-map-position.css">
+<link rel="stylesheet" href="css/v17-map-controls.css">
+<link rel="stylesheet" href="css/v18-clean-layers.css">
+<link rel="stylesheet" href="css/v20-layer-feature-editor.css">
+<link rel="stylesheet" href="css/v21-reliable-controls.css">
+<link rel="stylesheet" href="css/v21-final-legend.css">
+<link rel="stylesheet" href="css/v23-layer-feature-editor.css">
+<link rel="stylesheet" href="css/v24-label-positions.css">
+<link rel="stylesheet" href="css/v27-draw-lfe-extension.css">
+
+<style id="v31-history-clean">
+.map-panel{display:none!important}
+</style>
+<link rel="stylesheet" href="css/raster-export.css">
+<link rel="stylesheet" href="css/premium-unified.css">
+<link rel="stylesheet" href="css/layer-workspace-premium.css">
 </head>
 
 <body>
+<nav class="atlas-map-header" aria-label="Atlasz térkép navigáció">
+  <div class="atlas-header-left">
+    <a href="index.html">FŐOLDAL</a><a href="geography.html">FÖLDRAJZI</a><a href="history.html">TÖRTÉNETI</a><a href="gallery.html">GALÉRIA</a>
+  </div>
+  <div class="atlas-header-center">
+    <button id="headerRasterExportButton" class="atlas-header-btn atlas-header-raster" type="button">▦ RASTER EXPORT</button>
+    <button id="headerDrawEditorButton" class="atlas-header-btn atlas-header-draw">✏️ DRAW EDITOR</button>
+    <button id="headerPresentationButton" class="atlas-header-btn">🎬 PREZI MÓD</button>
+    <button id="headerAtlasAIButton" class="atlas-header-btn atlas-header-ai">🤖 ATLAS AI</button>
+    <button id="headerLayerWorkspaceButton" class="atlas-header-btn atlas-gis-link">🧭 RÉTEG MUNKATÉR</button>
+  </div>
+  <div class="atlas-header-right"><a href="../admin/index.html">🔐 ADMIN</a></div>
+</nav>
 
 <div id="loadingOverlay" class="loading-overlay">
     <div class="loading-box">
@@ -425,62 +3681,11 @@ nav a.active{
     </div>
 </div>
 
-<header>
 
-    <h1>Kárpátalja Földrajzi és Történeti Atlasza</h1>
 
-    <p>
-        Történelmi korszakok • helyszínek • események • vármegyék • források
-    </p>
 
-    <div class="language-switch">
 
-        <span class="current-language">
-            🇭🇺 MAGYAR
-        </span>
 
-        <a href="tortenelmi-terkep-ua.html">
-            🇺🇦 УКРАЇНСЬКА
-        </a>
-
-    </div>
-
-</header>
-
-<nav>
-
-    <a href="index.html">
-        FŐOLDAL
-    </a>
-
-    <a href="geography.html">
-        🌍 FÖLDRAJZI TÉRKÉP
-    </a>
-
-    <a href="history.html" class="active">
-        📜 TÖRTÉNELMI TÉRKÉP
-    </a>
-
-    <a href="gallery.html">
-        📷 GALÉRIA
-    </a>
-
-    <a href="../admin/index.html">
-        🔐 ADMIN
-    </a>
-
-</nav>
-
-<section class="map-header">
-
-    <h2>📜 Interaktív történelmi térkép</h2>
-
-    <p>
-        Kárpátalja történelmi helyszíneinek, eseményeinek,
-        korszakainak és egykori vármegyéinek térképi megjelenítése.
-    </p>
-
-</section>
 
 <div id="map"></div>
 
@@ -571,6 +3776,8 @@ nav a.active{
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
 
+<script src="js/outdoors-basemap.js"></script>
+
 <script>
 
 /* =====================================================
@@ -613,6 +3820,23 @@ const satellite =
         }
     );
 
+const outdoors =
+    KA_createOutdoorsLayer(L);
+
+outdoors.on("add",function(){
+    if(!KA_prepareOutdoorsLayer(outdoors,map)){
+        map.removeLayer(outdoors);
+    }
+});
+
+const baseMaps = {
+    "🗺️ OpenStreetMap": osm,
+    "🛰️ Google műhold": satellite,
+    "🥾 Outdoors": outdoors
+};
+
+window.KA_RASTER_EXPORT_BASEMAPS = baseMaps;
+
 
 /* =====================================================
    TÖRTÉNELMI RÉTEGEK
@@ -629,6 +3853,12 @@ const historicalCountiesLayer =
 
 const historicalGalleryLayer =
     L.layerGroup();
+
+/* Unified V21 historical layers: visibility is controlled by the common Layer panel. */
+historicalPlacesLayer.addTo(map);
+historicalEventsLayer.addTo(map);
+historicalCountiesLayer.addTo(map);
+historicalGalleryLayer.addTo(map);
 
 
 /* =====================================================
@@ -677,23 +3907,7 @@ const overlays = {
 };
 
 
-L.control.layers(
 
-    {
-        "OpenStreetMap":
-            osm,
-
-        "Műhold":
-            satellite
-    },
-
-    overlays,
-
-    {
-        collapsed:false
-    }
-
-).addTo(map);
 
 
 /* =====================================================
@@ -1583,17 +4797,19 @@ function updateStatistics(){
         ).length;
 
 
-    document.getElementById(
-        "historyStats"
-    ).innerHTML =
-        `
-        <strong>Térképi objektumok</strong><br>
-        📜 Helyszínek: ${visiblePlaces}<br>
-        ⚔️ Események: ${visibleEvents}<br>
-        📷 Galériapontok: ${visibleGallery}<br>
-        🏛️ Vármegyék: ${visibleCounties}<br>
-        ⏳ Korszakok: ${historicalPeriods.length}
-        `;
+    const statsElement = document.getElementById("historyStats");
+
+    if(statsElement){
+        statsElement.innerHTML =
+            `
+            <strong>Térképi objektumok</strong><br>
+            📜 Helyszínek: ${visiblePlaces}<br>
+            ⚔️ Események: ${visibleEvents}<br>
+            📷 Galériapontok: ${visibleGallery}<br>
+            🏛️ Vármegyék: ${visibleCounties}<br>
+            ⏳ Korszakok: ${historicalPeriods.length}
+            `;
+    }
 
 }
 
@@ -2274,315 +5490,13 @@ map.on(
    GEOJSON EXPORT
 ===================================================== */
 
-const exportControl =
-    L.control({
-        position:"topright"
-    });
-
-
-exportControl.onAdd =
-function(){
-
-    const container =
-        L.DomUtil.create(
-            "div",
-            "info-control"
-        );
-
-
-    const button =
-        L.DomUtil.create(
-            "button",
-            "",
-            container
-        );
-
-
-    button.innerHTML =
-        "📤 Rajzolt adatok exportálása";
-
-
-    button.onclick =
-    function(){
-
-        const geojson =
-            drawnItems.toGeoJSON();
-
-
-        const blob =
-            new Blob(
-                [
-                    JSON.stringify(
-                        geojson,
-                        null,
-                        2
-                    )
-                ],
-                {
-                    type:
-                        "application/geo+json"
-                }
-            );
-
-
-        const url =
-            URL.createObjectURL(
-                blob
-            );
-
-
-        const link =
-            document.createElement(
-                "a"
-            );
-
-
-        link.href =
-            url;
-
-
-        link.download =
-            "karpatalja-tortenelmi-rajz.geojson";
-
-
-        document.body.appendChild(
-            link
-        );
-
-
-        link.click();
-
-
-        link.remove();
-
-
-        URL.revokeObjectURL(
-            url
-        );
-
-    };
-
-
-    L.DomEvent.disableClickPropagation(
-        container
-    );
-
-
-    return container;
-
-};
-
-
-exportControl.addTo(
-    map
-);
-
-
 /* =====================================================
    GALÉRIA TELJES NÉZET
 ===================================================== */
 
-const galleryFitControl =
-    L.control({
-        position:"topright"
-    });
-
-
-galleryFitControl.onAdd =
-function(){
-
-    const container =
-        L.DomUtil.create(
-            "div",
-            "info-control"
-        );
-
-
-    const button =
-        L.DomUtil.create(
-            "button",
-            "",
-            container
-        );
-
-
-    button.innerHTML =
-        "📷 Galéria pontok nézete";
-
-
-    button.onclick =
-    function(){
-
-        const items =
-            historicalGallery.filter(
-                item =>
-                    item &&
-                    item.visible !== false &&
-                    item.mapVisible !== false &&
-                    validCoordinates(item)
-            );
-
-
-        if(!items.length){
-
-            return;
-
-        }
-
-
-        const bounds =
-            L.latLngBounds(
-                items.map(
-                    item =>
-                        [
-                            Number(item.latitude),
-                            Number(item.longitude)
-                        ]
-                )
-            );
-
-
-        if(
-            bounds.isValid()
-        ){
-
-            map.fitBounds(
-                bounds,
-                {
-                    padding:
-                        [40,40],
-
-                    maxZoom:
-                        12,
-
-                    animate:true
-                }
-            );
-
-        }
-
-    };
-
-
-    L.DomEvent.disableClickPropagation(
-        container
-    );
-
-
-    return container;
-
-};
-
-
-galleryFitControl.addTo(
-    map
-);
-
-
 /* =====================================================
    TÖRTÉNELMI HELYSZÍNEK TELJES NÉZETE
 ===================================================== */
-
-const historicalFitControl =
-    L.control({
-        position:"topright"
-    });
-
-
-historicalFitControl.onAdd =
-function(){
-
-    const container =
-        L.DomUtil.create(
-            "div",
-            "info-control"
-        );
-
-
-    const button =
-        L.DomUtil.create(
-            "button",
-            "",
-            container
-        );
-
-
-    button.innerHTML =
-        "📜 Történelmi objektumok nézete";
-
-
-    button.onclick =
-    function(){
-
-        const points =
-            [
-                ...historicalPlaces,
-                ...historicalEvents
-            ]
-            .filter(
-                item =>
-                    item &&
-                    item.visible !== false &&
-                    item.mapVisible !== false &&
-                    validCoordinates(item)
-            );
-
-
-        if(!points.length){
-
-            return;
-
-        }
-
-
-        const bounds =
-            L.latLngBounds(
-                points.map(
-                    item =>
-                        [
-                            Number(item.latitude),
-                            Number(item.longitude)
-                        ]
-                )
-            );
-
-
-        if(
-            bounds.isValid()
-        ){
-
-            map.fitBounds(
-                bounds,
-                {
-                    padding:
-                        [45,45],
-
-                    maxZoom:
-                        12,
-
-                    animate:true
-                }
-            );
-
-        }
-
-    };
-
-
-    L.DomEvent.disableClickPropagation(
-        container
-    );
-
-
-    return container;
-
-};
-
-
-historicalFitControl.addTo(
-    map
-);
-
 
 /* =====================================================
    INDÍTÁS
@@ -2592,5 +5506,97 @@ loadHistoricalData();
 
 </script>
 
+<script src="js/v12-layer-workspace.js"></script>
+
+<script>
+/* V12 HEADER CONTROLLER */
+(function(){
+"use strict";
+function wire(){
+ const draw=document.getElementById("headerDrawEditorButton");
+ const prezi=document.getElementById("headerPresentationButton");
+ const ai=document.getElementById("headerAtlasAIButton");
+ const ws=document.getElementById("headerLayerWorkspaceButton");
+ if(draw) draw.onclick=()=>{
+   const p=document.getElementById("featureEditorPanel");
+   if(!p){alert("A Draw Feature Editor még nem töltődött be.");return}
+   const open=!p.hidden && p.style.display!=="none";
+   p.hidden=open;p.style.display=open?"none":"block";
+   if(!open) window.renderDrawFeatureEditor?.();
+ };
+ if(prezi) prezi.onclick=()=>{if(typeof openPreziEditor==="function")openPreziEditor();else alert("A Prezi modul nem töltődött be.")};
+ if(ai) ai.onclick=()=>window.AtlasAI?.open?.() || alert("Az Atlas AI modul a backend beállítása után használható.");
+ if(ws) ws.onclick=()=>window.AtlasLayerWorkspace?.open?.();
+}
+document.addEventListener("DOMContentLoaded",()=>setTimeout(wire,500));
+})();
+</script><script src="js/atlas-ai.js"></script>
+<script src="js/v14-opacity.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+ const wireOpacity=()=>{
+   const input=document.getElementById("awOpacity"),out=document.getElementById("awOpacityOut");
+   if(!input||input.dataset.wired)return;input.dataset.wired="1";
+   input.oninput=()=>{
+     out.textContent=Math.round(+input.value*100)+"%";
+     try{
+       document.querySelectorAll(".atlas-layer-row,.aw-layer-row").forEach(()=>{});
+       if(typeof importedVectorRegistry!=="undefined") importedVectorRegistry.forEach(x=>x.group?.eachLayer?.(l=>l.setStyle?.({opacity:+input.value,fillOpacity:+input.value*.35})));
+       if(typeof overlays!=="undefined") Object.values(overlays).forEach(g=>g?.eachLayer?.(l=>l.setStyle?.({opacity:+input.value,fillOpacity:+input.value*.35})));
+     }catch(e){}
+   };
+ };
+ setInterval(wireOpacity,500);
+});
+</script>
+<script>
+/* V29: historical page uses the exact Geography header and no duplicate UI. */
+(function(){
+  function bind(id, ids){
+    const b=document.getElementById(id);
+    if(!b)return;
+    b.addEventListener("click",function(){
+      for(const x of ids){
+        const el=document.getElementById(x);
+        if(el && el!==b){el.click();return}
+      }
+    },{capture:false});
+  }
+  bind("headerDrawEditorButton",["drawEditorBtn","drawEditor","openDrawEditor"]);
+  bind("headerPresentationButton",["preziBtn","preziMode","openPrezi"]);
+  bind("headerAtlasAIButton",["atlasAiBtn","atlasAI","openAtlasAI"]);
+  bind("headerLayerWorkspaceButton",["layerWorkspaceBtn","gisWorkspaceBtn","openLayerWorkspace"]);
+})();
+</script>
+
+<script src="js/v18-geojson-filename.js"></script>
+<script src="js/v19-display-name.js"></script>
+<script src="js/v21-reliable-controls.js"></script>
+<script src="js/v21-final-legend.js"></script>
+<script src="js/v23-lfe-opacity.js"></script>
+<script src="js/raster-export.js"></script>
+
+<script id="v30-history-header-bridge">
+(function(){
+  const bind=(headerId,candidates)=>{
+    const h=document.getElementById(headerId);
+    if(!h)return;
+    h.addEventListener("click",()=>{
+      for(const id of candidates){
+        const el=document.getElementById(id);
+        if(el && el!==h){el.click();return;}
+      }
+    });
+  };
+  bind("headerDrawEditorButton",["drawEditorBtn","drawEditor","openDrawEditor"]);
+  bind("headerPresentationButton",["preziBtn","preziMode","openPrezi"]);
+  bind("headerAtlasAIButton",["atlasAiBtn","atlasAI","openAtlasAI"]);
+  bind("headerLayerWorkspaceButton",["layerWorkspaceBtn","gisWorkspaceBtn","openLayerWorkspace"]);
+})();
+</script>
+
+<script>document.addEventListener("DOMContentLoaded",function(){var b=document.getElementById("headerRasterExportButton");if(b)b.addEventListener("click",function(){window.KA_openRasterExport&&window.KA_openRasterExport();});});</script>
 </body>
 </html>
+

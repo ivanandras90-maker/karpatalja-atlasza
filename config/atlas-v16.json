@@ -1,0 +1,11 @@
+{
+  "version": "16.0",
+  "geographyUX": {
+    "layerButton": "top-right",
+    "searchButton": "top-right",
+    "quickHelp": "removed",
+    "layerCategory": "removed-atlas-layer-group",
+    "uploadedGeoJSONDisplayName": "original-filename",
+    "opacity": "preserved"
+  }
+}

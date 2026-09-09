@@ -1,0 +1,17 @@
+
+/* ==========================================================
+ V18 — CLEAN DATA LAYER PANEL
+ Only base maps + actually uploaded GeoJSON files.
+ No predefined thematic layer catalogue.
+========================================================== */
+#atlasLayerDrawer .ald-body{padding:8px 10px}
+#atlasLayerDrawer .ald-group-title{display:none!important}
+#atlasLayerDrawer .ald-row{grid-template-columns:25px 1fr auto;min-height:48px}
+#atlasLayerDrawer .ald-meta{font-size:8px;color:#718087}
+#atlasLayerDrawer .ald-name{font-size:10px;font-weight:800;word-break:break-word}
+#atlasLayerDrawer .ald-row[data-type="Saját GeoJSON"]{border-bottom:1px solid #edf0ee}
+#atlasLayerDrawer .ald-source{
+ font-size:8px;color:#718087;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+#atlasLayerDrawer .ald-file-icon{font-size:15px;line-height:1}
+#atlasLayerDrawer .ald-empty{padding:24px 10px;text-align:center}

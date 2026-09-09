@@ -1,0 +1,113 @@
+
+/* ==========================================================
+ V15 — FÖLDRAJZI TÉRKÉP / USER FRIENDLY GIS UI
+========================================================== */
+:root{
+ --ux-navy:#0b2636;--ux-navy2:#173f55;--ux-gold:#c8a45e;
+ --ux-paper:rgba(255,255,255,.97);--ux-line:#d9e0dd;--ux-muted:#718087;
+}
+html,body{width:100%!important;height:100%!important;margin:0!important;padding:0!important;overflow:hidden!important}
+body{background:#dfe8e4!important}
+#map{
+ position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;
+ min-height:0!important;margin:0!important;padding:0!important;background:#dfe8e4!important;
+ z-index:1!important;
+}
+.leaflet-container{width:100%!important;height:100%!important;background:#dfe8e4!important}
+.atlas-map-header{position:fixed!important;z-index:12000!important}
+
+/* Remove redundant native Leaflet layer chooser; V15 has a dedicated layer panel. */
+.leaflet-control-layers{display:none!important}
+
+/* Left utility rail */
+.atlas-map-rail{
+ position:fixed;left:14px;top:74px;z-index:9000;
+ display:flex;flex-direction:column;gap:8px;
+}
+.atlas-map-tool{
+ width:44px;height:44px;padding:0;border:1px solid rgba(11,38,54,.16);
+ border-radius:9px;background:var(--ux-paper);color:var(--ux-navy);
+ box-shadow:0 8px 24px rgba(11,38,54,.15);cursor:pointer;
+ display:flex;align-items:center;justify-content:center;
+ transition:transform .14s,background .14s,border-color .14s;
+}
+.atlas-map-tool:hover{transform:translateY(-1px);background:#f3ede0;border-color:rgba(200,164,94,.65)}
+.atlas-map-tool.active{background:var(--ux-navy2);color:#fff;border-color:var(--ux-gold)}
+.atlas-map-tool svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8}
+.atlas-map-tool .fill{fill:currentColor;stroke:none}
+
+/* Layer drawer */
+#atlasLayerDrawer{
+ position:fixed;left:68px;top:74px;z-index:8999;
+ width:min(365px,calc(100vw - 90px));max-height:calc(100dvh - 94px);
+ display:none;flex-direction:column;overflow:hidden;
+ background:var(--ux-paper);border:1px solid rgba(11,38,54,.13);
+ border-radius:14px;box-shadow:0 18px 55px rgba(11,38,54,.22);
+ color:var(--ux-navy);font-family:Arial,sans-serif;
+}
+#atlasLayerDrawer.open{display:flex}
+.ald-head{padding:12px 13px;background:linear-gradient(135deg,var(--ux-navy),var(--ux-navy2));color:#fff}
+.ald-title{display:flex;justify-content:space-between;align-items:center}
+.ald-title b{font-size:13px;letter-spacing:.5px}.ald-title button{background:transparent;border:0;color:#fff;font-size:21px;cursor:pointer}
+.ald-sub{font-size:9px;color:#cbd7dc;margin-top:3px}
+.ald-search{padding:9px 10px;border-bottom:1px solid var(--ux-line);background:#f5f7f5}
+.ald-search input{width:100%;height:34px;box-sizing:border-box;border:1px solid #ccd5d2;border-radius:7px;padding:0 10px;font-size:10px}
+.ald-body{overflow:auto;padding:8px}
+.ald-group-title{padding:7px 4px 5px;font-size:8px;font-weight:900;letter-spacing:.8px;color:var(--ux-muted)}
+.ald-row{display:grid;grid-template-columns:25px 1fr auto;gap:7px;align-items:center;padding:8px 6px;border-radius:8px}
+.ald-row:hover{background:#f0f3f1}.ald-row input{margin:0}
+.ald-name{font-size:10px;font-weight:800}.ald-meta{font-size:8px;color:var(--ux-muted);margin-top:2px}
+.ald-right{display:flex;align-items:center;gap:4px}.ald-zoom{border:1px solid #ccd5d2;background:#fff;border-radius:5px;padding:4px 6px;font-size:8px;cursor:pointer;color:var(--ux-navy)}
+.ald-zoom:hover{border-color:var(--ux-gold);background:#f4efe2}
+.ald-opacity{width:72px;display:none}.ald-row:hover .ald-opacity{display:block}
+.ald-opacity-value{font-size:8px;color:var(--ux-muted);width:27px;text-align:right}
+.ald-base{border-bottom:1px solid #edf0ee;padding-bottom:6px;margin-bottom:3px}
+.ald-empty{padding:18px 7px;text-align:center;color:var(--ux-muted);font-size:10px}
+
+/* Map search */
+.atlas-map-search{
+ position:fixed;left:68px;top:74px;z-index:8990;
+ width:min(310px,calc(100vw - 90px));display:none;
+}
+.atlas-map-search.open{display:block}
+.atlas-map-search form{display:flex;background:var(--ux-paper);border:1px solid rgba(11,38,54,.13);border-radius:10px;box-shadow:0 12px 35px rgba(11,38,54,.18);overflow:hidden}
+.atlas-map-search input{flex:1;border:0!important;border-radius:0!important;height:42px;padding:0 11px;font-size:10px}
+.atlas-map-search button{width:44px;border:0;background:var(--ux-navy2);color:#fff;font-size:16px;cursor:pointer}
+.atlas-search-results{margin-top:5px;background:var(--ux-paper);border-radius:9px;box-shadow:0 10px 30px rgba(11,38,54,.15);max-height:260px;overflow:auto}
+.atlas-search-result{padding:9px 11px;border-bottom:1px solid #edf0ee;font-size:10px;cursor:pointer}.atlas-search-result:hover{background:#f1f3ef}.atlas-search-result small{display:block;color:var(--ux-muted);margin-top:2px}
+
+/* bottom-right legend: never collide with attribution */
+#atlasLiveLegend{right:14px!important;bottom:28px!important;max-width:320px!important}
+.leaflet-control-attribution{z-index:500!important}
+
+/* Zoom controls */
+.leaflet-control-zoom{margin-top:0!important;margin-left:0!important}
+.atlas-map-rail + * .leaflet-control-zoom{}
+.leaflet-control-zoom a{font-size:0!important}
+
+/* Existing Draw control: make it secondary, clear and compact */
+.leaflet-draw-toolbar{
+ background:var(--ux-paper)!important;border:1px solid rgba(11,38,54,.15)!important;
+ border-radius:9px!important;box-shadow:0 8px 22px rgba(11,38,54,.14)!important;
+}
+.leaflet-draw-toolbar a{border-bottom:1px solid #e4e8e6!important}
+
+/* Guide card */
+.atlas-map-help{
+ position:fixed;left:14px;bottom:30px;z-index:8000;
+ background:rgba(255,255,255,.92);border:1px solid rgba(11,38,54,.10);
+ border-radius:9px;padding:7px 9px;box-shadow:0 7px 22px rgba(11,38,54,.12);
+ font:8px/1.4 Arial,sans-serif;color:var(--ux-muted);max-width:190px;
+}
+.atlas-map-help b{color:var(--ux-navy);font-size:9px}
+@media(max-width:900px){
+ #atlasLayerDrawer{left:62px;width:min(340px,calc(100vw - 76px))}
+ .atlas-map-rail{left:9px}.atlas-map-help{display:none}
+}
+@media(max-width:680px){
+ .atlas-map-header{overflow-x:auto!important}
+ .atlas-map-rail{top:62px;left:7px}
+ #atlasLayerDrawer{left:58px;top:62px;width:calc(100vw - 66px);max-height:calc(100dvh - 72px)}
+ .atlas-map-search{left:58px;top:62px;width:calc(100vw - 66px)}
+ #atlasLiveLegend{right:8px!important;bottom:22px!important;width:260px!important}
+}

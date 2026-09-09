@@ -1,0 +1,58 @@
+
+/* V23 — Layer Feature Editor: reliable layer opacity + batch styling */
+.v23-lfe-opacity{
+  margin-left:auto;
+  width:190px;
+  min-width:170px;
+  padding:7px 9px;
+  border:1px solid #d8c9a7;
+  border-radius:8px;
+  background:#faf8f1;
+}
+.v23-lfe-opacity-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  font:700 9px Arial,sans-serif;
+  color:#173f55;
+  margin-bottom:4px;
+}
+.v23-lfe-opacity-title strong{color:#8a6b2e}
+.v23-lfe-opacity input{width:100%;cursor:pointer}
+
+.lfe-batch-style{
+  margin:10px 0 0;
+  padding:10px;
+  border:1px solid #d8c9a7;
+  border-radius:10px;
+  background:linear-gradient(180deg,#fbfaf5,#f5f1e7);
+}
+.lfe-batch-head strong{
+  display:block;color:#173f55;font:900 10px Arial,sans-serif;letter-spacing:.25px;
+}
+.lfe-batch-head small{display:block;color:#718087;font:8px Arial,sans-serif;margin-top:3px}
+.lfe-batch-grid{
+  margin-top:9px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+}
+.lfe-batch-grid label{
+  display:flex;flex-direction:column;gap:4px;
+  color:#526573;font:700 8px Arial,sans-serif;
+}
+.lfe-batch-grid input[type=color]{
+  width:100%;height:34px;padding:3px;border:1px solid #cbd2cf;
+  border-radius:6px;background:#fff;cursor:pointer;
+}
+.lfe-batch-grid button{
+  grid-column:1/-1;height:34px;border:1px solid #9c7c3c;
+  border-radius:6px;background:#173f55;color:#fff;
+  font:800 9px Arial,sans-serif;cursor:pointer;
+}
+.lfe-batch-grid button:hover{background:#c09d57;color:#102638}
+@media(max-width:800px){
+  .v23-lfe-opacity{width:150px;min-width:130px}
+  .lfe-batch-grid{grid-template-columns:1fr}
+}

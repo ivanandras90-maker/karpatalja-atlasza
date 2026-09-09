@@ -1,0 +1,12 @@
+KÁRPÁTALJA ATLAS PROFESSIONAL V24
+
+GitHub feltöltés:
+1. A ZIP-et csomagold ki az asztalra.
+2. A KARPATALJA-ATLAS mappa TELJES tartalmát töltsd fel a repository gyökerébe.
+3. A gyökérben az index.html maradjon.
+4. GitHub → Settings → Pages → Deploy from branch → main → /(root).
+
+Belépési út:
+index.html → frontend/index.html → geography.html
+
+A V24 térképes funkciói a frontend mappában maradnak.

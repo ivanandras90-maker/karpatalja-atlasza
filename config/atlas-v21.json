@@ -1,0 +1,20 @@
+{
+  "version": "21.0",
+  "controls": {
+    "layer": "upper-right",
+    "search": "upper-right-under-layer",
+    "independentCreator": true
+  },
+  "layerWorkspace": {
+    "source": "uploaded-geojson-only",
+    "predefinedThematicCatalogue": false
+  },
+  "featureEditor": {
+    "dedicatedHeaderButton": true,
+    "layerOpacitySlider": true
+  },
+  "filename": {
+    "display": "original-upload-name-without-extension",
+    "internalOriginalFilename": true
+  }
+}

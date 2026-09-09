@@ -1,0 +1,44 @@
+{
+  "version": "12.0",
+  "design": "modern-gis-editorial",
+  "map": {
+    "fullHeight": true,
+    "zoomLabels": true,
+    "leafletLayerControl": "hidden",
+    "legend": "bottom-right"
+  },
+  "header": [
+    "FŐOLDAL",
+    "FÖLDRAJZI",
+    "TÖRTÉNETI",
+    "GALÉRIA",
+    "DRAW EDITOR",
+    "PREZI MÓD",
+    "ATLAS AI",
+    "RÉTEG MUNKATÉR",
+    "ADMIN"
+  ],
+  "layerWorkspace": [
+    "visibility",
+    "zoom",
+    "newData",
+    "featureEditor",
+    "drawObjects",
+    "prezi",
+    "statistics",
+    "style",
+    "excelJoin",
+    "export"
+  ],
+  "draw": {
+    "line": true,
+    "polygon": true,
+    "traceLine": true,
+    "tracePolygon": true
+  },
+  "ai": {
+    "frontend": true,
+    "secureBackend": true,
+    "apiKeyClientSide": false
+  }
+}

@@ -1,0 +1,79 @@
+
+/* ==========================================================
+ V20 — LAYER WORKSPACE / FEATURE EDITOR
+========================================================== */
+
+/* The layer workspace should be a focused GIS tool, not a
+   catalogue of predefined thematic layers. */
+.layer-workspace .layer-row.predefined,
+.layer-workspace [data-layer-name="Domborzat"],
+.layer-workspace [data-layer-name="Hegységek"],
+.layer-workspace [data-layer-name="Folyók"],
+.layer-workspace [data-layer-name="Tavak"],
+.layer-workspace [data-layer-name="Városok"],
+.layer-workspace [data-layer-name="Falvak"],
+.layer-workspace [data-layer-name="Utak"],
+.layer-workspace [data-layer-name="Közigazgatási határok"],
+.layer-workspace [data-layer-name="Földtan"],
+.layer-workspace [data-layer-name="Éghajlat"],
+.layer-workspace [data-layer-name="Talaj"],
+.layer-workspace [data-layer-name="Növényzet"],
+.layer-workspace [data-layer-name="Tájak"],
+.layer-workspace [data-layer-name="Természetvédelem"],
+.layer-workspace [data-layer-name="Természeti erőforrások"],
+.layer-workspace [data-layer-name="Természeti veszélyek"],
+.layer-workspace [data-layer-name="Galéria"]{
+    display:none!important;
+}
+
+/* Feature editor / layer workspace opacity control */
+.layer-opacity-control,
+.feature-editor-opacity,
+#layerOpacityControl,
+[data-role="layer-opacity"]{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+.layer-opacity-control input[type="range"],
+.feature-editor-opacity input[type="range"],
+#layerOpacityControl input[type="range"],
+[data-role="layer-opacity"] input[type="range"]{
+    flex:1;
+    min-width:120px;
+}
+.layer-opacity-value,
+.feature-editor-opacity .opacity-value{
+    min-width:42px;
+    text-align:right;
+    font-weight:700;
+}
+
+/* V20 floating layer/search controls: upper-right, below header */
+#atlasMapRail{
+    right:14px!important;
+    left:auto!important;
+    top:70px!important;
+    z-index:12000!important;
+}
+#atlasLayerTool,#atlasSearchTool{
+    position:relative!important;
+    right:auto!important;
+    top:auto!important;
+    display:flex!important;
+}
+#atlasLayerTool{order:1}
+#atlasSearchTool{order:2}
+
+/* Keep drawer beside the upper-right controls. */
+#atlasLayerDrawer{
+    right:68px!important;
+    left:auto!important;
+    top:70px!important;
+}
+
+/* Hide any legacy predefined layer list if it is rendered
+   inside the layer workspace by older modules. */
+#atlasLayerDrawer .ald-row[data-predefined="true"]{
+    display:none!important;
+}

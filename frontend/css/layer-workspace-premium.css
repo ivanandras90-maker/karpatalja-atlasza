@@ -1,0 +1,17 @@
+
+/* Unified premium layer workspace UI helper.
+   Hook this stylesheet to the existing layer panel; it deliberately does not change map logic. */
+.layer-workspace,.layer-panel,.layers-panel{
+  background:#fff;border:1px solid #dfe9e5;border-radius:18px;
+  box-shadow:0 12px 32px rgba(16,61,53,.08);color:#102d2a;
+}
+.layer-workspace .layer-item,.layer-panel .layer-item,.layers-panel .layer-item{
+  border-bottom:1px solid #e7efec;padding:10px 12px;
+}
+.layer-workspace .layer-item:last-child,.layer-panel .layer-item:last-child{border-bottom:0}
+.layer-workspace button,.layer-panel button,.layers-panel button{
+  border:1px solid #dfe9e5;background:#fff;border-radius:9px;padding:8px 10px;cursor:pointer;
+}
+.layer-workspace button:hover,.layer-panel button:hover,.layers-panel button:hover{
+  background:#eaf3ef;color:#0b6b4f;
+}
